@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using SkiaSharp;
 
-namespace H4D2;
+namespace H4D2.Infrastructure;
 
 public static class ResourceLoader
 {

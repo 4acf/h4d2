@@ -1,6 +1,6 @@
 ﻿using SkiaSharp;
 
-namespace H4D2;
+namespace H4D2.Infrastructure;
 
 public class Bitmap
 {
@@ -46,9 +46,12 @@ public class Bitmap
 
     public void Clear()
     {
-        for (int i = 0; i < Data.Length; i++)
+        for (int i = 0; i < Data.Length; i += 4)
         {
-            Data[i] = 0xff;
+            Data[i] = 0x5c;
+            Data[i + 1] = 0x5b;
+            Data[i + 2] = 0x56;
+            Data[i + 3] = 0xff;
         }
     }
 
@@ -60,14 +63,21 @@ public class Bitmap
             {
                 int parentIndex = _GetBytespaceIndex(Width, x + j, y - i - 1);
                 int childIndex = _GetBytespaceIndex(bitmap.Width, j, i);
-                
-                if (bitmap.Data[childIndex + 3] != 0)
+
+                if (parentIndex < 0 || childIndex < 0 || parentIndex >= Data.Length || childIndex >= bitmap.Data.Length)
                 {
-                    Data[parentIndex] = bitmap.Data[childIndex];
-                    Data[parentIndex + 1] = bitmap.Data[childIndex + 1];
-                    Data[parentIndex + 2] = bitmap.Data[childIndex + 2];
-                    Data[parentIndex + 3] = bitmap.Data[childIndex + 3];
+                    continue;
                 }
+
+                if (bitmap.Data[childIndex + 3] == 0)
+                {
+                    continue;
+                }
+                
+                Data[parentIndex] = bitmap.Data[childIndex];
+                Data[parentIndex + 1] = bitmap.Data[childIndex + 1];
+                Data[parentIndex + 2] = bitmap.Data[childIndex + 2];
+                Data[parentIndex + 3] = bitmap.Data[childIndex + 3];
             }
         }
     }

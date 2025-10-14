@@ -1,28 +1,29 @@
-﻿namespace H4D2;
+﻿using H4D2.Infrastructure;
+using H4D2.Levels;
+
+namespace H4D2;
 
 public class Game
 {
-    private readonly Bitmap _graphics;
+    private readonly Bitmap _screen;
+    private readonly Level _level;
     
     public Game(int width, int height)
     {
-        _graphics = new Bitmap(width, height);
+        _screen = new Bitmap(width, height);
+        _level = new Level();
     }
 
+    public void Update(double elapsedTime)
+    {
+        _level.UpdateEntities(elapsedTime);
+    }
+    
     public byte[] Render()
     {
-        _graphics.Clear();
-        
-        //temp test code
-        const int spriteSize = Art.SpriteSize;
-        for (int i = 0; i < Art.Survivors.Length; i++)
-        {
-            for (int j = 0; j < Art.Survivors[i].Length; j++)
-            {
-                _graphics.Draw(Art.Survivors[i][j], j * spriteSize, _graphics.Height - (i * spriteSize));
-            }
-        }
-        
-        return _graphics.Data;
+        _screen.Clear();
+        _level.RenderBackground(_screen);
+        _level.RenderEntities(_screen);
+        return _screen.Data;
     }
 }

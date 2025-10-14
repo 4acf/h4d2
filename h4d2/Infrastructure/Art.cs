@@ -1,14 +1,14 @@
 ﻿using SkiaSharp;
 
-namespace H4D2;
+namespace H4D2.Infrastructure;
 
 public static class Art
 {
     public const int SpriteSize = 16;
     public static readonly Bitmap[][] Survivors = _LoadSurvivors();
-    public static readonly Bitmap[][] Common = _LoadCommons();
-    public static readonly Bitmap[][] Uncommon = _LoadUncommons();
-    public static readonly Bitmap[][] Special = _LoadSpecials();
+    public static readonly Bitmap[][] Commons = _LoadCommons();
+    public static readonly Bitmap[][] Uncommons = _LoadUncommons();
+    public static readonly Bitmap[][] Specials = _LoadSpecials();
     
     private static Bitmap[][] _LoadBitmaps(string resourceName, int rows, int columns)
     {
@@ -18,7 +18,7 @@ public static class Art
             result[i] = new Bitmap[columns];
         }
 
-        SKBitmap fullResourceBitmap = ResourceLoader.LoadEmbeddedResource($"h4d2.res.{resourceName}");
+        SKBitmap fullResourceBitmap = ResourceLoader.LoadEmbeddedResource($"h4d2.Resources.{resourceName}");
         for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < columns; j++)

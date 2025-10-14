@@ -13,18 +13,21 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="res\" />
+      <Folder Include="Entities\Mobs\Commons\" />
+      <Folder Include="Entities\Mobs\Specials\" />
+      <Folder Include="Entities\Mobs\Uncommons\" />
+      <Folder Include="Resources\" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="res\common.png" />
-      <EmbeddedResource Include="res\common.png" />
+      <EmbeddedResource Include="Resources\common.png" />
       <None Remove="res\special.png" />
-      <EmbeddedResource Include="res\special.png" />
+      <EmbeddedResource Include="Resources\special.png" />
       <None Remove="res\survivor.png" />
-      <EmbeddedResource Include="res\survivor.png" />
+      <EmbeddedResource Include="Resources\survivor.png" />
       <None Remove="res\uncommon.png" />
-      <EmbeddedResource Include="res\uncommon.png" />
+      <EmbeddedResource Include="Resources\uncommon.png" />
       <None Remove="res\survivors.png" />
     </ItemGroup>
 

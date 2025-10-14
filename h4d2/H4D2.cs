@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using System.Diagnostics;
+using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
@@ -31,10 +32,17 @@ public static class H4D2
         
         var game = new Game((int)ScreenWidth, (int)ScreenHeight);
         var scale = new Vector2f(ScreenScale, ScreenScale);
+        var stopwatch = new Stopwatch();
         
         while (window.IsOpen)
         {
+            stopwatch.Stop();
+            double elapsedTime = stopwatch.Elapsed.TotalSeconds;
+            stopwatch = Stopwatch.StartNew();
+            
             window.DispatchEvents();
+            
+            game.Update(elapsedTime);
             
             canvas.Clear();
             Texture texture = canvas.Texture;
