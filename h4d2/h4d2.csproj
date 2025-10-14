@@ -13,9 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Entities\Mobs\Commons\" />
-      <Folder Include="Entities\Mobs\Specials\" />
-      <Folder Include="Entities\Mobs\Uncommons\" />
       <Folder Include="Resources\" />
     </ItemGroup>
 

@@ -13,6 +13,6 @@ public abstract class Entity
         YPosition = yPosition;
     }
     
-    public abstract void Update(double timeElapsed);
+    public abstract void Update(double elapsedTime);
     public abstract void Render(Bitmap screen);
 }

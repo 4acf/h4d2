@@ -1,23 +1,23 @@
 ﻿using H4D2.Infrastructure;
 
-namespace H4D2.Entities.Mobs.Survivors;
+namespace H4D2.Entities.Mobs.Uncommons;
 
-public class Survivor : Mob
+public class Uncommon : Mob
 {
-    private readonly int _character;
+    private readonly int _uncommon;
     private int _walkStep;
     private int _lastNonZeroWalkStep;
     private const double _frameDuration = 1.0 / 8.0;
     private double _timeSinceLastFrameUpdate;
     
-    protected Survivor(int character, int xPosition, int yPosition) : base(100, 220, xPosition, yPosition)
+    protected Uncommon(int uncommon, int health, int speed, int xPosition, int yPosition) : base(health, speed, xPosition, yPosition)
     {
-        _character = character;
+        _uncommon = uncommon;
         _walkStep = 0;
         _lastNonZeroWalkStep = 0;
         _timeSinceLastFrameUpdate = 0.0;
     }
-
+    
     public override void Update(double elapsedTime)
     {
         _timeSinceLastFrameUpdate += elapsedTime;
@@ -48,7 +48,7 @@ public class Survivor : Mob
 
     public override void Render(Bitmap screen)
     {
-        Bitmap animationCycleBitmap = Art.Survivors[_character][_walkStep];
+        Bitmap animationCycleBitmap = Art.Uncommons[_uncommon][_walkStep];
         screen.Draw(animationCycleBitmap, XPosition, YPosition);
     }
 }
