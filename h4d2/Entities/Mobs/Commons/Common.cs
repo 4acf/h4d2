@@ -13,8 +13,7 @@ public class Common : Mob
     
     public Common(Level level, int speed, int xPosition, int yPosition) : base(level, 50, speed, xPosition, yPosition)
     {
-        var random = new Random();
-        _common = random.Next(9);
+        _common = RandomSingleton.Instance.Next(9);
         _walkStep = 0;
         _lastNonZeroWalkStep = 0;
         _timeSinceLastFrameUpdate = 0.0;

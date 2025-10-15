@@ -7,7 +7,6 @@ public class Bitmap
     public readonly byte[] Data;
     public readonly int Width;
     public readonly int Height;
-    public bool XFlip { get; set; }
 
     public Bitmap(int width, int height)
     {
@@ -15,7 +14,6 @@ public class Bitmap
         Data = new byte[numBytes];
         Width = width;
         Height = height;
-        XFlip = false;
     }
     
     public Bitmap(SKBitmap bitmap, int spriteSize, int row, int col)
@@ -41,7 +39,6 @@ public class Bitmap
         
         Width = spriteSize;
         Height = spriteSize;
-        XFlip = false;
     }
 
     public void Clear()

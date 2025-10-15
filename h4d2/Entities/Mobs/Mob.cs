@@ -10,6 +10,7 @@ public abstract class Mob : Entity
     protected double _speed;
     protected double _directionRadians;
     protected double _angularVelocity;
+    protected bool _xFlip;
     
     protected Mob(Level level, int health, double speed, int xPosition, int yPosition) : base(level, xPosition, yPosition)
     {
@@ -17,5 +18,6 @@ public abstract class Mob : Entity
         _speed = speed;
         _directionRadians = 0;
         _angularVelocity = 0;
+        _xFlip = false;
     }
 }

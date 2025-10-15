@@ -11,18 +11,12 @@ public class Survivor : Mob
     private const double _frameDuration = 1.0 / 8.0;
     private double _timeSinceLastFrameUpdate;
     
-    //temp
-    private Random _random;
-    
     protected Survivor(Level level, int character, int xPosition, int yPosition) : base(level, 100, 220, xPosition, yPosition)
     {
         _character = character;
         _walkStep = 0;
         _lastNonZeroWalkStep = 0;
         _timeSinceLastFrameUpdate = 0.0;
-        
-        //temp
-        _random = new Random();
     }
 
     public override void Update(double elapsedTime)
@@ -33,7 +27,7 @@ public class Survivor : Mob
         _xVelocity *= 0.5;
         _yVelocity *= 0.5;
         _angularVelocity *= 0.9;
-        _angularVelocity += ((_random.NextDouble() - _random.NextDouble()) * _random.NextDouble()) * 0.1;
+        _angularVelocity += ((RandomSingleton.Instance.NextDouble() - RandomSingleton.Instance.NextDouble()) * RandomSingleton.Instance.NextDouble()) * 0.1;
         _directionRadians += _angularVelocity;
         
         double moveSpeed = (0.2 * _speed / 220) * frameFactor;
@@ -43,7 +37,7 @@ public class Survivor : Mob
 
         if (_xVelocity == 0 || _yVelocity == 0)
         {
-            _angularVelocity += ((_random.NextDouble() - _random.NextDouble()) * _random.NextDouble()) * 0.4;
+            _angularVelocity += ((RandomSingleton.Instance.NextDouble() -RandomSingleton.Instance.NextDouble()) * RandomSingleton.Instance.NextDouble()) * 0.4;
         }
         
         _timeSinceLastFrameUpdate += elapsedTime;
