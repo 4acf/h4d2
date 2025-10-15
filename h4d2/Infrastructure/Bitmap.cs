@@ -52,14 +52,20 @@ public class Bitmap
         }
     }
 
-    public void Draw(Bitmap bitmap, int x, int y)
+    public void Draw(Bitmap bitmap, int x, int y, bool flip = false)
     {
         for (int i = 0; i < bitmap.Height; i++)
         {
             for (int j = 0; j < bitmap.Width; j++)
             {
+                int k = j;
+                if (flip)
+                {
+                    k = bitmap.Width - j - 1;
+                }
+                
                 int parentIndex = _GetBytespaceIndex(Width, x + j, y - i - 1);
-                int childIndex = _GetBytespaceIndex(bitmap.Width, j, i);
+                int childIndex = _GetBytespaceIndex(bitmap.Width, k, i);
 
                 if (parentIndex < 0 || childIndex < 0 || parentIndex >= Data.Length || childIndex >= bitmap.Data.Length)
                 {

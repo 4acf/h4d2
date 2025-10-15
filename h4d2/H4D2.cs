@@ -9,7 +9,7 @@ public static class H4D2
 {
     public const uint ScreenWidth = 320;
     public const uint ScreenHeight = 240;
-    public const uint ScreenScale = 3;
+    public const uint ScreenScale = 4;
     public const uint WindowWidth = ScreenWidth * ScreenScale;
     public const uint WindowHeight = ScreenHeight * ScreenScale;
     public const string WindowTitle = "h4d2";

@@ -7,7 +7,7 @@ public class Survivor : Mob
 {
     private readonly int _character;
     private int _walkStep;
-    private int _lastNonZeroWalkStep;
+    private int _walkFrame;
     private const double _frameDuration = 1.0 / 8.0;
     private double _timeSinceLastFrameUpdate;
     
@@ -15,11 +15,17 @@ public class Survivor : Mob
     {
         _character = character;
         _walkStep = 0;
-        _lastNonZeroWalkStep = 0;
+        _walkFrame = 0;
         _timeSinceLastFrameUpdate = 0.0;
     }
 
     public override void Update(double elapsedTime)
+    {
+        _UpdatePosition(elapsedTime);
+        _UpdateSprite(elapsedTime);
+    }
+
+    private void _UpdatePosition(double elapsedTime)
     {
         double frameFactor = elapsedTime * 60;
         
@@ -29,6 +35,7 @@ public class Survivor : Mob
         _angularVelocity *= 0.9;
         _angularVelocity += ((RandomSingleton.Instance.NextDouble() - RandomSingleton.Instance.NextDouble()) * RandomSingleton.Instance.NextDouble()) * 0.1;
         _directionRadians += _angularVelocity;
+        while (_directionRadians < 0) _directionRadians += 2 * Math.PI;
         
         double moveSpeed = (0.2 * _speed / 220) * frameFactor;
         _xVelocity += Math.Cos(_directionRadians) * moveSpeed;
@@ -39,36 +46,67 @@ public class Survivor : Mob
         {
             _angularVelocity += ((RandomSingleton.Instance.NextDouble() -RandomSingleton.Instance.NextDouble()) * RandomSingleton.Instance.NextDouble()) * 0.4;
         }
-        
+    }
+    
+    private void _UpdateSprite(double elapsedTime)
+    {
         _timeSinceLastFrameUpdate += elapsedTime;
 
-        // to be refactored eventually
+        int direction = 0;
+        int degrees = MathHelpers.RadiansToDegrees(_directionRadians);
+        switch (degrees)
+        {
+            case >= 315:
+            case < 45:
+                direction = 1;
+                _xFlip = false;
+                break;
+            case < 135:
+                direction = 2;
+                _xFlip = false;
+                break;
+            case < 225:
+                direction = 1;
+                _xFlip = true;
+                break;
+            default:
+                direction = 0;
+                _xFlip = false;
+                break;
+        }
+        
         while (_timeSinceLastFrameUpdate >= _frameDuration)
         {
-            if (_walkStep == 0)
+            _walkStep = (_walkStep + 1) % 4;
+            int nextFrame = 0;
+            if (direction == 1)
             {
-                if (_lastNonZeroWalkStep == 0 || _lastNonZeroWalkStep == 2)
+                nextFrame = _walkStep switch
                 {
-                    _walkStep = 1;
-                    _lastNonZeroWalkStep = 1;
-                }
-                else
-                {
-                    _walkStep = 2;
-                    _lastNonZeroWalkStep = 2;
-                }
+                    0 => 3,
+                    1 or 3 => 4,
+                    2 => 5,
+                    _ => nextFrame
+                };
             }
             else
             {
-                _walkStep = 0;
+                nextFrame = _walkStep switch
+                {
+                    0 or 2 => 0 + (3 * direction),
+                    1 => 1 + (3 * direction),
+                    3 => 2 + (3 * direction),
+                    _ => nextFrame
+                };
             }
+            _walkFrame = nextFrame;
             _timeSinceLastFrameUpdate -= _frameDuration;
         }
     }
-
+    
     public override void Render(Bitmap screen)
     {
-        Bitmap animationCycleBitmap = Art.Survivors[_character][_walkStep];
-        screen.Draw(animationCycleBitmap, (int)XPosition, (int)YPosition);
+        Bitmap animationCycleBitmap = Art.Survivors[_character][_walkFrame];
+        screen.Draw(animationCycleBitmap, (int)XPosition, (int)YPosition, _xFlip);
     }
 }
