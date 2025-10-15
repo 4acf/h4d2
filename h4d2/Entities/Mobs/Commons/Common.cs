@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Commons;
 
@@ -10,7 +11,7 @@ public class Common : Mob
     private const double _frameDuration = 1.0 / 8.0;
     private double _timeSinceLastFrameUpdate;
     
-    public Common(int speed, int xPosition, int yPosition) : base(50, speed, xPosition, yPosition)
+    public Common(Level level, int speed, int xPosition, int yPosition) : base(level, 50, speed, xPosition, yPosition)
     {
         var random = new Random();
         _common = random.Next(9);
@@ -50,6 +51,6 @@ public class Common : Mob
     public override void Render(Bitmap screen)
     {
         Bitmap animationCycleBitmap = Art.Commons[_common][_walkStep];
-        screen.Draw(animationCycleBitmap, XPosition, YPosition);
+        screen.Draw(animationCycleBitmap, (int)XPosition, (int)YPosition);
     }
 }

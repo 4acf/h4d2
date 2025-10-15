@@ -11,7 +11,7 @@ public class Game
     public Game(int width, int height)
     {
         _screen = new Bitmap(width, height);
-        _level = new Level();
+        _level = new Level(width, height);
     }
 
     public void Update(double elapsedTime)

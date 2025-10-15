@@ -1,8 +1,10 @@
-﻿namespace H4D2.Entities.Mobs.Uncommons;
+﻿using H4D2.Levels;
+
+namespace H4D2.Entities.Mobs.Uncommons;
 
 public class Clown : Uncommon
 {
-    public Clown(int xPosition, int yPosition) : base(1, 200, 100, xPosition, yPosition)
+    public Clown(Level level, int xPosition, int yPosition) : base(level, 1, 200, 100, xPosition, yPosition)
     {
         
     }

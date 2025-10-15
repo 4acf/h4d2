@@ -1,8 +1,10 @@
-﻿namespace H4D2.Entities.Mobs.Specials;
+﻿using H4D2.Levels;
+
+namespace H4D2.Entities.Mobs.Specials;
 
 public class Jockey : Special
 {
-    public Jockey(int xPosition, int yPosition) : base(4, 325, 250, xPosition, yPosition)
+    public Jockey(Level level, int xPosition, int yPosition) : base(level, 4, 325, 250, xPosition, yPosition)
     {
         
     }    

@@ -1,8 +1,10 @@
-﻿namespace H4D2.Entities.Mobs.Survivors;
+﻿using H4D2.Levels;
+
+namespace H4D2.Entities.Mobs.Survivors;
 
 public class Nick : Survivor
 {
-    public Nick(int xPosition, int yPosition) : base(1, xPosition, yPosition)
+    public Nick(Level level, int xPosition, int yPosition) : base(level, 1, xPosition, yPosition)
     {
         
     }    

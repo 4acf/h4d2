@@ -1,8 +1,10 @@
-﻿namespace H4D2.Entities.Mobs.Uncommons;
+﻿using H4D2.Levels;
+
+namespace H4D2.Entities.Mobs.Uncommons;
 
 public class Mudman : Uncommon
 {
-    public Mudman(int xPosition, int yPosition) : base(2, 200, 110, xPosition, yPosition)
+    public Mudman(Level level, int xPosition, int yPosition) : base(level, 2, 200, 110, xPosition, yPosition)
     {
         
     }

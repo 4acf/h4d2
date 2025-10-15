@@ -1,4 +1,4 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs;
 
@@ -8,11 +8,14 @@ public abstract class Mob : Entity
     public int Health => _health;
 
     protected double _speed;
-    public double Speed => _speed;
+    protected double _directionRadians;
+    protected double _angularVelocity;
     
-    protected Mob(int health, double speed, int xPosition, int yPosition) : base(xPosition, yPosition)
+    protected Mob(Level level, int health, double speed, int xPosition, int yPosition) : base(level, xPosition, yPosition)
     {
         _health = health;
         _speed = speed;
+        _directionRadians = 0;
+        _angularVelocity = 0;
     }
 }

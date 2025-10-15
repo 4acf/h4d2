@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Uncommons;
 
@@ -10,7 +11,7 @@ public class Uncommon : Mob
     private const double _frameDuration = 1.0 / 8.0;
     private double _timeSinceLastFrameUpdate;
     
-    protected Uncommon(int uncommon, int health, int speed, int xPosition, int yPosition) : base(health, speed, xPosition, yPosition)
+    protected Uncommon(Level level, int uncommon, int health, int speed, int xPosition, int yPosition) : base(level, health, speed, xPosition, yPosition)
     {
         _uncommon = uncommon;
         _walkStep = 0;
@@ -49,6 +50,6 @@ public class Uncommon : Mob
     public override void Render(Bitmap screen)
     {
         Bitmap animationCycleBitmap = Art.Uncommons[_uncommon][_walkStep];
-        screen.Draw(animationCycleBitmap, XPosition, YPosition);
+        screen.Draw(animationCycleBitmap, (int)XPosition, (int)YPosition);
     }
 }

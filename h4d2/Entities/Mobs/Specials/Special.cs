@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Specials;
 
@@ -10,7 +11,7 @@ public class Special : Mob
     private const double _frameDuration = 1.0 / 8.0;
     private double _timeSinceLastFrameUpdate;
     
-    protected Special(int special, int health, int speed, int xPosition, int yPosition) : base(health, speed, xPosition,
+    protected Special(Level level, int special, int health, int speed, int xPosition, int yPosition) : base(level, health, speed, xPosition,
         yPosition)
     {
         _special = special;
@@ -50,6 +51,6 @@ public class Special : Mob
     public override void Render(Bitmap screen)
     {
         Bitmap animationCycleBitmap = Art.Specials[_special][_walkStep];
-        screen.Draw(animationCycleBitmap, XPosition, YPosition);
+        screen.Draw(animationCycleBitmap, (int)XPosition, (int)YPosition);
     }
 }

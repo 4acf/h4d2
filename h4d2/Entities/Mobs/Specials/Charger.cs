@@ -1,8 +1,10 @@
-﻿namespace H4D2.Entities.Mobs.Specials;
+﻿using H4D2.Levels;
+
+namespace H4D2.Entities.Mobs.Specials;
 
 public class Charger : Special
 {
-    public Charger(int xPosition, int yPosition) : base(3, 600, 250, xPosition, yPosition)
+    public Charger(Level level, int xPosition, int yPosition) : base(level, 3, 600, 250, xPosition, yPosition)
     {
         
     }
