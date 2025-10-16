@@ -23,10 +23,7 @@ public abstract class Entity
     
     public abstract void Update(double elapsedTime);
     public abstract void Render(Bitmap screen);
-    public virtual void RenderShadow(Bitmap screen)
-    {
-        //this will be abstract at some point
-    } 
+    public abstract void RenderShadow(Bitmap screen);
     
     protected void _AttemptMove()
     {
