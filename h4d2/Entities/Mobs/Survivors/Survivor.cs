@@ -11,7 +11,8 @@ public class Survivor : Mob
     private const double _frameDuration = 1.0 / 8.0;
     private double _timeSinceLastFrameUpdate;
     
-    protected Survivor(Level level, int character, int xPosition, int yPosition) : base(level, 100, 220, xPosition, yPosition)
+    protected Survivor(Level level, int character, int xPosition, int yPosition) 
+        : base(level, 100, 220, xPosition, yPosition)
     {
         _character = character;
         _walkStep = 0;
@@ -27,13 +28,14 @@ public class Survivor : Mob
 
     private void _UpdatePosition(double elapsedTime)
     {
+        Random random = RandomSingleton.Instance;
         double frameFactor = elapsedTime * 60;
         
         // angular velocity calculations are still a work in progress, they don't yet change based on framerate
         _xVelocity *= 0.5;
         _yVelocity *= 0.5;
         _angularVelocity *= 0.9;
-        _angularVelocity += ((RandomSingleton.Instance.NextDouble() - RandomSingleton.Instance.NextDouble()) * RandomSingleton.Instance.NextDouble()) * 0.1;
+        _angularVelocity += ((random.NextDouble() - random.NextDouble()) * random.NextDouble()) * 0.1;
         _directionRadians += _angularVelocity;
         while (_directionRadians < 0) _directionRadians += 2 * Math.PI;
         
@@ -44,7 +46,7 @@ public class Survivor : Mob
 
         if (_xVelocity == 0 || _yVelocity == 0)
         {
-            _angularVelocity += ((RandomSingleton.Instance.NextDouble() -RandomSingleton.Instance.NextDouble()) * RandomSingleton.Instance.NextDouble()) * 0.4;
+            _angularVelocity += ((random.NextDouble() - random.NextDouble()) * random.NextDouble()) * 0.4;
         }
     }
     
@@ -109,4 +111,19 @@ public class Survivor : Mob
         Bitmap animationCycleBitmap = Art.Survivors[_character][_walkFrame];
         screen.Draw(animationCycleBitmap, (int)XPosition, (int)YPosition, _xFlip);
     }
+
+    public override void RenderShadow(Bitmap screen)
+    {
+        int x = (int)XPosition;
+        int y = (int)YPosition;
+        screen.BlendFill(
+            x + Art.SpriteSize - 10,
+            y - Art.SpriteSize - 1,
+            x + Art.SpriteSize - 7,
+            y - Art.SpriteSize - 1,
+            0x0,
+            0.9            
+        );
+    }
+    
 }

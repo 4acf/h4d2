@@ -23,6 +23,7 @@ public class Game
     {
         _screen.Clear();
         _level.RenderBackground(_screen);
+        _level.RenderShadows(_screen);
         _level.RenderEntities(_screen);
         return _screen.Data;
     }

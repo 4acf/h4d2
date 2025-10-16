@@ -67,15 +67,8 @@ public class Bitmap
                 int parentIndex = _GetBytespaceIndex(Width, x + j, y - i - 1);
                 int childIndex = _GetBytespaceIndex(bitmap.Width, k, i);
 
-                if (parentIndex < 0 || childIndex < 0 || parentIndex >= Data.Length || childIndex >= bitmap.Data.Length)
-                {
-                    continue;
-                }
-
-                if (bitmap.Data[childIndex + 3] == 0)
-                {
-                    continue;
-                }
+                if (IsOutOfBounds(parentIndex) || bitmap.IsOutOfBounds(childIndex)) continue;
+                if (bitmap.Data[childIndex + 3] == 0) continue;
                 
                 Data[parentIndex] = bitmap.Data[childIndex];
                 Data[parentIndex + 1] = bitmap.Data[childIndex + 1];
@@ -84,9 +77,36 @@ public class Bitmap
             }
         }
     }
+
+    public void BlendFill(int x0, int y0, int x1, int y1, int color, double blend)
+    {
+        byte r = (byte)(color >> 16 & 0xff);
+        byte g = (byte)(color >> 8 & 0xff);
+        byte b = (byte)(color & 0xff);
+
+        for (int i = y0; i <= y1; i++)
+        {
+            for (int j = x0; j <= x1; j++)
+            {
+                int index = _GetBytespaceIndex(Width, j, i);
+                if (IsOutOfBounds(index)) continue;
+                
+                Data[index] = MathHelpers.ByteLerp(Data[index], r, blend);
+                Data[index + 1] = MathHelpers.ByteLerp(Data[index + 1], g, blend);
+                Data[index + 2] = MathHelpers.ByteLerp(Data[index + 2], b, blend);
+                Data[index + 3] = 0xff;
+            }
+        }
+    }
     
-    private int _GetBytespaceIndex(int width, int x, int y)
+    public bool IsOutOfBounds(int index)
+    {
+        return index < 0 || index >= Data.Length;
+    }
+    
+    private static int _GetBytespaceIndex(int width, int x, int y)
     {
         return ((y * width) + x) * 4;
     }
+    
 }

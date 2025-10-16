@@ -10,7 +10,7 @@ public abstract class Entity
     
     protected double _xVelocity;
     protected double _yVelocity;
-    protected Level _level;
+    protected readonly Level _level;
     
     protected Entity(Level level, int xPosition, int yPosition)
     {
@@ -23,6 +23,10 @@ public abstract class Entity
     
     public abstract void Update(double elapsedTime);
     public abstract void Render(Bitmap screen);
+    public virtual void RenderShadow(Bitmap screen)
+    {
+        //this will be abstract at some point
+    } 
     
     protected void _AttemptMove()
     {
@@ -42,7 +46,7 @@ public abstract class Entity
         // todo: create a bounding box around an entity for more accurate collisions
         if (xDest < 0 || yDest < Art.SpriteSize || xDest >= _level.Width - Art.SpriteSize || yDest >= _level.Height)
         {
-            _Collide(xComponent, yComponent);
+            _Collide();
             return;
         }
         
@@ -50,7 +54,7 @@ public abstract class Entity
         YPosition = yDest;
     }
 
-    private void _Collide(double xComponent, double yComponent)
+    private void _Collide()
     {
         _xVelocity = 0;
         _yVelocity = 0;

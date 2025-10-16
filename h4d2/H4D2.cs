@@ -33,6 +33,8 @@ public static class H4D2
         var game = new Game((int)ScreenWidth, (int)ScreenHeight);
         var scale = new Vector2f(ScreenScale, ScreenScale);
         var stopwatch = new Stopwatch();
+
+        var renderState = new RenderStates(BlendMode.None);
         
         while (window.IsOpen)
         {
@@ -50,7 +52,7 @@ public static class H4D2
             canvas.Display();
             Sprite sprite = new Sprite(canvas.Texture);
             sprite.Scale = scale;
-            window.Draw(sprite);
+            window.Draw(sprite, renderState);
             window.Display();
         }
     }
