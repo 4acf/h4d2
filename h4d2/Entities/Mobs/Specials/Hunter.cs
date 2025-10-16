@@ -4,7 +4,8 @@ namespace H4D2.Entities.Mobs.Specials;
 
 public class Hunter : Special
 {
-    public Hunter(Level level, int xPosition, int yPosition) : base(level, 0, 250, 250, xPosition, yPosition)
+    public Hunter(Level level, int xPosition, int yPosition) 
+        : base(level, new BoundingBox(4, 7, 8, 9), 0, 250, 250, xPosition, yPosition)
     {
         
     }    

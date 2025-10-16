@@ -12,7 +12,7 @@ public class Survivor : Mob
     private double _timeSinceLastFrameUpdate;
     
     protected Survivor(Level level, int character, int xPosition, int yPosition) 
-        : base(level, 100, 220, xPosition, yPosition)
+        : base(level, new BoundingBox(4, 6, 8, 10), 100, 220, xPosition, yPosition)
     {
         _character = character;
         _walkStep = 0;

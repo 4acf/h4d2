@@ -5,20 +5,22 @@ namespace H4D2.Entities;
 
 public abstract class Entity
 {
+    protected readonly Level _level;
     public double XPosition { get; protected set; }
     public double YPosition { get; protected set; }
+    protected BoundingBox _boundingBox;
     
     protected double _xVelocity;
     protected double _yVelocity;
-    protected readonly Level _level;
     
-    protected Entity(Level level, int xPosition, int yPosition)
+    protected Entity(Level level, BoundingBox boundingBox, int xPosition, int yPosition)
     {
+        _level = level;
         XPosition = xPosition;
         YPosition = yPosition;
+        _boundingBox = boundingBox;
         _xVelocity = 0;
         _yVelocity = 0;
-        _level = level;
     }
     
     public abstract void Update(double elapsedTime);
@@ -40,8 +42,7 @@ public abstract class Entity
         double xDest = XPosition + xComponent;
         double yDest = YPosition + yComponent;
 
-        // todo: create a bounding box around an entity for more accurate collisions
-        if (xDest < 0 || yDest < Art.SpriteSize || xDest >= _level.Width - Art.SpriteSize || yDest >= _level.Height)
+        if (_boundingBox.IsOutOfLevelBounds(_level, xDest, yDest))
         {
             _Collide();
             return;
@@ -50,7 +51,7 @@ public abstract class Entity
         XPosition = xDest;
         YPosition = yDest;
     }
-
+    
     private void _Collide()
     {
         _xVelocity = 0;

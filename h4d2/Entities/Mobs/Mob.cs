@@ -12,7 +12,8 @@ public abstract class Mob : Entity
     protected double _angularVelocity;
     protected bool _xFlip;
     
-    protected Mob(Level level, int health, double speed, int xPosition, int yPosition) : base(level, xPosition, yPosition)
+    protected Mob(Level level, BoundingBox boundingBox, int health, double speed, int xPosition, int yPosition) :
+        base(level, boundingBox, xPosition, yPosition)
     {
         _health = health;
         _speed = speed;

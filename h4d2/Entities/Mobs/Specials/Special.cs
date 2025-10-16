@@ -11,7 +11,8 @@ public class Special : Mob
     private const double _frameDuration = 1.0 / 8.0;
     private double _timeSinceLastFrameUpdate;
     
-    protected Special(Level level, int special, int health, int speed, int xPosition, int yPosition) : base(level, health, speed, xPosition,
+    protected Special(Level level, BoundingBox boundingBox, int special, int health, int speed, int xPosition, int yPosition) 
+        : base(level, boundingBox, health, speed, xPosition,
         yPosition)
     {
         _special = special;
