@@ -2,6 +2,7 @@
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Commons;
+using Cfg = CommonConfig;
 
 public class Common : Mob
 {
@@ -12,9 +13,16 @@ public class Common : Mob
     private double _timeSinceLastFrameUpdate;
     
     public Common(Level level, int xPosition, int yPosition)
-        : base(level, new BoundingBox(true, 4, 6, 8, 10), 50, RandomSingleton.Instance.Next(230, 281), xPosition, yPosition)
+        : base(
+            level,
+            Cfg.BoundingBox, 
+            Cfg.Health, 
+            RandomSingleton.Instance.Next(Cfg.MinSpeed, Cfg.MaxSpeed), 
+            xPosition, 
+            yPosition
+            )
     {
-        _common = RandomSingleton.Instance.Next(9);
+        _common = RandomSingleton.Instance.Next(Cfg.NumSprites);
         _walkStep = 0;
         _walkFrame = 0;
         _timeSinceLastFrameUpdate = 0.0;

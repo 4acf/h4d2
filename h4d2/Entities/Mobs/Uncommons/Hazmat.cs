@@ -1,10 +1,12 @@
 ﻿using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Uncommons;
+using Cfg = UncommonConfig;
 
 public class Hazmat : Uncommon
 {
-    public Hazmat(Level level, int xPosition, int yPosition) : base(level, 0, 200, 250, xPosition, yPosition)
+    public Hazmat(Level level, int xPosition, int yPosition) 
+        : base(level, Cfg.Hazmat, Cfg.HazmatHealth, Cfg.HazmatSpeed, xPosition, yPosition)
     {
         
     }

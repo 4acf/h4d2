@@ -1,11 +1,12 @@
 ﻿using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Specials;
+using Cfg = SpecialConfig;
 
 public class Tank : Special
 {
     public Tank(Level level, int xPosition, int yPosition) 
-        : base(level, new BoundingBox(true, 1, 5, 14, 11), 6, 6000, 210, xPosition, yPosition)
+        : base(level, Cfg.TankBoundingBox, Cfg.Tank, Cfg.TankHealth, Cfg.TankRunSpeed, xPosition, yPosition)
     {
         
     }

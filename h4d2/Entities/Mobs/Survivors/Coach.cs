@@ -1,10 +1,11 @@
 ﻿using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Survivors;
+using Cfg = SurvivorConfig;
 
 public class Coach : Survivor
 {
-    public Coach(Level level, int xPosition, int yPosition) : base(level, 0, xPosition, yPosition)
+    public Coach(Level level, int xPosition, int yPosition) : base(level, Cfg.Coach, xPosition, yPosition)
     {
         
     }

@@ -89,18 +89,13 @@ public abstract class Entity
         double xDest = XPosition + xComponent;
         double yDest = YPosition + yComponent;
 
-        if (IsOutOfLevelBounds(xDest, yDest))
+        if (IsOutOfLevelBounds(xDest, yDest) || 
+            _level.ContainsBlockingEntity(this, xDest, yDest))
         {
             _Collide();
             return;
         }
-        
-        if (_level.ContainsBlockingEntity(this, xDest, yDest))
-        {
-            _Collide();
-            return;
-        }
-        
+
         XPosition = xDest;
         YPosition = yDest;
     }

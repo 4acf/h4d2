@@ -2,6 +2,7 @@
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Survivors;
+using Cfg = SurvivorConfig;
 
 public class Survivor : Mob
 {
@@ -12,14 +13,14 @@ public class Survivor : Mob
     private double _timeSinceLastFrameUpdate;
     
     protected Survivor(Level level, int character, int xPosition, int yPosition) 
-        : base(level, new BoundingBox(true, 4, 6, 8, 10), 100, 220, xPosition, yPosition)
+        : base(level, Cfg.BoundingBox, Cfg.DefaultHealth, Cfg.RunSpeed, xPosition, yPosition)
     {
         _character = character;
         _walkStep = 0;
         _walkFrame = 0;
         _timeSinceLastFrameUpdate = 0.0;
     }
-
+    
     public override void Update(double elapsedTime)
     {
         _UpdatePosition(elapsedTime);

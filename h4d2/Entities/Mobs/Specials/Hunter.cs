@@ -1,11 +1,12 @@
 ﻿using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Specials;
+using Cfg = SpecialConfig;
 
 public class Hunter : Special
 {
     public Hunter(Level level, int xPosition, int yPosition) 
-        : base(level, new BoundingBox(true, 4, 7, 8, 9), 0, 250, 250, xPosition, yPosition)
+        : base(level, Cfg.HunterBoundingBox, Cfg.Hunter, Cfg.HunterHealth, Cfg.HunterRunSpeed, xPosition, yPosition)
     {
         
     }    
