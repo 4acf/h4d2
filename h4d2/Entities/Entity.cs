@@ -8,7 +8,7 @@ public abstract class Entity
     protected readonly Level _level;
     public double XPosition { get; protected set; }
     public double YPosition { get; protected set; }
-    protected BoundingBox _boundingBox;
+    public readonly BoundingBox BoundingBox;
     
     protected double _xVelocity;
     protected double _yVelocity;
@@ -18,7 +18,7 @@ public abstract class Entity
         _level = level;
         XPosition = xPosition;
         YPosition = yPosition;
-        _boundingBox = boundingBox;
+        BoundingBox = boundingBox;
         _xVelocity = 0;
         _yVelocity = 0;
     }
@@ -26,6 +26,53 @@ public abstract class Entity
     public abstract void Update(double elapsedTime);
     public abstract void Render(Bitmap screen);
     public abstract void RenderShadow(Bitmap screen);
+
+    public bool IsOutOfLevelBounds(double xPosition, double yPosition)
+    {
+        double w = BoundingBox.W(xPosition);
+        if (w < 0) 
+            return true;
+        
+        double s = BoundingBox.S(yPosition);
+        if(s < 0) 
+            return true;
+        
+        double e = BoundingBox.E(xPosition);
+        if (e >= _level.Width) 
+            return true;
+        
+        double n = BoundingBox.N(yPosition);
+        if (n >= _level.Height) 
+            return true;
+
+        return false;
+    }
+    
+    public bool IsIntersecting(Entity other, double xPosition, double yPosition)
+    {
+        double otherN = other.BoundingBox.N(other.YPosition);
+        double otherE = other.BoundingBox.E(other.XPosition);
+        double otherS = other.BoundingBox.S(other.YPosition);
+        double otherW = other.BoundingBox.W(other.XPosition);
+        
+        (double, double) point = BoundingBox.SW(xPosition, yPosition);
+        if (BoundingBox.IsIntersecting(point, otherN, otherE, otherS, otherW))
+            return true;
+        
+        point = BoundingBox.NW(xPosition, yPosition);
+        if (BoundingBox.IsIntersecting(point, otherN, otherE, otherS, otherW))
+            return true;
+        
+        point = BoundingBox.SE(xPosition, yPosition);
+        if (BoundingBox.IsIntersecting(point, otherN, otherE, otherS, otherW))
+            return true;
+        
+        point =  BoundingBox.NE(xPosition, yPosition);
+        if (BoundingBox.IsIntersecting(point, otherN, otherE, otherS, otherW))
+            return true;
+        
+        return false;
+    }
     
     protected void _AttemptMove()
     {
@@ -42,7 +89,13 @@ public abstract class Entity
         double xDest = XPosition + xComponent;
         double yDest = YPosition + yComponent;
 
-        if (_boundingBox.IsOutOfLevelBounds(_level, xDest, yDest))
+        if (IsOutOfLevelBounds(xDest, yDest))
+        {
+            _Collide();
+            return;
+        }
+        
+        if (_level.ContainsBlockingEntity(this, xDest, yDest))
         {
             _Collide();
             return;

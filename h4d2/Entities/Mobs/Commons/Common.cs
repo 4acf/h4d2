@@ -12,7 +12,7 @@ public class Common : Mob
     private double _timeSinceLastFrameUpdate;
     
     public Common(Level level, int xPosition, int yPosition)
-        : base(level, new BoundingBox(4, 6, 8, 10), 50, RandomSingleton.Instance.Next(230, 281), xPosition, yPosition)
+        : base(level, new BoundingBox(true, 4, 6, 8, 10), 50, RandomSingleton.Instance.Next(230, 281), xPosition, yPosition)
     {
         _common = RandomSingleton.Instance.Next(9);
         _walkStep = 0;

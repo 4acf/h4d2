@@ -19,33 +19,47 @@ public class Level
         Height = height;
         
         _entities = new List<Entity>();
-        _entities.Add(new Louis(this, 152, 130));
-        _entities.Add(new Francis(this, 152, 130));
-        _entities.Add(new Zoey(this, 152, 130));
-        _entities.Add(new Bill(this, 152, 130));
-        _entities.Add(new Rochelle(this, 152, 130));
-        _entities.Add(new Ellis(this, 152, 130));
-        _entities.Add(new Nick(this, 152, 130));
-        _entities.Add(new Coach(this, 152, 130));
-        
-        for (int i = 0; i < 10; i++) {
-            _entities.Add(new Common(this, 152, 130));
-        }
+        _entities.Add(new Louis   (this, 0, 16));
+        _entities.Add(new Francis (this, 32, 16));
+        _entities.Add(new Zoey    (this, 64, 16));
+        _entities.Add(new Bill    (this, 96, 16));
+        _entities.Add(new Rochelle(this, 128, 16));
+        _entities.Add(new Ellis   (this, 160, 16));
+        _entities.Add(new Nick    (this, 192, 16));
+        _entities.Add(new Coach   (this, 224, 16));
 
-        _entities.Add(new Riot(this, 152, 130));
-        _entities.Add(new Worker(this, 152, 130));
-        _entities.Add(new Mudman(this, 152, 130));
-        _entities.Add(new Clown(this, 152, 130));
-        _entities.Add(new Hazmat(this, 152, 130));
+        for (int i = 0; i < 10; i++)
+        {
+            _entities.Add(new Common(this, i * 32, 64));
+        }
         
-        _entities.Add(new Witch(this, 152, 130));
-        _entities.Add(new Tank(this, 152, 130));
-        _entities.Add(new Spitter(this, 152, 130));
-        _entities.Add(new Jockey(this, 152, 130));
-        _entities.Add(new Charger(this, 152, 130));
-        _entities.Add(new Smoker(this, 152, 130));
-        _entities.Add(new Boomer(this, 152, 130));
-        _entities.Add(new Hunter(this, 152, 130));
+        _entities.Add(new Riot  (this, 0, 128));
+        _entities.Add(new Worker(this, 32, 128));
+        _entities.Add(new Mudman(this, 64, 128));
+        _entities.Add(new Clown (this, 96, 128));
+        _entities.Add(new Hazmat(this, 128, 128));
+        
+        _entities.Add(new Witch  (this, 0, 196));
+        _entities.Add(new Tank   (this, 32, 196));
+        _entities.Add(new Spitter(this, 64, 196));
+        _entities.Add(new Jockey (this, 96, 196));
+        _entities.Add(new Charger(this, 128, 196));
+        _entities.Add(new Smoker (this, 160, 196));
+        _entities.Add(new Boomer (this, 192, 196));
+        _entities.Add(new Hunter (this, 224, 196));
+    }
+    
+    public bool ContainsBlockingEntity(Entity e1, double xPosition, double yPosition)
+    {
+        foreach (Entity e2 in _entities)
+        {
+            if (e2 != e1 &&
+                e2.BoundingBox.IsBlocking &&
+                e1.IsIntersecting(e2, xPosition, yPosition)
+            )
+                return true;
+        }
+        return false;
     }
     
     public void UpdateEntities(double elapsedTime)

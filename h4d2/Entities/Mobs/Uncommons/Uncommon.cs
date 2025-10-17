@@ -12,7 +12,7 @@ public class Uncommon : Mob
     private double _timeSinceLastFrameUpdate;
     
     protected Uncommon(Level level, int uncommon, int health, int speed, int xPosition, int yPosition) 
-        : base(level, new BoundingBox(4, 6, 8, 10), health, speed, xPosition, yPosition)
+        : base(level, new BoundingBox(true, 4, 6, 8, 10), health, speed, xPosition, yPosition)
     {
         _uncommon = uncommon;
         _walkStep = 0;
