@@ -1,16 +1,11 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Levels;
 
-namespace H4D2.Entities.Mobs.Specials;
+namespace H4D2.Entities.Mobs.Zombies.Specials;
 
-public class Special : Mob
+public class Special : Zombie
 {
     private readonly int _special;
-    private int _walkStep;
-    private int _walkFrame;
-    private const double _frameDuration = 1.0 / 8.0;
-    private double _timeSinceLastFrameUpdate;
-    private Entity? _target;
     
     protected Special(Level level, BoundingBox boundingBox, int special, int health, int speed, int xPosition, int yPosition) 
         : base(level, boundingBox, health, speed, xPosition,

@@ -1,4 +1,4 @@
-﻿namespace H4D2.Entities.Mobs.Specials;
+﻿namespace H4D2.Entities.Mobs.Zombies.Specials;
 
 public static class SpecialConfig
 {

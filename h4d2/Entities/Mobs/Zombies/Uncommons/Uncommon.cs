@@ -1,16 +1,11 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Levels;
 
-namespace H4D2.Entities.Mobs.Uncommons;
+namespace H4D2.Entities.Mobs.Zombies.Uncommons;
 
-public class Uncommon : Mob
+public class Uncommon : Zombie
 {
     private readonly int _uncommon;
-    private int _walkStep;
-    private int _walkFrame;
-    private const double _frameDuration = 1.0 / 8.0;
-    private double _timeSinceLastFrameUpdate;
-    private Entity? _target;
     
     protected Uncommon(Level level, int uncommon, int health, int speed, int xPosition, int yPosition) 
         : base(level, UncommonConfig.BoundingBox, health, speed, xPosition, yPosition)

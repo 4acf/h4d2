@@ -1,6 +1,6 @@
 ﻿using H4D2.Levels;
 
-namespace H4D2.Entities.Mobs.Uncommons;
+namespace H4D2.Entities.Mobs.Zombies.Uncommons;
 using Cfg = UncommonConfig;
 
 public class Riot : Uncommon

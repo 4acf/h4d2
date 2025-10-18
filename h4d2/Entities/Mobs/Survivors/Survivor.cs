@@ -7,18 +7,11 @@ using Cfg = SurvivorConfig;
 public class Survivor : Mob
 {
     private readonly int _character;
-    private int _walkStep;
-    private int _walkFrame;
-    private const double _frameDuration = 1.0 / 8.0;
-    private double _timeSinceLastFrameUpdate;
     
     protected Survivor(Level level, int character, int xPosition, int yPosition) 
         : base(level, Cfg.BoundingBox, Cfg.DefaultHealth, Cfg.RunSpeed, xPosition, yPosition)
     {
         _character = character;
-        _walkStep = 0;
-        _walkFrame = 0;
-        _timeSinceLastFrameUpdate = 0.0;
     }
     
     public override void Update(double elapsedTime)

@@ -1,8 +1,8 @@
 ﻿using H4D2.Entities;
-using H4D2.Entities.Mobs.Commons;
-using H4D2.Entities.Mobs.Specials;
+using H4D2.Entities.Mobs.Zombies.Commons;
+using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Mobs.Survivors;
-using H4D2.Entities.Mobs.Uncommons;
+using H4D2.Entities.Mobs.Zombies.Uncommons;
 using H4D2.Infrastructure;
 
 namespace H4D2.Levels;

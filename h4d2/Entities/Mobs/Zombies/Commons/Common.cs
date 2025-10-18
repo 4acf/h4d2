@@ -1,17 +1,12 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Levels;
 
-namespace H4D2.Entities.Mobs.Commons;
+namespace H4D2.Entities.Mobs.Zombies.Commons;
 using Cfg = CommonConfig;
 
-public class Common : Mob
+public class Common : Zombie
 {
     private readonly int _common;
-    private int _walkStep;
-    private int _walkFrame;
-    private const double _frameDuration = 1.0 / 8.0;
-    private double _timeSinceLastFrameUpdate;
-    private Entity? _target;
     
     public Common(Level level, int xPosition, int yPosition)
         : base(

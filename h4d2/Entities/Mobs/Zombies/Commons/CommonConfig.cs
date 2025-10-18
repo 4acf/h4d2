@@ -1,4 +1,4 @@
-﻿namespace H4D2.Entities.Mobs.Commons;
+﻿namespace H4D2.Entities.Mobs.Zombies.Commons;
 
 public static class CommonConfig
 {

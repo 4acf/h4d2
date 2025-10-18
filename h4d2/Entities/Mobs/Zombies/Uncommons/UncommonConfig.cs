@@ -1,4 +1,4 @@
-﻿namespace H4D2.Entities.Mobs.Uncommons;
+﻿namespace H4D2.Entities.Mobs.Zombies.Uncommons;
 
 public static class UncommonConfig
 {
