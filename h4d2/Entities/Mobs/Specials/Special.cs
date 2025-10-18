@@ -49,7 +49,7 @@ public class Special : Mob
         _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
         _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
         
-        double moveSpeed = (0.2 * _speed / 220) * 50 * elapsedTime;
+        double moveSpeed = (15 * _speed / 220) * elapsedTime;
         _xVelocity += Math.Cos(_directionRadians) * moveSpeed;
         _yVelocity += Math.Sin(_directionRadians) * moveSpeed;
 
