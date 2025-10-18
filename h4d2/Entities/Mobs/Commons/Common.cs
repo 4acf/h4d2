@@ -13,9 +13,6 @@ public class Common : Mob
     private double _timeSinceLastFrameUpdate;
     private Entity? _target;
     
-    //this will probably be a replacement for _angularVelocity in Mob at some point
-    public const double _turnSpeed = 5.0;
-    
     public Common(Level level, int xPosition, int yPosition)
         : base(
             level,

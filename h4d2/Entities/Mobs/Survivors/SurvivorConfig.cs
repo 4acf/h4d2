@@ -11,7 +11,7 @@ public static class SurvivorConfig
     public const int Louis = 6;
     public const int Zoey = 7;
     
-    public static readonly BoundingBox BoundingBox = new(true, 4, 6, 8, 10);
+    public static readonly BoundingBox BoundingBox = new(false, 4, 6, 8, 10);
     public const int DefaultHealth = 100;
     public const int IncappedHealth = 300;
     public const int RunSpeed = 220;
