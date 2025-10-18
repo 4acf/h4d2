@@ -25,7 +25,7 @@ public static class SpecialConfig
     public const int Jockey = 4;
     public const int JockeyHealth = 325;
     public const int JockeyRunSpeed = 250;
-    public static readonly BoundingBox JockeyBoundingBox = new(true, 6, 11, 6, 5);
+    public static readonly BoundingBox JockeyBoundingBox = new(true, 6, 11, 8, 5);
 
     public const int Spitter = 5;
     public const int SpitterHealth = 100;
@@ -35,7 +35,7 @@ public static class SpecialConfig
     public const int Tank = 6;
     public const int TankHealth = 6000;
     public const int TankRunSpeed = 210;
-    public static readonly BoundingBox TankBoundingBox = new(true, 1, 5, 14, 11);
+    public static readonly BoundingBox TankBoundingBox = new(true, 1, 4, 14, 12);
 
     public const int Witch = 7;
     public const int WitchHealth = 1000;

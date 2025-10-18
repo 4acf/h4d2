@@ -26,7 +26,7 @@ public abstract class Entity
     public abstract void Update(double elapsedTime);
     public abstract void Render(Bitmap screen);
     public abstract void RenderShadow(Bitmap screen);
-
+    
     public bool IsOutOfLevelBounds(double xPosition, double yPosition)
     {
         double w = BoundingBox.W(xPosition);
@@ -50,28 +50,7 @@ public abstract class Entity
     
     public bool IsIntersecting(Entity other, double xPosition, double yPosition)
     {
-        double otherN = other.BoundingBox.N(other.YPosition);
-        double otherE = other.BoundingBox.E(other.XPosition);
-        double otherS = other.BoundingBox.S(other.YPosition);
-        double otherW = other.BoundingBox.W(other.XPosition);
-        
-        (double, double) point = BoundingBox.SW(xPosition, yPosition);
-        if (BoundingBox.IsIntersecting(point, otherN, otherE, otherS, otherW))
-            return true;
-        
-        point = BoundingBox.NW(xPosition, yPosition);
-        if (BoundingBox.IsIntersecting(point, otherN, otherE, otherS, otherW))
-            return true;
-        
-        point = BoundingBox.SE(xPosition, yPosition);
-        if (BoundingBox.IsIntersecting(point, otherN, otherE, otherS, otherW))
-            return true;
-        
-        point =  BoundingBox.NE(xPosition, yPosition);
-        if (BoundingBox.IsIntersecting(point, otherN, otherE, otherS, otherW))
-            return true;
-        
-        return false;
+        return BoundingBox.IsIntersecting(other.BoundingBox, other.XPosition, other.YPosition, xPosition, yPosition);
     }
     
     protected void _AttemptMove()

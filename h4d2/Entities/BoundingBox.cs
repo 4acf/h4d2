@@ -25,16 +25,14 @@ public class BoundingBox
     public (double, double) NW(double xPosition, double yPosition) => (W(xPosition), N(yPosition));
     public (double, double) SE(double xPosition, double yPosition) => (E(xPosition), S(yPosition));
     public (double, double) NE(double xPosition, double yPosition) => (E(xPosition), N(yPosition));
-
-    public static bool IsIntersecting((double, double) point, double n, double e, double s, double w)
+    
+    public bool IsIntersecting(BoundingBox other, double otherXPosition, double otherYPosition, double xPosition, double yPosition)
     {
-        double x = point.Item1;
-        double y = point.Item2;
-        
-        return 
-            x >= w &&
-            x <= e &&
-            y >= s &&
-            y <= n;
+        return
+            other.W(otherXPosition) <= E(xPosition) &&
+            other.E(otherXPosition) >= W(xPosition) &&
+            other.N(otherYPosition) >= S(yPosition) &&
+            other.S(otherYPosition) <= N(yPosition);
     }
+    
 }
