@@ -11,6 +11,7 @@ public abstract class Mob : Entity
     protected double _directionRadians;
     protected bool _xFlip;
     protected const double _turnSpeed = 5.0;
+    protected const double _speedFactor = 15.0 / 220.0;
     
     protected int _walkStep;
     protected int _walkFrame;

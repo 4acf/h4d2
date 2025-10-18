@@ -51,7 +51,7 @@ public class Common : Zombie
         _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
         _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
         
-        double moveSpeed = (15 * _speed / 220) * elapsedTime;
+        double moveSpeed = (_speed * _speedFactor) * elapsedTime;
         _xVelocity += Math.Cos(_directionRadians) * moveSpeed;
         _yVelocity += Math.Sin(_directionRadians) * moveSpeed;
 
