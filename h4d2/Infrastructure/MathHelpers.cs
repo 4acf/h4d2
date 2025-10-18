@@ -7,8 +7,22 @@ public static class MathHelpers
         return (int)(radians * 180 / Math.PI) % 360;
     }
 
+    public static double NormalizeRadians(double radians)
+    {
+        while (radians < 0) radians += 2 * Math.PI;
+        while (radians >= 2 * Math.PI) radians -= 2 * Math.PI;
+        return radians;
+    }
+    
     public static byte ByteLerp(byte a, byte b, double t)
     {
         return (byte)((t * a) + (1 - t) * b);
+    }
+
+    public static double Distance(double x0, double y0, double x1, double y1)
+    {
+        double term1 = Math.Pow(x1 - x0, 2);
+        double term2 = Math.Pow(y1 - y0, 2);
+        return Math.Sqrt(term1 + term2);
     }
 }

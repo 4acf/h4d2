@@ -61,6 +61,23 @@ public class Level
         }
         return false;
     }
+
+    public Entity? GetNearestHealthySurvivor(double xPosition, double yPosition)
+    {
+        Entity? result = null;
+        double lowestDistance = double.MaxValue;
+        foreach (Survivor survivor in _entities.OfType<Survivor>())
+        {
+            if (survivor.Health <= 0) continue;
+            double distance = MathHelpers.Distance(xPosition, yPosition, survivor.XPosition, survivor.YPosition);
+            if (distance < lowestDistance)
+            {
+                result = survivor;
+                lowestDistance = distance;
+            }
+        }
+        return result;
+    }
     
     public void UpdateEntities(double elapsedTime)
     {

@@ -80,6 +80,7 @@ public class Uncommon : Mob
         while (_timeSinceLastFrameUpdate >= _frameDuration)
         {
             _walkStep = (_walkStep + 1) % 4;
+            if (_xVelocity == 0 && _yVelocity == 0) _walkStep = 0;
             int nextFrame = 0;
             if (direction == 1)
             {
