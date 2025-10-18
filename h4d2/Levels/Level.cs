@@ -19,15 +19,7 @@ public class Level
         Height = height;
         
         _entities = new List<Entity>();
-        _entities.Add(new Louis   (this, 0, 16));
-        _entities.Add(new Francis (this, 32, 16));
-        _entities.Add(new Zoey    (this, 64, 16));
-        _entities.Add(new Bill    (this, 96, 16));
-        _entities.Add(new Rochelle(this, 128, 16));
-        _entities.Add(new Ellis   (this, 160, 16));
-        _entities.Add(new Nick    (this, 192, 16));
-        _entities.Add(new Coach   (this, 224, 16));
-
+        
         for (int i = 0; i < 10; i++)
         {
             _entities.Add(new Common(this, i * 32, 64));
@@ -47,6 +39,15 @@ public class Level
         _entities.Add(new Smoker (this, 160, 196));
         _entities.Add(new Boomer (this, 192, 196));
         _entities.Add(new Hunter (this, 224, 196));
+        
+        _entities.Add(new Louis   (this, 0, 16));
+        _entities.Add(new Francis (this, 32, 16));
+        _entities.Add(new Zoey    (this, 64, 16));
+        _entities.Add(new Bill    (this, 96, 16));
+        _entities.Add(new Rochelle(this, 128, 16));
+        _entities.Add(new Ellis   (this, 160, 16));
+        _entities.Add(new Nick    (this, 192, 16));
+        _entities.Add(new Coach   (this, 224, 16));
     }
     
     public bool ContainsBlockingEntity(Entity e1, double xPosition, double yPosition)

@@ -29,26 +29,20 @@ public class Survivor : Mob
 
     private void _UpdatePosition(double elapsedTime)
     {
-        Random random = RandomSingleton.Instance;
-        double frameFactor = elapsedTime * 60;
-        
-        // angular velocity calculations are still a work in progress, they don't yet change based on framerate
         _xVelocity *= 0.5;
         _yVelocity *= 0.5;
-        _angularVelocity *= 0.9;
-        _angularVelocity += ((random.NextDouble() - random.NextDouble()) * random.NextDouble()) * 0.1;
-        _directionRadians += _angularVelocity;
-        while (_directionRadians < 0) _directionRadians += 2 * Math.PI;
+
+        double randomDirection = RandomSingleton.Instance.NextDouble() * (2 * Math.PI);
+        double directionDiff = randomDirection - _directionRadians;
+        directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
+        _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
+        _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
         
-        double moveSpeed = (0.2 * _speed / 220) * frameFactor;
+        double moveSpeed = (0.2 * _speed / 220) * 50 * elapsedTime;
         _xVelocity += Math.Cos(_directionRadians) * moveSpeed;
         _yVelocity += Math.Sin(_directionRadians) * moveSpeed;
-        _AttemptMove();
 
-        if (_xVelocity == 0 || _yVelocity == 0)
-        {
-            _angularVelocity += ((random.NextDouble() - random.NextDouble()) * random.NextDouble()) * 0.4;
-        }
+        _AttemptMove();
     }
     
     private void _UpdateSprite(double elapsedTime)

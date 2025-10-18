@@ -9,7 +9,6 @@ public abstract class Mob : Entity
 
     protected double _speed;
     protected double _directionRadians;
-    protected double _angularVelocity;
     protected bool _xFlip;
     protected const double _turnSpeed = 5.0;
     
@@ -19,7 +18,6 @@ public abstract class Mob : Entity
         _health = health;
         _speed = speed;
         _directionRadians = 0;
-        _angularVelocity = 0;
         _xFlip = false;
     }
 }
