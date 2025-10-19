@@ -34,5 +34,10 @@ public class BoundingBox
             other.N(otherYPosition) >= S(yPosition) &&
             other.S(otherYPosition) <= N(yPosition);
     }
+
+    public (double, double) CenterMass(double xPosition, double yPosition)
+    {
+        return ((W(xPosition) + E(xPosition)) / 2, (N(yPosition) + S(yPosition)) / 2);
+    }
     
 }

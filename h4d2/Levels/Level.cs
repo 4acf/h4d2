@@ -2,6 +2,7 @@
 using H4D2.Entities.Mobs.Zombies.Commons;
 using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Mobs.Survivors;
+using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Uncommons;
 using H4D2.Infrastructure;
 
@@ -25,29 +26,29 @@ public class Level
             _entities.Add(new Common(this, i * 32, 64));
         }
         
-        _entities.Add(new Riot  (this, 0, 128));
-        _entities.Add(new Worker(this, 32, 128));
-        _entities.Add(new Mudman(this, 64, 128));
-        _entities.Add(new Clown (this, 96, 128));
-        _entities.Add(new Hazmat(this, 128, 128));
+        _entities.Add(new Riot  (this, 32, 16));
+        _entities.Add(new Worker(this, 64, 16));
+        _entities.Add(new Mudman(this, 96, 16));
+        _entities.Add(new Clown (this, 128, 16));
+        _entities.Add(new Hazmat(this, 160, 16));
         
-        _entities.Add(new Witch  (this, 0, 196));
-        _entities.Add(new Tank   (this, 32, 196));
-        _entities.Add(new Spitter(this, 64, 196));
-        _entities.Add(new Jockey (this, 96, 196));
-        _entities.Add(new Charger(this, 128, 196));
-        _entities.Add(new Smoker (this, 160, 196));
-        _entities.Add(new Boomer (this, 192, 196));
-        _entities.Add(new Hunter (this, 224, 196));
+        _entities.Add(new Witch  (this, 32, 196));
+        _entities.Add(new Tank   (this, 64, 196));
+        _entities.Add(new Spitter(this, 96, 196));
+        _entities.Add(new Jockey (this, 128, 196));
+        _entities.Add(new Charger(this, 160, 196));
+        _entities.Add(new Smoker (this, 192, 196));
+        _entities.Add(new Boomer (this, 224, 196));
+        _entities.Add(new Hunter (this, 256, 196));
         
-        _entities.Add(new Louis   (this, 0, 16));
-        _entities.Add(new Francis (this, 32, 16));
-        _entities.Add(new Zoey    (this, 64, 16));
-        _entities.Add(new Bill    (this, 96, 16));
-        _entities.Add(new Rochelle(this, 128, 16));
-        _entities.Add(new Ellis   (this, 160, 16));
-        _entities.Add(new Nick    (this, 192, 16));
-        _entities.Add(new Coach   (this, 224, 16));
+        _entities.Add(new Louis   (this, 32, 120));
+        _entities.Add(new Francis (this, 64, 120));
+        _entities.Add(new Zoey    (this, 96, 120));
+        _entities.Add(new Bill    (this, 128, 120));
+        _entities.Add(new Rochelle(this, 160, 120));
+        _entities.Add(new Ellis   (this, 192, 120));
+        _entities.Add(new Nick    (this, 224, 120));
+        _entities.Add(new Coach   (this, 256, 120));
     }
     
     public bool ContainsBlockingEntity(Entity e1, double xPosition, double yPosition)
@@ -63,7 +64,37 @@ public class Level
         return false;
     }
 
-    public Entity? GetNearestHealthySurvivor(double xPosition, double yPosition)
+    public double GetDirectionToNearestWall(double xPosition, double yPosition)
+    {
+        double minDistance = xPosition;
+        double direction = Math.PI;
+        if (yPosition < minDistance)
+        {
+            minDistance = yPosition;
+            direction = (3 * Math.PI) / 2;
+        }
+        if (Width - xPosition < minDistance)
+        {
+            minDistance = Width - xPosition;
+            direction = 0;
+        }
+        if (Height - yPosition < minDistance)
+        {
+            minDistance = Height - yPosition;
+            direction = Math.PI / 2;
+        }
+        return direction;
+    }
+
+    public List<Survivor> GetLivingSurvivors()
+    {
+        return _entities
+            .OfType<Survivor>()
+            .Where(s => s.Health > 0)
+            .ToList();
+    }
+    
+    public Entity? GetNearestLivingSurvivor(double xPosition, double yPosition)
     {
         Entity? result = null;
         double lowestDistance = double.MaxValue;
@@ -74,6 +105,31 @@ public class Level
             if (distance < lowestDistance)
             {
                 result = survivor;
+                lowestDistance = distance;
+            }
+        }
+        return result;
+    }
+
+    public List<Zombie> GetLivingZombies()
+    {
+        return _entities
+            .OfType<Zombie>()
+            .Where(z => z.Health > 0)
+            .ToList();
+    }
+    
+    public Entity? GetNearestLivingZombie(double xPosition, double yPosition)
+    {
+        Entity? result = null;
+        double lowestDistance = double.MaxValue;
+        foreach (Zombie zombie in _entities.OfType<Zombie>())
+        {
+            if (zombie.Health <= 0) continue;
+            double distance = MathHelpers.Distance(xPosition, yPosition, zombie.XPosition, zombie.YPosition);
+            if (distance < lowestDistance)
+            {
+                result = zombie;
                 lowestDistance = distance;
             }
         }

@@ -1,4 +1,5 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Entities.Mobs.Zombies;
+using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Survivors;
@@ -13,6 +14,12 @@ public class Survivor : Mob
     {
         _character = character;
     }
+
+    private double _CalculateBestDirection()
+    {
+        //temp
+        return RandomSingleton.Instance.NextDouble() * (2 * Math.PI);
+    }
     
     public override void Update(double elapsedTime)
     {
@@ -25,8 +32,8 @@ public class Survivor : Mob
         _xVelocity *= 0.5;
         _yVelocity *= 0.5;
 
-        double randomDirection = RandomSingleton.Instance.NextDouble() * (2 * Math.PI);
-        double directionDiff = randomDirection - _directionRadians;
+        double targetDirection = _CalculateBestDirection();
+        double directionDiff = targetDirection - _directionRadians;
         directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
         _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
         _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);

@@ -35,7 +35,7 @@ public class Common : Zombie
     private void _UpdateTarget()
     {
         if (_target != null) return;
-        _target = _level.GetNearestHealthySurvivor(XPosition, YPosition);
+        _target = _level.GetNearestLivingSurvivor(XPosition, YPosition);
     }
     
     private void _UpdatePosition(double elapsedTime)
