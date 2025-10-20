@@ -1,5 +1,4 @@
-﻿using H4D2.Entities.Mobs.Zombies;
-using H4D2.Infrastructure;
+﻿using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Survivors;
@@ -17,8 +16,49 @@ public class Survivor : Mob
 
     private double _CalculateBestDirection()
     {
-        //temp
-        return RandomSingleton.Instance.NextDouble() * (2 * Math.PI);
+        double direction = RandomSingleton.Instance.NextDouble() * (2 * Math.PI);
+        direction = CorrectDirectionToAvoidWalls(direction);
+        return direction;
+    }
+
+    private double CorrectDirectionToAvoidWalls(double direction)
+    {
+        const int boundaryTolerance = 25;
+        var (x, y) = BoundingBox.CenterMass(XPosition, YPosition);
+        
+        if (x < boundaryTolerance)
+        {
+            if ((Math.PI / 2) < direction && direction < (3 * Math.PI / 2))
+            {
+                direction = Math.Atan2(Math.Sin(direction), Math.Cos(direction) * -1);
+            }
+        }
+        
+        if (y < boundaryTolerance)
+        {
+            if (direction > Math.PI)
+            {
+                direction = Math.Atan2(Math.Sin(direction) * -1, Math.Cos(direction));
+            }
+        }
+
+        if (_level.Width - x < boundaryTolerance)
+        {
+            if ((3 * Math.PI / 2) < direction || direction < (Math.PI / 2))
+            {
+                direction = Math.Atan2(Math.Sin(direction), Math.Cos(direction) * -1);
+            }
+        }
+
+        if (_level.Height - y < boundaryTolerance)
+        {
+            if (direction < Math.PI)
+            {
+                direction = Math.Atan2(Math.Sin(direction) * -1, Math.Cos(direction));
+            }
+        }
+
+        return direction;
     }
     
     public override void Update(double elapsedTime)

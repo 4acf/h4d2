@@ -64,28 +64,6 @@ public class Level
         return false;
     }
 
-    public double GetDirectionToNearestWall(double xPosition, double yPosition)
-    {
-        double minDistance = xPosition;
-        double direction = Math.PI;
-        if (yPosition < minDistance)
-        {
-            minDistance = yPosition;
-            direction = (3 * Math.PI) / 2;
-        }
-        if (Width - xPosition < minDistance)
-        {
-            minDistance = Width - xPosition;
-            direction = 0;
-        }
-        if (Height - yPosition < minDistance)
-        {
-            minDistance = Height - yPosition;
-            direction = Math.PI / 2;
-        }
-        return direction;
-    }
-
     public List<Survivor> GetLivingSurvivors()
     {
         return _entities
