@@ -24,8 +24,8 @@ public abstract class Weapon
     
     protected double _shootDelaySecondsLeft = 0;
 
-    private readonly Level _level;
-    private readonly Survivor _owner;
+    protected readonly Level _level;
+    protected readonly Survivor _owner;
     
     protected Weapon(Level level, Survivor owner)
     {
@@ -62,7 +62,7 @@ public abstract class Weapon
         return true;
     }
     
-    public void Shoot()
+    public virtual void Shoot()
     {
         if (!CanShoot()) return;
         AmmoLoaded--;
@@ -73,7 +73,7 @@ public abstract class Weapon
             double newYComponent = Math.Sin(_owner.AimDirectionRadians) + (RandomSingleton.Instance.NextDouble() * Spread);
             double newDirection = Math.Atan2(newYComponent, newXComponent);
             var (x, y) = _owner.BoundingBox.CenterMass(_owner.XPosition, _owner.YPosition); 
-            _level.AddBullet(new Bullet(_level, newDirection, x, y));
+            _level.AddProjectile(new Bullet(_level, newDirection, x, y));
         }
     }
 

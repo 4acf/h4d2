@@ -75,8 +75,9 @@ public class Survivor : Mob
         if (_target == null)
         {
             _target = _level.GetNearestLivingZombie(XPosition, YPosition);
-            if (_target != null)
-                AimDirectionRadians = Math.Atan2(_target.YPosition - YPosition, _target.XPosition - XPosition);
+            if (_target == null) return;
+            AimDirectionRadians = Math.Atan2(_target.YPosition - YPosition, _target.XPosition - XPosition);
+            AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
         }
         else
         {
@@ -87,6 +88,7 @@ public class Survivor : Mob
             else
             {
                 AimDirectionRadians = Math.Atan2(_target.YPosition - YPosition, _target.XPosition - XPosition);
+                AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
             }
         }
     }

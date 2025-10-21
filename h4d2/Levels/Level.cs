@@ -115,9 +115,9 @@ public class Level
         return result;
     }
 
-    public void AddBullet(Bullet bullet)
+    public void AddProjectile(Projectile projectile)
     {
-        _entities.Add(bullet);
+        _entities.Add(projectile);
     }
     
     public void UpdateEntities(double elapsedTime)

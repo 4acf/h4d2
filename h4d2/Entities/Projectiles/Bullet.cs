@@ -3,17 +3,16 @@ using H4D2.Levels;
 
 namespace H4D2.Entities.Projectiles;
 
-public class Bullet : Entity
+public class Bullet : Projectile
 {
     private const double _speed = 200;
-    private readonly double _directionRadians;
+    private const int _color = 0xffffff;
     private double _oldXPosition;
     private double _oldYPosition;
     
     public Bullet(Level level, double directionRadians, double xPosition, double yPosition) 
-        : base(level, new BoundingBox(false, 1, 1), xPosition, yPosition)
+        : base(level, new BoundingBox(false, 1, 1), directionRadians, xPosition, yPosition)
     {
-        _directionRadians = directionRadians;
         _oldXPosition = xPosition;
         _oldYPosition = yPosition;
     }
@@ -35,7 +34,7 @@ public class Bullet : Entity
         int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
         for (int i = 0; i < steps; i++)
         {
-            screen.SetPixel((int)Math.Ceiling(XPosition + xDifference * i / steps), (int)(YPosition + yDifference * i / steps), 0xffffff);
+            screen.SetPixel((int)Math.Ceiling(XPosition + xDifference * i / steps), (int)(YPosition + yDifference * i / steps), _color);
         }
     }
 
