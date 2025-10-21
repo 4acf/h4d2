@@ -1,4 +1,5 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Entities.Projectiles;
+using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Entities;
@@ -6,19 +7,21 @@ namespace H4D2.Entities;
 public abstract class Entity
 {
     protected readonly Level _level;
-    public double XPosition { get; protected set; }
-    public double YPosition { get; protected set; }
+    public double XPosition { get; private set; }
+    public double YPosition { get; private set; }
     public readonly BoundingBox BoundingBox;
+    public bool Removed { get; protected set; }
     
     protected double _xVelocity;
     protected double _yVelocity;
     
-    protected Entity(Level level, BoundingBox boundingBox, int xPosition, int yPosition)
+    protected Entity(Level level, BoundingBox boundingBox, double xPosition, double yPosition)
     {
         _level = level;
         XPosition = xPosition;
         YPosition = yPosition;
         BoundingBox = boundingBox;
+        Removed = false;
         _xVelocity = 0;
         _yVelocity = 0;
     }
@@ -81,6 +84,10 @@ public abstract class Entity
     
     private void _Collide()
     {
+        if (this is Bullet)
+        {
+            Removed = true;
+        }
         _xVelocity = 0;
         _yVelocity = 0;
     }

@@ -16,6 +16,15 @@ public class BoundingBox
         _width = width;
         _height = height;
     }
+
+    public BoundingBox(bool isBlocking, int width, int height)
+    {
+        IsBlocking = isBlocking;
+        _xOffset = 0;
+        _yOffset = 0;
+        _width = width;
+        _height = height;
+    }
     
     public double N(double yPosition) => yPosition - _yOffset;
     public double E(double xPosition) => xPosition + _xOffset + _width;

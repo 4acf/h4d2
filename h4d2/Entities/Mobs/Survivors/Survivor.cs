@@ -1,5 +1,7 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Entities.Mobs.Zombies;
+using H4D2.Infrastructure;
 using H4D2.Levels;
+using H4D2.Weapons;
 
 namespace H4D2.Entities.Mobs.Survivors;
 using Cfg = SurvivorConfig;
@@ -7,11 +9,18 @@ using Cfg = SurvivorConfig;
 public class Survivor : Mob
 {
     private readonly int _character;
+    protected Weapon? _weapon;
+    private Zombie? _target;
+    private bool _shooting;
+    public double AimDirectionRadians { get; private set; }
     
     protected Survivor(Level level, int character, int xPosition, int yPosition) 
         : base(level, Cfg.BoundingBox, Cfg.DefaultHealth, Cfg.RunSpeed, xPosition, yPosition)
     {
         _character = character;
+        _target = null;
+        _shooting = false;
+        AimDirectionRadians = 0;
     }
 
     private double _CalculateBestDirection()
@@ -60,9 +69,48 @@ public class Survivor : Mob
 
         return direction;
     }
+
+    public void _UpdateTarget()
+    {
+        if (_target == null)
+        {
+            _target = _level.GetNearestLivingZombie(XPosition, YPosition);
+            if (_target != null)
+                AimDirectionRadians = Math.Atan2(_target.YPosition - YPosition, _target.XPosition - XPosition);
+        }
+        else
+        {
+            if (_target.Health <= 0)
+            {
+                _target = null;
+            }
+            else
+            {
+                AimDirectionRadians = Math.Atan2(_target.YPosition - YPosition, _target.XPosition - XPosition);
+            }
+        }
+    }
+
+    public void _UpdateWeapon(double elapsedTime)
+    {
+        if (_weapon == null) return;
+        _weapon.Update(elapsedTime);
+        if (_weapon.CanShoot())
+        {
+            _weapon.Shoot();
+            _shooting = true;
+        }
+        else
+        {
+            if(_weapon.AmmoLoaded == 0)
+                _shooting = false;
+        }
+    }
     
     public override void Update(double elapsedTime)
     {
+        _UpdateTarget();
+        _UpdateWeapon(elapsedTime);
         _UpdatePosition(elapsedTime);
         _UpdateSprite(elapsedTime);
     }

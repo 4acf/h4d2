@@ -78,6 +78,11 @@ public class Bitmap
         }
     }
 
+    public void Fill(int x0, int y0, int x1, int y1, int color)
+    {
+        BlendFill(x0, y0, x1, y1, color, 0);
+    }
+    
     public void BlendFill(int x0, int y0, int x1, int y1, int color, double blend)
     {
         byte r = (byte)(color >> 16 & 0xff);
@@ -97,6 +102,16 @@ public class Bitmap
                 Data[index + 3] = 0xff;
             }
         }
+    }
+    
+    public void SetPixel(int x, int y, int color)
+    {
+        SetPixelBlend(x, y, color, 0);
+    }
+
+    public void SetPixelBlend(int x, int y, int color, double blend)
+    {
+        BlendFill(x, y, x, y, color, blend);
     }
     
     public bool IsOutOfBounds(int index)

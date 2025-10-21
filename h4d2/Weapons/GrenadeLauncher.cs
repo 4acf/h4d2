@@ -1,0 +1,21 @@
+﻿using H4D2.Entities.Mobs.Survivors;
+using H4D2.Levels;
+
+namespace H4D2.Weapons;
+
+public class GrenadeLauncher : Weapon
+{
+    public GrenadeLauncher(Level level, Survivor owner) : base(level, owner)
+    {
+        Damage = 400;
+        ReloadTimeSeconds = 3.3;
+        ShootDelaySeconds = 1;
+        AmmoPerMagazine = 1;
+        ShootsTheFloor = true;
+        MaxRange = 100;
+        Spread = 0;
+        Pellets = 1;
+        
+        AmmoLoaded = AmmoPerMagazine;
+    }    
+}

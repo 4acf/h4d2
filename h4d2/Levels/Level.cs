@@ -4,6 +4,7 @@ using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Uncommons;
+using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
 
 namespace H4D2.Levels;
@@ -72,9 +73,9 @@ public class Level
             .ToList();
     }
     
-    public Entity? GetNearestLivingSurvivor(double xPosition, double yPosition)
+    public Survivor? GetNearestLivingSurvivor(double xPosition, double yPosition)
     {
-        Entity? result = null;
+        Survivor? result = null;
         double lowestDistance = double.MaxValue;
         foreach (Survivor survivor in _entities.OfType<Survivor>())
         {
@@ -97,9 +98,9 @@ public class Level
             .ToList();
     }
     
-    public Entity? GetNearestLivingZombie(double xPosition, double yPosition)
+    public Zombie? GetNearestLivingZombie(double xPosition, double yPosition)
     {
-        Entity? result = null;
+        Zombie? result = null;
         double lowestDistance = double.MaxValue;
         foreach (Zombie zombie in _entities.OfType<Zombie>())
         {
@@ -113,12 +114,30 @@ public class Level
         }
         return result;
     }
+
+    public void AddBullet(Bullet bullet)
+    {
+        _entities.Add(bullet);
+    }
     
     public void UpdateEntities(double elapsedTime)
     {
-        foreach (Entity entity in _entities)
+        var indexesToRemove = new List<int>();
+        for (int i = 0; i < _entities.Count; i++)
         {
-            entity.Update(elapsedTime);
+            if (_entities[i].Removed)
+            {
+                indexesToRemove.Add(i);
+            }
+            else
+            {
+                _entities[i].Update(elapsedTime);
+            }
+        }
+
+        for (int i = indexesToRemove.Count - 1; i >= 0; i--)
+        {
+            _entities.RemoveAt(indexesToRemove[i]);
         }
     }
     
