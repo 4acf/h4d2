@@ -14,7 +14,7 @@ public static class SurvivorConfig
     public static readonly BoundingBox BoundingBox = new(false, 4, 6, 8, 10);
     public const int DefaultHealth = 100;
     public const int IncappedHealth = 300;
-    public const int RunSpeed = 220;
+    public const int RunSpeed = 300;
     public const int LimpSpeed = 150;
     public const int WalkSpeed = 85;
     public const int AdrenalineRunSpeed = 260;

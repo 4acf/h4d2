@@ -5,7 +5,7 @@ namespace H4D2.Entities.Projectiles;
 
 public class Bullet : Entity
 {
-    private const double _speed = 100;
+    private const double _speed = 200;
     private readonly double _directionRadians;
     
     public Bullet(Level level, double directionRadians, double xPosition, double yPosition) 

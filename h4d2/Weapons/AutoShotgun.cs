@@ -13,7 +13,7 @@ public class AutoShotgun : Weapon
         AmmoPerMagazine = 10;
         ShootsTheFloor = false;
         MaxRange = -1;
-        Spread = 0.05;
+        Spread = 0.5;
         Pellets = 11;
         
         AmmoLoaded = AmmoPerMagazine;

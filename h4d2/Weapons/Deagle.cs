@@ -13,7 +13,7 @@ public class Deagle : Weapon
         AmmoPerMagazine = 8;
         ShootsTheFloor = false;
         MaxRange = -1;
-        Spread = 0.001;
+        Spread = 0.1;
         Pellets = 1;
         
         AmmoLoaded = AmmoPerMagazine;

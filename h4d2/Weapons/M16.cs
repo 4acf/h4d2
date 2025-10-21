@@ -13,7 +13,7 @@ public class M16 : Weapon
         AmmoPerMagazine = 30;
         ShootsTheFloor = false;
         MaxRange = -1;
-        Spread = 0.05;
+        Spread = 0.25;
         Pellets = 1;
         
         AmmoLoaded = AmmoPerMagazine;

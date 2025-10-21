@@ -13,7 +13,7 @@ public class Uzi : Weapon
         AmmoPerMagazine = 50;
         ShootsTheFloor = false;
         MaxRange = -1;
-        Spread = 0.05;
+        Spread = 0.4;
         Pellets = 1;
         
         AmmoLoaded = AmmoPerMagazine;

@@ -13,7 +13,7 @@ public class PumpShotgun : Weapon
         AmmoPerMagazine = 8;
         ShootsTheFloor = false;
         MaxRange = -1;
-        Spread = 0.05;
+        Spread = 0.5;
         Pellets = 10;
         
         AmmoLoaded = AmmoPerMagazine;

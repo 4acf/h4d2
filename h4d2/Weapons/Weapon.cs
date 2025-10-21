@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Projectiles;
+using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Weapons;
@@ -23,10 +24,10 @@ public abstract class Weapon
     
     protected double _shootDelaySecondsLeft = 0;
 
-    private Level _level;
-    private Survivor _owner;
+    private readonly Level _level;
+    private readonly Survivor _owner;
     
-    public Weapon(Level level, Survivor owner)
+    protected Weapon(Level level, Survivor owner)
     {
         _level = level;
         _owner = owner;
@@ -68,8 +69,11 @@ public abstract class Weapon
         _shootDelaySecondsLeft = ShootDelaySeconds;
         for (int i = 0; i < Pellets; i++)
         {
+            double newXComponent = Math.Cos(_owner.AimDirectionRadians) + (RandomSingleton.Instance.NextDouble() * Spread);
+            double newYComponent = Math.Sin(_owner.AimDirectionRadians) + (RandomSingleton.Instance.NextDouble() * Spread);
+            double newDirection = Math.Atan2(newYComponent, newXComponent);
             var (x, y) = _owner.BoundingBox.CenterMass(_owner.XPosition, _owner.YPosition); 
-            _level.AddBullet(new Bullet(_level, _owner.AimDirectionRadians, x, y));
+            _level.AddBullet(new Bullet(_level, newDirection, x, y));
         }
     }
 
