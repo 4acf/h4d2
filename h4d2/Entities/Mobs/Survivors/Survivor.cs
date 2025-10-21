@@ -138,7 +138,64 @@ public class Survivor : Mob
     private void _UpdateSprite(double elapsedTime)
     {
         _timeSinceLastFrameUpdate += elapsedTime;
+        if (_shooting)
+            _UpdateShootingSprite();
+        else
+            _UpdateRunningSprite();
+    }
 
+    private void _UpdateShootingSprite()
+    {
+        // this will be refactored once i render different uppers and lowers
+        int direction = 0;
+        double degrees = MathHelpers.RadiansToDegrees(AimDirectionRadians);
+        switch (degrees)
+        {
+            case >= 337.5:
+            case < 22.5:
+                direction = 2;
+                _xFlip = false;
+                break;
+            case < 67.5:
+                direction = 3;
+                _xFlip = false;
+                break;
+            case < 112.5:
+                direction = 4;
+                _xFlip = false;
+                break;
+            case < 157.5:
+                direction = 3;
+                _xFlip = true;
+                break;
+            case < 202.5:
+                direction = 2;
+                _xFlip = true;
+                break;
+            case < 247.5:
+                direction = 1;
+                _xFlip = true;
+                break;
+            case < 292.5:
+                direction = 0;
+                _xFlip = false;
+                break;
+            default:
+                direction = 1;
+                _xFlip = false;
+                break;
+        }
+
+        const int shootingBitmapsOffset = 9;
+        while (_timeSinceLastFrameUpdate >= _frameDuration)
+        {
+            _walkFrame = shootingBitmapsOffset + direction;
+            _timeSinceLastFrameUpdate -= _frameDuration;
+        }
+    }
+    
+    private void _UpdateRunningSprite()
+    {
         int direction = 0;
         int degrees = MathHelpers.RadiansToDegrees(_directionRadians);
         switch (degrees)
