@@ -82,12 +82,8 @@ public abstract class Entity
         YPosition = yDest;
     }
     
-    private void _Collide()
+    protected virtual void _Collide()
     {
-        if (this is Bullet)
-        {
-            Removed = true;
-        }
         _xVelocity = 0;
         _yVelocity = 0;
     }
