@@ -1,8 +1,9 @@
 ﻿namespace H4D2.Entities.Mobs.Zombies.Uncommons;
+using ZCfg = ZombieConfig;
 
 public static class UncommonConfig
 {
-    public static readonly BoundingBox BoundingBox = new(false, 4, 6, 8, 10);
+    public static readonly BoundingBox BoundingBox = new(ZCfg.CollisionMask, ZCfg.CollidesWith, 4, 6, 8, 10);
 
     public const int Hazmat = 0;
     public const int HazmatHealth = 200;

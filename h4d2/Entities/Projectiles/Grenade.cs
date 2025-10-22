@@ -2,6 +2,7 @@
 using H4D2.Levels;
 
 namespace H4D2.Entities.Projectiles;
+using Cfg = ProjectileConfig;
 
 public class Grenade : Projectile
 {
@@ -22,7 +23,7 @@ public class Grenade : Projectile
     };
     
     public Grenade(Level level, double directionRadians, double xPosition, double yPosition)
-        : base(level, new BoundingBox(false, 2, 2), directionRadians, xPosition, yPosition)
+        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 2, 2), directionRadians, xPosition, yPosition)
     {
         _directionIndex = _ResolveDirectionIndex(directionRadians);
     }

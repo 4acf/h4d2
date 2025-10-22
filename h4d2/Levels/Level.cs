@@ -57,7 +57,7 @@ public class Level
         foreach (Entity e2 in _entities)
         {
             if (e2 != e1 &&
-                e2.BoundingBox.IsBlocking &&
+                e1.BoundingBox.CanCollideWith(e2.BoundingBox) &&
                 e1.IsIntersecting(e2, xPosition, yPosition)
             )
                 return true;

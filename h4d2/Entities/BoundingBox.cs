@@ -2,24 +2,27 @@
 
 public class BoundingBox
 {
-    public readonly bool IsBlocking;
+    public readonly int CollisionMask;
+    private readonly int _collidesWith;
     private readonly int _xOffset;
     private readonly int _yOffset;
     private readonly int _width;
     private readonly int _height;
     
-    public BoundingBox(bool isBlocking, int xOffset, int yOffset, int width, int height)
+    public BoundingBox(int collisionMask, int collidesWith, int xOffset, int yOffset, int width, int height)
     {
-        IsBlocking = isBlocking;
+        CollisionMask = collisionMask;
+        _collidesWith = collidesWith;
         _xOffset = xOffset;
         _yOffset = yOffset;
         _width = width;
         _height = height;
     }
 
-    public BoundingBox(bool isBlocking, int width, int height)
+    public BoundingBox(int collisionMask, int collidesWith, int width, int height)
     {
-        IsBlocking = isBlocking;
+        CollisionMask = collisionMask;
+        _collidesWith = collidesWith;
         _xOffset = 0;
         _yOffset = 0;
         _width = width;
@@ -34,6 +37,11 @@ public class BoundingBox
     public (double, double) NW(double xPosition, double yPosition) => (W(xPosition), N(yPosition));
     public (double, double) SE(double xPosition, double yPosition) => (E(xPosition), S(yPosition));
     public (double, double) NE(double xPosition, double yPosition) => (E(xPosition), N(yPosition));
+
+    public bool CanCollideWith(BoundingBox other)
+    {
+        return (_collidesWith & other.CollisionMask) == other.CollisionMask;
+    }
     
     public bool IsIntersecting(BoundingBox other, double otherXPosition, double otherYPosition, double xPosition, double yPosition)
     {

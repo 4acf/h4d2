@@ -2,6 +2,7 @@
 using H4D2.Levels;
 
 namespace H4D2.Entities.Projectiles;
+using Cfg = ProjectileConfig;
 
 public class Bullet : Projectile
 {
@@ -11,7 +12,7 @@ public class Bullet : Projectile
     private double _oldYPosition;
     
     public Bullet(Level level, double directionRadians, double xPosition, double yPosition) 
-        : base(level, new BoundingBox(false, 1, 1), directionRadians, xPosition, yPosition)
+        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 1, 1), directionRadians, xPosition, yPosition)
     {
         _oldXPosition = xPosition;
         _oldYPosition = yPosition;
