@@ -1,4 +1,5 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Entities.Mobs.Zombies;
+using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Projectiles;
@@ -11,8 +12,8 @@ public class Bullet : Projectile
     private double _oldXPosition;
     private double _oldYPosition;
     
-    public Bullet(Level level, double directionRadians, double xPosition, double yPosition) 
-        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 1, 1), directionRadians, xPosition, yPosition)
+    public Bullet(Level level, double directionRadians, double xPosition, double yPosition, int damage) 
+        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 1, 1), directionRadians, xPosition, yPosition, damage)
     {
         _oldXPosition = xPosition;
         _oldYPosition = yPosition;
@@ -50,9 +51,12 @@ public class Bullet : Projectile
         }
     }
 
-    protected override void _Collide()
+    protected override void _Collide(Entity? entity)
     {
-        base._Collide();
+        base._Collide(entity);
         Removed = true;
+        if (entity == null || entity is not Zombie zombie)
+            return;
+        zombie.HitBy(this);
     }
 }

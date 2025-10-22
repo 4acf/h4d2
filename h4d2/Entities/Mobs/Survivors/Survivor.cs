@@ -72,7 +72,7 @@ public class Survivor : Mob
 
     public void _UpdateTarget()
     {
-        if (_target == null)
+        if (_target == null || !_target.IsAlive())
         {
             _target = _level.GetNearestLivingZombie(XPosition, YPosition);
             if (_target == null) return;
@@ -81,7 +81,7 @@ public class Survivor : Mob
         }
         else
         {
-            if (_target.Health <= 0)
+            if (!_target.IsAlive())
             {
                 _target = null;
             }
@@ -97,14 +97,14 @@ public class Survivor : Mob
     {
         if (_weapon == null) return;
         _weapon.Update(elapsedTime);
-        if (_weapon.CanShoot())
+        if (_weapon.CanShoot() && _target != null)
         {
             _weapon.Shoot();
             _shooting = true;
         }
         else
         {
-            if(_weapon.AmmoLoaded == 0)
+            if(_weapon.AmmoLoaded == 0 || _target == null)
                 _shooting = false;
         }
     }

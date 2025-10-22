@@ -28,7 +28,7 @@ public class GrenadeLauncher : Weapon
         for (int i = 0; i < Pellets; i++)
         {
             var (x, y) = _owner.BoundingBox.CenterMass(_owner.XPosition, _owner.YPosition); 
-            _level.AddProjectile(new Grenade(_level, _owner.AimDirectionRadians, x, y));
+            _level.AddProjectile(new Grenade(_level, _owner.AimDirectionRadians, x, y, Damage));
         }
     }
 }

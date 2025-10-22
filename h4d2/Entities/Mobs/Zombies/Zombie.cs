@@ -1,4 +1,5 @@
-﻿using H4D2.Levels;
+﻿using H4D2.Entities.Projectiles;
+using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Zombies;
 
@@ -10,5 +11,14 @@ public abstract class Zombie : Mob
         : base(level, boundingBox, health, speed, xPosition, yPosition)
     {
         _target = null;
+    }
+
+    public void HitBy(Projectile projectile)
+    {
+        _health -= projectile.Damage;
+        if (_health <= 0)
+        {
+            Removed = true;
+        }
     }
 }

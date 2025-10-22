@@ -1,4 +1,5 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Entities.Mobs.Zombies;
+using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Projectiles;
@@ -22,8 +23,8 @@ public class Grenade : Projectile
         [(0, 1), (-1, 0), (1, 0), (0, -1), (1, -1)]    // SE
     };
     
-    public Grenade(Level level, double directionRadians, double xPosition, double yPosition)
-        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 2, 2), directionRadians, xPosition, yPosition)
+    public Grenade(Level level, double directionRadians, double xPosition, double yPosition, int damage)
+        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 2, 2), directionRadians, xPosition, yPosition, damage)
     {
         _directionIndex = _ResolveDirectionIndex(directionRadians);
     }
@@ -77,9 +78,12 @@ public class Grenade : Projectile
         }
     }
 
-    protected override void _Collide()
+    protected override void _Collide(Entity? entity)
     {
-        base._Collide();
+        base._Collide(entity);
         Removed = true;
+        if (entity == null || entity is not Zombie zombie)
+            return;
+        zombie.HitBy(this);
     }
 }

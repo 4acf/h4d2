@@ -7,7 +7,7 @@ namespace H4D2.Weapons;
 
 public abstract class Weapon
 {
-    public double Damage { get; init; }
+    public int Damage { get; init; }
     public double ReloadTimeSeconds { get; init; }
     public double ShootDelaySeconds { get; init; }
     public int AmmoPerMagazine { get; init; }
@@ -73,7 +73,7 @@ public abstract class Weapon
             double newYComponent = Math.Sin(_owner.AimDirectionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * Spread;
             double newDirection = Math.Atan2(newYComponent, newXComponent);
             var (x, y) = _owner.BoundingBox.CenterMass(_owner.XPosition, _owner.YPosition); 
-            _level.AddProjectile(new Bullet(_level, newDirection, x, y));
+            _level.AddProjectile(new Bullet(_level, newDirection, x, y, Damage));
         }
     }
 

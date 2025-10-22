@@ -1,4 +1,6 @@
-﻿using H4D2.Entities.Projectiles;
+﻿using H4D2.Entities.Mobs;
+using H4D2.Entities.Mobs.Zombies;
+using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
 using H4D2.Levels;
 
@@ -71,10 +73,16 @@ public abstract class Entity
         double xDest = XPosition + xComponent;
         double yDest = YPosition + yComponent;
 
-        if (IsOutOfLevelBounds(xDest, yDest) || 
-            _level.ContainsBlockingEntity(this, xDest, yDest))
+        if (IsOutOfLevelBounds(xDest, yDest))
         {
-            _Collide();
+            _Collide(null);
+            return;
+        }
+
+        Entity? collidingEntity = _level.GetFirstCollidingEntity(this, xDest, yDest);
+        if (collidingEntity != null)
+        {
+            _Collide(collidingEntity);
             return;
         }
 
@@ -82,7 +90,7 @@ public abstract class Entity
         YPosition = yDest;
     }
     
-    protected virtual void _Collide()
+    protected virtual void _Collide(Entity? entity)
     {
         _xVelocity = 0;
         _yVelocity = 0;

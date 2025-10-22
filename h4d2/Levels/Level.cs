@@ -52,7 +52,7 @@ public class Level
         _entities.Add(new Coach   (this, 256, 120));
     }
     
-    public bool ContainsBlockingEntity(Entity e1, double xPosition, double yPosition)
+    public Entity? GetFirstCollidingEntity(Entity e1, double xPosition, double yPosition)
     {
         foreach (Entity e2 in _entities)
         {
@@ -60,16 +60,16 @@ public class Level
                 e1.BoundingBox.CanCollideWith(e2.BoundingBox) &&
                 e1.IsIntersecting(e2, xPosition, yPosition)
             )
-                return true;
+                return e2;
         }
-        return false;
+        return null;
     }
 
     public List<Survivor> GetLivingSurvivors()
     {
         return _entities
             .OfType<Survivor>()
-            .Where(s => s.Health > 0)
+            .Where(s => s.IsAlive())
             .ToList();
     }
     
@@ -79,7 +79,7 @@ public class Level
         double lowestDistance = double.MaxValue;
         foreach (Survivor survivor in _entities.OfType<Survivor>())
         {
-            if (survivor.Health <= 0) continue;
+            if (!survivor.IsAlive()) continue;
             double distance = MathHelpers.Distance(xPosition, yPosition, survivor.XPosition, survivor.YPosition);
             if (distance < lowestDistance)
             {
@@ -94,7 +94,7 @@ public class Level
     {
         return _entities
             .OfType<Zombie>()
-            .Where(z => z.Health > 0)
+            .Where(z => z.IsAlive())
             .ToList();
     }
     
@@ -104,7 +104,7 @@ public class Level
         double lowestDistance = double.MaxValue;
         foreach (Zombie zombie in _entities.OfType<Zombie>())
         {
-            if (zombie.Health <= 0) continue;
+            if (!zombie.IsAlive()) continue;
             double distance = MathHelpers.Distance(xPosition, yPosition, zombie.XPosition, zombie.YPosition);
             if (distance < lowestDistance)
             {

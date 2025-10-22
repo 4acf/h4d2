@@ -5,7 +5,6 @@ namespace H4D2.Entities.Mobs;
 public abstract class Mob : Entity
 {
     protected int _health;
-    public int Health => _health;
 
     protected double _speed;
     protected double _directionRadians;
@@ -29,4 +28,6 @@ public abstract class Mob : Entity
         _walkFrame = 0;
         _timeSinceLastFrameUpdate = 0.0;
     }
+
+    public bool IsAlive() => _health > 0;
 }
