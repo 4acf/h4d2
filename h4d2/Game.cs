@@ -17,6 +17,7 @@ public class Game
     public void Update(double elapsedTime)
     {
         _level.UpdateEntities(elapsedTime);
+        _level.UpdateParticles(elapsedTime);
     }
     
     public byte[] Render()
@@ -25,6 +26,7 @@ public class Game
         _level.RenderBackground(_screen);
         _level.RenderShadows(_screen);
         _level.RenderEntities(_screen);
+        _level.RenderParticles(_screen);
         return _screen.Data;
     }
 }

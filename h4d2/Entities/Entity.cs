@@ -1,36 +1,26 @@
-﻿using H4D2.Entities.Mobs;
-using H4D2.Entities.Mobs.Zombies;
-using H4D2.Entities.Projectiles;
-using H4D2.Infrastructure;
+﻿using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Entities;
 
-public abstract class Entity
+public abstract class Entity : Isometric
 {
     protected readonly Level _level;
-    public double XPosition { get; private set; }
-    public double YPosition { get; private set; }
     public readonly BoundingBox BoundingBox;
-    public bool Removed { get; protected set; }
     
     protected double _xVelocity;
     protected double _yVelocity;
     
     protected Entity(Level level, BoundingBox boundingBox, double xPosition, double yPosition)
+        : base(xPosition, yPosition, 0)
     {
         _level = level;
-        XPosition = xPosition;
-        YPosition = yPosition;
         BoundingBox = boundingBox;
-        Removed = false;
         _xVelocity = 0;
         _yVelocity = 0;
     }
     
     public abstract void Update(double elapsedTime);
-    public abstract void Render(Bitmap screen);
-    public abstract void RenderShadow(Bitmap screen);
     
     public bool IsOutOfLevelBounds(double xPosition, double yPosition)
     {

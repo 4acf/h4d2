@@ -56,7 +56,7 @@ public class Grenade : Projectile
         _AttemptMove();
     }
 
-    public override void Render(Bitmap screen)
+    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
         screen.SetPixel((int)XPosition, (int)YPosition, _color);
         for (int i = 0; i < _sprites[_directionIndex].Length; i++)
@@ -67,7 +67,7 @@ public class Grenade : Projectile
         }
     }
 
-    public override void RenderShadow(Bitmap screen)
+    protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
     {
         screen.SetPixelBlend((int)XPosition, (int)YPosition - 4, 0x0, 0.9);
         for (int i = 0; i < _sprites[_directionIndex].Length; i++)

@@ -29,7 +29,7 @@ public class Bullet : Projectile
         _AttemptMove();
     }
 
-    public override void Render(Bitmap screen)
+    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
         double xDifference = _oldXPosition - XPosition;
         double yDifference = _oldYPosition - YPosition;
@@ -40,7 +40,7 @@ public class Bullet : Projectile
         }
     }
 
-    public override void RenderShadow(Bitmap screen)
+    protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
     {
         double xDifference = _oldXPosition - XPosition;
         double yDifference = _oldYPosition - YPosition;

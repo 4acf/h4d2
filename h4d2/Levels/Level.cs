@@ -6,6 +6,7 @@ using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Uncommons;
 using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
+using H4D2.Particles;
 
 namespace H4D2.Levels;
 
@@ -14,6 +15,7 @@ public class Level
     public readonly int Width;
     public readonly int Height;
     private List<Entity> _entities;
+    private List<Particle> _particles;
     
     public Level(int width, int height)
     {
@@ -21,6 +23,7 @@ public class Level
         Height = height;
         
         _entities = new List<Entity>();
+        _particles = new List<Particle>();
         
         for (int i = 0; i < 10; i++)
         {
@@ -119,6 +122,11 @@ public class Level
     {
         _entities.Add(projectile);
     }
+
+    public void AddParticle(Particle particle)
+    {
+        _particles.Add(particle);
+    }
     
     public void UpdateEntities(double elapsedTime)
     {
@@ -140,6 +148,27 @@ public class Level
             _entities.RemoveAt(indexesToRemove[i]);
         }
     }
+
+    public void UpdateParticles(double elapsedTime)
+    {
+        var indexesToRemove = new List<int>();
+        for (int i = 0; i < _particles.Count; i++)
+        {
+            if (_particles[i].Removed)
+            {
+                indexesToRemove.Add(i);
+            }
+            else
+            {
+                _particles[i].Update(elapsedTime);
+            }
+        }
+
+        for (int i = indexesToRemove.Count - 1; i >= 0; i--)
+        {
+            _particles.RemoveAt(indexesToRemove[i]);
+        }
+    }
     
     public void RenderBackground(Bitmap screen)
     {
@@ -152,6 +181,11 @@ public class Level
         {
             entity.RenderShadow(screen);
         }
+
+        foreach (Particle particle in _particles)
+        {
+            particle.RenderShadow(screen);
+        }
     }
     
     public void RenderEntities(Bitmap screen)
@@ -159,6 +193,14 @@ public class Level
         foreach (Entity entity in _entities)
         {
             entity.Render(screen);
+        }
+    }
+
+    public void RenderParticles(Bitmap screen)
+    {
+        foreach (Particle particle in _particles)
+        {
+            particle.Render(screen);
         }
     }
 }
