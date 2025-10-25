@@ -66,9 +66,13 @@ public class Bitmap
                 
                 int parentIndex = _GetBytespaceIndex(Width, x + j, y - i - 1);
                 int childIndex = _GetBytespaceIndex(bitmap.Width, k, i);
-
+                
                 if (IsOutOfBounds(parentIndex) || bitmap.IsOutOfBounds(childIndex)) continue;
                 if (bitmap.Data[childIndex + 3] == 0) continue;
+
+                int expectedY = y - i - 1;
+                int actualY = parentIndex / (Width * 4);
+                if (expectedY != actualY) continue;
                 
                 Data[parentIndex] = bitmap.Data[childIndex];
                 Data[parentIndex + 1] = bitmap.Data[childIndex + 1];

@@ -190,6 +190,7 @@ public class Level
     
     public void RenderEntities(Bitmap screen)
     {
+        _entities = _entities.OrderByDescending(e => e.YPosition).ToList();
         foreach (Entity entity in _entities)
         {
             entity.Render(screen);

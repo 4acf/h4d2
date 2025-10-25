@@ -1,6 +1,4 @@
-﻿using H4D2.Infrastructure;
-
-namespace H4D2.Entities;
+﻿namespace H4D2.Entities;
 
 public class BoundingBox
 {
@@ -42,7 +40,9 @@ public class BoundingBox
     public (double, double) NW(double xPosition, double yPosition) => (W(xPosition), N(yPosition));
     public (double, double) SE(double xPosition, double yPosition) => (E(xPosition), S(yPosition));
     public (double, double) NE(double xPosition, double yPosition) => (E(xPosition), N(yPosition));
-
+    public double Top(double zPosition) => zPosition + _zHeight;
+    public double Bottom(double zPosition) => zPosition;
+    
     public bool CanCollideWith(BoundingBox other)
     {
         return (_collidesWith & other.CollisionMask) == other.CollisionMask;
@@ -56,16 +56,16 @@ public class BoundingBox
             other.N(otherYPosition) >= S(yPosition) &&
             other.S(otherYPosition) <= N(yPosition);
         
-        // todo: include actual z detection
-        bool otherCondition = true;
+        bool isZIntersecting =
+            other.Bottom(otherZPosition) <= Top(zPosition) &&
+            other.Top(otherZPosition) >= Bottom(zPosition);
 
-        return isXYPlaneIntersecting && otherCondition;
+        return isXYPlaneIntersecting && isZIntersecting;
     }
 
     public (double, double, double) CenterMass(double xPosition, double yPosition, double zPosition)
     {
-        // todo: factor zPosition into this equation
-        return ((W(xPosition) + E(xPosition)) / 2, (N(yPosition) + S(yPosition)) / 2, _zHeight / 2.0);
+        return ((W(xPosition) + E(xPosition)) / 2, (N(yPosition) + S(yPosition)) / 2, (zPosition + _zHeight) / 2.0);
     }
     
 }

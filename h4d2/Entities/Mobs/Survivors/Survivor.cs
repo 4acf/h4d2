@@ -76,7 +76,9 @@ public class Survivor : Mob
         {
             _target = _level.GetNearestLivingZombie(XPosition, YPosition);
             if (_target == null) return;
-            AimDirectionRadians = Math.Atan2(_target.YPosition - YPosition, _target.XPosition - XPosition);
+            var (x0, y0, _) = BoundingBox.CenterMass(XPosition, YPosition, ZPosition);
+            var (x1, y1, _) = _target.BoundingBox.CenterMass(_target.XPosition, _target.YPosition, _target.ZPosition);
+            AimDirectionRadians = Math.Atan2(y1 - y0, x1 - x0);
             AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
         }
         else
