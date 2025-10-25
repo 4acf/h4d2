@@ -6,7 +6,7 @@ using Cfg = UncommonConfig;
 public class Clown : Uncommon
 {
     public Clown(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.Clown, Cfg.ClownHealth, Cfg.ClownSpeed, xPosition, yPosition)
+        : base(level, Cfg.Clown, Cfg.ClownHealth, Cfg.ClownSpeed, xPosition, yPosition, Cfg.ClownColor)
     {
         
     }

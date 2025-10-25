@@ -15,7 +15,8 @@ public class Common : Zombie
             Cfg.Health, 
             RandomSingleton.Instance.Next(Cfg.MinSpeed, Cfg.MaxSpeed), 
             xPosition, 
-            yPosition
+            yPosition,
+            Cfg.Color
             )
     {
         _common = RandomSingleton.Instance.Next(Cfg.NumSprites);

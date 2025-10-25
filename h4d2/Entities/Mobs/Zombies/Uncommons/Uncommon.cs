@@ -7,8 +7,8 @@ public class Uncommon : Zombie
 {
     private readonly int _uncommon;
     
-    protected Uncommon(Level level, int uncommon, int health, int speed, int xPosition, int yPosition) 
-        : base(level, UncommonConfig.BoundingBox, health, speed, xPosition, yPosition)
+    protected Uncommon(Level level, int uncommon, int health, int speed, int xPosition, int yPosition, int color) 
+        : base(level, UncommonConfig.BoundingBox, health, speed, xPosition, yPosition, color)
     {
         _uncommon = uncommon;
         _walkStep = 0;

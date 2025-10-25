@@ -6,7 +6,7 @@ using Cfg = SpecialConfig;
 public class Smoker : Special
 {
     public Smoker(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.SmokerBoundingBox, Cfg.Smoker, Cfg.SmokerHealth, Cfg.SmokerRunSpeed, xPosition, yPosition)
+        : base(level, Cfg.SmokerBoundingBox, Cfg.Smoker, Cfg.SmokerHealth, Cfg.SmokerRunSpeed, xPosition, yPosition, Cfg.SmokerColor)
     {
         
     }

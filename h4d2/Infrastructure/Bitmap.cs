@@ -99,8 +99,8 @@ public class Bitmap
             {
                 int index = _GetBytespaceIndex(Width, j, i);
                 if (IsOutOfBounds(index)) continue;
-
-                int expectedY = y0 + (y0 - i);
+                
+                int expectedY = y0 + (i - y0);
                 int actualY = index / (Width * 4);
                 if (expectedY != actualY) continue;
                 

@@ -6,7 +6,7 @@ using Cfg = UncommonConfig;
 public class Worker : Uncommon
 {
     public Worker(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.Worker, Cfg.WorkerHealth, Cfg.WorkerSpeed, xPosition, yPosition)
+        : base(level, Cfg.Worker, Cfg.WorkerHealth, Cfg.WorkerSpeed, xPosition, yPosition, Cfg.WorkerColor)
     {
         
     }    

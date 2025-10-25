@@ -6,7 +6,7 @@ using Cfg = SpecialConfig;
 public class Tank : Special
 {
     public Tank(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.TankBoundingBox, Cfg.Tank, Cfg.TankHealth, Cfg.TankRunSpeed, xPosition, yPosition)
+        : base(level, Cfg.TankBoundingBox, Cfg.Tank, Cfg.TankHealth, Cfg.TankRunSpeed, xPosition, yPosition, Cfg.TankColor)
     {
         
     }

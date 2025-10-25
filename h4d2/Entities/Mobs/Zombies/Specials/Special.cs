@@ -7,9 +7,8 @@ public class Special : Zombie
 {
     private readonly int _special;
     
-    protected Special(Level level, BoundingBox boundingBox, int special, int health, int speed, int xPosition, int yPosition) 
-        : base(level, boundingBox, health, speed, xPosition,
-        yPosition)
+    protected Special(Level level, BoundingBox boundingBox, int special, int health, int speed, int xPosition, int yPosition, int color) 
+        : base(level, boundingBox, health, speed, xPosition, yPosition, color)
     {
         _special = special;
         _walkStep = 0;
