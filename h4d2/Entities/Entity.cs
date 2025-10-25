@@ -5,7 +5,6 @@ namespace H4D2.Entities;
 
 public abstract class Entity : Isometric
 {
-    protected readonly Level _level;
     public readonly BoundingBox BoundingBox;
     
     protected double _xVelocity;
@@ -13,9 +12,8 @@ public abstract class Entity : Isometric
     protected double _zVelocity;
     
     protected Entity(Level level, BoundingBox boundingBox, double xPosition, double yPosition, double zPosition)
-        : base(xPosition, yPosition, zPosition)
+        : base(level, xPosition, yPosition, zPosition)
     {
-        _level = level;
         BoundingBox = boundingBox;
         _xVelocity = 0;
         _yVelocity = 0;

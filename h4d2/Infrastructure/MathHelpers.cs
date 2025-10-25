@@ -25,4 +25,11 @@ public static class MathHelpers
         double term2 = Math.Pow(y1 - y0, 2);
         return Math.Sqrt(term1 + term2);
     }
+
+    public static double ClampDouble(double value, double min, double max)
+    {
+        if (value < min) return min;
+        if (value > max) return max;
+        return value;
+    }
 }

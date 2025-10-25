@@ -1,14 +1,19 @@
-﻿namespace H4D2.Infrastructure;
+﻿using H4D2.Levels;
+
+namespace H4D2.Infrastructure;
 
 public abstract class Isometric
 {
+    protected Level _level;
     public double XPosition { get; protected set; }
     public double YPosition { get; protected set; }
     public double ZPosition { get; protected set; }
     public bool Removed { get; protected set; }
+    public bool IsOnGround => ZPosition == 0;
     
-    protected Isometric(double xPosition, double yPosition, double zPosition)
+    protected Isometric(Level level, double xPosition, double yPosition, double zPosition)
     {
+        _level = level;
         XPosition = xPosition;
         YPosition = yPosition;
         ZPosition = zPosition;

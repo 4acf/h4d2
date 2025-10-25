@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities.Projectiles;
 using H4D2.Levels;
+using H4D2.Particles;
 
 namespace H4D2.Entities.Mobs.Zombies;
 
@@ -20,5 +21,8 @@ public abstract class Zombie : Mob
         {
             Removed = true;
         }
+        var (x, y, z) = BoundingBox.CenterMass(XPosition, YPosition, ZPosition);
+        var bloodSplatter = new BloodSplatterDebris(_level, x, y, z);
+        _level.AddParticle(bloodSplatter);
     }
 }
