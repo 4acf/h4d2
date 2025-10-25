@@ -49,13 +49,16 @@ public class Bullet : Projectile
 
     protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
     {
-        double xDifference = xCorrected - _oldXPosition;
-        double yDifference = yCorrected - _oldYPosition;
+        double xCorrectedDouble = XPosition;
+        double yCorrectedDouble = YPosition;
+        
+        double xDifference = xCorrectedDouble - _oldXPosition;
+        double yDifference = yCorrectedDouble - _oldYPosition;
         
         int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
         for (int i = 0; i < steps; i++)
         {
-            screen.SetPixelBlend((int)(xCorrected + xDifference * i / steps), (int)(yCorrected + yDifference * i / steps), 0x0, 0.9);
+            screen.SetPixelBlend((int)(xCorrectedDouble + xDifference * i / steps), (int)(yCorrectedDouble + yDifference * i / steps), 0x0, 0.9);
         }
     }
 

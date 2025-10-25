@@ -100,6 +100,9 @@ public class Bitmap
                 int index = _GetBytespaceIndex(Width, j, i);
                 if (IsOutOfBounds(index)) continue;
                 
+                int actualY = index / (Width * 4);
+                if (y0 != actualY) continue;
+                
                 Data[index] = MathHelpers.ByteLerp(Data[index], r, blend);
                 Data[index + 1] = MathHelpers.ByteLerp(Data[index + 1], g, blend);
                 Data[index + 2] = MathHelpers.ByteLerp(Data[index + 2], b, blend);
