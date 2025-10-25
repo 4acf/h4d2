@@ -1,4 +1,6 @@
-﻿namespace H4D2.Entities.Mobs.Survivors;
+﻿using H4D2.Infrastructure;
+
+namespace H4D2.Entities.Mobs.Survivors;
 
 public static class SurvivorConfig
 {
@@ -11,7 +13,7 @@ public static class SurvivorConfig
     public const int Louis = 6;
     public const int Zoey = 7;
     
-    public static readonly BoundingBox BoundingBox = new(0b100, 0b10, 4, 6, 8, 10);
+    public static readonly BoundingBox BoundingBox = new(0b100, 0b10, 7, 2, 2, 10, Art.SpriteSize);
     public const int DefaultHealth = 100;
     public const int IncappedHealth = 300;
     public const int RunSpeed = 300;

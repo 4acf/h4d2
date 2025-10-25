@@ -11,18 +11,21 @@ public class Bullet : Projectile
     private const int _color = 0xffffff;
     private double _oldXPosition;
     private double _oldYPosition;
+    private double _oldZPosition;
     
-    public Bullet(Level level, double directionRadians, double xPosition, double yPosition, int damage) 
-        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 1, 1), directionRadians, xPosition, yPosition, damage)
+    public Bullet(Level level, double directionRadians, double xPosition, double yPosition, double zPosition, int damage) 
+        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 1, 1, 1, 0), directionRadians, xPosition, yPosition, zPosition, damage)
     {
         _oldXPosition = xPosition;
         _oldYPosition = yPosition;
+        _oldZPosition = zPosition;
     }
     
     public override void Update(double elapsedTime)
     {
         _oldXPosition = XPosition;
         _oldYPosition = YPosition;
+        _oldZPosition = ZPosition;
         double timeAdjustedSpeed = _speed * elapsedTime;
         _xVelocity = Math.Cos(_directionRadians) * timeAdjustedSpeed;
         _yVelocity = Math.Sin(_directionRadians) * timeAdjustedSpeed;
@@ -31,23 +34,28 @@ public class Bullet : Projectile
 
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        double xDifference = _oldXPosition - XPosition;
-        double yDifference = _oldYPosition - YPosition;
+        double oldYCorrected = _oldYPosition + _oldZPosition;
+        double yCorrectedDouble = YPosition + ZPosition;
+        
+        double xDifference = XPosition - _oldXPosition;
+        double yDifference = yCorrectedDouble - oldYCorrected;
+        
         int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
         for (int i = 0; i < steps; i++)
         {
-            screen.SetPixel((int)Math.Ceiling(XPosition + xDifference * i / steps), (int)(YPosition + yDifference * i / steps), _color);
+            screen.SetPixel((int)(XPosition + xDifference * i / steps), (int)(yCorrectedDouble + yDifference * i / steps), _color);
         }
     }
 
     protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
     {
-        double xDifference = _oldXPosition - XPosition;
-        double yDifference = _oldYPosition - YPosition;
+        double xDifference = xCorrected - _oldXPosition;
+        double yDifference = yCorrected - _oldYPosition;
+        
         int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
         for (int i = 0; i < steps; i++)
         {
-            screen.SetPixelBlend((int)(XPosition + xDifference * i / steps), (int)(YPosition + yDifference * i / steps) - 4, 0x0, 0.9);
+            screen.SetPixelBlend((int)(xCorrected + xDifference * i / steps), (int)(yCorrected + yDifference * i / steps), 0x0, 0.9);
         }
     }
 

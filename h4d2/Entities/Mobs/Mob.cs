@@ -18,7 +18,7 @@ public abstract class Mob : Entity
     protected double _timeSinceLastFrameUpdate;
     
     protected Mob(Level level, BoundingBox boundingBox, int health, double speed, int xPosition, int yPosition) :
-        base(level, boundingBox, xPosition, yPosition)
+        base(level, boundingBox, xPosition, yPosition, 0)
     {
         _health = health;
         _speed = speed;

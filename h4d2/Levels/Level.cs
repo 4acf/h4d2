@@ -55,13 +55,13 @@ public class Level
         _entities.Add(new Coach   (this, 256, 120));
     }
     
-    public Entity? GetFirstCollidingEntity(Entity e1, double xPosition, double yPosition)
+    public Entity? GetFirstCollidingEntity(Entity e1, double xPosition, double yPosition, double zPosition)
     {
         foreach (Entity e2 in _entities)
         {
             if (e2 != e1 &&
                 e1.BoundingBox.CanCollideWith(e2.BoundingBox) &&
-                e1.IsIntersecting(e2, xPosition, yPosition)
+                e1.IsIntersecting(e2, xPosition, yPosition, zPosition)
             )
                 return e2;
         }

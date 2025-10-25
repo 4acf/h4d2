@@ -23,8 +23,8 @@ public class Grenade : Projectile
         [(0, 1), (-1, 0), (1, 0), (0, -1), (1, -1)]    // SE
     };
     
-    public Grenade(Level level, double directionRadians, double xPosition, double yPosition, int damage)
-        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 2, 2), directionRadians, xPosition, yPosition, damage)
+    public Grenade(Level level, double directionRadians, double xPosition, double yPosition, double zPosition, int damage)
+        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 2, 2, 2, 0), directionRadians, xPosition, yPosition, zPosition, damage)
     {
         _directionIndex = _ResolveDirectionIndex(directionRadians);
     }
@@ -58,23 +58,23 @@ public class Grenade : Projectile
 
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        screen.SetPixel((int)XPosition, (int)YPosition, _color);
+        screen.SetPixel(xCorrected, yCorrected, _color);
         for (int i = 0; i < _sprites[_directionIndex].Length; i++)
         {
             int dx = _sprites[_directionIndex][i].Item1;
             int dy = _sprites[_directionIndex][i].Item2;
-            screen.SetPixel((int)XPosition + dx, (int)YPosition + dy, _color);
+            screen.SetPixel(xCorrected + dx, yCorrected + dy, _color);
         }
     }
 
     protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
     {
-        screen.SetPixelBlend((int)XPosition, (int)YPosition - 4, 0x0, 0.9);
+        screen.SetPixelBlend(xCorrected, yCorrected, 0x0, 0.9);
         for (int i = 0; i < _sprites[_directionIndex].Length; i++)
         {
             int dx = _sprites[_directionIndex][i].Item1;
             int dy = _sprites[_directionIndex][i].Item2;
-            screen.SetPixelBlend((int)XPosition + dx, (int)YPosition + dy - 4, 0x0, 0.9);
+            screen.SetPixelBlend(xCorrected + dx, yCorrected + dy, 0x0, 0.9);
         }
     }
 

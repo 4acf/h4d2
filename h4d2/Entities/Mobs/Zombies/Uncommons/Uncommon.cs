@@ -110,18 +110,16 @@ public class Uncommon : Zombie
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
         Bitmap animationCycleBitmap = Art.Uncommons[_uncommon][_walkFrame];
-        screen.Draw(animationCycleBitmap, (int)XPosition, (int)YPosition, _xFlip);
+        screen.Draw(animationCycleBitmap, xCorrected, yCorrected, _xFlip);
     }
     
     protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
     {
-        int x = (int)XPosition;
-        int y = (int)YPosition;
         screen.BlendFill(
-            x + Art.SpriteSize - 10,
-            y - Art.SpriteSize - 1,
-            x + Art.SpriteSize - 7,
-            y - Art.SpriteSize - 1,
+            xCorrected + Art.SpriteSize - 10,
+            yCorrected - Art.SpriteSize - 1,
+            xCorrected + Art.SpriteSize - 7,
+            yCorrected - Art.SpriteSize - 1,
             0x0,
             0.9            
         );
