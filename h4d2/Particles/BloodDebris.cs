@@ -14,14 +14,16 @@ public class BloodDebris : Debris
         
     }
 
-    public void DampVelocities(double parentXVelocity, double parentYVelocity, double parentZVelocity)
+    public void DampVelocities(double elapsedTime, double parentXVelocity, double parentYVelocity, double parentZVelocity)
     {
-        _xVelocity *= _decay;
-        _yVelocity *= _decay;
-        _zVelocity *= _decay;
-        _xVelocity += parentXVelocity * _inertia;
-        _yVelocity += parentYVelocity * _inertia;
-        _zVelocity += parentZVelocity * _inertia;
+        double deltaDecay = Math.Pow(_decay, 60 * elapsedTime);
+        double deltaInertia = _inertia * 60 * elapsedTime;
+        _xVelocity *= deltaDecay;
+        _yVelocity *= deltaDecay;
+        _zVelocity *= deltaDecay;
+        _xVelocity += parentXVelocity * deltaInertia;
+        _yVelocity += parentYVelocity * deltaInertia;
+        _zVelocity += parentZVelocity * deltaInertia;
     }
     
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)

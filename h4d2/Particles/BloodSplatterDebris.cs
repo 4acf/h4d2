@@ -17,7 +17,7 @@ public class BloodSplatterDebris : Debris
         if (RandomSingleton.Instance.Next(2) != 0)
             return;
         var blood = new BloodDebris(_level, XPosition, YPosition, ZPosition);
-        blood.DampVelocities(_xVelocity, _yVelocity, _zVelocity);
+        blood.DampVelocities(elapsedTime, _xVelocity, _yVelocity, _zVelocity);
         _level.AddParticle(blood);
     }
 

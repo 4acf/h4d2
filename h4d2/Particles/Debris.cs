@@ -5,7 +5,7 @@ namespace H4D2.Particles;
 
 public abstract class Debris : Particle
 {
-    protected const double _gravity = 0.08;
+    protected const double _gravity = 4.8;
     protected double _drag;
     protected double _bounce;
     protected const double _groundFriction = 0.85;
@@ -40,17 +40,18 @@ public abstract class Debris : Particle
             return;
         }
 
+        double elapsedTimeConstant = 60 * elapsedTime;
         if (IsOnGround)
         {
-            _xVelocity *= _groundFriction;
-            _yVelocity *= _groundFriction;
+            _xVelocity *= Math.Pow(_groundFriction, elapsedTimeConstant);
+            _yVelocity *= Math.Pow(_groundFriction, elapsedTimeConstant);
         }
         else
         {
-            _xVelocity *= _drag;
-            _yVelocity *= _drag;
+            _xVelocity *= Math.Pow(_drag, elapsedTimeConstant);
+            _yVelocity *= Math.Pow(_drag, elapsedTimeConstant);
         }
-        _zVelocity -= _gravity;
+        _zVelocity -= _gravity * elapsedTime;
         _AttemptMove();
     }
     
