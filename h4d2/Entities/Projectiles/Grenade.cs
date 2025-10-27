@@ -1,6 +1,7 @@
 ﻿using H4D2.Entities.Mobs.Zombies;
 using H4D2.Infrastructure;
 using H4D2.Levels;
+using H4D2.Particles;
 
 namespace H4D2.Entities.Projectiles;
 using Cfg = ProjectileConfig;
@@ -10,6 +11,7 @@ public class Grenade : Projectile
     private const double _speed = 150;
     private const int _color = 0x333333;
     private readonly int _directionIndex;
+    private const int _numSmokeParticlesPerUpdate = 120;
 
     private static readonly (int, int)[][] _sprites =
     {
@@ -50,6 +52,11 @@ public class Grenade : Projectile
     
     public override void Update(double elapsedTime)
     {
+        for (int i = 0; i < _numSmokeParticlesPerUpdate * elapsedTime; i++)
+        {
+            var smoke = new Smoke(_level, XPosition, YPosition, ZPosition, _xVelocity, _yVelocity, 0x0);
+            _level.AddParticle(smoke);
+        }
         double timeAdjustedSpeed = _speed * elapsedTime;
         _xVelocity = Math.Cos(_directionRadians) * timeAdjustedSpeed;
         _yVelocity = Math.Sin(_directionRadians) * timeAdjustedSpeed;

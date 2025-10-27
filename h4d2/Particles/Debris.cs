@@ -6,8 +6,8 @@ namespace H4D2.Particles;
 public abstract class Debris : Particle
 {
     protected const double _gravity = 4.8;
-    protected double _drag;
-    protected double _bounce;
+    protected readonly double _drag;
+    protected readonly double _bounce;
     protected const double _groundFriction = 0.85;
     protected double _timeToLiveSeconds;
     
