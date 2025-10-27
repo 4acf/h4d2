@@ -12,7 +12,8 @@ public class Grenade : Projectile
     private const int _color = 0x333333;
     private readonly int _directionIndex;
     private const int _numSmokeParticlesPerUpdate = 120;
-
+    private const double _gravity = 0.15;
+    
     private static readonly (int, int)[][] _sprites =
     {
         [(-1, 0), (1, 0), (-1, -1), (0, -1), (1, -1)], // E
@@ -60,6 +61,7 @@ public class Grenade : Projectile
         double timeAdjustedSpeed = _speed * elapsedTime;
         _xVelocity = Math.Cos(_directionRadians) * timeAdjustedSpeed;
         _yVelocity = Math.Sin(_directionRadians) * timeAdjustedSpeed;
+        _zVelocity -= _gravity * elapsedTime;
         _AttemptMove();
     }
 

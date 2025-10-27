@@ -11,8 +11,6 @@ public abstract class Weapon
     public double ReloadTimeSeconds { get; init; }
     public double ShootDelaySeconds { get; init; }
     public int AmmoPerMagazine { get; init; }
-    public bool ShootsTheFloor { get; init; }
-    public double MaxRange { get; init; }
     public double Spread { get; init; }
     public int Pellets { get; init; }
 

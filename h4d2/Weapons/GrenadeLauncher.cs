@@ -12,8 +12,6 @@ public class GrenadeLauncher : Weapon
         ReloadTimeSeconds = 3.3;
         ShootDelaySeconds = 1;
         AmmoPerMagazine = 1;
-        ShootsTheFloor = true;
-        MaxRange = 100;
         Spread = 0;
         Pellets = 1;
         

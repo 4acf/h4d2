@@ -11,8 +11,6 @@ public class Uzi : Weapon
         ReloadTimeSeconds = 2.27;
         ShootDelaySeconds = 1.0 / 16.0;
         AmmoPerMagazine = 50;
-        ShootsTheFloor = false;
-        MaxRange = -1;
         Spread = 0.4;
         Pellets = 1;
         

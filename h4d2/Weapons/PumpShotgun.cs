@@ -11,8 +11,6 @@ public class PumpShotgun : Weapon
         ReloadTimeSeconds = 4.2;
         ShootDelaySeconds = 1;
         AmmoPerMagazine = 8;
-        ShootsTheFloor = false;
-        MaxRange = -1;
         Spread = 0.5;
         Pellets = 10;
         

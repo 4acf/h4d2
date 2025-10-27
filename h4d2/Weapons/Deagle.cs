@@ -11,8 +11,6 @@ public class Deagle : Weapon
         ReloadTimeSeconds = 2;
         ShootDelaySeconds = 1 / 3.33;
         AmmoPerMagazine = 8;
-        ShootsTheFloor = false;
-        MaxRange = -1;
         Spread = 0.1;
         Pellets = 1;
         

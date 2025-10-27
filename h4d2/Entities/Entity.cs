@@ -91,5 +91,6 @@ public abstract class Entity : Isometric
     {
         _xVelocity = 0;
         _yVelocity = 0;
+        _zVelocity = 0;
     }
 }

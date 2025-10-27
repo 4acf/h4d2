@@ -11,8 +11,6 @@ public class HuntingRifle : Weapon
         ReloadTimeSeconds = 3.13;
         ShootDelaySeconds = 1.0 / 4.0;
         AmmoPerMagazine = 15;
-        ShootsTheFloor = false;
-        MaxRange = -1;
         Spread = 0;
         Pellets = 1;
         

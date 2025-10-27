@@ -11,8 +11,6 @@ public class AutoShotgun : Weapon
         ReloadTimeSeconds = 4;
         ShootDelaySeconds =  1 / 3.33;
         AmmoPerMagazine = 10;
-        ShootsTheFloor = false;
-        MaxRange = -1;
         Spread = 0.5;
         Pellets = 11;
         

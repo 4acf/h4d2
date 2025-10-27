@@ -11,8 +11,6 @@ public class M16 : Weapon
         ReloadTimeSeconds = 2.2;
         ShootDelaySeconds = 1 / 11.43;
         AmmoPerMagazine = 30;
-        ShootsTheFloor = false;
-        MaxRange = -1;
         Spread = 0.25;
         Pellets = 1;
         
