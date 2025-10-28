@@ -26,6 +26,14 @@ public static class MathHelpers
         return Math.Sqrt(term1 + term2);
     }
 
+    public static double Distance(double x0, double y0, double z0, double x1, double y1, double z1)
+    {
+        double term1 = Math.Pow(x1 - x0, 2);
+        double term2 = Math.Pow(y1 - y0, 2);
+        double term3 = Math.Pow(z1 - z0, 2);
+        return Math.Sqrt(term1 + term2 + term3);
+    }
+
     public static double ClampDouble(double value, double min, double max)
     {
         if (value < min) return min;

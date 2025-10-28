@@ -26,7 +26,11 @@ public abstract class Isometric
         int yCorrected = (int)(YPosition + ZPosition);
         Render(screen, xCorrected, yCorrected);
     }
-    protected abstract void Render(Bitmap screen, int xCorrected, int yCorrected);
+
+    protected virtual void Render(Bitmap screen, int xCorrected, int yCorrected)
+    {
+        
+    }
 
     public void RenderShadow(Bitmap screen)
     {
@@ -34,5 +38,9 @@ public abstract class Isometric
         int yCorrected = (int)YPosition;
         RenderShadow(screen, xCorrected, yCorrected);
     }
-    protected abstract void RenderShadow(Bitmap screen, int xCorrected, int yCorrected);
+
+    protected virtual void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
+    {
+        
+    }
 }

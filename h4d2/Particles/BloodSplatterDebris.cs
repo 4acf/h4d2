@@ -20,14 +20,4 @@ public class BloodSplatterDebris : Debris
         blood.DampVelocities(elapsedTime, _xVelocity, _yVelocity, _zVelocity);
         _level.AddParticle(blood);
     }
-
-    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
-    {
-        // do nothing
-    }
-
-    protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
-    {
-        // do nothing
-    }
 }

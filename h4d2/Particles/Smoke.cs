@@ -72,9 +72,4 @@ public class Smoke : Particle
         opacity = MathHelpers.ClampDouble(opacity, 0, 0.5);
         screen.SetPixelBlend(xCorrected + _randomDx, yCorrected + _randomDy, _color, opacity);
     }
-
-    protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
-    {
-        // do nothing
-    }
 }

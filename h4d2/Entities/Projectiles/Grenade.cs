@@ -13,6 +13,7 @@ public class Grenade : Projectile
     private readonly int _directionIndex;
     private const int _numSmokeParticlesPerUpdate = 120;
     private const double _gravity = 0.15;
+    public readonly double SplashRadius = 15.0;
     
     private static readonly (int, int)[][] _sprites =
     {
@@ -90,6 +91,7 @@ public class Grenade : Projectile
     protected override void _Collide(Entity? entity)
     {
         base._Collide(entity);
+        _level.Explode(this, XPosition, YPosition, ZPosition);
         Removed = true;
         if (entity == null || entity is not Zombie zombie)
             return;

@@ -5,12 +5,15 @@ namespace H4D2.Infrastructure;
 public static class Art
 {
     public const int SpriteSize = 16;
+    public const int ParticleSize = 8;
     public static readonly Bitmap[][] Survivors = _LoadSurvivors();
     public static readonly Bitmap[][] Commons = _LoadCommons();
     public static readonly Bitmap[][] Uncommons = _LoadUncommons();
     public static readonly Bitmap[][] Specials = _LoadSpecials();
+    private static readonly Bitmap[][] _particles = _LoadParticles();
+    public static Bitmap[] Explosion => _particles[0];
     
-    private static Bitmap[][] _LoadBitmaps(string resourceName, int rows, int columns)
+    private static Bitmap[][] _LoadBitmaps(string resourceName, int spriteSize, int rows, int columns)
     {
         var result = new Bitmap[rows][];
         for (int i = 0; i < rows; i++)
@@ -25,7 +28,7 @@ public static class Art
             {
                 result[i][j] = new Bitmap(
                     fullResourceBitmap,
-                    SpriteSize,
+                    spriteSize,
                     i,
                     j
                 );
@@ -34,8 +37,9 @@ public static class Art
         
         return result;
     }
-    private static Bitmap[][] _LoadSurvivors() => _LoadBitmaps("survivor.png", 8, 14);
-    private static Bitmap[][] _LoadCommons() => _LoadBitmaps("common.png", 9, 9);
-    private static Bitmap[][] _LoadUncommons() => _LoadBitmaps("uncommon.png", 5, 9);
-    private static Bitmap[][] _LoadSpecials() => _LoadBitmaps("special.png", 8, 9);
+    private static Bitmap[][] _LoadSurvivors() => _LoadBitmaps("survivor.png", SpriteSize, 8, 14);
+    private static Bitmap[][] _LoadCommons() => _LoadBitmaps("common.png", SpriteSize, 9, 9);
+    private static Bitmap[][] _LoadUncommons() => _LoadBitmaps("uncommon.png", SpriteSize, 5, 9);
+    private static Bitmap[][] _LoadSpecials() => _LoadBitmaps("special.png", SpriteSize, 8, 9);
+    private static Bitmap[][] _LoadParticles() => _LoadBitmaps("particle.png", ParticleSize, 1, 4);
 }
