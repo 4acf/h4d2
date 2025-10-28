@@ -8,12 +8,14 @@ public abstract class Zombie : Mob
 {
     protected Entity? _target;
     protected readonly int _color;
+    protected bool _isAttacking;
     
     protected Zombie(Level level, BoundingBox boundingBox, int health, double speed, int xPosition, int yPosition, int color)
         : base(level, boundingBox, health, speed, xPosition, yPosition)
     {
         _target = null;
         _color = color;
+        _isAttacking = false;
     }
 
     public void HitBy(Projectile projectile)

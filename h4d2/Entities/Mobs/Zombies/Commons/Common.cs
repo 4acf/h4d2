@@ -7,6 +7,9 @@ using Cfg = CommonConfig;
 public class Common : Zombie
 {
     private readonly int _common;
+    private const double _attackRange = 10.0;
+
+    private double _aimDirectionRadians;
     
     public Common(Level level, int xPosition, int yPosition)
         : base(
@@ -24,6 +27,7 @@ public class Common : Zombie
         _walkFrame = 0;
         _timeSinceLastFrameUpdate = 0.0;
         _target = null;
+        _aimDirectionRadians = 0;
     }
 
     public override void Update(double elapsedTime)
@@ -35,8 +39,25 @@ public class Common : Zombie
 
     private void _UpdateTarget()
     {
-        if (_target != null) return;
+        if (_target != null)
+        {
+            var (targetXPosition, targetYPosition, targetZPosition) 
+                = _target.BoundingBox.CenterMass(_target.XPosition, _target.YPosition, _target.ZPosition);
+            var (zombieXPosition, zombieYPosition, zombieZPosition)
+                = BoundingBox.CenterMass(XPosition, YPosition, ZPosition);
+            double distance = MathHelpers.Distance(targetXPosition, targetYPosition, targetZPosition, zombieXPosition, zombieYPosition, zombieZPosition);
+ 
+            _isAttacking = distance <= _attackRange;
+
+            _aimDirectionRadians = Math.Atan2(targetYPosition - zombieYPosition, targetXPosition - zombieXPosition);
+            _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
+            
+            return;
+        }
+        
+        _isAttacking = false;
         _target = _level.GetNearestLivingSurvivor(XPosition, YPosition);
+        
     }
     
     private void _UpdatePosition(double elapsedTime)
@@ -62,7 +83,86 @@ public class Common : Zombie
     private void _UpdateSprite(double elapsedTime)
     {
         _timeSinceLastFrameUpdate += elapsedTime;
+        if (_isAttacking)
+            _UpdateAttackingSprite();
+        else
+            _UpdateRunningSprite();
+    }
 
+    private void _UpdateAttackingSprite()
+    {
+        int direction = 0;
+        double degrees = MathHelpers.RadiansToDegrees(_aimDirectionRadians);
+        switch (degrees)
+        {
+            case >= 337.5:
+            case < 22.5:
+                direction = 2;
+                _xFlip = false;
+                break;
+            case < 67.5:
+                direction = 3;
+                _xFlip = false;
+                break;
+            case < 112.5:
+                direction = 4;
+                _xFlip = false;
+                break;
+            case < 157.5:
+                direction = 3;
+                _xFlip = true;
+                break;
+            case < 202.5:
+                direction = 2;
+                _xFlip = true;
+                break;
+            case < 247.5:
+                direction = 1;
+                _xFlip = true;
+                break;
+            case < 292.5:
+                direction = 0;
+                _xFlip = false;
+                break;
+            default:
+                direction = 1;
+                _xFlip = false;
+                break;
+        }
+        
+        while (_timeSinceLastFrameUpdate >= _frameDuration)
+        {
+            _walkStep = (_walkStep + 1) % 4;
+            if (_xVelocity == 0 && _yVelocity == 0) _walkStep = 0;
+            int nextLowerFrame = 0;
+            if (direction == 2)
+            {
+                nextLowerFrame = _walkStep switch
+                {
+                    0 => 3,
+                    1 or 3 => 4,
+                    2 => 5,
+                    _ => nextLowerFrame
+                };
+            }
+            else
+            {
+                nextLowerFrame = _walkStep switch
+                {
+                    0 or 2 => 0,
+                    1 => 1,
+                    3 => 2,
+                    _ => nextLowerFrame
+                };
+            }
+            _lowerFrame = nextLowerFrame;
+            _upperFrame = _attackingBitmapOffset + direction;
+            _timeSinceLastFrameUpdate -= _frameDuration;
+        }
+    }
+
+    private void _UpdateRunningSprite()
+    {
         int direction = 0;
         int degrees = MathHelpers.RadiansToDegrees(_directionRadians);
         switch (degrees)
@@ -117,7 +217,7 @@ public class Common : Zombie
             _timeSinceLastFrameUpdate -= _frameDuration;
         }
     }
-
+    
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
         Bitmap lowerBitmap = Art.Commons[_common][_lowerFrame];

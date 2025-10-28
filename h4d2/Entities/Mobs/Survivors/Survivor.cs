@@ -11,7 +11,7 @@ public class Survivor : Mob
     private readonly int _character;
     protected Weapon? _weapon;
     private Zombie? _target;
-    private bool _shooting;
+    private bool _isShooting;
     public double AimDirectionRadians { get; private set; }
     
     protected Survivor(Level level, int character, int xPosition, int yPosition) 
@@ -19,7 +19,7 @@ public class Survivor : Mob
     {
         _character = character;
         _target = null;
-        _shooting = false;
+        _isShooting = false;
         AimDirectionRadians = 0;
     }
 
@@ -102,12 +102,12 @@ public class Survivor : Mob
         if (_weapon.CanShoot() && _target != null)
         {
             _weapon.Shoot();
-            _shooting = true;
+            _isShooting = true;
         }
         else
         {
             if(_weapon.AmmoLoaded == 0 || _target == null)
-                _shooting = false;
+                _isShooting = false;
         }
     }
     
@@ -140,7 +140,7 @@ public class Survivor : Mob
     private void _UpdateSprite(double elapsedTime)
     {
         _timeSinceLastFrameUpdate += elapsedTime;
-        if (_shooting)
+        if (_isShooting)
             _UpdateShootingSprite();
         else
             _UpdateRunningSprite();
