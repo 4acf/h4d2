@@ -21,9 +21,6 @@ public class Survivor : Mob
         _target = null;
         _shooting = false;
         AimDirectionRadians = 0;
-
-        _lowerFrame = 0;
-        _upperFrame = 9;
     }
 
     private double _CalculateBestDirection()
@@ -189,8 +186,7 @@ public class Survivor : Mob
                 _xFlip = false;
                 break;
         }
-
-        const int shootingBitmapsOffset = 18;
+        
         while (_timeSinceLastFrameUpdate >= _frameDuration)
         {
             _walkStep = (_walkStep + 1) % 4;
@@ -217,7 +213,7 @@ public class Survivor : Mob
                 };
             }
             _lowerFrame = nextLowerFrame;
-            _upperFrame = shootingBitmapsOffset + direction;
+            _upperFrame = _attackingBitmapOffset + direction;
             _timeSinceLastFrameUpdate -= _frameDuration;
         }
     }
@@ -247,7 +243,6 @@ public class Survivor : Mob
                 break;
         }
         
-        const int uppersOffset = 9;
         while (_timeSinceLastFrameUpdate >= _frameDuration)
         {
             _walkStep = (_walkStep + 1) % 4;
@@ -275,7 +270,7 @@ public class Survivor : Mob
             }
 
             _lowerFrame = nextFrame;
-            _upperFrame = nextFrame + uppersOffset;
+            _upperFrame = nextFrame + _upperBitmapOffset;
             _timeSinceLastFrameUpdate -= _frameDuration;
         }
     }

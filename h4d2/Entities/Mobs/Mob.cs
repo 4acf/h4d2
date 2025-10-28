@@ -18,6 +18,9 @@ public abstract class Mob : Entity
     protected int _upperFrame;
     protected const double _frameDuration = 1.0 / 8.0;
     protected double _timeSinceLastFrameUpdate;
+
+    protected const int _upperBitmapOffset = 9;
+    protected const int _attackingBitmapOffset = 18;
     
     protected Mob(Level level, BoundingBox boundingBox, int health, double speed, int xPosition, int yPosition) :
         base(level, boundingBox, xPosition, yPosition, 0)
@@ -28,6 +31,8 @@ public abstract class Mob : Entity
         _xFlip = false;
         _walkStep = 0;
         _walkFrame = 0;
+        _lowerFrame = 0;
+        _upperFrame = _upperBitmapOffset;
         _timeSinceLastFrameUpdate = 0.0;
     }
 
