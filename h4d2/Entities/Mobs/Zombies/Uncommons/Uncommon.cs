@@ -102,15 +102,19 @@ public class Uncommon : Zombie
                     _ => nextFrame
                 };
             }
-            _walkFrame = nextFrame;
+
+            _lowerFrame = nextFrame;
+            _upperFrame = nextFrame + _upperBitmapOffset;
             _timeSinceLastFrameUpdate -= _frameDuration;
         }
     }
 
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        Bitmap animationCycleBitmap = Art.Uncommons[_uncommon][_walkFrame];
-        screen.Draw(animationCycleBitmap, xCorrected, yCorrected, _xFlip);
+        Bitmap lowerBitmap = Art.Uncommons[_uncommon][_lowerFrame];
+        Bitmap upperBitmap = Art.Uncommons[_uncommon][_upperFrame];
+        screen.Draw(lowerBitmap, xCorrected, yCorrected, _xFlip);
+        screen.Draw(upperBitmap, xCorrected, yCorrected, _xFlip);
     }
     
     protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
