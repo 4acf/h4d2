@@ -8,7 +8,6 @@ public class Common : Zombie
 {
     private readonly int _common;
     private const double _attackRange = 10.0;
-
     private double _aimDirectionRadians;
     
     public Common(Level level, int xPosition, int yPosition)
