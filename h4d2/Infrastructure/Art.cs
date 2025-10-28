@@ -37,7 +37,7 @@ public static class Art
         
         return result;
     }
-    private static Bitmap[][] _LoadSurvivors() => _LoadBitmaps("survivor.png", SpriteSize, 8, 14);
+    private static Bitmap[][] _LoadSurvivors() => _LoadBitmaps("survivor.png", SpriteSize, 8, 23);
     private static Bitmap[][] _LoadCommons() => _LoadBitmaps("common.png", SpriteSize, 9, 9);
     private static Bitmap[][] _LoadUncommons() => _LoadBitmaps("uncommon.png", SpriteSize, 5, 9);
     private static Bitmap[][] _LoadSpecials() => _LoadBitmaps("special.png", SpriteSize, 8, 9);

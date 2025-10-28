@@ -14,6 +14,8 @@ public abstract class Mob : Entity
     
     protected int _walkStep;
     protected int _walkFrame;
+    protected int _lowerFrame;
+    protected int _upperFrame;
     protected const double _frameDuration = 1.0 / 8.0;
     protected double _timeSinceLastFrameUpdate;
     

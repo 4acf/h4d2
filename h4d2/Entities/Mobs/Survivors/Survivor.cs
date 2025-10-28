@@ -21,6 +21,9 @@ public class Survivor : Mob
         _target = null;
         _shooting = false;
         AimDirectionRadians = 0;
+
+        _lowerFrame = 0;
+        _upperFrame = 9;
     }
 
     private double _CalculateBestDirection()
@@ -148,7 +151,6 @@ public class Survivor : Mob
 
     private void _UpdateShootingSprite()
     {
-        // this will be refactored once i render different uppers and lowers
         int direction = 0;
         double degrees = MathHelpers.RadiansToDegrees(AimDirectionRadians);
         switch (degrees)
@@ -188,10 +190,34 @@ public class Survivor : Mob
                 break;
         }
 
-        const int shootingBitmapsOffset = 9;
+        const int shootingBitmapsOffset = 18;
         while (_timeSinceLastFrameUpdate >= _frameDuration)
         {
-            _walkFrame = shootingBitmapsOffset + direction;
+            _walkStep = (_walkStep + 1) % 4;
+            if (_xVelocity == 0 && _yVelocity == 0) _walkStep = 0;
+            int nextLowerFrame = 0;
+            if (direction == 2)
+            {
+                nextLowerFrame = _walkStep switch
+                {
+                    0 => 3,
+                    1 or 3 => 4,
+                    2 => 5,
+                    _ => nextLowerFrame
+                };
+            }
+            else
+            {
+                nextLowerFrame = _walkStep switch
+                {
+                    0 or 2 => 0,
+                    1 => 1,
+                    3 => 2,
+                    _ => nextLowerFrame
+                };
+            }
+            _lowerFrame = nextLowerFrame;
+            _upperFrame = shootingBitmapsOffset + direction;
             _timeSinceLastFrameUpdate -= _frameDuration;
         }
     }
@@ -221,6 +247,7 @@ public class Survivor : Mob
                 break;
         }
         
+        const int uppersOffset = 9;
         while (_timeSinceLastFrameUpdate >= _frameDuration)
         {
             _walkStep = (_walkStep + 1) % 4;
@@ -246,15 +273,19 @@ public class Survivor : Mob
                     _ => nextFrame
                 };
             }
-            _walkFrame = nextFrame;
+
+            _lowerFrame = nextFrame;
+            _upperFrame = nextFrame + uppersOffset;
             _timeSinceLastFrameUpdate -= _frameDuration;
         }
     }
     
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        Bitmap animationCycleBitmap = Art.Survivors[_character][_walkFrame];
-        screen.Draw(animationCycleBitmap, xCorrected, yCorrected, _xFlip);
+        Bitmap lowerBitmap = Art.Survivors[_character][_lowerFrame];
+        Bitmap upperBitmap = Art.Survivors[_character][_upperFrame];
+        screen.Draw(lowerBitmap, xCorrected, yCorrected, _xFlip);
+        screen.Draw(upperBitmap, xCorrected, yCorrected, _xFlip);
     }
 
     protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
