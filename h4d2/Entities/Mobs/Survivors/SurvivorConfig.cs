@@ -12,6 +12,9 @@ public static class SurvivorConfig
     public const int Francis = 5;
     public const int Louis = 6;
     public const int Zoey = 7;
+
+    public const int WhiteSkinColor = 0xffaf80;
+    public const int BlackSkinColor = 0x895e46;
     
     public static readonly BoundingBox BoundingBox = new(0b100, 0b10, 7, 2, 2, 10, Art.SpriteSize);
     public const int DefaultHealth = 100;

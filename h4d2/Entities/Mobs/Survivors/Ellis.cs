@@ -7,7 +7,7 @@ using Cfg = SurvivorConfig;
 public class Ellis : Survivor
 {
     public Ellis(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.Ellis, xPosition, yPosition)
+        : base(level, Cfg.Ellis, xPosition, yPosition, Cfg.WhiteSkinColor)
     {
         _weapon = new GrenadeLauncher(level, this);
     }

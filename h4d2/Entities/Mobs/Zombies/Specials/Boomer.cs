@@ -6,7 +6,17 @@ using Cfg = SpecialConfig;
 public class Boomer : Special
 {
     public Boomer(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.BoomerBoundingBox, Cfg.Boomer, Cfg.BoomerHealth, Cfg.BoomerRunSpeed, xPosition, yPosition, Cfg.BoomerColor)
+        : base(
+            level,
+            Cfg.BoomerBoundingBox,
+            Cfg.Boomer,
+            Cfg.BoomerHealth,
+            Cfg.BoomerRunSpeed,
+            Cfg.BoomerDamage,
+            xPosition,
+            yPosition,
+            Cfg.BoomerColor
+        )
     {
         
     }

@@ -6,7 +6,17 @@ using Cfg = SpecialConfig;
 public class Jockey : Special
 {
     public Jockey(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.JockeyBoundingBox, Cfg.Jockey, Cfg.JockeyHealth, Cfg.JockeyRunSpeed, xPosition, yPosition, Cfg.JockeyColor)
+        : base(
+            level,
+            Cfg.JockeyBoundingBox,
+            Cfg.Jockey,
+            Cfg.JockeyHealth,
+            Cfg.JockeyRunSpeed,
+            Cfg.JockeyDamage,
+            xPosition,
+            yPosition,
+            Cfg.JockeyColor
+        )
     {
         
     }    

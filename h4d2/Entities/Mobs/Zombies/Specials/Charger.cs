@@ -6,7 +6,17 @@ using Cfg = SpecialConfig;
 public class Charger : Special
 {
     public Charger(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.ChargerBoundingBox, Cfg.Charger, Cfg.ChargerHealth, Cfg.ChargerRunSpeed, xPosition, yPosition, Cfg.ChargerColor)
+        : base(
+            level,
+            Cfg.ChargerBoundingBox,
+            Cfg.Charger,
+            Cfg.ChargerHealth,
+            Cfg.ChargerRunSpeed,
+            Cfg.ChargerDamage,
+            xPosition,
+            yPosition,
+            Cfg.ChargerColor
+        )
     {
         
     }

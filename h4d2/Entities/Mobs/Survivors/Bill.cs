@@ -7,7 +7,7 @@ using Cfg = SurvivorConfig;
 public class Bill : Survivor
 {
     public Bill(Level level, int xPosition, int yPosition) 
-        : base(level,Cfg.Bill, xPosition, yPosition)
+        : base(level,Cfg.Bill, xPosition, yPosition, Cfg.WhiteSkinColor)
     {
         _weapon = new M16(level, this);
     }

@@ -6,7 +6,16 @@ using Cfg = UncommonConfig;
 public class Mudman : Uncommon
 {
     public Mudman(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.Mudman, Cfg.MudmanHealth, Cfg.MudmanSpeed, xPosition, yPosition, Cfg.MudmanColor)
+        : base(
+            level,
+            Cfg.Mudman,
+            Cfg.MudmanHealth,
+            Cfg.MudmanSpeed,
+            Cfg.Damage,
+            xPosition,
+            yPosition,
+            Cfg.MudmanColor
+        )
     {
         
     }

@@ -7,7 +7,7 @@ using Cfg = SurvivorConfig;
 public class Rochelle : Survivor
 {
     public Rochelle(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.Rochelle, xPosition, yPosition)
+        : base(level, Cfg.Rochelle, xPosition, yPosition, Cfg.BlackSkinColor)
     {
         _weapon = new Uzi(level, this);
     }

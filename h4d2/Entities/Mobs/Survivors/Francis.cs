@@ -7,7 +7,7 @@ using Cfg = SurvivorConfig;
 public class Francis : Survivor
 {
     public Francis(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.Francis, xPosition, yPosition)
+        : base(level, Cfg.Francis, xPosition, yPosition, Cfg.WhiteSkinColor)
     {
         _weapon = new AutoShotgun(level, this);
     }    

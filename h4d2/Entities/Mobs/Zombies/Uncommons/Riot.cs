@@ -6,7 +6,16 @@ using Cfg = UncommonConfig;
 public class Riot : Uncommon
 {
     public Riot(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.Riot, Cfg.RiotHealth, Cfg.RiotSpeed, xPosition, yPosition, Cfg.RiotColor)
+        : base(
+            level,
+            Cfg.Riot,
+            Cfg.RiotHealth,
+            Cfg.RiotSpeed,
+            Cfg.Damage,
+            xPosition,
+            yPosition,
+            Cfg.RiotColor
+        )
     {
         
     }

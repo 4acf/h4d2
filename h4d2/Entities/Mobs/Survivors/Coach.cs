@@ -7,7 +7,7 @@ using Cfg = SurvivorConfig;
 public class Coach : Survivor
 {
     public Coach(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.Coach, xPosition, yPosition)
+        : base(level, Cfg.Coach, xPosition, yPosition, Cfg.BlackSkinColor)
     {
         _weapon = new PumpShotgun(level, this);
     }

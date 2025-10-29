@@ -6,7 +6,17 @@ using Cfg = SpecialConfig;
 public class Witch : Special
 {
     public Witch(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.WitchBoundingBox, Cfg.Witch, Cfg.WitchHealth, Cfg.WitchRunSpeed, xPosition, yPosition, Cfg.WitchColor)
+        : base(
+            level,
+            Cfg.WitchBoundingBox,
+            Cfg.Witch,
+            Cfg.WitchHealth,
+            Cfg.WitchRunSpeed,
+            Cfg.WitchDamage,
+            xPosition,
+            yPosition,
+            Cfg.WitchColor
+        )
     {
         
     }    

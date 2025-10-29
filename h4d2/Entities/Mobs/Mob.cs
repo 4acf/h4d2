@@ -1,4 +1,6 @@
-﻿using H4D2.Levels;
+﻿using H4D2.Entities.Mobs.Zombies;
+using H4D2.Levels;
+using H4D2.Particles;
 
 namespace H4D2.Entities.Mobs;
 
@@ -22,7 +24,9 @@ public abstract class Mob : Entity
     protected const int _upperBitmapOffset = 9;
     protected const int _attackingBitmapOffset = 18;
     
-    protected Mob(Level level, BoundingBox boundingBox, int health, double speed, int xPosition, int yPosition) :
+    protected readonly int _color;
+    
+    protected Mob(Level level, BoundingBox boundingBox, int health, double speed, int xPosition, int yPosition, int color) :
         base(level, boundingBox, xPosition, yPosition, 0)
     {
         _health = health;
@@ -34,7 +38,33 @@ public abstract class Mob : Entity
         _lowerFrame = 0;
         _upperFrame = _upperBitmapOffset;
         _timeSinceLastFrameUpdate = 0.0;
+        _color = color;
     }
 
     public bool IsAlive() => _health > 0;
+
+    public void HitBy(Zombie zombie)
+    {
+        if (Removed)
+            return;
+        _health -= zombie.Damage;
+        if (!IsAlive())
+        {
+            _Die();
+        }
+        var (x, y, z) = BoundingBox.CenterMass(XPosition, YPosition, ZPosition);
+        var bloodSplatter = new BloodSplatterDebris(_level, x, y, z);
+        _level.AddParticle(bloodSplatter);
+    }
+
+    protected virtual void _Die()
+    {
+        var (x, y, z) = BoundingBox.CenterMass(XPosition, YPosition, ZPosition);
+        for (int i = 0; i < 8; i++)
+        {
+            var deathSplatter = new DeathSplatterDebris(_level, x, y, z + i, _color);
+            _level.AddParticle(deathSplatter);
+        }
+        Removed = true;
+    }
 }

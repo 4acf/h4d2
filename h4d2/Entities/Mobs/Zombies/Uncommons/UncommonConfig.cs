@@ -6,7 +6,8 @@ using ZCfg = ZombieConfig;
 public static class UncommonConfig
 {
     public static readonly BoundingBox BoundingBox = new(ZCfg.CollisionMask, ZCfg.CollidesWith, 7, 2, 2, 10, Art.SpriteSize);
-
+    public const int Damage = 2;
+    
     public const int Hazmat = 0;
     public const int HazmatHealth = 200;
     public const int HazmatSpeed = 250;

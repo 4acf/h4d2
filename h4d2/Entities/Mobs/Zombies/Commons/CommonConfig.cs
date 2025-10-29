@@ -9,6 +9,7 @@ public static class CommonConfig
     public const int Health = 50;
     public const int MinSpeed = 230;
     public const int MaxSpeed = 280;
+    public const int Damage = 2;
     public const int NumSprites = 9;
     public const int Color = 0x847b71;
 }

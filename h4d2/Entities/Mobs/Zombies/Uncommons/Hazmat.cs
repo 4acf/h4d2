@@ -6,7 +6,16 @@ using Cfg = UncommonConfig;
 public class Hazmat : Uncommon
 {
     public Hazmat(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.Hazmat, Cfg.HazmatHealth, Cfg.HazmatSpeed, xPosition, yPosition, Cfg.HazmatColor)
+        : base(
+            level,
+            Cfg.Hazmat,
+            Cfg.HazmatHealth,
+            Cfg.HazmatSpeed,
+            Cfg.Damage,
+            xPosition,
+            yPosition,
+            Cfg.HazmatColor
+        )
     {
         
     }

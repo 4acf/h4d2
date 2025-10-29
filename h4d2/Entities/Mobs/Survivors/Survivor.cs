@@ -14,8 +14,8 @@ public class Survivor : Mob
     private bool _isShooting;
     public double AimDirectionRadians { get; private set; }
     
-    protected Survivor(Level level, int character, int xPosition, int yPosition) 
-        : base(level, Cfg.BoundingBox, Cfg.DefaultHealth, Cfg.RunSpeed, xPosition, yPosition)
+    protected Survivor(Level level, int character, int xPosition, int yPosition, int color) 
+        : base(level, Cfg.BoundingBox, Cfg.DefaultHealth, Cfg.RunSpeed, xPosition, yPosition, color)
     {
         _character = character;
         _target = null;

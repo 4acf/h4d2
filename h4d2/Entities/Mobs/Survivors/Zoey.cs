@@ -7,7 +7,7 @@ using Cfg = SurvivorConfig;
 public class Zoey : Survivor
 {
     public Zoey(Level level, int xPosition, int yPosition) 
-        : base(level, Cfg.Zoey, xPosition, yPosition)
+        : base(level, Cfg.Zoey, xPosition, yPosition, Cfg.WhiteSkinColor)
     {
         _weapon = new HuntingRifle(level, this);
     }

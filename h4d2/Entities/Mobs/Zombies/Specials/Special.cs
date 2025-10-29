@@ -7,8 +7,8 @@ public class Special : Zombie
 {
     private readonly int _special;
     
-    protected Special(Level level, BoundingBox boundingBox, int special, int health, int speed, int xPosition, int yPosition, int color) 
-        : base(level, boundingBox, health, speed, xPosition, yPosition, color)
+    protected Special(Level level, BoundingBox boundingBox, int special, int health, int speed, int damage, int xPosition, int yPosition, int color) 
+        : base(level, boundingBox, health, speed, damage, xPosition, yPosition, color)
     {
         _special = special;
         _walkStep = 0;
@@ -26,8 +26,11 @@ public class Special : Zombie
 
     private void _UpdateTarget()
     {
-        if (_target != null) return;
-        _target = _level.GetNearestLivingSurvivor(XPosition, YPosition);
+        if (_target == null || _target.Removed)
+        {
+            _isAttacking = false;
+            _target = _level.GetNearestLivingSurvivor(XPosition, YPosition);
+        }
     }
     
     private void _UpdatePosition(double elapsedTime)

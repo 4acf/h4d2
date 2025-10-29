@@ -7,8 +7,10 @@ using Cfg = CommonConfig;
 public class Common : Zombie
 {
     private readonly int _common;
-    private const double _attackRange = 10.0;
+    private const double _attackRange = 5.0;
     private double _aimDirectionRadians;
+    private const double _attackDelay = 1.0;
+    private double _attackDelaySecondsLeft;
     
     public Common(Level level, int xPosition, int yPosition)
         : base(
@@ -16,6 +18,7 @@ public class Common : Zombie
             Cfg.BoundingBox, 
             Cfg.Health, 
             RandomSingleton.Instance.Next(Cfg.MinSpeed, Cfg.MaxSpeed), 
+            Cfg.Damage,
             xPosition, 
             yPosition,
             Cfg.Color
@@ -26,37 +29,46 @@ public class Common : Zombie
         _walkFrame = 0;
         _timeSinceLastFrameUpdate = 0.0;
         _target = null;
-        _aimDirectionRadians = 0;
+        _aimDirectionRadians = 0.0;
+        _attackDelaySecondsLeft = 0.0;
     }
 
     public override void Update(double elapsedTime)
     {
-        _UpdateTarget();
+        _UpdateTarget(elapsedTime);
         _UpdatePosition(elapsedTime);
         _UpdateSprite(elapsedTime);
     }
-
-    private void _UpdateTarget()
+    
+    private void _UpdateTarget(double elapsedTime)
     {
-        if (_target != null)
+        _attackDelaySecondsLeft -= elapsedTime;
+
+        if (_target == null || _target.Removed)
+        {
+            _isAttacking = false;
+            _target = _level.GetNearestLivingSurvivor(XPosition, YPosition);
+        }
+        else
         {
             var (targetXPosition, targetYPosition, targetZPosition) 
                 = _target.BoundingBox.CenterMass(_target.XPosition, _target.YPosition, _target.ZPosition);
             var (zombieXPosition, zombieYPosition, zombieZPosition)
                 = BoundingBox.CenterMass(XPosition, YPosition, ZPosition);
             double distance = MathHelpers.Distance(targetXPosition, targetYPosition, targetZPosition, zombieXPosition, zombieYPosition, zombieZPosition);
- 
-            _isAttacking = distance <= _attackRange;
 
+            _isAttacking = distance <= _attackRange;
+            if (!_isAttacking) return;
+            
+            if (_target is Mob targetMob && _attackDelaySecondsLeft <= 0)
+            {
+                targetMob.HitBy(this);
+                _attackDelaySecondsLeft = _attackDelay;
+            }
+                
             _aimDirectionRadians = Math.Atan2(targetYPosition - zombieYPosition, targetXPosition - zombieXPosition);
             _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
-            
-            return;
         }
-        
-        _isAttacking = false;
-        _target = _level.GetNearestLivingSurvivor(XPosition, YPosition);
-        
     }
     
     private void _UpdatePosition(double elapsedTime)
