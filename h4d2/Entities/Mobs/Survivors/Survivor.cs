@@ -115,10 +115,23 @@ public class Survivor : Mob
     {
         _UpdateTarget();
         _UpdateWeapon(elapsedTime);
+        _UpdateSpeed();
         _UpdatePosition(elapsedTime);
         _UpdateSprite(elapsedTime);
     }
 
+    private void _UpdateSpeed()
+    {
+        bool isLimping = _speed < Cfg.WalkSpeed && _speed < Cfg.RunSpeed;
+        bool isWalking = _speed < Cfg.LimpSpeed;
+        bool isHealthBetween1and39 = 1 < _health && _health < 40;
+        
+        if (isHealthBetween1and39 && !isLimping)
+            _speed = Cfg.LimpSpeed;
+        else if(_health == 1 && !isWalking)
+            _speed = Cfg.WalkSpeed;
+    }
+    
     private void _UpdatePosition(double elapsedTime)
     {
         _xVelocity *= 0.5;
