@@ -91,7 +91,7 @@ public class Grenade : Projectile
     protected override void _Collide(Entity? entity)
     {
         base._Collide(entity);
-        _level.Explode(this, XPosition, YPosition, ZPosition);
+        _level.Explode(this);
         Removed = true;
         if (entity == null || entity is not Zombie zombie)
             return;

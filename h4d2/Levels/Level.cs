@@ -128,15 +128,15 @@ public class Level
         _particles.Add(particle);
     }
 
-    public void Explode(Grenade grenade, double xPosition, double yPosition, double zPosition)
+    public void Explode(Grenade grenade)
     {
-        AddParticle(new Explosion(this, xPosition, yPosition, zPosition, grenade.SplashRadius));
+        AddParticle(new Explosion(this, grenade.XPosition, grenade.YPosition, grenade.ZPosition, grenade.SplashRadius));
         List<Zombie> zombies = GetLivingZombies();
         foreach (Zombie zombie in zombies)
         {
             var (zombieXPosition, zombieYPosition, zombieZPosition) = 
                 zombie.BoundingBox.CenterMass(zombie.XPosition, zombie.YPosition, zombie.ZPosition);
-            double distance = MathHelpers.Distance(xPosition, yPosition, zPosition, zombieXPosition, zombieYPosition, zombieZPosition);
+            double distance = MathHelpers.Distance(grenade.XPosition, grenade.YPosition, grenade.ZPosition, zombieXPosition, zombieYPosition, zombieZPosition);
             if (distance <= grenade.SplashRadius)
             {
                 zombie.HitBy(grenade);
