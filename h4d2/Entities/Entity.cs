@@ -25,7 +25,7 @@ public abstract class Entity : Isometric
     
     public bool IsIntersecting(Entity other, double xPosition, double yPosition, double zPosition)
     {
-        return BoundingBox.IsIntersecting(other.BoundingBox, other.XPosition, other.YPosition, other.ZPosition, xPosition, yPosition, zPosition);
+        return BoundingBox.IsIntersecting(other, xPosition, yPosition, zPosition);
     }
     
     protected void _AttemptMove()

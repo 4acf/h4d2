@@ -48,17 +48,17 @@ public class BoundingBox
         return (_collidesWith & other.CollisionMask) == other.CollisionMask;
     }
     
-    public bool IsIntersecting(BoundingBox other, double otherXPosition, double otherYPosition, double otherZPosition, double xPosition, double yPosition, double zPosition)
+    public bool IsIntersecting(Entity other, double xPosition, double yPosition, double zPosition)
     {
         bool isXYPlaneIntersecting =
-            other.W(otherXPosition) <= E(xPosition) &&
-            other.E(otherXPosition) >= W(xPosition) &&
-            other.N(otherYPosition) >= S(yPosition) &&
-            other.S(otherYPosition) <= N(yPosition);
+            other.BoundingBox.W(other.XPosition) <= E(xPosition) &&
+            other.BoundingBox.E(other.XPosition) >= W(xPosition) &&
+            other.BoundingBox.N(other.YPosition) >= S(yPosition) &&
+            other.BoundingBox.S(other.YPosition) <= N(yPosition);
         
         bool isZIntersecting =
-            other.Bottom(otherZPosition) <= Top(zPosition) &&
-            other.Top(otherZPosition) >= Bottom(zPosition);
+            other.BoundingBox.Bottom(other.ZPosition) <= Top(zPosition) &&
+            other.BoundingBox.Top(other.ZPosition) >= Bottom(zPosition);
 
         return isXYPlaneIntersecting && isZIntersecting;
     }
