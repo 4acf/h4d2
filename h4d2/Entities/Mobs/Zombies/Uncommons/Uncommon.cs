@@ -5,20 +5,17 @@ namespace H4D2.Entities.Mobs.Zombies.Uncommons;
 
 public class Uncommon : Zombie
 {
-    private readonly int _uncommon;
     private const double _attackRange = 5.0;
-    private double _aimDirectionRadians;
     private const double _attackDelay = 1.0;
+    
+    private readonly int _uncommon;
+    private double _aimDirectionRadians;
     private double _attackDelaySecondsLeft;
     
     protected Uncommon(Level level, int uncommon, int health, int speed, int damage, int xPosition, int yPosition, int color) 
         : base(level, UncommonConfig.BoundingBox, health, speed, damage, xPosition, yPosition, color)
     {
         _uncommon = uncommon;
-        _walkStep = 0;
-        _walkFrame = 0;
-        _timeSinceLastFrameUpdate = 0.0;
-        _target = null;
         _attackDelaySecondsLeft = 0.0;
     }
     

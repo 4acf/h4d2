@@ -27,8 +27,8 @@ public class Grenade : Projectile
         [(0, 1), (-1, 0), (1, 0), (0, -1), (1, -1)]    // SE
     };
     
-    public Grenade(Level level, double directionRadians, double xPosition, double yPosition, double zPosition, int damage)
-        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 2, 2, 2, 0), directionRadians, xPosition, yPosition, zPosition, damage)
+    public Grenade(Level level, double xPosition, double yPosition, double zPosition, int damage, double directionRadians)
+        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 2, 2, 2, 0), xPosition, yPosition, zPosition, damage, directionRadians)
     {
         _directionIndex = _ResolveDirectionIndex(directionRadians);
     }

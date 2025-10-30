@@ -22,7 +22,23 @@ public abstract class Entity : Isometric
     
     public abstract void Update(double elapsedTime);
     
-    public bool IsOutOfLevelBounds(double xPosition, double yPosition, double zPosition)
+    public bool IsIntersecting(Entity other, double xPosition, double yPosition, double zPosition)
+    {
+        return BoundingBox.IsIntersecting(other.BoundingBox, other.XPosition, other.YPosition, other.ZPosition, xPosition, yPosition, zPosition);
+    }
+    
+    protected void _AttemptMove()
+    {
+        int steps = (int)(Math.Sqrt(_xVelocity * _xVelocity + _yVelocity * _yVelocity + _zVelocity * _zVelocity) + 1);
+        for (int i = 0; i < steps; i++)
+        {
+            _Move(_xVelocity / steps, 0, 0);
+            _Move(0,_yVelocity / steps, 0);
+            _Move(0, 0, _zVelocity / steps);
+        }
+    }
+
+    private bool _IsOutOfLevelBounds(double xPosition, double yPosition, double zPosition)
     {
         double w = BoundingBox.W(xPosition);
         if (w < 0) 
@@ -46,29 +62,13 @@ public abstract class Entity : Isometric
         return false;
     }
     
-    public bool IsIntersecting(Entity other, double xPosition, double yPosition, double zPosition)
-    {
-        return BoundingBox.IsIntersecting(other.BoundingBox, other.XPosition, other.YPosition, other.ZPosition, xPosition, yPosition, zPosition);
-    }
-    
-    protected void _AttemptMove()
-    {
-        int steps = (int)(Math.Sqrt(_xVelocity * _xVelocity + _yVelocity * _yVelocity + _zVelocity * _zVelocity) + 1);
-        for (int i = 0; i < steps; i++)
-        {
-            _Move(_xVelocity / steps, 0, 0);
-            _Move(0,_yVelocity / steps, 0);
-            _Move(0, 0, _zVelocity / steps);
-        }
-    }
-
     private void _Move(double xComponent, double yComponent, double zComponent)
     {
         double xDest = XPosition + xComponent;
         double yDest = YPosition + yComponent;
         double zDest = ZPosition + zComponent;
 
-        if (IsOutOfLevelBounds(xDest, yDest, zDest))
+        if (_IsOutOfLevelBounds(xDest, yDest, zDest))
         {
             if (zDest < 0) ZPosition = 0;
             _Collide(null);

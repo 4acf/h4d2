@@ -6,9 +6,10 @@ namespace H4D2.Particles;
 public abstract class Debris : Particle
 {
     protected const double _gravity = 4.8;
+    protected const double _groundFriction = 0.85;
+    
     protected readonly double _drag;
     protected readonly double _bounce;
-    protected const double _groundFriction = 0.85;
     protected double _timeToLiveSeconds;
     
     protected Debris(Level level, double xPosition, double yPosition, double zPosition, double drag, double bounce)
@@ -55,7 +56,7 @@ public abstract class Debris : Particle
         _AttemptMove();
     }
     
-    protected void _AttemptMove()
+    private void _AttemptMove()
     {
         int steps = (int)(Math.Sqrt(_xVelocity * _xVelocity + _yVelocity * _yVelocity + _zVelocity * _zVelocity) + 1);
         for (int i = 0; i < steps; i++)
@@ -66,7 +67,7 @@ public abstract class Debris : Particle
         }
     }
 
-    public bool IsOutOfLevelBounds(double xPosition, double yPosition, double zPosition)
+    private bool _IsOutOfLevelBounds(double xPosition, double yPosition, double zPosition)
     {
         return
             xPosition < 0 ||
@@ -82,7 +83,7 @@ public abstract class Debris : Particle
         double yDest = YPosition + yComponent;
         double zDest = ZPosition + zComponent;
 
-        if (IsOutOfLevelBounds(xDest, yDest, zDest))
+        if (_IsOutOfLevelBounds(xDest, yDest, zDest))
         {
             if (zDest < 0) ZPosition = 0;
             _Collide(xComponent, yComponent, zComponent);
@@ -94,7 +95,7 @@ public abstract class Debris : Particle
         ZPosition = zDest;
     }
 
-    protected void _Collide(double xComponent, double yComponent, double zComponent)
+    private void _Collide(double xComponent, double yComponent, double zComponent)
     {
         if (xComponent != 0) _xVelocity *= _bounce * -1;
         if (yComponent != 0) _yVelocity *= _bounce * -1;

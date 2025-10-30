@@ -8,6 +8,8 @@ using Cfg = SurvivorConfig;
 
 public class Survivor : Mob
 {
+    private const int _boundaryTolerance = 25;
+    
     private readonly int _character;
     protected Weapon? _weapon;
     private Zombie? _target;
@@ -23,56 +25,18 @@ public class Survivor : Mob
         AimDirectionRadians = 0;
     }
 
-    private double _CalculateBestDirection()
+    public override void Update(double elapsedTime)
     {
-        double direction = RandomSingleton.Instance.NextDouble() * (2 * Math.PI);
-        direction = CorrectDirectionToAvoidWalls(direction);
-        return direction;
+        _UpdateTarget();
+        _UpdateWeapon(elapsedTime);
+        _UpdateSpeed();
+        _UpdatePosition(elapsedTime);
+        _UpdateSprite(elapsedTime);
     }
-
-    private double CorrectDirectionToAvoidWalls(double direction)
+    
+    private void _UpdateTarget()
     {
-        const int boundaryTolerance = 25;
-        var (x, y, _) = BoundingBox.CenterMass(XPosition, YPosition, ZPosition);
-        
-        if (x < boundaryTolerance)
-        {
-            if ((Math.PI / 2) < direction && direction < (3 * Math.PI / 2))
-            {
-                direction = Math.Atan2(Math.Sin(direction), Math.Cos(direction) * -1);
-            }
-        }
-        
-        if (y < boundaryTolerance)
-        {
-            if (direction > Math.PI)
-            {
-                direction = Math.Atan2(Math.Sin(direction) * -1, Math.Cos(direction));
-            }
-        }
-
-        if (_level.Width - x < boundaryTolerance)
-        {
-            if ((3 * Math.PI / 2) < direction || direction < (Math.PI / 2))
-            {
-                direction = Math.Atan2(Math.Sin(direction), Math.Cos(direction) * -1);
-            }
-        }
-
-        if (_level.Height - y < boundaryTolerance)
-        {
-            if (direction < Math.PI)
-            {
-                direction = Math.Atan2(Math.Sin(direction) * -1, Math.Cos(direction));
-            }
-        }
-
-        return direction;
-    }
-
-    public void _UpdateTarget()
-    {
-        if (_target == null || !_target.IsAlive())
+        if (_target == null || !_target.IsAlive)
         {
             _target = _level.GetNearestLivingZombie(XPosition, YPosition);
             if (_target == null) return;
@@ -83,7 +47,7 @@ public class Survivor : Mob
         }
         else
         {
-            if (!_target.IsAlive())
+            if (!_target.IsAlive)
             {
                 _target = null;
             }
@@ -94,8 +58,8 @@ public class Survivor : Mob
             }
         }
     }
-
-    public void _UpdateWeapon(double elapsedTime)
+    
+    private void _UpdateWeapon(double elapsedTime)
     {
         if (_weapon == null) return;
         _weapon.Update(elapsedTime);
@@ -111,15 +75,6 @@ public class Survivor : Mob
         }
     }
     
-    public override void Update(double elapsedTime)
-    {
-        _UpdateTarget();
-        _UpdateWeapon(elapsedTime);
-        _UpdateSpeed();
-        _UpdatePosition(elapsedTime);
-        _UpdateSprite(elapsedTime);
-    }
-
     private void _UpdateSpeed()
     {
         bool isLimping = _speed < Cfg.WalkSpeed && _speed < Cfg.RunSpeed;
@@ -148,6 +103,52 @@ public class Survivor : Mob
         _yVelocity += Math.Sin(_directionRadians) * moveSpeed;
 
         _AttemptMove();
+    }
+    
+    private double _CalculateBestDirection()
+    {
+        double direction = RandomSingleton.Instance.NextDouble() * (2 * Math.PI);
+        direction = CorrectDirectionToAvoidWalls(direction);
+        return direction;
+    }
+
+    private double CorrectDirectionToAvoidWalls(double direction)
+    {
+        var (x, y, _) = BoundingBox.CenterMass(XPosition, YPosition, ZPosition);
+        
+        if (x < _boundaryTolerance)
+        {
+            if ((Math.PI / 2) < direction && direction < (3 * Math.PI / 2))
+            {
+                direction = Math.Atan2(Math.Sin(direction), Math.Cos(direction) * -1);
+            }
+        }
+        
+        if (y < _boundaryTolerance)
+        {
+            if (direction > Math.PI)
+            {
+                direction = Math.Atan2(Math.Sin(direction) * -1, Math.Cos(direction));
+            }
+        }
+
+        if (_level.Width - x < _boundaryTolerance)
+        {
+            if ((3 * Math.PI / 2) < direction || direction < (Math.PI / 2))
+            {
+                direction = Math.Atan2(Math.Sin(direction), Math.Cos(direction) * -1);
+            }
+        }
+
+        if (_level.Height - y < _boundaryTolerance)
+        {
+            if (direction < Math.PI)
+            {
+                direction = Math.Atan2(Math.Sin(direction) * -1, Math.Cos(direction));
+            }
+        }
+
+        return direction;
     }
     
     private void _UpdateSprite(double elapsedTime)
@@ -307,5 +308,4 @@ public class Survivor : Mob
             0.9            
         );
     }
-    
 }

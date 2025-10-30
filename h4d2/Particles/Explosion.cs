@@ -5,10 +5,11 @@ namespace H4D2.Particles;
 
 public class Explosion : Particle
 {
+    private const double _particleMultiplier = 10;
+    
     private double _timeToLiveSeconds;
     private readonly double _maxLifeSeconds;
     private readonly double _splashRadius;
-    private const double _particleMultiplier = 10;
     
     public Explosion(Level level, double xPosition, double yPosition, double zPosition, double splashRadius)
         : base(level, xPosition, yPosition, zPosition)

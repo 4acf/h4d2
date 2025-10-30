@@ -6,10 +6,11 @@ using Cfg = CommonConfig;
 
 public class Common : Zombie
 {
-    private readonly int _common;
     private const double _attackRange = 5.0;
-    private double _aimDirectionRadians;
     private const double _attackDelay = 1.0;
+    
+    private readonly int _common;
+    private double _aimDirectionRadians;
     private double _attackDelaySecondsLeft;
     
     public Common(Level level, int xPosition, int yPosition)
@@ -25,10 +26,6 @@ public class Common : Zombie
             )
     {
         _common = RandomSingleton.Instance.Next(Cfg.NumSprites);
-        _walkStep = 0;
-        _walkFrame = 0;
-        _timeSinceLastFrameUpdate = 0.0;
-        _target = null;
         _aimDirectionRadians = 0.0;
         _attackDelaySecondsLeft = 0.0;
     }

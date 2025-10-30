@@ -5,6 +5,10 @@ namespace H4D2.Particles;
 
 public class Smoke : Particle
 {
+    private const double _gravity = 2.0;
+    private const double _decay = 0.5;
+    private const double _inertia = 0.1;
+    
     private readonly int _color;
     private double _timeToLiveSeconds;
     private readonly double _maxLifeSeconds;
@@ -12,9 +16,6 @@ public class Smoke : Particle
     private readonly double _parentYVelocity;
     private readonly int _randomDx;
     private readonly int _randomDy;
-    private const double _gravity = 2.0;
-    private const double _decay = 0.5;
-    private const double _inertia = 0.1;
     
     public Smoke(Level level, double xPosition, double yPosition, double zPosition, double parentXVelocity, double parentYVelocity, int color)
         : base(level, xPosition, yPosition, zPosition)
@@ -48,7 +49,7 @@ public class Smoke : Particle
         _AttemptMove();
     }
 
-    protected void _AttemptMove()
+    private void _AttemptMove()
     {
         int steps = (int)(Math.Sqrt(_xVelocity * _xVelocity + _yVelocity * _yVelocity + _zVelocity * _zVelocity) + 1);
         for (int i = 0; i < steps; i++)

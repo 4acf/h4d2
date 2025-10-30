@@ -72,7 +72,7 @@ public class Level
     {
         return _entities
             .OfType<Survivor>()
-            .Where(s => s.IsAlive())
+            .Where(s => s.IsAlive)
             .ToList();
     }
     
@@ -82,7 +82,7 @@ public class Level
         double lowestDistance = double.MaxValue;
         foreach (Survivor survivor in _entities.OfType<Survivor>())
         {
-            if (!survivor.IsAlive()) continue;
+            if (!survivor.IsAlive) continue;
             double distance = MathHelpers.Distance(xPosition, yPosition, survivor.XPosition, survivor.YPosition);
             if (distance < lowestDistance)
             {
@@ -97,7 +97,7 @@ public class Level
     {
         return _entities
             .OfType<Zombie>()
-            .Where(z => z.IsAlive())
+            .Where(z => z.IsAlive)
             .ToList();
     }
     
@@ -107,7 +107,7 @@ public class Level
         double lowestDistance = double.MaxValue;
         foreach (Zombie zombie in _entities.OfType<Zombie>())
         {
-            if (!zombie.IsAlive()) continue;
+            if (!zombie.IsAlive) continue;
             double distance = MathHelpers.Distance(xPosition, yPosition, zombie.XPosition, zombie.YPosition);
             if (distance < lowestDistance)
             {

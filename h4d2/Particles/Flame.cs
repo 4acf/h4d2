@@ -5,8 +5,9 @@ namespace H4D2.Particles;
 
 public class Flame : Particle
 {
-    private int _frame;
     private const double _frameDuration = 1.0 / 16.0;
+    
+    private int _frame;
     private double _timeSinceLastFrameUpdate;
     
     public Flame(Level level, double xPosition, double yPosition, double zPosition)

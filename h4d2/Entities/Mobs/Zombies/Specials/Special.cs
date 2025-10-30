@@ -11,10 +11,6 @@ public class Special : Zombie
         : base(level, boundingBox, health, speed, damage, xPosition, yPosition, color)
     {
         _special = special;
-        _walkStep = 0;
-        _walkFrame = 0;
-        _timeSinceLastFrameUpdate = 0.0;
-        _target = null;
     }
 
     public override void Update(double elapsedTime)

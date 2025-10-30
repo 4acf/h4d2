@@ -13,8 +13,8 @@ public class Bullet : Projectile
     private double _oldYPosition;
     private double _oldZPosition;
     
-    public Bullet(Level level, double directionRadians, double xPosition, double yPosition, double zPosition, int damage) 
-        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 1, 1, 1, 0), directionRadians, xPosition, yPosition, zPosition, damage)
+    public Bullet(Level level, double xPosition, double yPosition, double zPosition, int damage, double directionRadians) 
+        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 1, 1, 1, 0), xPosition, yPosition, zPosition, damage, directionRadians)
     {
         _oldXPosition = xPosition;
         _oldYPosition = yPosition;
