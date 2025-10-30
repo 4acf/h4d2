@@ -40,8 +40,8 @@ public class Survivor : Mob
         {
             _target = _level.GetNearestLivingZombie(XPosition, YPosition);
             if (_target == null) return;
-            var (x0, y0, _) = BoundingBox.CenterMass(XPosition, YPosition, ZPosition);
-            var (x1, y1, _) = _target.BoundingBox.CenterMass(_target.XPosition, _target.YPosition, _target.ZPosition);
+            var (x0, y0, _) = CenterMass;
+            var (x1, y1, _) = _target.CenterMass;
             AimDirectionRadians = Math.Atan2(y1 - y0, x1 - x0);
             AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
         }
@@ -114,7 +114,7 @@ public class Survivor : Mob
 
     private double CorrectDirectionToAvoidWalls(double direction)
     {
-        var (x, y, _) = BoundingBox.CenterMass(XPosition, YPosition, ZPosition);
+        var (x, y, _) = CenterMass;
         
         if (x < _boundaryTolerance)
         {

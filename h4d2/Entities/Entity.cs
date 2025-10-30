@@ -6,6 +6,7 @@ namespace H4D2.Entities;
 public abstract class Entity : Isometric
 {
     public readonly BoundingBox BoundingBox;
+    public (double, double, double) CenterMass => BoundingBox.CenterMass(XPosition, YPosition, ZPosition); 
     
     protected double _xVelocity;
     protected double _yVelocity;

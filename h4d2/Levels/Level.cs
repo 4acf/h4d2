@@ -134,8 +134,7 @@ public class Level
         List<Zombie> zombies = GetLivingZombies();
         foreach (Zombie zombie in zombies)
         {
-            var (zombieXPosition, zombieYPosition, zombieZPosition) = 
-                zombie.BoundingBox.CenterMass(zombie.XPosition, zombie.YPosition, zombie.ZPosition);
+            var (zombieXPosition, zombieYPosition, zombieZPosition) = zombie.CenterMass;
             double distance = MathHelpers.Distance(grenade.XPosition, grenade.YPosition, grenade.ZPosition, zombieXPosition, zombieYPosition, zombieZPosition);
             if (distance <= grenade.SplashRadius)
             {

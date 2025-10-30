@@ -70,7 +70,7 @@ public abstract class Weapon
             double newXComponent = Math.Cos(_owner.AimDirectionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * Spread;
             double newYComponent = Math.Sin(_owner.AimDirectionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * Spread;
             double newDirection = Math.Atan2(newYComponent, newXComponent);
-            var (x, y, z) = _owner.BoundingBox.CenterMass(_owner.XPosition, _owner.YPosition, _owner.ZPosition); 
+            var (x, y, z) = _owner.CenterMass; 
             _level.AddProjectile(new Bullet(_level, x, y, z, Damage, newDirection));
         }
     }

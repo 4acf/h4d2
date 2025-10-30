@@ -38,9 +38,9 @@ public class Uncommon : Zombie
         else
         {
             var (targetXPosition, targetYPosition, targetZPosition) 
-                = _target.BoundingBox.CenterMass(_target.XPosition, _target.YPosition, _target.ZPosition);
+                = _target.CenterMass;
             var (zombieXPosition, zombieYPosition, zombieZPosition)
-                = BoundingBox.CenterMass(XPosition, YPosition, ZPosition);
+                = CenterMass;
             double distance = MathHelpers.Distance(targetXPosition, targetYPosition, targetZPosition, zombieXPosition, zombieYPosition, zombieZPosition);
 
             _isAttacking = distance <= _attackRange;

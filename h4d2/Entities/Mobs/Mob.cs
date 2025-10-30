@@ -50,14 +50,14 @@ public abstract class Mob : Entity
         {
             _Die();
         }
-        var (x, y, z) = BoundingBox.CenterMass(XPosition, YPosition, ZPosition);
+        var (x, y, z) = CenterMass;
         var bloodSplatter = new BloodSplatterDebris(_level, x, y, z);
         _level.AddParticle(bloodSplatter);
     }
 
     protected virtual void _Die()
     {
-        var (x, y, z) = BoundingBox.CenterMass(XPosition, YPosition, ZPosition);
+        var (x, y, z) = CenterMass;
         for (int i = 0; i < 8; i++)
         {
             var deathSplatter = new DeathSplatterDebris(_level, x, y, z + i, _color);
