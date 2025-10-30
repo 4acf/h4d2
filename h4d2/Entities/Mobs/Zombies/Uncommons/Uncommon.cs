@@ -37,9 +37,9 @@ public class Uncommon : Zombie
         }
         else
         {
-            var (targetXPosition, targetYPosition, targetZPosition) 
+            (double targetXPosition, double targetYPosition, double targetZPosition) 
                 = _target.CenterMass;
-            var (zombieXPosition, zombieYPosition, zombieZPosition)
+            (double zombieXPosition, double zombieYPosition, double zombieZPosition)
                 = CenterMass;
             double distance = MathHelpers.Distance(targetXPosition, targetYPosition, targetZPosition, zombieXPosition, zombieYPosition, zombieZPosition);
 

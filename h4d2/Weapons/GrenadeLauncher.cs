@@ -25,7 +25,7 @@ public class GrenadeLauncher : Weapon
         _shootDelaySecondsLeft = ShootDelaySeconds;
         for (int i = 0; i < Pellets; i++)
         {
-            var (x, y, z) = _owner.CenterMass; 
+            (double x, double y, double z) = _owner.CenterMass; 
             _level.AddProjectile(new Grenade(_level, x, y, z, Damage, _owner.AimDirectionRadians));
         }
     }

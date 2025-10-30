@@ -40,9 +40,9 @@ public class Survivor : Mob
         {
             _target = _level.GetNearestLivingZombie(XPosition, YPosition);
             if (_target == null) return;
-            var (x0, y0, _) = CenterMass;
-            var (x1, y1, _) = _target.CenterMass;
-            AimDirectionRadians = Math.Atan2(y1 - y0, x1 - x0);
+            (double survivorXPosition, double survivorYPosition, _) = CenterMass;
+            (double targetXPosition, double targetYPosition, _) = _target.CenterMass;
+            AimDirectionRadians = Math.Atan2(targetYPosition - survivorYPosition, targetXPosition - survivorXPosition);
             AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
         }
         else

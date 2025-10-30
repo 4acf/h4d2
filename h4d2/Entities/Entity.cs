@@ -22,11 +22,9 @@ public abstract class Entity : Isometric
     }
     
     public abstract void Update(double elapsedTime);
-    
-    public bool IsIntersecting(Entity other, double xPosition, double yPosition, double zPosition)
-    {
-        return BoundingBox.IsIntersecting(other, xPosition, yPosition, zPosition);
-    }
+
+    public bool IsIntersecting(Entity other, double xPosition, double yPosition, double zPosition) =>
+        BoundingBox.IsIntersecting(other, xPosition, yPosition, zPosition);
     
     protected void _AttemptMove()
     {

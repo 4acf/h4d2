@@ -27,7 +27,7 @@ public abstract class Zombie : Mob
         {
             _Die();
         }
-        var (x, y, z) = CenterMass;
+        (double x, double y, double z) = CenterMass;
         var bloodSplatter = new BloodSplatterDebris(_level, x, y, z);
         _level.AddParticle(bloodSplatter);
     }
