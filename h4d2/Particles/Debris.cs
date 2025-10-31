@@ -8,6 +8,8 @@ public abstract class Debris : Particle
 {
     protected const double _gravity = 4.8;
     protected const double _groundFriction = 0.85;
+    private const double _minLifetime = 0.6;
+    private const double _maxLifetime = 1.0;
     
     protected readonly double _drag;
     protected readonly double _bounce;
@@ -19,7 +21,7 @@ public abstract class Debris : Particle
         _drag = drag;
         _bounce = bounce;
         _timeToLiveSeconds = RandomSingleton.Instance.NextDouble();
-        _timeToLiveSeconds = MathHelpers.ClampDouble(_timeToLiveSeconds, Cfg.MinDebrisLifetime, Cfg.MaxDebrisLifetime);
+        _timeToLiveSeconds = MathHelpers.ClampDouble(_timeToLiveSeconds, _minLifetime, _maxLifetime);
 
         do
         {

@@ -9,6 +9,10 @@ public class Smoke : Particle
     private const double _gravity = 2.0;
     private const double _decay = 0.5;
     private const double _inertia = 0.1;
+    private const double _minLifetime = 0.1;
+    private const double _maxLifetime = 0.3;
+    private const double _minOpacity = 0;
+    private const double _maxOpacity = 0.5;
     
     private readonly int _color;
     private double _timeToLiveSeconds;
@@ -23,7 +27,7 @@ public class Smoke : Particle
     {
         _color = color;
         _timeToLiveSeconds = RandomSingleton.Instance.NextDouble();
-        _timeToLiveSeconds = MathHelpers.ClampDouble(_timeToLiveSeconds, Cfg.MinSmokeLifetime, Cfg.MaxSmokeLifetime);
+        _timeToLiveSeconds = MathHelpers.ClampDouble(_timeToLiveSeconds, _minLifetime, _maxLifetime);
         _maxLifeSeconds = _timeToLiveSeconds;
         _parentXVelocity = parentXVelocity;
         _parentYVelocity = parentYVelocity;
@@ -71,7 +75,7 @@ public class Smoke : Particle
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
         double opacity = 1 - (_timeToLiveSeconds) / _maxLifeSeconds;
-        opacity = MathHelpers.ClampDouble(opacity, Cfg.MinSmokeOpacity, Cfg.MaxSmokeOpacity);
+        opacity = MathHelpers.ClampDouble(opacity, _minOpacity, _maxOpacity);
         screen.SetPixelBlend(xCorrected + _randomDx, yCorrected + _randomDy, _color, opacity);
     }
 }

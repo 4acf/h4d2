@@ -6,10 +6,14 @@ using Cfg = ParticleConfig;
 
 public class BloodSplatterDebris : Debris
 {
+    private const double _bloodSplatterDrag = 0.98;
+    private const double _bloodSplatterBounce = 0.6;
+    private const double _lifetimeScale = 0.25;
+    
     public BloodSplatterDebris(Level level, double xPosition, double yPosition, double zPosition)
-        : base(level, xPosition, yPosition, zPosition, Cfg.BloodSplatterDrag, Cfg.BloodSplatterBounce)
+        : base(level, xPosition, yPosition, zPosition, _bloodSplatterDrag, _bloodSplatterBounce)
     {
-        _timeToLiveSeconds *= Cfg.BloodSplatterLifetimeScale;
+        _timeToLiveSeconds *= _lifetimeScale;
     }
 
     public override void Update(double elapsedTime)
