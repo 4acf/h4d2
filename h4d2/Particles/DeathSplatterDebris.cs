@@ -2,13 +2,14 @@
 using H4D2.Levels;
 
 namespace H4D2.Particles;
+using Cfg = ParticleConfig;
 
 public class DeathSplatterDebris : Debris
 {
     private readonly int _color;
     
     public DeathSplatterDebris(Level level, double xPosition, double yPosition, double zPosition, int color)
-        : base(level, xPosition, yPosition, zPosition, 0.96, 0.6)
+        : base(level, xPosition, yPosition, zPosition, Cfg.DeathSplatterDrag, Cfg.DeathSplatterBounce)
     {
         _color = color;
         _timeToLiveSeconds *= 1.5;
@@ -29,6 +30,6 @@ public class DeathSplatterDebris : Debris
 
     protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
     {
-        screen.BlendFill(xCorrected, yCorrected, xCorrected + 1, yCorrected + 1, 0x0, 0.9);
+        screen.BlendFill(xCorrected, yCorrected, xCorrected + 1, yCorrected + 1, Art.ShadowColor, Art.ShadowBlend);
     }
 }

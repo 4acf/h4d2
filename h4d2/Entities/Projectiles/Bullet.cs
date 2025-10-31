@@ -9,12 +9,13 @@ public class Bullet : Projectile
 {
     private const double _speed = 200;
     private const int _color = 0xffffff;
+    
     private double _oldXPosition;
     private double _oldYPosition;
     private double _oldZPosition;
     
     public Bullet(Level level, double xPosition, double yPosition, double zPosition, int damage, double directionRadians) 
-        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 1, 1, 1, 0), xPosition, yPosition, zPosition, damage, directionRadians)
+        : base(level, Cfg.BulletBoundingBox, xPosition, yPosition, zPosition, damage, directionRadians)
     {
         _oldXPosition = xPosition;
         _oldYPosition = yPosition;
@@ -58,7 +59,7 @@ public class Bullet : Projectile
         int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
         for (int i = 0; i < steps; i++)
         {
-            screen.SetPixelBlend((int)(xCorrectedDouble + xDifference * i / steps), (int)(yCorrectedDouble + yDifference * i / steps), 0x0, 0.9);
+            screen.SetPixelBlend((int)(xCorrectedDouble + xDifference * i / steps), (int)(yCorrectedDouble + yDifference * i / steps), Art.ShadowColor, Art.ShadowBlend);
         }
     }
 

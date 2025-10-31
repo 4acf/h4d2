@@ -8,12 +8,13 @@ using Cfg = ProjectileConfig;
 
 public class Grenade : Projectile
 {
+    public const double SplashRadius = 15.0;
     private const double _speed = 150;
     private const int _color = 0x333333;
-    private readonly int _directionIndex;
     private const int _numSmokeParticlesPerUpdate = 120;
     private const double _gravity = 0.15;
-    public readonly double SplashRadius = 15.0;
+    
+    private readonly int _directionIndex;
     
     private static readonly (int, int)[][] _sprites =
     {
@@ -28,7 +29,7 @@ public class Grenade : Projectile
     };
     
     public Grenade(Level level, double xPosition, double yPosition, double zPosition, int damage, double directionRadians)
-        : base(level, new BoundingBox(Cfg.CollisionMask, Cfg.CollidesWith, 2, 2, 2, 0), xPosition, yPosition, zPosition, damage, directionRadians)
+        : base(level, Cfg.GrenadeBoundingBox, xPosition, yPosition, zPosition, damage, directionRadians)
     {
         _directionIndex = _ResolveDirectionIndex(directionRadians);
     }
@@ -79,12 +80,12 @@ public class Grenade : Projectile
 
     protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
     {
-        screen.SetPixelBlend(xCorrected, yCorrected, 0x0, 0.9);
+        screen.SetPixelBlend(xCorrected, yCorrected, Art.ShadowColor, Art.ShadowBlend);
         for (int i = 0; i < _sprites[_directionIndex].Length; i++)
         {
             int dx = _sprites[_directionIndex][i].Item1;
             int dy = _sprites[_directionIndex][i].Item2;
-            screen.SetPixelBlend(xCorrected + dx, yCorrected + dy, 0x0, 0.9);
+            screen.SetPixelBlend(xCorrected + dx, yCorrected + dy, Art.ShadowColor, Art.ShadowBlend);
         }
     }
 

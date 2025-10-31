@@ -230,8 +230,8 @@ public class Uncommon : Zombie
             yCorrected - Art.SpriteSize - 1,
             xCorrected + Art.SpriteSize - 7,
             yCorrected - Art.SpriteSize - 1,
-            0x0,
-            0.9            
+            Art.ShadowColor,
+            Art.ShadowBlend           
         );
     }
 }

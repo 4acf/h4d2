@@ -23,7 +23,7 @@ public abstract class Zombie : Mob
         if (Removed)
             return;
         _health -= projectile.Damage;
-        if (_health <= 0)
+        if (!IsAlive)
         {
             _Die();
         }

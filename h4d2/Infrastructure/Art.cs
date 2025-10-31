@@ -6,6 +6,8 @@ public static class Art
 {
     public const int SpriteSize = 16;
     public const int ParticleSize = 8;
+    public const int ShadowColor = 0x0;
+    public const double ShadowBlend = 0.9;
     public static readonly Bitmap[][] Survivors = _LoadSurvivors();
     public static readonly Bitmap[][] Commons = _LoadCommons();
     public static readonly Bitmap[][] Uncommons = _LoadUncommons();

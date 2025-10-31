@@ -2,13 +2,14 @@
 using H4D2.Levels;
 
 namespace H4D2.Particles;
+using Cfg = ParticleConfig;
 
 public class BloodSplatterDebris : Debris
 {
     public BloodSplatterDebris(Level level, double xPosition, double yPosition, double zPosition)
-        : base(level, xPosition, yPosition, zPosition, 0.98, 0.6)
+        : base(level, xPosition, yPosition, zPosition, Cfg.BloodSplatterDrag, Cfg.BloodSplatterBounce)
     {
-        _timeToLiveSeconds /= 4;
+        _timeToLiveSeconds *= Cfg.BloodSplatterLifetimeScale;
     }
 
     public override void Update(double elapsedTime)

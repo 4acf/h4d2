@@ -2,6 +2,7 @@
 using H4D2.Levels;
 
 namespace H4D2.Particles;
+using Cfg = ParticleConfig;
 
 public class Smoke : Particle
 {
@@ -22,7 +23,7 @@ public class Smoke : Particle
     {
         _color = color;
         _timeToLiveSeconds = RandomSingleton.Instance.NextDouble();
-        _timeToLiveSeconds = MathHelpers.ClampDouble(_timeToLiveSeconds, 0.1, 0.3);
+        _timeToLiveSeconds = MathHelpers.ClampDouble(_timeToLiveSeconds, Cfg.MinSmokeLifetime, Cfg.MaxSmokeLifetime);
         _maxLifeSeconds = _timeToLiveSeconds;
         _parentXVelocity = parentXVelocity;
         _parentYVelocity = parentYVelocity;
@@ -39,8 +40,8 @@ public class Smoke : Particle
             return;
         }
 
-        double deltaDecay = Math.Pow(_decay, 60 * elapsedTime);
-        double deltaInertia = _inertia * 60 * elapsedTime;
+        double deltaDecay = Math.Pow(_decay, Cfg.BaseFramerate * elapsedTime);
+        double deltaInertia = _inertia * (Cfg.BaseFramerate * elapsedTime);
         _xVelocity *= deltaDecay;
         _yVelocity *= deltaDecay;
         _xVelocity += _parentXVelocity * deltaInertia;
@@ -70,7 +71,7 @@ public class Smoke : Particle
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
         double opacity = 1 - (_timeToLiveSeconds) / _maxLifeSeconds;
-        opacity = MathHelpers.ClampDouble(opacity, 0, 0.5);
+        opacity = MathHelpers.ClampDouble(opacity, Cfg.MinSmokeOpacity, Cfg.MaxSmokeOpacity);
         screen.SetPixelBlend(xCorrected + _randomDx, yCorrected + _randomDy, _color, opacity);
     }
 }

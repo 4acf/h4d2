@@ -2,6 +2,7 @@
 using H4D2.Levels;
 
 namespace H4D2.Particles;
+using Cfg = ParticleConfig;
 
 public abstract class Debris : Particle
 {
@@ -18,7 +19,7 @@ public abstract class Debris : Particle
         _drag = drag;
         _bounce = bounce;
         _timeToLiveSeconds = RandomSingleton.Instance.NextDouble();
-        _timeToLiveSeconds = MathHelpers.ClampDouble(_timeToLiveSeconds, 0.6, 1.0);
+        _timeToLiveSeconds = MathHelpers.ClampDouble(_timeToLiveSeconds, Cfg.MinDebrisLifetime, Cfg.MaxDebrisLifetime);
 
         do
         {
@@ -41,7 +42,7 @@ public abstract class Debris : Particle
             return;
         }
 
-        double elapsedTimeConstant = 60 * elapsedTime;
+        double elapsedTimeConstant = Cfg.BaseFramerate * elapsedTime;
         if (IsOnGround)
         {
             _xVelocity *= Math.Pow(_groundFriction, elapsedTimeConstant);

@@ -2,6 +2,7 @@
 using H4D2.Levels;
 
 namespace H4D2.Particles;
+using Cfg = ParticleConfig;
 
 public class Explosion : Particle
 {
@@ -14,7 +15,7 @@ public class Explosion : Particle
     public Explosion(Level level, double xPosition, double yPosition, double zPosition, double splashRadius)
         : base(level, xPosition, yPosition, zPosition)
     {
-        _timeToLiveSeconds = 0.5;
+        _timeToLiveSeconds = Cfg.ExplosionLifetime;
         _maxLifeSeconds = _timeToLiveSeconds;
         _splashRadius = splashRadius;
     }
