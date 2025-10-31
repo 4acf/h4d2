@@ -1,4 +1,5 @@
 ﻿using H4D2.Entities.Mobs.Zombies;
+using H4D2.Infrastructure;
 using H4D2.Levels;
 using H4D2.Particles;
 
@@ -26,8 +27,8 @@ public abstract class Mob : Entity
     protected double _timeSinceLastFrameUpdate;
     protected readonly int _color;
     
-    protected Mob(Level level, BoundingBox boundingBox, int health, double speed, int xPosition, int yPosition, int color) :
-        base(level, boundingBox, xPosition, yPosition, 0)
+    protected Mob(Level level, BoundingBox boundingBox, Position position, int health, double speed, int color) :
+        base(level, boundingBox, position)
     {
         _health = health;
         _speed = speed;
@@ -50,17 +51,17 @@ public abstract class Mob : Entity
         {
             _Die();
         }
-        (double x, double y, double z) = CenterMass;
-        var bloodSplatter = new BloodSplatterDebris(_level, x, y, z);
+        var bloodSplatter = new BloodSplatterDebris(_level, CenterMass.MutableCopy());
         _level.AddParticle(bloodSplatter);
     }
 
     protected virtual void _Die()
     {
-        (double x, double y, double z) = CenterMass;
         for (int i = 0; i < 8; i++)
         {
-            var deathSplatter = new DeathSplatterDebris(_level, x, y, z + i, _color);
+            Position position = CenterMass.MutableCopy();
+            position.Z += i;
+            var deathSplatter = new DeathSplatterDebris(_level, position, _color);
             _level.AddParticle(deathSplatter);
         }
         Removed = true;

@@ -28,8 +28,8 @@ public class Grenade : Projectile
         [(0, 1), (-1, 0), (1, 0), (0, -1), (1, -1)]    // SE
     };
     
-    public Grenade(Level level, double xPosition, double yPosition, double zPosition, int damage, double directionRadians)
-        : base(level, Cfg.GrenadeBoundingBox, xPosition, yPosition, zPosition, damage, directionRadians)
+    public Grenade(Level level, Position position, int damage, double directionRadians)
+        : base(level, Cfg.GrenadeBoundingBox, position, damage, directionRadians)
     {
         _directionIndex = _ResolveDirectionIndex(directionRadians);
     }
@@ -57,7 +57,7 @@ public class Grenade : Projectile
     {
         for (int i = 0; i < _numSmokeParticlesPerUpdate * elapsedTime; i++)
         {
-            var smoke = new Smoke(_level, XPosition, YPosition, ZPosition, _xVelocity, _yVelocity, 0x0);
+            var smoke = new Smoke(_level, _position.Copy(), _xVelocity, _yVelocity);
             _level.AddParticle(smoke);
         }
         double timeAdjustedSpeed = _speed * elapsedTime;
@@ -91,11 +91,16 @@ public class Grenade : Projectile
 
     protected override void _Collide(Entity? entity)
     {
+        // currently this will double grenade damage on a direct hit (Explode + HitBy damage will stack)
+        // im inclined to keep this for balancing reasons
         base._Collide(entity);
         _level.Explode(this);
-        Removed = true;
         if (entity == null || entity is not Zombie zombie)
+        {
+            Removed = true;
             return;
+        }
         zombie.HitBy(this);
+        Removed = true;
     }
 }

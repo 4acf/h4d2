@@ -7,8 +7,8 @@ public class Special : Zombie
 {
     private readonly int _special;
     
-    protected Special(Level level, BoundingBox boundingBox, int special, int health, int speed, int damage, int xPosition, int yPosition, int color) 
-        : base(level, boundingBox, health, speed, damage, xPosition, yPosition, color)
+    protected Special(Level level, BoundingBox boundingBox, Position position, int special, int health, int speed, int damage, int color) 
+        : base(level, boundingBox, position, health, speed, damage, color)
     {
         _special = special;
     }
@@ -25,7 +25,7 @@ public class Special : Zombie
         if (_target == null || _target.Removed)
         {
             _isAttacking = false;
-            _target = _level.GetNearestLivingSurvivor(XPosition, YPosition);
+            _target = _level.GetNearestLivingSurvivor(Position);
         }
     }
     
@@ -36,7 +36,7 @@ public class Special : Zombie
         
         double targetDirection = _target == null ? 
             _directionRadians : 
-            Math.Atan2(_target.YPosition - YPosition, _target.XPosition - XPosition);
+            Math.Atan2(_target.Position.Y - _position.Y, _target.Position.X - _position.X);
         double directionDiff = targetDirection - _directionRadians;
         directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
         _directionRadians += directionDiff * (elapsedTime * _turnSpeed);

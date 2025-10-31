@@ -12,8 +12,8 @@ public class Explosion : Particle
     private readonly double _maxLifeSeconds;
     private readonly double _splashRadius;
     
-    public Explosion(Level level, double xPosition, double yPosition, double zPosition, double splashRadius)
-        : base(level, xPosition, yPosition, zPosition)
+    public Explosion(Level level, Position position, double splashRadius)
+        : base(level, position)
     {
         _timeToLiveSeconds = _lifetime;
         _maxLifeSeconds = _timeToLiveSeconds;
@@ -38,7 +38,8 @@ public class Explosion : Particle
             double dx = Math.Cos(randomDirection) * distance * randomMult;
             double dy = Math.Sin(randomDirection) * distance * randomMult;
             double dz = RandomSingleton.Instance.NextDouble() * 2;
-            var flame = new Flame(_level, XPosition + dx, YPosition + dy, ZPosition + dz);
+            Position translatedPositionCopy = _position.CopyAndTranslate(dx, dy, dz);
+            var flame = new Flame(_level, translatedPositionCopy);
             _level.AddParticle(flame);
         }
     }

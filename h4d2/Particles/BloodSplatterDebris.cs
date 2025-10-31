@@ -10,8 +10,8 @@ public class BloodSplatterDebris : Debris
     private const double _bloodSplatterBounce = 0.6;
     private const double _lifetimeScale = 0.25;
     
-    public BloodSplatterDebris(Level level, double xPosition, double yPosition, double zPosition)
-        : base(level, xPosition, yPosition, zPosition, _bloodSplatterDrag, _bloodSplatterBounce)
+    public BloodSplatterDebris(Level level, Position position)
+        : base(level, position, _bloodSplatterDrag, _bloodSplatterBounce)
     {
         _timeToLiveSeconds *= _lifetimeScale;
     }
@@ -21,7 +21,7 @@ public class BloodSplatterDebris : Debris
         base.Update(elapsedTime);
         if (RandomSingleton.Instance.Next(2) != 0)
             return;
-        var blood = new BloodDebris(_level, XPosition, YPosition, ZPosition);
+        var blood = new BloodDebris(_level, _position.Copy());
         blood.DampVelocities(elapsedTime, _xVelocity, _yVelocity, _zVelocity);
         _level.AddParticle(blood);
     }

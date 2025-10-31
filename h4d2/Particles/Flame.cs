@@ -5,15 +5,13 @@ namespace H4D2.Particles;
 
 public class Flame : Particle
 {
-    private const int _smokeColor = 0x0;
     private const double _frameDuration = 1.0 / 16.0;
     
     private int _frame;
     private double _timeSinceLastFrameUpdate;
-
     
-    public Flame(Level level, double xPosition, double yPosition, double zPosition)
-        : base(level, xPosition, yPosition, zPosition)
+    public Flame(Level level, Position position)
+        : base(level, position)
     {
         _frame = 0;
     }
@@ -30,7 +28,7 @@ public class Flame : Particle
         if (_frame >= Art.Explosion.Length)
         {
             Removed = true;
-            var smoke = new Smoke(_level, XPosition, YPosition, ZPosition, 0, 0, _smokeColor);
+            var smoke = new Smoke(_level, _position.Copy(), 0, 0);
             _level.AddParticle(smoke);
         }
     }

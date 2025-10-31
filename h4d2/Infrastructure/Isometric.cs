@@ -5,25 +5,22 @@ namespace H4D2.Infrastructure;
 public abstract class Isometric
 {
     protected Level _level;
-    public double XPosition { get; protected set; }
-    public double YPosition { get; protected set; }
-    public double ZPosition { get; protected set; }
+    protected Position _position;
+    public ReadonlyPosition Position => _position.ReadonlyCopy(); 
     public bool Removed { get; protected set; }
-    public bool IsOnGround => ZPosition == 0;
+    public bool IsOnGround => _position.Z == 0;
     
-    protected Isometric(Level level, double xPosition, double yPosition, double zPosition)
+    protected Isometric(Level level, Position position)
     {
         _level = level;
-        XPosition = xPosition;
-        YPosition = yPosition;
-        ZPosition = zPosition;
+        _position = position;
         Removed = false;
     }
     
     public void Render(Bitmap screen)
     {
-        int xCorrected = (int)XPosition;
-        int yCorrected = (int)(YPosition + ZPosition);
+        int xCorrected = (int)_position.X;
+        int yCorrected = (int)(_position.Y + _position.Z);
         Render(screen, xCorrected, yCorrected);
     }
 
@@ -34,8 +31,8 @@ public abstract class Isometric
 
     public void RenderShadow(Bitmap screen)
     {
-        int xCorrected = (int)XPosition;
-        int yCorrected = (int)YPosition;
+        int xCorrected = (int)_position.X;
+        int yCorrected = (int)_position.Y;
         RenderShadow(screen, xCorrected, yCorrected);
     }
 

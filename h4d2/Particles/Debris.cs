@@ -15,8 +15,8 @@ public abstract class Debris : Particle
     protected readonly double _bounce;
     protected double _timeToLiveSeconds;
     
-    protected Debris(Level level, double xPosition, double yPosition, double zPosition, double drag, double bounce)
-        : base(level, xPosition, yPosition, zPosition)
+    protected Debris(Level level, Position position, double drag, double bounce)
+        : base(level, position)
     {
         _drag = drag;
         _bounce = bounce;
@@ -82,20 +82,20 @@ public abstract class Debris : Particle
     
     private void _Move(double xComponent, double yComponent, double zComponent)
     {
-        double xDest = XPosition + xComponent;
-        double yDest = YPosition + yComponent;
-        double zDest = ZPosition + zComponent;
+        double xDest = _position.X + xComponent;
+        double yDest = _position.Y + yComponent;
+        double zDest = _position.Z + zComponent;
 
         if (_IsOutOfLevelBounds(xDest, yDest, zDest))
         {
-            if (zDest < 0) ZPosition = 0;
+            if (zDest < 0) _position.Z = 0;
             _Collide(xComponent, yComponent, zComponent);
             return;
         }
         
-        XPosition = xDest;
-        YPosition = yDest;
-        ZPosition = zDest;
+        _position.X = xDest;
+        _position.Y = yDest;
+        _position.Z = zDest;
     }
 
     private void _Collide(double xComponent, double yComponent, double zComponent)

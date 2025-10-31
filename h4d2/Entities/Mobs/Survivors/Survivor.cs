@@ -16,8 +16,8 @@ public class Survivor : Mob
     private bool _isShooting;
     public double AimDirectionRadians { get; private set; }
     
-    protected Survivor(Level level, int character, int xPosition, int yPosition, int color) 
-        : base(level, Cfg.BoundingBox, Cfg.DefaultHealth, Cfg.RunSpeed, xPosition, yPosition, color)
+    protected Survivor(Level level, Position position, int character, int color) 
+        : base(level, Cfg.BoundingBox, position, Cfg.DefaultHealth, Cfg.RunSpeed, color)
     {
         _character = character;
         _target = null;
@@ -36,13 +36,14 @@ public class Survivor : Mob
     
     private void _UpdateTarget()
     {
+        ReadonlyPosition survivorPosition = CenterMass;
+        
         if (_target == null || !_target.IsAlive)
         {
-            _target = _level.GetNearestLivingZombie(XPosition, YPosition);
+            _target = _level.GetNearestLivingZombie(Position);
             if (_target == null) return;
-            (double survivorXPosition, double survivorYPosition, _) = CenterMass;
-            (double targetXPosition, double targetYPosition, _) = _target.CenterMass;
-            AimDirectionRadians = Math.Atan2(targetYPosition - survivorYPosition, targetXPosition - survivorXPosition);
+            ReadonlyPosition targetPosition = _target.CenterMass;
+            AimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
             AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
         }
         else
@@ -53,7 +54,8 @@ public class Survivor : Mob
             }
             else
             {
-                AimDirectionRadians = Math.Atan2(_target.YPosition - YPosition, _target.XPosition - XPosition);
+                ReadonlyPosition targetPosition = _target.CenterMass;
+                AimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
                 AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
             }
         }
@@ -114,9 +116,9 @@ public class Survivor : Mob
 
     private double CorrectDirectionToAvoidWalls(double direction)
     {
-        var (x, y, _) = CenterMass;
+        ReadonlyPosition centerMass = CenterMass;
         
-        if (x < _boundaryTolerance)
+        if (centerMass.X < _boundaryTolerance)
         {
             if ((Math.PI / 2) < direction && direction < (3 * Math.PI / 2))
             {
@@ -124,7 +126,7 @@ public class Survivor : Mob
             }
         }
         
-        if (y < _boundaryTolerance)
+        if (centerMass.Y < _boundaryTolerance)
         {
             if (direction > Math.PI)
             {
@@ -132,7 +134,7 @@ public class Survivor : Mob
             }
         }
 
-        if (_level.Width - x < _boundaryTolerance)
+        if (_level.Width - centerMass.X < _boundaryTolerance)
         {
             if ((3 * Math.PI / 2) < direction || direction < (Math.PI / 2))
             {
@@ -140,7 +142,7 @@ public class Survivor : Mob
             }
         }
 
-        if (_level.Height - y < _boundaryTolerance)
+        if (_level.Height - centerMass.Y < _boundaryTolerance)
         {
             if (direction < Math.PI)
             {

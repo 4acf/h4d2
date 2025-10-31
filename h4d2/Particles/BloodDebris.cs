@@ -12,8 +12,8 @@ public class BloodDebris : Debris
     private const double _bloodBounce = 0.1;
     private const int _color = 0xa00000;
     
-    public BloodDebris(Level level, double xPosition, double yPosition, double zPosition)
-        : base(level, xPosition, yPosition, zPosition, _bloodDrag, _bloodBounce)
+    public BloodDebris(Level level, Position position)
+        : base(level, position, _bloodDrag, _bloodBounce)
     {
         
     }

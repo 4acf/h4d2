@@ -11,8 +11,8 @@ public class DeathSplatterDebris : Debris
     private const double _lifetimeScale = 1.5;
     private readonly int _color;
     
-    public DeathSplatterDebris(Level level, double xPosition, double yPosition, double zPosition, int color)
-        : base(level, xPosition, yPosition, zPosition, _deathSplatterDrag, _deathSplatterBounce)
+    public DeathSplatterDebris(Level level, Position position, int color)
+        : base(level, position, _deathSplatterDrag, _deathSplatterBounce)
     {
         _color = color;
         _timeToLiveSeconds *= _lifetimeScale;
@@ -21,7 +21,7 @@ public class DeathSplatterDebris : Debris
     public override void Update(double elapsedTime)
     {
         base.Update(elapsedTime);
-        var blood = new BloodDebris(_level, XPosition, YPosition, ZPosition);
+        var blood = new BloodDebris(_level, _position.Copy());
         blood.DampVelocities(elapsedTime, _xVelocity, _yVelocity, _zVelocity);
         _level.AddParticle(blood);
     }

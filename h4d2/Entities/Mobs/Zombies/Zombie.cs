@@ -1,4 +1,5 @@
 ﻿using H4D2.Entities.Projectiles;
+using H4D2.Infrastructure;
 using H4D2.Levels;
 using H4D2.Particles;
 
@@ -10,8 +11,8 @@ public abstract class Zombie : Mob
     protected bool _isAttacking;
     public readonly int Damage;
     
-    protected Zombie(Level level, BoundingBox boundingBox, int health, double speed, int damage, int xPosition, int yPosition, int color)
-        : base(level, boundingBox, health, speed, xPosition, yPosition, color)
+    protected Zombie(Level level, BoundingBox boundingBox, Position position, int health, double speed, int damage, int color)
+        : base(level, boundingBox, position, health, speed, color)
     {
         _target = null;
         _isAttacking = false;
@@ -20,15 +21,14 @@ public abstract class Zombie : Mob
 
     public void HitBy(Projectile projectile)
     {
-        if (Removed)
+        if (Removed || projectile.Removed)
             return;
         _health -= projectile.Damage;
         if (!IsAlive)
         {
             _Die();
         }
-        (double x, double y, double z) = CenterMass;
-        var bloodSplatter = new BloodSplatterDebris(_level, x, y, z);
+        var bloodSplatter = new BloodSplatterDebris(_level, CenterMass.MutableCopy());
         _level.AddParticle(bloodSplatter);
     }
 }

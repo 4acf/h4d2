@@ -1,4 +1,6 @@
-﻿namespace H4D2.Entities;
+﻿using H4D2.Infrastructure;
+
+namespace H4D2.Entities;
 
 public class BoundingBox
 {
@@ -48,24 +50,30 @@ public class BoundingBox
         return (_collidesWith & other.CollisionMask) == other.CollisionMask;
     }
     
-    public bool IsIntersecting(Entity other, double xPosition, double yPosition, double zPosition)
+    public bool IsIntersecting(Entity other, ReadonlyPosition position)
     {
+        ReadonlyPosition otherPosition = other.Position;
+        
         bool isXYPlaneIntersecting =
-            other.BoundingBox.W(other.XPosition) <= E(xPosition) &&
-            other.BoundingBox.E(other.XPosition) >= W(xPosition) &&
-            other.BoundingBox.N(other.YPosition) >= S(yPosition) &&
-            other.BoundingBox.S(other.YPosition) <= N(yPosition);
+            other.BoundingBox.W(otherPosition.X) <= E(position.X) &&
+            other.BoundingBox.E(otherPosition.X) >= W(position.X) &&
+            other.BoundingBox.N(otherPosition.Y) >= S(position.Y) &&
+            other.BoundingBox.S(otherPosition.Y) <= N(position.Y);
         
         bool isZIntersecting =
-            other.BoundingBox.Bottom(other.ZPosition) <= Top(zPosition) &&
-            other.BoundingBox.Top(other.ZPosition) >= Bottom(zPosition);
+            other.BoundingBox.Bottom(otherPosition.Z) <= Top(position.Z) &&
+            other.BoundingBox.Top(otherPosition.Z) >= Bottom(position.Z);
 
         return isXYPlaneIntersecting && isZIntersecting;
     }
 
-    public (double, double, double) CenterMass(double xPosition, double yPosition, double zPosition)
+    public ReadonlyPosition CenterMass(ReadonlyPosition position)
     {
-        return ((W(xPosition) + E(xPosition)) / 2, (N(yPosition) + S(yPosition)) / 2, (zPosition + _zHeight) / 2.0);
+        return new ReadonlyPosition(
+            (W(position.X) + E(position.X)) / 2,
+            (N(position.Y) + S(position.Y)) / 2,
+            (position.Z + _zHeight) / 2.0
+        );
     }
     
 }

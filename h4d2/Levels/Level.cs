@@ -27,41 +27,42 @@ public class Level
         
         for (int i = 0; i < 10; i++)
         {
-            _entities.Add(new Common(this, i * 32, 64));
+            var position = new Position(i * 32, 64);
+            _entities.Add(new Common(this, position));
         }
         
-        _entities.Add(new Riot  (this, 32, 16));
-        _entities.Add(new Worker(this, 64, 16));
-        _entities.Add(new Mudman(this, 96, 16));
-        _entities.Add(new Clown (this, 128, 16));
-        _entities.Add(new Hazmat(this, 160, 16));
+        _entities.Add(new Riot  (this, new Position(32, 16)));
+        _entities.Add(new Worker(this, new Position(64, 16)));
+        _entities.Add(new Mudman(this, new Position(96, 16)));
+        _entities.Add(new Clown (this, new Position(128, 16)));
+        _entities.Add(new Hazmat(this, new Position(160, 16)));
         
-        _entities.Add(new Witch  (this, 32, 196));
-        _entities.Add(new Tank   (this, 64, 196));
-        _entities.Add(new Spitter(this, 96, 196));
-        _entities.Add(new Jockey (this, 128, 196));
-        _entities.Add(new Charger(this, 160, 196));
-        _entities.Add(new Smoker (this, 192, 196));
-        _entities.Add(new Boomer (this, 224, 196));
-        _entities.Add(new Hunter (this, 256, 196));
+        _entities.Add(new Witch  (this, new Position(32, 196)));
+        _entities.Add(new Tank   (this, new Position(64, 196)));
+        _entities.Add(new Spitter(this, new Position(96, 196)));
+        _entities.Add(new Jockey (this, new Position(128, 196)));
+        _entities.Add(new Charger(this, new Position(160, 196)));
+        _entities.Add(new Smoker (this, new Position(192, 196)));
+        _entities.Add(new Boomer (this, new Position(224, 196)));
+        _entities.Add(new Hunter (this, new Position(256, 196)));
         
-        _entities.Add(new Louis   (this, 32, 120));
-        _entities.Add(new Francis (this, 64, 120));
-        _entities.Add(new Zoey    (this, 96, 120));
-        _entities.Add(new Bill    (this, 128, 120));
-        _entities.Add(new Rochelle(this, 160, 120));
-        _entities.Add(new Ellis   (this, 192, 120));
-        _entities.Add(new Nick    (this, 224, 120));
-        _entities.Add(new Coach   (this, 256, 120));
+        //_entities.Add(new Louis   (this, new Position(32, 120)));
+        //_entities.Add(new Francis (this, new Position(64, 120)));
+        //_entities.Add(new Zoey    (this, new Position(96, 120)));
+        //_entities.Add(new Bill    (this, new Position(128, 120)));
+        _entities.Add(new Rochelle(this, new Position(160, 120)));
+        _entities.Add(new Ellis   (this, new Position(192, 120)));
+        _entities.Add(new Nick    (this, new Position(224, 120)));
+        _entities.Add(new Coach   (this, new Position(256, 120)));
     }
     
-    public Entity? GetFirstCollidingEntity(Entity e1, double xPosition, double yPosition, double zPosition)
+    public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position)
     {
         foreach (Entity e2 in _entities)
         {
             if (e2 != e1 &&
                 e1.BoundingBox.CanCollideWith(e2.BoundingBox) &&
-                e1.IsIntersecting(e2, xPosition, yPosition, zPosition)
+                e1.IsIntersecting(e2, position)
             )
                 return e2;
         }
@@ -76,14 +77,14 @@ public class Level
             .ToList();
     }
     
-    public Survivor? GetNearestLivingSurvivor(double xPosition, double yPosition)
+    public Survivor? GetNearestLivingSurvivor(ReadonlyPosition position)
     {
         Survivor? result = null;
         double lowestDistance = double.MaxValue;
         foreach (Survivor survivor in _entities.OfType<Survivor>())
         {
             if (!survivor.IsAlive) continue;
-            double distance = MathHelpers.Distance(xPosition, yPosition, survivor.XPosition, survivor.YPosition);
+            double distance = ReadonlyPosition.Distance(position, survivor.Position);
             if (distance < lowestDistance)
             {
                 result = survivor;
@@ -101,14 +102,14 @@ public class Level
             .ToList();
     }
     
-    public Zombie? GetNearestLivingZombie(double xPosition, double yPosition)
+    public Zombie? GetNearestLivingZombie(ReadonlyPosition position)
     {
         Zombie? result = null;
         double lowestDistance = double.MaxValue;
         foreach (Zombie zombie in _entities.OfType<Zombie>())
         {
             if (!zombie.IsAlive) continue;
-            double distance = MathHelpers.Distance(xPosition, yPosition, zombie.XPosition, zombie.YPosition);
+            double distance = ReadonlyPosition.Distance(position, zombie.Position);
             if (distance < lowestDistance)
             {
                 result = zombie;
@@ -130,12 +131,11 @@ public class Level
 
     public void Explode(Grenade grenade)
     {
-        AddParticle(new Explosion(this, grenade.XPosition, grenade.YPosition, grenade.ZPosition, Grenade.SplashRadius));
+        AddParticle(new Explosion(this, grenade.Position.MutableCopy(), Grenade.SplashRadius));
         List<Zombie> zombies = GetLivingZombies();
         foreach (Zombie zombie in zombies)
         {
-            (double zombieXPosition, double zombieYPosition, double zombieZPosition) = zombie.CenterMass;
-            double distance = MathHelpers.Distance(grenade.XPosition, grenade.YPosition, grenade.ZPosition, zombieXPosition, zombieYPosition, zombieZPosition);
+            double distance = ReadonlyPosition.Distance(grenade.Position, zombie.CenterMass);
             if (distance <= Grenade.SplashRadius)
             {
                 zombie.HitBy(grenade);
@@ -205,7 +205,7 @@ public class Level
     
     public void RenderEntities(Bitmap screen)
     {
-        _entities = _entities.OrderByDescending(e => e.YPosition).ToList();
+        _entities = _entities.OrderByDescending(e => e.Position.Y).ToList();
         foreach (Entity entity in _entities)
         {
             entity.Render(screen);

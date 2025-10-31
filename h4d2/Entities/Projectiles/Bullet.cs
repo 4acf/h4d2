@@ -9,24 +9,18 @@ public class Bullet : Projectile
 {
     private const double _speed = 200;
     private const int _color = 0xffffff;
+
+    private Position _oldPosition;
     
-    private double _oldXPosition;
-    private double _oldYPosition;
-    private double _oldZPosition;
-    
-    public Bullet(Level level, double xPosition, double yPosition, double zPosition, int damage, double directionRadians) 
-        : base(level, Cfg.BulletBoundingBox, xPosition, yPosition, zPosition, damage, directionRadians)
+    public Bullet(Level level, Position position, int damage, double directionRadians) 
+        : base(level, Cfg.BulletBoundingBox, position, damage, directionRadians)
     {
-        _oldXPosition = xPosition;
-        _oldYPosition = yPosition;
-        _oldZPosition = zPosition;
+        _oldPosition = position.Copy();
     }
     
     public override void Update(double elapsedTime)
     {
-        _oldXPosition = XPosition;
-        _oldYPosition = YPosition;
-        _oldZPosition = ZPosition;
+        _oldPosition = _position.Copy();
         double timeAdjustedSpeed = _speed * elapsedTime;
         _xVelocity = Math.Cos(_directionRadians) * timeAdjustedSpeed;
         _yVelocity = Math.Sin(_directionRadians) * timeAdjustedSpeed;
@@ -35,26 +29,26 @@ public class Bullet : Projectile
 
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        double oldYCorrected = _oldYPosition + _oldZPosition;
-        double yCorrectedDouble = YPosition + ZPosition;
+        double oldYCorrected = _oldPosition.Y + _oldPosition.Z;
+        double yCorrectedDouble = _position.Y + _position.Z;
         
-        double xDifference = XPosition - _oldXPosition;
+        double xDifference = _position.X - _oldPosition.X;
         double yDifference = yCorrectedDouble - oldYCorrected;
         
         int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
         for (int i = 0; i < steps; i++)
         {
-            screen.SetPixel((int)(XPosition + xDifference * i / steps), (int)(yCorrectedDouble + yDifference * i / steps), _color);
+            screen.SetPixel((int)(_position.X + xDifference * i / steps), (int)(yCorrectedDouble + yDifference * i / steps), _color);
         }
     }
 
     protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
     {
-        double xCorrectedDouble = XPosition;
-        double yCorrectedDouble = YPosition;
+        double xCorrectedDouble = _position.X;
+        double yCorrectedDouble = _position.Y;
         
-        double xDifference = xCorrectedDouble - _oldXPosition;
-        double yDifference = yCorrectedDouble - _oldYPosition;
+        double xDifference = xCorrectedDouble - _oldPosition.X;
+        double yDifference = yCorrectedDouble - _oldPosition.Y;
         
         int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
         for (int i = 0; i < steps; i++)
@@ -66,9 +60,12 @@ public class Bullet : Projectile
     protected override void _Collide(Entity? entity)
     {
         base._Collide(entity);
-        Removed = true;
         if (entity == null || entity is not Zombie zombie)
+        {
+            Removed = true;
             return;
+        }
         zombie.HitBy(this);
+        Removed = true;
     }
 }

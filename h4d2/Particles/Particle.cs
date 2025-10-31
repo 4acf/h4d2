@@ -9,8 +9,8 @@ public abstract class Particle : Isometric
     protected double _yVelocity;
     protected double _zVelocity;
     
-    protected Particle(Level level, double xPosition, double yPosition, double zPosition)
-        : base(level, xPosition, yPosition, zPosition)
+    protected Particle(Level level, Position position)
+        : base(level, position)
     {
         _xVelocity = 0;
         _yVelocity = 0;

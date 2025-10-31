@@ -6,14 +6,14 @@ namespace H4D2.Entities;
 public abstract class Entity : Isometric
 {
     public readonly BoundingBox BoundingBox;
-    public (double, double, double) CenterMass => BoundingBox.CenterMass(XPosition, YPosition, ZPosition); 
+    public ReadonlyPosition CenterMass => BoundingBox.CenterMass(Position); 
     
     protected double _xVelocity;
     protected double _yVelocity;
     protected double _zVelocity;
     
-    protected Entity(Level level, BoundingBox boundingBox, double xPosition, double yPosition, double zPosition)
-        : base(level, xPosition, yPosition, zPosition)
+    protected Entity(Level level, BoundingBox boundingBox, Position position)
+        : base(level, position)
     {
         BoundingBox = boundingBox;
         _xVelocity = 0;
@@ -23,8 +23,8 @@ public abstract class Entity : Isometric
     
     public abstract void Update(double elapsedTime);
 
-    public bool IsIntersecting(Entity other, double xPosition, double yPosition, double zPosition) =>
-        BoundingBox.IsIntersecting(other, xPosition, yPosition, zPosition);
+    public bool IsIntersecting(Entity other, ReadonlyPosition position) =>
+        BoundingBox.IsIntersecting(other, position);
     
     protected void _AttemptMove()
     {
@@ -63,27 +63,27 @@ public abstract class Entity : Isometric
     
     private void _Move(double xComponent, double yComponent, double zComponent)
     {
-        double xDest = XPosition + xComponent;
-        double yDest = YPosition + yComponent;
-        double zDest = ZPosition + zComponent;
+        double xDest = _position.X + xComponent;
+        double yDest = _position.Y + yComponent;
+        double zDest = _position.Z + zComponent;
 
         if (_IsOutOfLevelBounds(xDest, yDest, zDest))
         {
-            if (zDest < 0) ZPosition = 0;
+            if (zDest < 0) _position.Z = 0;
             _Collide(null);
             return;
         }
 
-        Entity? collidingEntity = _level.GetFirstCollidingEntity(this, xDest, yDest, zDest);
+        Entity? collidingEntity = _level.GetFirstCollidingEntity(this, Position);
         if (collidingEntity != null)
         {
             _Collide(collidingEntity);
             return;
         }
 
-        XPosition = xDest;
-        YPosition = yDest;
-        ZPosition = zDest;
+        _position.X = xDest;
+        _position.Y = yDest;
+        _position.Z = zDest;
     }
     
     protected virtual void _Collide(Entity? entity)

@@ -12,8 +12,8 @@ public class Uncommon : Zombie
     private double _aimDirectionRadians;
     private double _attackDelaySecondsLeft;
     
-    protected Uncommon(Level level, int uncommon, int health, int speed, int damage, int xPosition, int yPosition, int color) 
-        : base(level, UncommonConfig.BoundingBox, health, speed, damage, xPosition, yPosition, color)
+    protected Uncommon(Level level, Position position, int uncommon, int health, int speed, int damage, int color) 
+        : base(level, UncommonConfig.BoundingBox, position, health, speed, damage, color)
     {
         _uncommon = uncommon;
         _attackDelaySecondsLeft = 0.0;
@@ -33,15 +33,13 @@ public class Uncommon : Zombie
         if (_target == null || _target.Removed)
         {
             _isAttacking = false;
-            _target = _level.GetNearestLivingSurvivor(XPosition, YPosition);
+            _target = _level.GetNearestLivingSurvivor(Position);
         }
         else
         {
-            (double targetXPosition, double targetYPosition, double targetZPosition) 
-                = _target.CenterMass;
-            (double zombieXPosition, double zombieYPosition, double zombieZPosition)
-                = CenterMass;
-            double distance = MathHelpers.Distance(targetXPosition, targetYPosition, targetZPosition, zombieXPosition, zombieYPosition, zombieZPosition);
+            ReadonlyPosition targetPosition = _target.CenterMass;
+            ReadonlyPosition zombiePosition = CenterMass;
+            double distance = ReadonlyPosition.Distance(targetPosition, zombiePosition);
 
             _isAttacking = distance <= _attackRange;
             if (!_isAttacking) return;
@@ -52,7 +50,7 @@ public class Uncommon : Zombie
                 _attackDelaySecondsLeft = _attackDelay;
             }
                 
-            _aimDirectionRadians = Math.Atan2(targetYPosition - zombieYPosition, targetXPosition - zombieXPosition);
+            _aimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
             _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
         }
     }
@@ -64,7 +62,7 @@ public class Uncommon : Zombie
         
         double targetDirection = _target == null ? 
             _directionRadians : 
-            Math.Atan2(_target.YPosition - YPosition, _target.XPosition - XPosition);
+            Math.Atan2(_target.Position.Y - _position.Y, _target.Position.X - _position.X);
         double directionDiff = targetDirection - _directionRadians;
         directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
         _directionRadians += directionDiff * (elapsedTime * _turnSpeed);

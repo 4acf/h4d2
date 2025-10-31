@@ -14,7 +14,7 @@ public class Smoke : Particle
     private const double _minOpacity = 0;
     private const double _maxOpacity = 0.5;
     
-    private readonly int _color;
+    private const int _color = 0x0;
     private double _timeToLiveSeconds;
     private readonly double _maxLifeSeconds;
     private readonly double _parentXVelocity;
@@ -22,10 +22,9 @@ public class Smoke : Particle
     private readonly int _randomDx;
     private readonly int _randomDy;
     
-    public Smoke(Level level, double xPosition, double yPosition, double zPosition, double parentXVelocity, double parentYVelocity, int color)
-        : base(level, xPosition, yPosition, zPosition)
+    public Smoke(Level level, Position position, double parentXVelocity, double parentYVelocity)
+        : base(level, position)
     {
-        _color = color;
         _timeToLiveSeconds = RandomSingleton.Instance.NextDouble();
         _timeToLiveSeconds = MathHelpers.ClampDouble(_timeToLiveSeconds, _minLifetime, _maxLifetime);
         _maxLifeSeconds = _timeToLiveSeconds;
@@ -67,9 +66,9 @@ public class Smoke : Particle
     
     private void _Move(double xComponent, double yComponent, double zComponent)
     {
-        XPosition += xComponent;
-        YPosition += yComponent;
-        ZPosition += zComponent;
+        _position.X += xComponent;
+        _position.Y += yComponent;
+        _position.Z += zComponent;
     }
     
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)

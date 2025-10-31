@@ -13,15 +13,14 @@ public class Common : Zombie
     private double _aimDirectionRadians;
     private double _attackDelaySecondsLeft;
     
-    public Common(Level level, int xPosition, int yPosition)
+    public Common(Level level, Position position)
         : base(
             level,
             Cfg.BoundingBox, 
+            position,
             Cfg.Health, 
             RandomSingleton.Instance.Next(Cfg.MinSpeed, Cfg.MaxSpeed), 
             Cfg.Damage,
-            xPosition, 
-            yPosition,
             Cfg.Color
             )
     {
@@ -44,15 +43,13 @@ public class Common : Zombie
         if (_target == null || _target.Removed)
         {
             _isAttacking = false;
-            _target = _level.GetNearestLivingSurvivor(XPosition, YPosition);
+            _target = _level.GetNearestLivingSurvivor(Position);
         }
         else
         {
-            (double targetXPosition, double targetYPosition, double targetZPosition) 
-                = _target.CenterMass;
-            (double zombieXPosition, double zombieYPosition, double zombieZPosition)
-                = CenterMass;
-            double distance = MathHelpers.Distance(targetXPosition, targetYPosition, targetZPosition, zombieXPosition, zombieYPosition, zombieZPosition);
+            ReadonlyPosition targetPosition = _target.CenterMass;
+            ReadonlyPosition zombiePosition = CenterMass;
+            double distance = ReadonlyPosition.Distance(targetPosition, zombiePosition);
 
             _isAttacking = distance <= _attackRange;
             if (!_isAttacking) return;
@@ -63,7 +60,7 @@ public class Common : Zombie
                 _attackDelaySecondsLeft = _attackDelay;
             }
                 
-            _aimDirectionRadians = Math.Atan2(targetYPosition - zombieYPosition, targetXPosition - zombieXPosition);
+            _aimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
             _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
         }
     }
@@ -75,7 +72,7 @@ public class Common : Zombie
         
         double targetDirection = _target == null ? 
             _directionRadians : 
-            Math.Atan2(_target.YPosition - YPosition, _target.XPosition - XPosition);
+            Math.Atan2(_target.Position.Y - _position.Y, _target.Position.X - _position.X);
         double directionDiff = targetDirection - _directionRadians;
         directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
         _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
