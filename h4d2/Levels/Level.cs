@@ -46,10 +46,10 @@ public class Level
         _entities.Add(new Boomer (this, new Position(224, 196)));
         _entities.Add(new Hunter (this, new Position(256, 196)));
         
-        //_entities.Add(new Louis   (this, new Position(32, 120)));
-        //_entities.Add(new Francis (this, new Position(64, 120)));
-        //_entities.Add(new Zoey    (this, new Position(96, 120)));
-        //_entities.Add(new Bill    (this, new Position(128, 120)));
+        _entities.Add(new Louis   (this, new Position(32, 120)));
+        _entities.Add(new Francis (this, new Position(64, 120)));
+        _entities.Add(new Zoey    (this, new Position(96, 120)));
+        _entities.Add(new Bill    (this, new Position(128, 120)));
         _entities.Add(new Rochelle(this, new Position(160, 120)));
         _entities.Add(new Ellis   (this, new Position(192, 120)));
         _entities.Add(new Nick    (this, new Position(224, 120)));

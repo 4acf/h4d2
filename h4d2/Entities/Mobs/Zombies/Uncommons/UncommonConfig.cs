@@ -1,35 +1,65 @@
 ﻿using H4D2.Infrastructure;
 
 namespace H4D2.Entities.Mobs.Zombies.Uncommons;
-using ZCfg = ZombieConfig;
+using ZCol = ZombieCollision;
 
-public static class UncommonConfig
+public class UncommonConfig : ZombieConfig
 {
-    public static readonly BoundingBox BoundingBox = new(ZCfg.CollisionMask, ZCfg.CollidesWith, 7, 2, 2, 10, Art.SpriteSize);
-    public const int Damage = 2;
-    
-    public const int Hazmat = 0;
-    public const int HazmatHealth = 200;
-    public const int HazmatSpeed = 250;
-    public const int HazmatColor = 0x847b71;
-    
-    public const int Clown = 1;
-    public const int ClownHealth = 200;
-    public const int ClownSpeed = 250;
-    public const int ClownColor = 0x847b71;
-    
-    public const int Mudman = 2;
-    public const int MudmanHealth = 200;
-    public const int MudmanSpeed = 300;
-    public const int MudmanColor = 0x856e55;
-    
-    public const int Worker = 3;
-    public const int WorkerHealth = 200;
-    public const int WorkerSpeed = 250;
-    public const int WorkerColor = 0x847b71;
-    
-    public const int Riot = 4;
-    public const int RiotHealth = 200;
-    public const int RiotSpeed = 230;
-    public const int RiotColor = 0xa7a39e;
+    public required int Type { get; init; }
+}
+
+public static class UncommonConfigs
+{
+    private static readonly BoundingBox _boundingBox = new(ZCol.CollisionMask, ZCol.CollidesWith, 7, 2, 2, 10, Art.SpriteSize);
+    private const int _damage = 2;
+
+    public static readonly UncommonConfig Hazmat = new()
+    {
+        Type = 0,
+        Health = 200,
+        RunSpeed = 250,
+        Damage = _damage,
+        GibColor = 0x847b71,
+        BoundingBox = _boundingBox
+    };
+
+    public static readonly UncommonConfig Clown = new()
+    {
+        Type = 1,
+        Health = 200,
+        RunSpeed = 250,
+        Damage = _damage,
+        GibColor = 0x847b71,
+        BoundingBox = _boundingBox
+    };
+
+    public static readonly UncommonConfig Mudman = new()
+    {
+        Type = 2,
+        Health = 200,
+        RunSpeed = 300,
+        Damage = _damage,
+        GibColor = 0x856e55,
+        BoundingBox = _boundingBox
+    };
+
+    public static readonly UncommonConfig Worker = new()
+    {
+        Type = 3,
+        Health = 200,
+        RunSpeed = 250,
+        Damage = _damage,
+        GibColor = 0x847b71,
+        BoundingBox = _boundingBox
+    };
+
+    public static readonly UncommonConfig Riot = new()
+    {
+        Type = 4,
+        Health = 200,
+        RunSpeed = 230,
+        Damage = _damage,
+        GibColor = 0xa7a39e,
+        BoundingBox = _boundingBox
+    };
 }

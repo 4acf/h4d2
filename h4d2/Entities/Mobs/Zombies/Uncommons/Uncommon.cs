@@ -8,14 +8,14 @@ public class Uncommon : Zombie
     private const double _attackRange = 5.0;
     private const double _attackDelay = 1.0;
     
-    private readonly int _uncommon;
+    private readonly int _type;
     private double _aimDirectionRadians;
     private double _attackDelaySecondsLeft;
     
-    protected Uncommon(Level level, Position position, int uncommon, int health, int speed, int damage, int color) 
-        : base(level, UncommonConfig.BoundingBox, position, health, speed, damage, color)
+    protected Uncommon(Level level, Position position, UncommonConfig config) 
+        : base(level, position, config)
     {
-        _uncommon = uncommon;
+        _type = config.Type;
         _attackDelaySecondsLeft = 0.0;
     }
     
@@ -215,8 +215,8 @@ public class Uncommon : Zombie
 
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        Bitmap lowerBitmap = Art.Uncommons[_uncommon][_lowerFrame];
-        Bitmap upperBitmap = Art.Uncommons[_uncommon][_upperFrame];
+        Bitmap lowerBitmap = Art.Uncommons[_type][_lowerFrame];
+        Bitmap upperBitmap = Art.Uncommons[_type][_upperFrame];
         screen.Draw(lowerBitmap, xCorrected, yCorrected, _xFlip);
         screen.Draw(upperBitmap, xCorrected, yCorrected, _xFlip);
     }

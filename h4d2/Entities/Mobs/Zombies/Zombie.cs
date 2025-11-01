@@ -11,12 +11,12 @@ public abstract class Zombie : Mob
     protected bool _isAttacking;
     public readonly int Damage;
     
-    protected Zombie(Level level, BoundingBox boundingBox, Position position, int health, double speed, int damage, int color)
-        : base(level, boundingBox, position, health, speed, color)
+    protected Zombie(Level level, Position position, ZombieConfig config)
+        : base(level, config.BoundingBox, position, config.Health, config.RunSpeed, config.GibColor)
     {
         _target = null;
         _isAttacking = false;
-        Damage = damage;
+        Damage = config.Damage;
     }
 
     public void HitBy(Projectile projectile)

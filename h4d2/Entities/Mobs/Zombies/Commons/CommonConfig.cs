@@ -1,15 +1,18 @@
 ﻿using H4D2.Infrastructure;
 
 namespace H4D2.Entities.Mobs.Zombies.Commons;
-using ZCfg = ZombieConfig;
+using ZCol = ZombieCollision;
 
-public static class CommonConfig
+public class CommonConfig : ZombieConfig;
+
+public static class CommonConfigs
 {
-    public static readonly BoundingBox BoundingBox = new(ZCfg.CollisionMask, ZCfg.CollidesWith, 7, 2, 2, 10, Art.SpriteSize);
-    public const int Health = 50;
-    public const int MinSpeed = 230;
-    public const int MaxSpeed = 280;
-    public const int Damage = 2;
-    public const int NumSprites = 9;
-    public const int Color = 0x847b71;
+    public static readonly CommonConfig Common = new()
+    {
+        Health = 50,
+        RunSpeed = 250,
+        Damage = 2,
+        GibColor = 0x847b71,
+        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, 7, 2, 2, 10, Art.SpriteSize)
+    };
 }

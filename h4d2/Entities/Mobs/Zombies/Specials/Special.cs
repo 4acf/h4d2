@@ -5,12 +5,12 @@ namespace H4D2.Entities.Mobs.Zombies.Specials;
 
 public class Special : Zombie
 {
-    private readonly int _special;
+    private readonly int _type;
     
-    protected Special(Level level, BoundingBox boundingBox, Position position, int special, int health, int speed, int damage, int color) 
-        : base(level, boundingBox, position, health, speed, damage, color)
+    protected Special(Level level, Position position, SpecialConfig config) 
+        : base(level, position, config)
     {
-        _special = special;
+        _type = config.Type;
     }
 
     public override void Update(double elapsedTime)
@@ -108,7 +108,7 @@ public class Special : Zombie
 
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        Bitmap animationCycleBitmap = Art.Specials[_special][_walkFrame];
+        Bitmap animationCycleBitmap = Art.Specials[_type][_walkFrame];
         screen.Draw(animationCycleBitmap, xCorrected, yCorrected, _xFlip);
     }
     

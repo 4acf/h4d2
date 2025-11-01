@@ -6,25 +6,18 @@ using Cfg = CommonConfig;
 
 public class Common : Zombie
 {
+    private const int _numVariations = 9;
     private const double _attackRange = 5.0;
     private const double _attackDelay = 1.0;
     
-    private readonly int _common;
+    private readonly int _type;
     private double _aimDirectionRadians;
     private double _attackDelaySecondsLeft;
     
     public Common(Level level, Position position)
-        : base(
-            level,
-            Cfg.BoundingBox, 
-            position,
-            Cfg.Health, 
-            RandomSingleton.Instance.Next(Cfg.MinSpeed, Cfg.MaxSpeed), 
-            Cfg.Damage,
-            Cfg.Color
-            )
+        : base(level, position, CommonConfigs.Common)
     {
-        _common = RandomSingleton.Instance.Next(Cfg.NumSprites);
+        _type = RandomSingleton.Instance.Next(_numVariations);
         _aimDirectionRadians = 0.0;
         _attackDelaySecondsLeft = 0.0;
     }
@@ -225,8 +218,8 @@ public class Common : Zombie
     
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        Bitmap lowerBitmap = Art.Commons[_common][_lowerFrame];
-        Bitmap upperBitmap = Art.Commons[_common][_upperFrame];
+        Bitmap lowerBitmap = Art.Commons[_type][_lowerFrame];
+        Bitmap upperBitmap = Art.Commons[_type][_upperFrame];
         screen.Draw(lowerBitmap, xCorrected, yCorrected, _xFlip);
         screen.Draw(upperBitmap, xCorrected, yCorrected, _xFlip);
     }
