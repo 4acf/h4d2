@@ -8,8 +8,8 @@ public abstract class Projectile : Entity
     public readonly int Damage;
     protected readonly double _directionRadians;
     
-    protected Projectile(Level level, BoundingBox boundingBox, Position position, int damage, double directionRadians) 
-        : base(level, boundingBox, position)
+    protected Projectile(Level level, Position position, BoundingBox boundingBox, int damage, double directionRadians) 
+        : base(level, position, boundingBox)
     {
         Damage = damage;
         _directionRadians = directionRadians;

@@ -13,7 +13,7 @@ public class Bullet : Projectile
     private Position _oldPosition;
     
     public Bullet(Level level, Position position, int damage, double directionRadians) 
-        : base(level, Cfg.BulletBoundingBox, position, damage, directionRadians)
+        : base(level, position, Cfg.BulletBoundingBox, damage, directionRadians)
     {
         _oldPosition = position.Copy();
     }

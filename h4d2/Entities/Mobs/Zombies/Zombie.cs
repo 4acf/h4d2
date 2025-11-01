@@ -7,9 +7,9 @@ namespace H4D2.Entities.Mobs.Zombies;
 
 public abstract class Zombie : Mob
 {
+    public readonly int Damage;
     protected Entity? _target;
     protected bool _isAttacking;
-    public readonly int Damage;
     
     protected Zombie(Level level, Position position, ZombieConfig config)
         : base(level, position, config)

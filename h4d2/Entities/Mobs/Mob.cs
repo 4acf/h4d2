@@ -28,7 +28,7 @@ public abstract class Mob : Entity
     protected readonly int _gibColor;
     
     protected Mob(Level level, Position position, MobConfig config) :
-        base(level, config.BoundingBox, position)
+        base(level, position, config.BoundingBox)
     {
         _health = config.Health;
         _speed = config.RunSpeed;

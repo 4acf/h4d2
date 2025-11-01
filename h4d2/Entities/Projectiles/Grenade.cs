@@ -29,7 +29,7 @@ public class Grenade : Projectile
     };
     
     public Grenade(Level level, Position position, int damage, double directionRadians)
-        : base(level, Cfg.GrenadeBoundingBox, position, damage, directionRadians)
+        : base(level, position, Cfg.GrenadeBoundingBox, damage, directionRadians)
     {
         _directionIndex = _ResolveDirectionIndex(directionRadians);
     }

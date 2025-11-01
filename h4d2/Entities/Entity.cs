@@ -12,7 +12,7 @@ public abstract class Entity : Isometric
     protected double _yVelocity;
     protected double _zVelocity;
     
-    protected Entity(Level level, BoundingBox boundingBox, Position position)
+    protected Entity(Level level, Position position, BoundingBox boundingBox)
         : base(level, position)
     {
         BoundingBox = boundingBox;
