@@ -15,6 +15,8 @@ public class Survivor : Mob
     private const int _adrenalineRunSpeed = 260;
     private const int _tempHealthDecayIntervalSeconds = 4;
     private const double _incappedHealthDecayIntervalSeconds = 1.0/3.0;
+    private const int _healthBarRed = 0xd62929;
+    private const int _healthBarGreen = 0x51bf45;
     
     private readonly int _character;
     protected Weapon? _weapon;
@@ -300,12 +302,36 @@ public class Survivor : Mob
     
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
+        _RenderHealthBar(screen, xCorrected, yCorrected);
+        
         Bitmap lowerBitmap = Art.Survivors[_character][_lowerFrame];
         Bitmap upperBitmap = Art.Survivors[_character][_upperFrame];
         screen.Draw(lowerBitmap, xCorrected, yCorrected, _xFlip);
         screen.Draw(upperBitmap, xCorrected, yCorrected, _xFlip);
     }
 
+    private void _RenderHealthBar(Bitmap screen, int xCorrected, int yCorrected)
+    {
+        double percentage = _health / (double)SurvivorConfigs.DefaultHealth;
+        int greenPixels = (int)Math.Ceiling(percentage * 10);
+        
+        screen.Fill(
+            xCorrected + Art.SpriteSize - 13 + greenPixels,
+            yCorrected - 3,
+            xCorrected + Art.SpriteSize - 4,
+            yCorrected - 3,
+            _healthBarRed
+        );
+        
+        screen.Fill(
+            xCorrected + Art.SpriteSize - 13,
+            yCorrected - 3,
+            xCorrected + Art.SpriteSize - 14 + greenPixels,
+            yCorrected - 3,
+            _healthBarGreen
+        );
+    }
+    
     protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
     {
         screen.BlendFill(
