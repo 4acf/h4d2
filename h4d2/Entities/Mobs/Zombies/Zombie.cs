@@ -12,7 +12,7 @@ public abstract class Zombie : Mob
     public readonly int Damage;
     
     protected Zombie(Level level, Position position, ZombieConfig config)
-        : base(level, config.BoundingBox, position, config.Health, config.RunSpeed, config.GibColor)
+        : base(level, position, config)
     {
         _target = null;
         _isAttacking = false;

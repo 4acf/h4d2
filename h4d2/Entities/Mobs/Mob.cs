@@ -25,13 +25,13 @@ public abstract class Mob : Entity
     protected int _lowerFrame;
     protected int _upperFrame;
     protected double _timeSinceLastFrameUpdate;
-    protected readonly int _color;
+    protected readonly int _gibColor;
     
-    protected Mob(Level level, BoundingBox boundingBox, Position position, int health, double speed, int color) :
-        base(level, boundingBox, position)
+    protected Mob(Level level, Position position, MobConfig config) :
+        base(level, config.BoundingBox, position)
     {
-        _health = health;
-        _speed = speed;
+        _health = config.Health;
+        _speed = config.RunSpeed;
         _directionRadians = 0;
         _xFlip = false;
         _walkStep = 0;
@@ -39,7 +39,7 @@ public abstract class Mob : Entity
         _lowerFrame = 0;
         _upperFrame = _upperBitmapOffset;
         _timeSinceLastFrameUpdate = 0.0;
-        _color = color;
+        _gibColor = config.GibColor;
     }
     
     public void HitBy(Zombie zombie)
@@ -61,7 +61,7 @@ public abstract class Mob : Entity
         {
             Position position = CenterMass.MutableCopy();
             position.Z += i;
-            var deathSplatter = new DeathSplatterDebris(_level, position, _color);
+            var deathSplatter = new DeathSplatterDebris(_level, position, _gibColor);
             _level.AddParticle(deathSplatter);
         }
         Removed = true;

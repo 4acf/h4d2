@@ -1,12 +1,8 @@
 ﻿namespace H4D2.Entities.Mobs.Zombies;
 
-public class ZombieConfig
+public class ZombieConfig : MobConfig
 {
-    public required int Health { get; init; }
-    public required int RunSpeed { get; init; }
     public required int Damage { get; init; }
-    public required int GibColor { get; init; }
-    public required BoundingBox BoundingBox { get; init; }
 }
 
 public static class ZombieCollision

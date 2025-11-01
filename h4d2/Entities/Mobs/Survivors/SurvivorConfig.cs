@@ -2,27 +2,88 @@
 
 namespace H4D2.Entities.Mobs.Survivors;
 
-public static class SurvivorConfig
+public class SurvivorConfig : MobConfig
 {
-    public const int Coach = 0;
-    public const int Nick = 1;
-    public const int Ellis = 2;
-    public const int Rochelle = 3;
-    public const int Bill = 4;
-    public const int Francis = 5;
-    public const int Louis = 6;
-    public const int Zoey = 7;
+    public required int Character { get; init; }
+}
 
-    public const int WhiteSkinColor = 0xffaf80;
-    public const int BlackSkinColor = 0x895e46;
+public static class SurvivorConfigs
+{
+    private const int _defaultHealth = 100;
+    private const int _runSpeed = 300;
+    private const int _whiteSkinColor = 0xffaf80;
+    private const int _blackSkinColor = 0x895e46;
+    private static readonly BoundingBox _boundingBox = new(0b100, 0b10, 7, 2, 2, 10, Art.SpriteSize);
     
-    public static readonly BoundingBox BoundingBox = new(0b100, 0b10, 7, 2, 2, 10, Art.SpriteSize);
-    public const int DefaultHealth = 100;
-    public const int IncappedHealth = 300;
-    public const int RunSpeed = 300;
-    public const int LimpSpeed = 150;
-    public const int WalkSpeed = 85;
-    public const int AdrenalineRunSpeed = 260;
-    public const int TempHealthDecayIntervalSeconds = 4;
-    public const double IncappedHealthDecayIntervalSeconds = 1.0/3.0;
+    public static readonly SurvivorConfig Coach = new()
+    {
+        Character = 0,
+        Health = _defaultHealth,
+        RunSpeed = _runSpeed,
+        GibColor = _blackSkinColor,
+        BoundingBox = _boundingBox
+    };
+    
+    public static readonly SurvivorConfig Nick = new()
+    {
+        Character = 1,
+        Health = _defaultHealth,
+        RunSpeed = _runSpeed,
+        GibColor = _whiteSkinColor,
+        BoundingBox = _boundingBox
+    };
+    
+    public static readonly SurvivorConfig Ellis = new()
+    {
+        Character = 2,
+        Health = _defaultHealth,
+        RunSpeed = _runSpeed,
+        GibColor = _whiteSkinColor,
+        BoundingBox = _boundingBox
+    };
+    
+    public static readonly SurvivorConfig Rochelle = new()
+    {
+        Character = 3,
+        Health = _defaultHealth,
+        RunSpeed = _runSpeed,
+        GibColor = _blackSkinColor,
+        BoundingBox = _boundingBox
+    };
+    
+    public static readonly SurvivorConfig Bill = new()
+    {
+        Character = 4,
+        Health = _defaultHealth,
+        RunSpeed = _runSpeed,
+        GibColor = _whiteSkinColor,
+        BoundingBox = _boundingBox
+    };
+    
+    public static readonly SurvivorConfig Francis = new()
+    {
+        Character = 5,
+        Health = _defaultHealth,
+        RunSpeed = _runSpeed,
+        GibColor = _whiteSkinColor,
+        BoundingBox = _boundingBox
+    };
+    
+    public static readonly SurvivorConfig Louis = new()
+    {
+        Character = 6,
+        Health = _defaultHealth,
+        RunSpeed = _runSpeed,
+        GibColor = _blackSkinColor,
+        BoundingBox = _boundingBox
+    };
+    
+    public static readonly SurvivorConfig Zoey = new()
+    {
+        Character = 7,
+        Health = _defaultHealth,
+        RunSpeed = _runSpeed,
+        GibColor = _whiteSkinColor,
+        BoundingBox = _boundingBox
+    };
 }

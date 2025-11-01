@@ -4,11 +4,17 @@ using H4D2.Levels;
 using H4D2.Weapons;
 
 namespace H4D2.Entities.Mobs.Survivors;
-using Cfg = SurvivorConfig;
 
 public class Survivor : Mob
 {
     private const int _boundaryTolerance = 25;
+    private const int _incappedHealth = 300;
+    private const int _runSpeed = 300;
+    private const int _limpSpeed = 150;
+    private const int _walkSpeed = 85;
+    private const int _adrenalineRunSpeed = 260;
+    private const int _tempHealthDecayIntervalSeconds = 4;
+    private const double _incappedHealthDecayIntervalSeconds = 1.0/3.0;
     
     private readonly int _character;
     protected Weapon? _weapon;
@@ -16,10 +22,10 @@ public class Survivor : Mob
     private bool _isShooting;
     public double AimDirectionRadians { get; private set; }
     
-    protected Survivor(Level level, Position position, int character, int color) 
-        : base(level, Cfg.BoundingBox, position, Cfg.DefaultHealth, Cfg.RunSpeed, color)
+    protected Survivor(Level level, Position position, SurvivorConfig config) 
+        : base(level, position, config)
     {
-        _character = character;
+        _character = config.Character;
         _target = null;
         _isShooting = false;
         AimDirectionRadians = 0;
@@ -79,14 +85,14 @@ public class Survivor : Mob
     
     private void _UpdateSpeed()
     {
-        bool isLimping = _speed < Cfg.WalkSpeed && _speed < Cfg.RunSpeed;
-        bool isWalking = _speed < Cfg.LimpSpeed;
+        bool isLimping = _speed < _walkSpeed && _speed < _runSpeed;
+        bool isWalking = _speed < _limpSpeed;
         bool isHealthBetween1and39 = 1 < _health && _health < 40;
         
         if (isHealthBetween1and39 && !isLimping)
-            _speed = Cfg.LimpSpeed;
+            _speed = _limpSpeed;
         else if(_health == 1 && !isWalking)
-            _speed = Cfg.WalkSpeed;
+            _speed = _walkSpeed;
     }
     
     private void _UpdatePosition(double elapsedTime)
