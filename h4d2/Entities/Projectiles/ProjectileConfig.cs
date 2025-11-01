@@ -2,12 +2,18 @@
 
 public static class ProjectileConfig
 {
-    public const int CollisionMask = 0b1;
-    public const int CollidesWith = 0b10;
+    private const int _collisionMask = 0b1;
+    private const int _collidesWith = 0b10;
 
+    private static readonly BoundingBoxDimensions _bulletDimensions
+        = new(1, 1, 1, 0);
+
+    private static readonly BoundingBoxDimensions _grenadeDimensions
+        = new(2, 2, 2, 0);
+    
     public static readonly BoundingBox BulletBoundingBox =
-        new (CollisionMask, CollidesWith, 1, 1, 1, 0);
+        new (_collisionMask, _collidesWith, _bulletDimensions);
 
     public static readonly BoundingBox GrenadeBoundingBox =
-        new(CollisionMask, CollidesWith, 2, 2, 2, 0);
+        new(_collisionMask, _collidesWith, _grenadeDimensions);
 }

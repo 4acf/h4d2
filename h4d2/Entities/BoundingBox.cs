@@ -2,36 +2,43 @@
 
 namespace H4D2.Entities;
 
+public record BoundingBoxDimensions
+{
+    public readonly int XWidth;
+    public readonly int YWidth;
+    public readonly int ZHeight;
+    public readonly int SpriteSize;
+    public readonly int XOffset;
+
+    public BoundingBoxDimensions(int xWidth, int yWidth, int zHeight, int spriteSize, int xOffset = 0)
+    {
+        XWidth = xWidth;
+        YWidth = yWidth;
+        ZHeight = zHeight;
+        SpriteSize = spriteSize;
+        XOffset = xOffset;
+    }
+}
+
 public class BoundingBox
 {
     public readonly int CollisionMask;
     private readonly int _collidesWith;
-    private readonly int _xOffset;
     private readonly int _xWidth;
     private readonly int _yWidth;
     private readonly int _zHeight;
     private readonly int _spriteSize;
+    private readonly int _xOffset;
     
-    public BoundingBox(int collisionMask, int collidesWith, int xOffset, int xWidth, int yWidth, int zHeight, int spriteSize)
+    public BoundingBox(int collisionMask, int collidesWith, BoundingBoxDimensions dimensions)
     {
         CollisionMask = collisionMask;
         _collidesWith = collidesWith;
-        _xOffset = xOffset;
-        _xWidth = xWidth;
-        _yWidth = yWidth;
-        _zHeight = zHeight;
-        _spriteSize = spriteSize;
-    }
-
-    public BoundingBox(int collisionMask, int collidesWith, int xWidth, int yWidth, int zHeight, int spriteSize)
-    {
-        CollisionMask = collisionMask;
-        _collidesWith = collidesWith;
-        _xOffset = 0;
-        _xWidth = xWidth;
-        _yWidth = yWidth;
-        _zHeight = zHeight;
-        _spriteSize = spriteSize;
+        _xWidth = dimensions.XWidth;
+        _yWidth = dimensions.YWidth;
+        _zHeight = dimensions.ZHeight;
+        _spriteSize = dimensions.SpriteSize;
+        _xOffset = dimensions.XOffset;
     }
     
     public double N(double yPosition) => yPosition - _spriteSize + _yWidth;

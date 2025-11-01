@@ -10,7 +10,10 @@ public class UncommonConfig : ZombieConfig
 
 public static class UncommonConfigs
 {
-    private static readonly BoundingBox _boundingBox = new(ZCol.CollisionMask, ZCol.CollidesWith, 7, 2, 2, 10, Art.SpriteSize);
+    private static readonly BoundingBoxDimensions _boundingBoxDimensions
+        = new(2, 2, 10, Art.SpriteSize, 7);
+    private static readonly BoundingBox _boundingBox 
+        = new(ZCol.CollisionMask, ZCol.CollidesWith, _boundingBoxDimensions);
     private const int _damage = 2;
 
     public static readonly UncommonConfig Hazmat = new()

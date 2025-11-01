@@ -10,6 +10,23 @@ public class SpecialConfig : ZombieConfig
 
 public static class SpecialConfigs
 {
+    private static readonly BoundingBoxDimensions _hunterDimensions
+        = new(2, 2, 9, Art.SpriteSize, 7);
+    private static readonly BoundingBoxDimensions _boomerDimensions
+        = new(6, 6, 9, Art.SpriteSize, 5);
+    private static readonly BoundingBoxDimensions _smokerDimensions
+        = new(2, 2, 12, Art.SpriteSize, 7);
+    private static readonly BoundingBoxDimensions _chargerDimensions
+        = new(7, 7, 12, Art.SpriteSize, 4);
+    private static readonly BoundingBoxDimensions _jockeyDimensions
+        = new(4, 4, 6, Art.SpriteSize, 6);
+    private static readonly BoundingBoxDimensions _spitterDimensions
+        = new(2, 2, 12, Art.SpriteSize, 7);
+    private static readonly BoundingBoxDimensions _tankDimensions
+        = new(10, 8, 12, Art.SpriteSize, 3);
+    private static readonly BoundingBoxDimensions _witchDimensions
+        = new(2, 2, 10, Art.SpriteSize, 7);
+    
     public static readonly SpecialConfig Hunter = new()
     {
         Type = 0,
@@ -17,7 +34,7 @@ public static class SpecialConfigs
         RunSpeed = 250,
         Damage = 5,
         GibColor = 0x785953,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, 7, 2, 2, 9, Art.SpriteSize)
+        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _hunterDimensions)
     };
 
     public static readonly SpecialConfig Boomer = new()
@@ -27,7 +44,7 @@ public static class SpecialConfigs
         RunSpeed = 175,
         Damage = 0,
         GibColor = 0x847b71,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, 5, 6, 6, 9, Art.SpriteSize)
+        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _boomerDimensions)
     };
 
     public static readonly SpecialConfig Smoker = new()
@@ -37,7 +54,7 @@ public static class SpecialConfigs
         RunSpeed = 210,
         Damage = 5,
         GibColor = 0x7f7165,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, 7, 2, 2, 12, Art.SpriteSize)
+        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _smokerDimensions)
     };
 
     public static readonly SpecialConfig Charger = new()
@@ -47,7 +64,7 @@ public static class SpecialConfigs
         RunSpeed = 250,
         Damage = 15,
         GibColor = 0x435444,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, 4, 7, 7, 12, Art.SpriteSize)
+        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _chargerDimensions)
     };
 
     public static readonly SpecialConfig Jockey = new()
@@ -57,7 +74,7 @@ public static class SpecialConfigs
         RunSpeed = 250,
         Damage = 4,
         GibColor = 0xbc9e9e,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, 6, 4, 4, 6, Art.SpriteSize)
+        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _jockeyDimensions)
     };
 
     public static readonly SpecialConfig Spitter = new()
@@ -67,7 +84,7 @@ public static class SpecialConfigs
         RunSpeed = 210,
         Damage = 7,
         GibColor = 0xbc9e9e,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, 7, 2, 2, 12, Art.SpriteSize)
+        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _spitterDimensions)
     };
 
     public static readonly SpecialConfig Tank = new()
@@ -77,7 +94,7 @@ public static class SpecialConfigs
         RunSpeed = 210,
         Damage = 24,
         GibColor = 0xd6896b,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, 3, 10, 8, 12, Art.SpriteSize)
+        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _tankDimensions)
     };
 
     public static readonly SpecialConfig Witch = new()
@@ -87,6 +104,6 @@ public static class SpecialConfigs
         RunSpeed = 300,
         Damage = 100,
         GibColor = 0xbcb8b8,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, 7, 2, 2, 10, Art.SpriteSize)
+        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _witchDimensions)
     };
 }

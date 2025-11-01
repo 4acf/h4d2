@@ -7,12 +7,15 @@ public class CommonConfig : ZombieConfig;
 
 public static class CommonConfigs
 {
+    private static readonly BoundingBoxDimensions _boundingBoxDimensions
+        = new(2, 2, 10, Art.SpriteSize, 7);
+    
     public static readonly CommonConfig Common = new()
     {
         Health = 50,
         RunSpeed = 250,
         Damage = 2,
         GibColor = 0x847b71,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, 7, 2, 2, 10, Art.SpriteSize)
+        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _boundingBoxDimensions)
     };
 }

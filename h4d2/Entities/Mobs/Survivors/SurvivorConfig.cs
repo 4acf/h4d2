@@ -13,7 +13,10 @@ public static class SurvivorConfigs
     private const int _runSpeed = 300;
     private const int _whiteSkinColor = 0xffaf80;
     private const int _blackSkinColor = 0x895e46;
-    private static readonly BoundingBox _boundingBox = new(0b100, 0b10, 7, 2, 2, 10, Art.SpriteSize);
+    private static readonly BoundingBoxDimensions _boundingBoxDimensions 
+        = new(2, 2, 10, Art.SpriteSize, 7);
+    private static readonly BoundingBox _boundingBox 
+        = new(0b100, 0b10, _boundingBoxDimensions);
     
     public static readonly SurvivorConfig Coach = new()
     {
