@@ -43,6 +43,7 @@ public class Survivor : Mob
     private void _UpdateTarget()
     {
         ReadonlyPosition survivorPosition = CenterMass;
+        _target = _level.GetNearestLivingZombie(Position);
         
         if (_target == null || !_target.IsAlive)
         {

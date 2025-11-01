@@ -27,11 +27,26 @@ public abstract class Mob : Entity
     protected double _timeSinceLastFrameUpdate;
     protected readonly int _gibColor;
     
-    protected Mob(Level level, Position position, MobConfig config) :
-        base(level, position, config.BoundingBox)
+    protected Mob(Level level, Position position, MobConfig config) 
+        : base(level, position, config.BoundingBox)
     {
         _health = config.Health;
         _speed = config.RunSpeed;
+        _directionRadians = 0;
+        _xFlip = false;
+        _walkStep = 0;
+        _walkFrame = 0;
+        _lowerFrame = 0;
+        _upperFrame = _upperBitmapOffset;
+        _timeSinceLastFrameUpdate = 0.0;
+        _gibColor = config.GibColor;
+    }
+
+    protected Mob(Level level, Position position, MobConfig config, double speed)
+        : base(level, position, config.BoundingBox)
+    {
+        _health = config.Health;
+        _speed = speed;
         _directionRadians = 0;
         _xFlip = false;
         _walkStep = 0;

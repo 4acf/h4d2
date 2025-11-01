@@ -2,11 +2,12 @@
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Zombies.Commons;
-using Cfg = CommonConfig;
 
 public class Common : Zombie
 {
     private const int _numVariations = 9;
+    private const int _minSpeed = 230;
+    private const int _maxSpeed = 280;
     private const double _attackRange = 5.0;
     private const double _attackDelay = 1.0;
     
@@ -15,7 +16,7 @@ public class Common : Zombie
     private double _attackDelaySecondsLeft;
     
     public Common(Level level, Position position)
-        : base(level, position, CommonConfigs.Common)
+        : base(level, position, CommonConfigs.Common, RandomSingleton.Instance.Next(_minSpeed, _maxSpeed))
     {
         _type = RandomSingleton.Instance.Next(_numVariations);
         _aimDirectionRadians = 0.0;

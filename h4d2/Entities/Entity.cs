@@ -40,19 +40,19 @@ public abstract class Entity : Isometric
     private bool _IsOutOfLevelBounds(double xPosition, double yPosition, double zPosition)
     {
         double w = BoundingBox.W(xPosition);
-        if (w < 0) 
+        if (w < -Level.Padding) 
             return true;
         
         double s = BoundingBox.S(yPosition);
-        if(s < -16) 
+        if(s < -Level.Padding) 
             return true;
         
         double e = BoundingBox.E(xPosition);
-        if (e >= _level.Width) 
+        if (e >= _level.Width + Level.Padding) 
             return true;
         
         double n = BoundingBox.N(yPosition);
-        if (n >= _level.Height) 
+        if (n >= _level.Height + Level.Padding) 
             return true;
 
         if (zPosition < 0)

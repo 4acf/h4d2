@@ -19,6 +19,14 @@ public abstract class Zombie : Mob
         Damage = config.Damage;
     }
 
+    protected Zombie(Level level, Position position, ZombieConfig config, int speed)
+        : base(level, position, config, speed)
+    {
+        _target = null;
+        _isAttacking = false;
+        Damage = config.Damage;
+    }
+    
     public void HitBy(Projectile projectile)
     {
         if (Removed || projectile.Removed)

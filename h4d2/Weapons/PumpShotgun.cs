@@ -8,8 +8,8 @@ public class PumpShotgun : Weapon
     public PumpShotgun(Level level, Survivor owner) : base(level, owner)
     {
         Damage = 25;
-        ReloadTimeSeconds = 4.2;
-        ShootDelaySeconds = 1;
+        ReloadTimeSeconds = 3.6;
+        ShootDelaySeconds = 1 / 1.5;
         AmmoPerMagazine = 8;
         Spread = 0.5;
         Pellets = 10;

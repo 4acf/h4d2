@@ -12,8 +12,14 @@ namespace H4D2.Levels;
 
 public class Level
 {
+    public const int Padding = 32;
+    private const int _minZombies = 20;
+    private const int _minSpawnWaveSize = 5;
+    private const int _maxSpawnWaveSize = 20;
+    
     public readonly int Width;
     public readonly int Height;
+    public bool isGameOver => GetLivingSurvivors().Count == 0; 
     private List<Entity> _entities;
     private List<Particle> _particles;
     
@@ -24,27 +30,6 @@ public class Level
         
         _entities = new List<Entity>();
         _particles = new List<Particle>();
-        
-        for (int i = 0; i < 10; i++)
-        {
-            var position = new Position(i * 32, 64);
-            _entities.Add(new Common(this, position));
-        }
-        
-        _entities.Add(new Riot  (this, new Position(32, 16)));
-        _entities.Add(new Worker(this, new Position(64, 16)));
-        _entities.Add(new Mudman(this, new Position(96, 16)));
-        _entities.Add(new Clown (this, new Position(128, 16)));
-        _entities.Add(new Hazmat(this, new Position(160, 16)));
-        
-        _entities.Add(new Witch  (this, new Position(32, 196)));
-        _entities.Add(new Tank   (this, new Position(64, 196)));
-        _entities.Add(new Spitter(this, new Position(96, 196)));
-        _entities.Add(new Jockey (this, new Position(128, 196)));
-        _entities.Add(new Charger(this, new Position(160, 196)));
-        _entities.Add(new Smoker (this, new Position(192, 196)));
-        _entities.Add(new Boomer (this, new Position(224, 196)));
-        _entities.Add(new Hunter (this, new Position(256, 196)));
         
         _entities.Add(new Louis   (this, new Position(32, 120)));
         _entities.Add(new Francis (this, new Position(64, 120)));
@@ -162,6 +147,8 @@ public class Level
         {
             _entities.RemoveAt(indexesToRemove[i]);
         }
+
+        _SpawnZombies();
     }
 
     public void UpdateParticles(double elapsedTime)
@@ -219,5 +206,63 @@ public class Level
             if(!particle.Removed)
                 particle.Render(screen);
         }
+    }
+
+    // these functions are somewhat temporary until i get add real levels
+    private void _SpawnZombies()
+    {
+        List<Zombie> zombies = GetLivingZombies();
+        if (zombies.Count < _minZombies)
+        {
+            int randomNewZombies = 
+                RandomSingleton.Instance.Next(_minSpawnWaveSize, _maxSpawnWaveSize);
+            for (int i = 0; i < randomNewZombies; i++)
+            {
+                Zombie zombie = _CreateRandomLevelZombie(_RandomZombieSpawnPosition());
+                _entities.Add(zombie);
+            }
+        }
+    }
+
+    private Position _RandomZombieSpawnPosition()
+    {
+        double x = 0;
+        double y = 0;
+        int random = RandomSingleton.Instance.Next(2);
+        if (random == 0)
+        {
+            // NS
+            x = RandomSingleton.Instance.NextDouble() * Width;
+            y = RandomSingleton.Instance.Next(2) == 0 ? 
+                Height + Padding - 1 : 
+                0;
+        }
+        else
+        {
+            // WE
+            x = RandomSingleton.Instance.Next(2) == 0 ?
+               -Padding + 1 :
+               Width;
+            y = RandomSingleton.Instance.NextDouble() * Height;
+        }
+
+        return new Position(x, y);
+    }
+    
+    private Zombie _CreateRandomLevelZombie(Position position)
+    {
+        int random = RandomSingleton.Instance.Next(20);
+        if (random != 0) 
+            return new Common(this, position);
+        int randomUncommon = RandomSingleton.Instance.Next(5);
+        return randomUncommon switch
+        {
+            0 => new Hazmat(this, position),
+            1 => new Clown(this, position),
+            2 => new Mudman(this, position),
+            3 => new Worker(this, position),
+            4 => new Riot(this, position),
+            _ => new Common(this, position)
+        };
     }
 }
