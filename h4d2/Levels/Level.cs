@@ -13,13 +13,16 @@ namespace H4D2.Levels;
 public class Level
 {
     public const int Padding = 32;
+    private const double _levelResetCooldownSeconds = 8.0;
     private const int _minZombies = 20;
     private const int _minSpawnWaveSize = 5;
     private const int _maxSpawnWaveSize = 20;
     
     public readonly int Width;
     public readonly int Height;
-    public bool isGameOver => GetLivingSurvivors().Count == 0; 
+    private double _resetSecondsLeft;
+    public bool CanReset => _resetSecondsLeft <= 0;
+    public bool IsGameOver => GetLivingSurvivors().Count == 0; 
     private List<Entity> _entities;
     private List<Particle> _particles;
     
@@ -27,6 +30,7 @@ public class Level
     {
         Width = width;
         Height = height;
+        _resetSecondsLeft = _levelResetCooldownSeconds;
         
         _entities = new List<Entity>();
         _particles = new List<Particle>();
@@ -113,7 +117,7 @@ public class Level
     {
         _particles.Add(particle);
     }
-
+    
     public void Explode(Grenade grenade)
     {
         AddParticle(new Explosion(this, grenade.Position.MutableCopy(), Grenade.SplashRadius));
@@ -128,7 +132,23 @@ public class Level
         }
     }
     
-    public void UpdateEntities(double elapsedTime)
+    public void Update(double elapsedTime)
+    {
+        if (IsGameOver)
+            _resetSecondsLeft -= elapsedTime;
+        _UpdateEntities(elapsedTime);
+        _UpdateParticles(elapsedTime);
+    }
+    
+    public void Render(Bitmap screen)
+    {
+        _RenderBackground(screen);
+        _RenderShadows(screen);
+        _RenderParticles(screen);
+        _RenderEntities(screen);
+    }
+    
+    private void _UpdateEntities(double elapsedTime)
     {
         var indexesToRemove = new List<int>();
         for (int i = 0; i < _entities.Count; i++)
@@ -151,7 +171,7 @@ public class Level
         _SpawnZombies();
     }
 
-    public void UpdateParticles(double elapsedTime)
+    private void _UpdateParticles(double elapsedTime)
     {
         var indexesToRemove = new List<int>();
         for (int i = 0; i < _particles.Count; i++)
@@ -172,12 +192,12 @@ public class Level
         }
     }
     
-    public void RenderBackground(Bitmap screen)
+    private void _RenderBackground(Bitmap screen)
     {
         
     }
     
-    public void RenderShadows(Bitmap screen)
+    private void _RenderShadows(Bitmap screen)
     {
         foreach (Entity entity in _entities)
         {
@@ -190,7 +210,7 @@ public class Level
         }
     }
     
-    public void RenderEntities(Bitmap screen)
+    private void _RenderEntities(Bitmap screen)
     {
         _entities = _entities.OrderByDescending(e => e.Position.Y).ToList();
         foreach (Entity entity in _entities)
@@ -199,7 +219,7 @@ public class Level
         }
     }
 
-    public void RenderParticles(Bitmap screen)
+    private void _RenderParticles(Bitmap screen)
     {
         foreach (Particle particle in _particles)
         {
@@ -208,7 +228,7 @@ public class Level
         }
     }
 
-    // these functions are somewhat temporary until i get add real levels
+    // these functions are somewhat temporary until i add real levels
     private void _SpawnZombies()
     {
         List<Zombie> zombies = GetLivingZombies();

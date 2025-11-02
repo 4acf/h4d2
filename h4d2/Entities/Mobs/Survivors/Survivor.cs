@@ -14,9 +14,9 @@ public class Survivor : Mob
     private const int _walkSpeed = 85;
     private const int _adrenalineRunSpeed = 260;
     private const int _tempHealthDecayIntervalSeconds = 4;
-    private const double _incappedHealthDecayIntervalSeconds = 1.0/3.0;
-    private const int _healthBarRed = 0xd62929;
-    private const int _healthBarGreen = 0x51bf45;
+    private const double _incappedHealthDecayIntervalSeconds = 1.0 / 3.0;
+    private const int _healthBarRed = 0xe61515;
+    private const int _healthBarGreen = 0x56de47;
     
     private readonly int _character;
     protected Weapon? _weapon;

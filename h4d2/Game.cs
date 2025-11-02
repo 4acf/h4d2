@@ -6,7 +6,7 @@ namespace H4D2;
 public class Game
 {
     private readonly Bitmap _screen;
-    private readonly Level _level;
+    private Level _level;
     
     public Game(int width, int height)
     {
@@ -16,17 +16,17 @@ public class Game
 
     public void Update(double elapsedTime)
     {
-        _level.UpdateEntities(elapsedTime);
-        _level.UpdateParticles(elapsedTime);
+        _level.Update(elapsedTime);
+        if (_level.IsGameOver && _level.CanReset)
+        {
+            _level = new Level(_level.Width, _level.Height);
+        }
     }
     
     public byte[] Render()
     {
         _screen.Clear();
-        _level.RenderBackground(_screen);
-        _level.RenderShadows(_screen);
-        _level.RenderParticles(_screen);
-        _level.RenderEntities(_screen);
+        _level.Render(_screen);
         return _screen.Data;
     }
 }
