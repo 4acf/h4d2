@@ -9,13 +9,11 @@ namespace H4D2.Entities.Mobs.Survivors;
 public class Survivor : Mob
 {
     private const int _boundaryTolerance = 25;
-    private const int _incappedHealth = 300;
     private const int _runSpeed = 300;
     private const int _limpSpeed = 150;
     private const int _walkSpeed = 85;
-    private const int _adrenalineRunSpeed = 260;
-    private const int _tempHealthDecayIntervalSeconds = 4;
-    private const double _incappedHealthDecayIntervalSeconds = 1.0 / 3.0;
+    private const int _adrenalineRunSpeed = 320;
+    private const int _adrenalineEffectSeconds = 15;
     private const int _healthBarRed = 0xe61515;
     private const int _healthBarGreen = 0x56de47;
     
@@ -23,6 +21,8 @@ public class Survivor : Mob
     protected Weapon? _weapon;
     private Zombie? _target;
     private bool _isShooting;
+    private bool _isAdrenalineBoosted;
+    private double _adrenalineSecondsLeft;
     public double AimDirectionRadians { get; private set; }
     
     protected Survivor(Level level, Position position, SurvivorConfig config) 
@@ -31,6 +31,8 @@ public class Survivor : Mob
         _character = config.Character;
         _target = null;
         _isShooting = false;
+        _isAdrenalineBoosted = false;
+        _adrenalineSecondsLeft = 0;
         AimDirectionRadians = 0;
     }
 
@@ -38,9 +40,32 @@ public class Survivor : Mob
     {
         _UpdateTarget();
         _UpdateWeapon(elapsedTime);
-        _UpdateSpeed();
+        _UpdateSpeed(elapsedTime);
         _UpdatePosition(elapsedTime);
         _UpdateSprite(elapsedTime);
+    }
+
+    public void ConsumeFirstAidKit()
+    {
+        int missingHealth = SurvivorConfigs.DefaultHealth - _health;
+        double healthToRestore = 0.8 * missingHealth;
+        _health += (int)healthToRestore;
+    }
+
+    public void ConsumePills()
+    {
+        int missingHealth = SurvivorConfigs.DefaultHealth - _health;
+        int healthToRestore = Math.Min(50, missingHealth);
+        _health += healthToRestore;
+    }
+
+    public void ConsumeAdrenaline()
+    {
+        int missingHealth = SurvivorConfigs.DefaultHealth - _health;
+        int healthToRestore = Math.Min(25, missingHealth);
+        _health += healthToRestore;
+        _isAdrenalineBoosted = true;
+        _adrenalineSecondsLeft = _adrenalineEffectSeconds;
     }
     
     private void _UpdateTarget()
@@ -87,16 +112,26 @@ public class Survivor : Mob
         }
     }
     
-    private void _UpdateSpeed()
+    private void _UpdateSpeed(double elapsedTime)
     {
-        bool isLimping = _speed < _walkSpeed && _speed < _runSpeed;
-        bool isWalking = _speed < _limpSpeed;
-        bool isHealthBetween1and39 = 1 < _health && _health < 40;
+        _adrenalineSecondsLeft -= elapsedTime;
+        if (_adrenalineSecondsLeft <= 0)
+        {
+            _isAdrenalineBoosted = false;
+        }
+
+        if (_isAdrenalineBoosted)
+        {
+            _speed = _adrenalineRunSpeed;
+            return;
+        }
         
-        if (isHealthBetween1and39 && !isLimping)
-            _speed = _limpSpeed;
-        else if(_health == 1 && !isWalking)
-            _speed = _walkSpeed;
+        _speed = _health switch
+        {
+            >= 40 => _runSpeed,
+            > 1 => _limpSpeed,
+            _ => _walkSpeed
+        };
     }
     
     private void _UpdatePosition(double elapsedTime)

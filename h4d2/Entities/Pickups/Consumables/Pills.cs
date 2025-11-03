@@ -14,7 +14,11 @@ public class Pills : Consumable
     
     public override void PickUp(Survivor survivor)
     {
-        base.PickUp(survivor);
+        if (!Removed)
+        {
+            survivor.ConsumePills();
+            base.PickUp(survivor);
+        }
     }
 
     protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
