@@ -1,4 +1,5 @@
 ﻿using H4D2.Entities.Mobs.Zombies;
+using H4D2.Entities.Pickups;
 using H4D2.Infrastructure;
 using H4D2.Levels;
 using H4D2.Weapons;
@@ -342,5 +343,13 @@ public class Survivor : Mob
             Art.ShadowColor,
             Art.ShadowBlend            
         );
+    }
+
+    protected override void _Collide(Entity? entity)
+    {
+        if (entity != null && entity is Pickup pickup)
+            pickup.PickUp(this);
+        else
+            base._Collide(entity);
     }
 }

@@ -1,9 +1,10 @@
 ﻿using H4D2.Entities;
 using H4D2.Entities.Mobs.Zombies.Commons;
-using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Uncommons;
+using H4D2.Entities.Pickups.Consumables;
+using H4D2.Entities.Pickups.ThrowablePickup;
 using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
 using H4D2.Particles;
@@ -43,6 +44,14 @@ public class Level
         _entities.Add(new Ellis   (this, new Position(192, 120)));
         _entities.Add(new Nick    (this, new Position(224, 120)));
         _entities.Add(new Coach   (this, new Position(256, 120)));
+        
+        _entities.Add(new FirstAidKit   (this, new Position(32, 192)));
+        _entities.Add(new Pills         (this, new Position(64, 192)));
+        _entities.Add(new Adrenaline    (this, new Position(96, 192)));
+        
+        _entities.Add(new MolotovPickup (this, new Position(128, 192)));
+        _entities.Add(new PipeBombPickup(this, new Position(160, 192)));
+        _entities.Add(new BileBombPickup(this, new Position(192, 192)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position)
@@ -168,7 +177,7 @@ public class Level
             _entities.RemoveAt(indexesToRemove[i]);
         }
 
-        _SpawnZombies();
+        //_SpawnZombies();
     }
 
     private void _UpdateParticles(double elapsedTime)
@@ -212,7 +221,7 @@ public class Level
     
     private void _RenderEntities(Bitmap screen)
     {
-        _entities = _entities.OrderByDescending(e => e.Position.Y).ToList();
+        _entities = _entities.OrderByDescending(e => e.FootPosition.Y).ToList();
         foreach (Entity entity in _entities)
         {
             entity.Render(screen);

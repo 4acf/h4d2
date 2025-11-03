@@ -82,5 +82,13 @@ public class BoundingBox
             (position.Z + _zHeight) / 2.0
         );
     }
-    
+
+    public ReadonlyPosition FootPosition(ReadonlyPosition position)
+    {
+        return new ReadonlyPosition(
+            (W(position.X) + E(position.X)) / 2,
+            S(position.Y),
+            position.Z
+        );
+    }
 }

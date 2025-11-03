@@ -7,6 +7,7 @@ public abstract class Entity : Isometric
 {
     public readonly BoundingBox BoundingBox;
     public ReadonlyPosition CenterMass => BoundingBox.CenterMass(Position); 
+    public ReadonlyPosition FootPosition => BoundingBox.FootPosition(Position);
     
     protected double _xVelocity;
     protected double _yVelocity;

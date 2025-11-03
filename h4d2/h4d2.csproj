@@ -28,6 +28,8 @@
       <None Remove="res\survivors.png" />
       <None Remove="Resources\particle.png" />
       <EmbeddedResource Include="Resources\particle.png" />
+      <None Remove="Resources\pickup.png" />
+      <EmbeddedResource Include="Resources\pickup.png" />
     </ItemGroup>
 
 </Project>

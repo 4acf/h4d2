@@ -10,8 +10,8 @@ public class GrenadeLauncher : Weapon
     {
         Damage = 400;
         ReloadTimeSeconds = 3.3;
-        ShootDelaySeconds = 1;
-        AmmoPerMagazine = 1;
+        ShootDelaySeconds = 3.3;
+        AmmoPerMagazine = 2;
         Spread = 0;
         Pellets = 1;
         

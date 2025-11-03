@@ -16,7 +16,7 @@ public static class SurvivorConfigs
     private static readonly BoundingBoxDimensions _boundingBoxDimensions 
         = new(2, 2, 10, Art.SpriteSize, 7);
     private static readonly BoundingBox _boundingBox 
-        = new(0b100, 0b10, _boundingBoxDimensions);
+        = new(0b100, 0b1010, _boundingBoxDimensions);
     
     public static readonly SurvivorConfig Coach = new()
     {
