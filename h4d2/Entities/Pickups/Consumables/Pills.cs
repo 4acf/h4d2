@@ -14,7 +14,7 @@ public class Pills : Consumable
     
     public override void PickUp(Survivor survivor)
     {
-        if (!Removed)
+        if (!Removed && !survivor.IsFullHealth)
         {
             survivor.ConsumePills();
             base.PickUp(survivor);

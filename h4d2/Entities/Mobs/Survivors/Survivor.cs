@@ -9,6 +9,8 @@ namespace H4D2.Entities.Mobs.Survivors;
 
 public class Survivor : Mob
 {
+    public bool IsFullHealth => _health == SurvivorConfigs.DefaultHealth;
+    
     private const int _boundaryTolerance = 25;
     private const int _runSpeed = 300;
     private const int _limpSpeed = 150;

@@ -14,7 +14,7 @@ public class FirstAidKit : Consumable
 
     public override void PickUp(Survivor survivor)
     {
-        if (!Removed)
+        if (!Removed && !survivor.IsFullHealth)
         {
             survivor.ConsumeFirstAidKit();
             base.PickUp(survivor);
