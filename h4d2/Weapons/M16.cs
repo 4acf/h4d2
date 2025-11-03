@@ -5,7 +5,7 @@ namespace H4D2.Weapons;
 
 public class M16 : Weapon
 {
-    public M16(Level level, Survivor owner) : base(level, owner)
+    public M16(Level level) : base(level)
     {
         Damage = 33;
         ReloadTimeSeconds = 2.2;

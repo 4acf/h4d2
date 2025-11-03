@@ -9,6 +9,6 @@ public class Coach : Survivor
     public Coach(Level level, Position position) 
         : base(level, position, SurvivorConfigs.Coach)
     {
-        _weapon = new PumpShotgun(level, this);
+        _weapon = new PumpShotgun(level);
     }
 }

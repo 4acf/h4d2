@@ -9,6 +9,6 @@ public class Nick : Survivor
     public Nick(Level level, Position position) 
         : base(level, position, SurvivorConfigs.Nick)
     {
-        _weapon = new Deagle(level, this);
+        _weapon = new Deagle(level);
     }    
 }

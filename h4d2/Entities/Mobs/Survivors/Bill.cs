@@ -9,6 +9,6 @@ public class Bill : Survivor
     public Bill(Level level, Position position) 
         : base(level, position, SurvivorConfigs.Bill)
     {
-        _weapon = new M16(level, this);
+        _weapon = new M16(level);
     }
 }

@@ -5,7 +5,7 @@ namespace H4D2.Weapons;
 
 public class AutoShotgun : Weapon
 {
-    public AutoShotgun(Level level, Survivor owner) : base(level, owner)
+    public AutoShotgun(Level level) : base(level)
     {
         Damage = 23;
         ReloadTimeSeconds = 4;

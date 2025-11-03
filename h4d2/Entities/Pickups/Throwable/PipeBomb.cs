@@ -1,12 +1,12 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Levels;
 
-namespace H4D2.Entities.Pickups.ThrowablePickup;
+namespace H4D2.Entities.Pickups.Throwable;
 
-public class BileBombPickup : ThrowablePickup
+public class PipeBomb : Throwable
 {
-    public BileBombPickup(Level level, Position position)
-        : base(level, position, ThrowablePickupConfigs.BileBomb)
+    public PipeBomb(Level level, Position position)
+        : base(level, position, ThrowableConfigs.PipeBomb)
     {
     
     }
@@ -16,7 +16,7 @@ public class BileBombPickup : ThrowablePickup
         screen.BlendFill(
             xCorrected + Art.PickupSize - 6,
             yCorrected - Art.PickupSize - 1,
-            xCorrected + Art.PickupSize - 4,
+            xCorrected + Art.PickupSize - 3,
             yCorrected - Art.PickupSize - 1,
             Art.ShadowColor,
             Art.ShadowBlend            

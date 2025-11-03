@@ -9,6 +9,6 @@ public class Zoey : Survivor
     public Zoey(Level level, Position position)
         : base(level, position, SurvivorConfigs.Zoey)
     {
-        _weapon = new HuntingRifle(level, this);
+        _weapon = new HuntingRifle(level);
     }
 }

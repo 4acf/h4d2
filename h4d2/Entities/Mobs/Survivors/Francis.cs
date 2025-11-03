@@ -10,6 +10,6 @@ public class Francis : Survivor
     public Francis(Level level, Position position) 
         : base(level, position, SurvivorConfigs.Francis)
     {
-        _weapon = new AutoShotgun(level, this);
+        _weapon = new AutoShotgun(level);
     }    
 }

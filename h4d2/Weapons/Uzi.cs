@@ -5,7 +5,7 @@ namespace H4D2.Weapons;
 
 public class Uzi : Weapon
 {
-    public Uzi(Level level, Survivor owner) : base(level, owner)
+    public Uzi(Level level) : base(level)
     {
         Damage = 20;
         ReloadTimeSeconds = 2.27;

@@ -10,6 +10,6 @@ public class Ellis : Survivor
     public Ellis(Level level, Position position) 
         : base(level, position, SurvivorConfigs.Ellis)
     {
-        _weapon = new GrenadeLauncher(level, this);
+        _weapon = new GrenadeLauncher(level);
     }
 }

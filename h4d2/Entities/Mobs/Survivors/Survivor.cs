@@ -22,9 +22,9 @@ public class Survivor : Mob
     protected Weapon? _weapon;
     private Zombie? _target;
     private bool _isShooting;
+    private double _aimDirectionRadians;
     private bool _isAdrenalineBoosted;
     private double _adrenalineSecondsLeft;
-    public double AimDirectionRadians { get; private set; }
     
     protected Survivor(Level level, Position position, SurvivorConfig config) 
         : base(level, position, config)
@@ -34,7 +34,7 @@ public class Survivor : Mob
         _isShooting = false;
         _isAdrenalineBoosted = false;
         _adrenalineSecondsLeft = 0;
-        AimDirectionRadians = 0;
+        _aimDirectionRadians = 0;
     }
 
     public override void Update(double elapsedTime)
@@ -88,8 +88,8 @@ public class Survivor : Mob
             _target = _level.GetNearestLivingZombie(Position);
             if (_target == null) return;
             ReadonlyPosition targetPosition = _target.CenterMass;
-            AimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
-            AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
+            _aimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
+            _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
         }
         else
         {
@@ -100,8 +100,8 @@ public class Survivor : Mob
             else
             {
                 ReadonlyPosition targetPosition = _target.CenterMass;
-                AimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
-                AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
+                _aimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
+                _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
             }
         }
     }
@@ -112,7 +112,7 @@ public class Survivor : Mob
         _weapon.Update(elapsedTime);
         if (_weapon.CanShoot() && _target != null)
         {
-            _weapon.Shoot();
+            _weapon.Shoot(CenterMass.MutableCopy(), _aimDirectionRadians);
             _isShooting = true;
         }
         else
@@ -220,7 +220,7 @@ public class Survivor : Mob
     private void _UpdateShootingSprite()
     {
         int direction = 0;
-        double degrees = MathHelpers.RadiansToDegrees(AimDirectionRadians);
+        double degrees = MathHelpers.RadiansToDegrees(_aimDirectionRadians);
         switch (degrees)
         {
             case >= 337.5:

@@ -38,25 +38,25 @@ public abstract class Entity : Isometric
         }
     }
 
-    private bool _IsOutOfLevelBounds(double xPosition, double yPosition, double zPosition)
+    private bool _IsOutOfLevelBounds(ReadonlyPosition position)
     {
-        double w = BoundingBox.W(xPosition);
+        double w = BoundingBox.W(position.X);
         if (w < -Level.Padding) 
             return true;
         
-        double s = BoundingBox.S(yPosition);
+        double s = BoundingBox.S(position.Y);
         if(s < -Level.Padding) 
             return true;
         
-        double e = BoundingBox.E(xPosition);
+        double e = BoundingBox.E(position.X);
         if (e >= _level.Width + Level.Padding) 
             return true;
         
-        double n = BoundingBox.N(yPosition);
+        double n = BoundingBox.N(position.Y);
         if (n >= _level.Height + Level.Padding) 
             return true;
 
-        if (zPosition < 0)
+        if (position.Z < 0)
             return true;
         
         return false;
@@ -64,27 +64,29 @@ public abstract class Entity : Isometric
     
     private void _Move(double xComponent, double yComponent, double zComponent)
     {
-        double xDest = _position.X + xComponent;
-        double yDest = _position.Y + yComponent;
-        double zDest = _position.Z + zComponent;
+        var destination = new ReadonlyPosition(
+            _position.X + xComponent,
+            _position.Y + yComponent,
+            _position.Z + zComponent
+        );
 
-        if (_IsOutOfLevelBounds(xDest, yDest, zDest))
+        if (_IsOutOfLevelBounds(destination))
         {
-            if (zDest < 0) _position.Z = 0;
+            if (destination.Z < 0) _position.Z = 0;
             _Collide(null);
             return;
         }
 
-        Entity? collidingEntity = _level.GetFirstCollidingEntity(this, Position);
+        Entity? collidingEntity = _level.GetFirstCollidingEntity(this, destination);
         if (collidingEntity != null)
         {
             _Collide(collidingEntity);
             return;
         }
 
-        _position.X = xDest;
-        _position.Y = yDest;
-        _position.Z = zDest;
+        _position.X = destination.X;
+        _position.Y = destination.Y;
+        _position.Z = destination.Z;
     }
     
     protected virtual void _Collide(Entity? entity)

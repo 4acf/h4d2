@@ -5,7 +5,7 @@ namespace H4D2.Weapons;
 
 public class HuntingRifle : Weapon
 {
-    public HuntingRifle(Level level, Survivor owner) : base(level, owner)
+    public HuntingRifle(Level level) : base(level)
     {
         Damage = 90;
         ReloadTimeSeconds = 3.13;

@@ -1,13 +1,13 @@
 ﻿using H4D2.Infrastructure;
 
-namespace H4D2.Entities.Pickups.ThrowablePickup;
+namespace H4D2.Entities.Pickups.Throwable;
 
-public class ThrowablePickupConfig : PickupConfig
+public class ThrowableConfig : PickupConfig
 {
-    public required int ThrowablePickupType { get; init; }
+    public required int ThrowableType { get; init; }
 }
 
-public static class ThrowablePickupConfigs
+public static class ThrowableConfigs
 {
     private const int _pickupType = 1;
     private const int _collisionMask = PickupCollision.CollisionMask;
@@ -22,24 +22,24 @@ public static class ThrowablePickupConfigs
     private static readonly BoundingBoxDimensions _bileBombBoundingBoxDimensions
         = new(3, 3, 7, Art.PickupSize, 2);
 
-    public static readonly ThrowablePickupConfig Molotov = new()
+    public static readonly ThrowableConfig Molotov = new()
     {
         PickupType = _pickupType,
-        ThrowablePickupType = 0,
+        ThrowableType = 0,
         BoundingBox = new BoundingBox(_collisionMask, _collidesWith, _molotovBoundingBoxDimensions)
     };
 
-    public static readonly ThrowablePickupConfig PipeBomb = new()
+    public static readonly ThrowableConfig PipeBomb = new()
     {
         PickupType = _pickupType,
-        ThrowablePickupType = 1,
+        ThrowableType = 1,
         BoundingBox = new BoundingBox(_collisionMask, _collidesWith, _pipeBombBoundingBoxDimensions)
     };
 
-    public static readonly ThrowablePickupConfig BileBomb = new()
+    public static readonly ThrowableConfig BileBomb = new()
     {
         PickupType = _pickupType,
-        ThrowablePickupType = 2,
+        ThrowableType = 2,
         BoundingBox = new BoundingBox(_collisionMask, _collidesWith, _bileBombBoundingBoxDimensions)
     };
 }

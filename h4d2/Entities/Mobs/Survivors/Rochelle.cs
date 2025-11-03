@@ -9,6 +9,6 @@ public class Rochelle : Survivor
     public Rochelle(Level level, Position position) 
         : base(level, position, SurvivorConfigs.Rochelle)
     {
-        _weapon = new Uzi(level, this);
+        _weapon = new Uzi(level);
     }
 }

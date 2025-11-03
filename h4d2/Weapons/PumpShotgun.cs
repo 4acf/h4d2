@@ -5,7 +5,7 @@ namespace H4D2.Weapons;
 
 public class PumpShotgun : Weapon
 {
-    public PumpShotgun(Level level, Survivor owner) : base(level, owner)
+    public PumpShotgun(Level level) : base(level)
     {
         Damage = 25;
         ReloadTimeSeconds = 3.6;

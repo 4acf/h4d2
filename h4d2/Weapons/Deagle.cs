@@ -5,7 +5,7 @@ namespace H4D2.Weapons;
 
 public class Deagle : Weapon
 {
-    public Deagle(Level level, Survivor owner) : base(level, owner)
+    public Deagle(Level level) : base(level)
     {
         Damage = 80;
         ReloadTimeSeconds = 2;

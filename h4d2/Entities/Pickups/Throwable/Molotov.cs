@@ -1,14 +1,14 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Levels;
 
-namespace H4D2.Entities.Pickups.ThrowablePickup;
+namespace H4D2.Entities.Pickups.Throwable;
 
-public class PipeBombPickup : ThrowablePickup
+public class Molotov : Throwable
 {
-    public PipeBombPickup(Level level, Position position)
-        : base(level, position, ThrowablePickupConfigs.PipeBomb)
+    public Molotov(Level level, Position position)
+        : base(level, position, ThrowableConfigs.Molotov)
     {
-    
+        
     }
 
     protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)

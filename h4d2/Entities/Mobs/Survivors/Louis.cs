@@ -9,6 +9,6 @@ public class Louis : Survivor
     public Louis(Level level, Position position) 
         : base(level, position, SurvivorConfigs.Louis)
     {
-        _weapon = new Uzi(level, this);
+        _weapon = new Uzi(level);
     }    
 }

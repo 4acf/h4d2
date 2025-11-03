@@ -4,7 +4,7 @@ using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Uncommons;
 using H4D2.Entities.Pickups.Consumables;
-using H4D2.Entities.Pickups.ThrowablePickup;
+using H4D2.Entities.Pickups.Throwable;
 using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
 using H4D2.Particles;
@@ -49,9 +49,9 @@ public class Level
         _entities.Add(new Pills         (this, new Position(64, 192)));
         _entities.Add(new Adrenaline    (this, new Position(96, 192)));
         
-        _entities.Add(new MolotovPickup (this, new Position(128, 192)));
-        _entities.Add(new PipeBombPickup(this, new Position(160, 192)));
-        _entities.Add(new BileBombPickup(this, new Position(192, 192)));
+        _entities.Add(new Molotov (this, new Position(128, 192)));
+        _entities.Add(new PipeBomb(this, new Position(160, 192)));
+        _entities.Add(new BileBomb(this, new Position(192, 192)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position)
@@ -177,7 +177,7 @@ public class Level
             _entities.RemoveAt(indexesToRemove[i]);
         }
 
-        //_SpawnZombies();
+        _SpawnZombies();
     }
 
     private void _UpdateParticles(double elapsedTime)

@@ -23,12 +23,10 @@ public abstract class Weapon
     protected double _shootDelaySecondsLeft = 0;
 
     protected readonly Level _level;
-    protected readonly Survivor _owner;
     
-    protected Weapon(Level level, Survivor owner)
+    protected Weapon(Level level)
     {
         _level = level;
-        _owner = owner;
     }
     
     public void Update(double elapsedTime)
@@ -60,17 +58,17 @@ public abstract class Weapon
         return true;
     }
     
-    public virtual void Shoot()
+    public virtual void Shoot(Position position, double directionRadians)
     {
         if (!CanShoot()) return;
         AmmoLoaded--;
         _shootDelaySecondsLeft = ShootDelaySeconds;
         for (int i = 0; i < Pellets; i++)
         {
-            double newXComponent = Math.Cos(_owner.AimDirectionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * Spread;
-            double newYComponent = Math.Sin(_owner.AimDirectionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * Spread;
+            double newXComponent = Math.Cos(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * Spread;
+            double newYComponent = Math.Sin(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * Spread;
             double newDirection = Math.Atan2(newYComponent, newXComponent);
-            var bullet = new Bullet(_level, _owner.CenterMass.MutableCopy(), Damage, newDirection);
+            var bullet = new Bullet(_level, position.Copy(), Damage, newDirection);
             _level.AddProjectile(bullet);
         }
     }
