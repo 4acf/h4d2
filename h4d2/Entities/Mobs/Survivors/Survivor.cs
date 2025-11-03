@@ -2,6 +2,7 @@
 using H4D2.Entities.Pickups;
 using H4D2.Infrastructure;
 using H4D2.Levels;
+using H4D2.Particles;
 using H4D2.Weapons;
 
 namespace H4D2.Entities.Mobs.Survivors;
@@ -47,6 +48,7 @@ public class Survivor : Mob
 
     public void ConsumeFirstAidKit()
     {
+        _EmitHealParticles();
         int missingHealth = SurvivorConfigs.DefaultHealth - _health;
         double healthToRestore = 0.8 * missingHealth;
         _health += (int)healthToRestore;
@@ -54,6 +56,7 @@ public class Survivor : Mob
 
     public void ConsumePills()
     {
+        _EmitHealParticles();
         int missingHealth = SurvivorConfigs.DefaultHealth - _health;
         int healthToRestore = Math.Min(50, missingHealth);
         _health += healthToRestore;
@@ -61,11 +64,18 @@ public class Survivor : Mob
 
     public void ConsumeAdrenaline()
     {
+        _EmitHealParticles();
         int missingHealth = SurvivorConfigs.DefaultHealth - _health;
         int healthToRestore = Math.Min(25, missingHealth);
         _health += healthToRestore;
         _isAdrenalineBoosted = true;
         _adrenalineSecondsLeft = _adrenalineEffectSeconds;
+    }
+
+    private void _EmitHealParticles()
+    {
+        var healCloud = new HealCloud(_level, CenterMass.MutableCopy());
+        _level.AddParticle(healCloud);
     }
     
     private void _UpdateTarget()

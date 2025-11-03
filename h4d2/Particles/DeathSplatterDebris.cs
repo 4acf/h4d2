@@ -2,7 +2,6 @@
 using H4D2.Levels;
 
 namespace H4D2.Particles;
-using Cfg = ParticleConfig;
 
 public class DeathSplatterDebris : Debris
 {

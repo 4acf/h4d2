@@ -6,8 +6,11 @@ namespace H4D2.Entities.Pickups;
 
 public abstract class Pickup : Entity
 {
+    private const double _minPositionChangeSeconds = 0.45;
+    private const double _maxPositionChangeSeconds = 0.55;
+    
     protected readonly int _pickupType;
-    private const double _positionChangeSeconds = 1.0;
+    private readonly double _positionChangeSeconds;
     private double _positionChangeSecondsLeft;
     private bool _isAtStartingPosition;
     
@@ -15,6 +18,9 @@ public abstract class Pickup : Entity
         : base(level, position, config.BoundingBox)
     {
         _pickupType = config.PickupType;
+        _positionChangeSeconds 
+            = _minPositionChangeSeconds + (RandomSingleton.Instance.NextDouble() *
+            (_maxPositionChangeSeconds - _minPositionChangeSeconds));
         _positionChangeSecondsLeft = _positionChangeSeconds;
         _isAtStartingPosition = true;
     }

@@ -16,6 +16,7 @@ public static class Art
     public static readonly Bitmap[][] Pickups = _LoadPickups();
     private static readonly Bitmap[][] _particles = _LoadParticles();
     public static Bitmap[] Explosion => _particles[0];
+    public static Bitmap[] HealParticle => _particles[1];
     
     private static Bitmap[][] _LoadBitmaps(string resourceName, int spriteSize, int rows, int columns)
     {
@@ -46,5 +47,5 @@ public static class Art
     private static Bitmap[][] _LoadUncommons() => _LoadBitmaps("uncommon.png", SpriteSize, 5, 23);
     private static Bitmap[][] _LoadSpecials() => _LoadBitmaps("special.png", SpriteSize, 8, 9);
     private static Bitmap[][] _LoadPickups() => _LoadBitmaps("pickup.png", PickupSize, 2, 3);
-    private static Bitmap[][] _LoadParticles() => _LoadBitmaps("particle.png", ParticleSize, 1, 4);
+    private static Bitmap[][] _LoadParticles() => _LoadBitmaps("particle.png", ParticleSize, 2, 4);
 }
