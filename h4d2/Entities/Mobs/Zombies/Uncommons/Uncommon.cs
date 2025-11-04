@@ -1,16 +1,18 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Entities.Projectiles;
+using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Zombies.Uncommons;
 
 public class Uncommon : Zombie
 {
-    private const double _attackRange = 5.0;
-    private const double _attackDelay = 1.0;
+    protected const double _attackRange = 5.0;
+    protected const double _attackDelay = 1.0;
+    private const double _pipeBombIdleDistance = 7.5;
     
-    private readonly int _type;
-    private double _aimDirectionRadians;
-    private double _attackDelaySecondsLeft;
+    protected readonly int _type;
+    protected double _aimDirectionRadians;
+    protected double _attackDelaySecondsLeft;
     
     protected Uncommon(Level level, Position position, UncommonConfig config) 
         : base(level, position, config)
@@ -26,10 +28,17 @@ public class Uncommon : Zombie
         _UpdateSprite(elapsedTime);
     }
 
-    private void _UpdateTarget(double elapsedTime)
+    protected virtual void _UpdateTarget(double elapsedTime)
     {
         _attackDelaySecondsLeft -= elapsedTime;
-
+        _attackDelaySecondsLeft -= elapsedTime;
+        PipeBombProjectile? activePipeBomb = _level.GetNearestActivePipeBomb(Position);
+        if (activePipeBomb != null)
+        {
+            _target = activePipeBomb;
+            return;
+        }
+        
         if (_target == null || _target.Removed)
         {
             _isAttacking = false;
@@ -62,7 +71,7 @@ public class Uncommon : Zombie
         
         double targetDirection = _target == null ? 
             _directionRadians : 
-            Math.Atan2(_target.Position.Y - _position.Y, _target.Position.X - _position.X);
+            Math.Atan2(_target.CenterMass.Y - CenterMass.Y, _target.CenterMass.X - CenterMass.X);
         double directionDiff = targetDirection - _directionRadians;
         directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
         _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
@@ -72,6 +81,18 @@ public class Uncommon : Zombie
         _xVelocity += Math.Cos(_directionRadians) * moveSpeed;
         _yVelocity += Math.Sin(_directionRadians) * moveSpeed;
 
+        if (_target is PipeBombProjectile)
+        {
+            ReadonlyPosition targetPosition = _target.CenterMass;
+            ReadonlyPosition zombiePosition = FootPosition;
+            double distance = ReadonlyPosition.Distance(targetPosition, zombiePosition);
+            if (distance < _pipeBombIdleDistance)
+            {
+                _xVelocity = 0;
+                _yVelocity = 0;
+            }
+        }
+        
         _AttemptMove();
     }
     

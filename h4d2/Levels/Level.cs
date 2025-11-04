@@ -3,7 +3,6 @@ using H4D2.Entities.Mobs.Zombies.Commons;
 using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Uncommons;
-using H4D2.Entities.Pickups.Consumables;
 using H4D2.Entities.Pickups.Throwable;
 using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
@@ -23,7 +22,7 @@ public class Level
     public readonly int Height;
     private double _resetSecondsLeft;
     public bool CanReset => _resetSecondsLeft <= 0;
-    public bool IsGameOver => GetLivingSurvivors().Count == 0; 
+    public bool IsGameOver => GetLivingSurvivors().Count == 0;
     private List<Entity> _entities;
     private List<Particle> _particles;
     
@@ -125,6 +124,23 @@ public class Level
         return result;
     }
 
+    public PipeBombProjectile? GetNearestActivePipeBomb(ReadonlyPosition position)
+    {
+        PipeBombProjectile? result = null;
+        double lowestDistance = double.MaxValue;
+        foreach (PipeBombProjectile pipeBomb in _entities.OfType<PipeBombProjectile>())
+        {
+            if (pipeBomb.Removed) continue;
+            double distance = ReadonlyPosition.Distance(position, pipeBomb.Position);
+            if (distance < lowestDistance)
+            {
+                result = pipeBomb;
+                lowestDistance = distance;
+            }
+        }
+        return result;
+    }
+    
     public void AddProjectile(Projectile projectile)
     {
         _entities.Add(projectile);

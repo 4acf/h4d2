@@ -36,7 +36,7 @@ public class Special : Zombie
         
         double targetDirection = _target == null ? 
             _directionRadians : 
-            Math.Atan2(_target.Position.Y - _position.Y, _target.Position.X - _position.X);
+            Math.Atan2(_target.CenterMass.Y - CenterMass.Y, _target.CenterMass.X - CenterMass.X);
         double directionDiff = targetDirection - _directionRadians;
         directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
         _directionRadians += directionDiff * (elapsedTime * _turnSpeed);

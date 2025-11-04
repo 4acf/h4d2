@@ -14,7 +14,7 @@ public static class ProjectileConfig
         = new(2, 2, 2, 0);
 
     private static readonly BoundingBoxDimensions _pipeBombDimensions
-        = new(2, 2, 2, Art.ProjectileSize, 2);
+        = new(2, 2, 2, Art.ProjectileSize, 3);
     
     public static readonly BoundingBox BulletBoundingBox =
         new (_collisionMask, _collidesWith, _bulletDimensions);
