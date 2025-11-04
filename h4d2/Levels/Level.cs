@@ -45,13 +45,21 @@ public class Level
         _entities.Add(new Nick    (this, new Position(224, 120)));
         _entities.Add(new Coach   (this, new Position(256, 120)));
         
-        _entities.Add(new FirstAidKit   (this, new Position(32, 192)));
-        _entities.Add(new Pills         (this, new Position(64, 192)));
-        _entities.Add(new Adrenaline    (this, new Position(96, 192)));
+        _entities.Add(new PipeBomb   (this, new Position(32, 192)));
+        _entities.Add(new PipeBomb         (this, new Position(64, 192)));
+        _entities.Add(new PipeBomb    (this, new Position(96, 192)));
         
-        _entities.Add(new Molotov (this, new Position(128, 192)));
+        _entities.Add(new PipeBomb (this, new Position(128, 192)));
         _entities.Add(new PipeBomb(this, new Position(160, 192)));
-        _entities.Add(new BileBomb(this, new Position(192, 192)));
+        _entities.Add(new PipeBomb(this, new Position(192, 192)));
+        
+        _entities.Add(new PipeBomb   (this, new Position(32, 32)));
+        _entities.Add(new PipeBomb         (this, new Position(64, 32)));
+        _entities.Add(new PipeBomb    (this, new Position(96, 32)));
+        
+        _entities.Add(new PipeBomb (this, new Position(128, 32)));
+        _entities.Add(new PipeBomb(this, new Position(160, 32)));
+        _entities.Add(new PipeBomb(this, new Position(192, 32)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position)
@@ -137,6 +145,20 @@ public class Level
             if (distance <= Grenade.SplashRadius)
             {
                 zombie.HitBy(grenade);
+            }
+        }
+    }
+
+    public void Explode(PipeBombProjectile pipeBomb)
+    {
+        AddParticle(new Explosion(this, pipeBomb.Position.MutableCopy(), PipeBombProjectile.SplashRadius));
+        List<Zombie> zombies = GetLivingZombies();
+        foreach (Zombie zombie in zombies)
+        {
+            double distance = ReadonlyPosition.Distance(pipeBomb.Position, zombie.CenterMass);
+            if (distance <= PipeBombProjectile.SplashRadius)
+            {
+                zombie.HitBy(pipeBomb);
             }
         }
     }

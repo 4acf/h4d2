@@ -1,4 +1,5 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Entities.Mobs.Survivors;
+using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Pickups.Throwable;
@@ -9,6 +10,14 @@ public class Molotov : Throwable
         : base(level, position, ThrowableConfigs.Molotov)
     {
         
+    }
+    
+    public override void PickUp(Survivor survivor)
+    {
+        if (!Removed)
+        {
+            base.PickUp(survivor);
+        }
     }
 
     protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)

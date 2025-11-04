@@ -1,4 +1,6 @@
-﻿namespace H4D2.Entities.Projectiles;
+﻿using H4D2.Infrastructure;
+
+namespace H4D2.Entities.Projectiles;
 
 public static class ProjectileConfig
 {
@@ -10,10 +12,16 @@ public static class ProjectileConfig
 
     private static readonly BoundingBoxDimensions _grenadeDimensions
         = new(2, 2, 2, 0);
+
+    private static readonly BoundingBoxDimensions _pipeBombDimensions
+        = new(2, 2, 2, Art.ProjectileSize, 2);
     
     public static readonly BoundingBox BulletBoundingBox =
         new (_collisionMask, _collidesWith, _bulletDimensions);
 
     public static readonly BoundingBox GrenadeBoundingBox =
         new(_collisionMask, _collidesWith, _grenadeDimensions);
+    
+    public static readonly BoundingBox PipeBombBoundingBox =
+        new(_collisionMask, _collidesWith, _pipeBombDimensions);
 }

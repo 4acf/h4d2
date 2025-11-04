@@ -13,11 +13,6 @@ public abstract class Throwable : Pickup
     {
         _throwableType = config.ThrowableType;
     }
-
-    public override void PickUp(Survivor survivor)
-    {
-        base.PickUp(survivor);
-    }
     
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {

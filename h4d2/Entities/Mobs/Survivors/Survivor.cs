@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Pickups;
+using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
 using H4D2.Levels;
 using H4D2.Particles;
@@ -74,6 +75,13 @@ public class Survivor : Mob
         _adrenalineSecondsLeft = _adrenalineEffectSeconds;
     }
 
+    public void ThrowPipeBomb()
+    {
+        var pipeBombProjectile 
+            = new PipeBombProjectile(_level, CenterMass.MutableCopy(), _aimDirectionRadians);
+        _level.AddProjectile(pipeBombProjectile);
+    }
+    
     private void _EmitHealParticles()
     {
         var healCloud = new HealCloud(_level, CenterMass.MutableCopy());

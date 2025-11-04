@@ -30,6 +30,8 @@
       <EmbeddedResource Include="Resources\particle.png" />
       <None Remove="Resources\pickup.png" />
       <EmbeddedResource Include="Resources\pickup.png" />
+      <None Remove="Resources\projectile.png" />
+      <EmbeddedResource Include="Resources\projectile.png" />
     </ItemGroup>
 
 </Project>
