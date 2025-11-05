@@ -8,30 +8,99 @@ public class Uncommon : Zombie
 {
     protected const double _attackRange = 5.0;
     protected const double _attackDelay = 1.0;
-    private const double _pipeBombIdleDistance = 7.5;
+    protected const double _pipeBombIdleDistance = 7.5;
+    protected const double _bileBombRageDistance = 10.0;
     
     protected readonly int _type;
     protected double _aimDirectionRadians;
     protected double _attackDelaySecondsLeft;
+    protected BileBombProjectile? _bileBombTarget;
     
     protected Uncommon(Level level, Position position, UncommonConfig config) 
         : base(level, position, config)
     {
         _type = config.Type;
         _attackDelaySecondsLeft = 0.0;
+        _bileBombTarget = null;
     }
     
     public override void Update(double elapsedTime)
     {
-        _UpdateTarget(elapsedTime);
+        _UpdateAttackState(elapsedTime);
+        _UpdateTarget();
         _UpdatePosition(elapsedTime);
         _UpdateSprite(elapsedTime);
     }
 
-    protected virtual void _UpdateTarget(double elapsedTime)
+    private void _UpdateAttackState(double elapsedTime)
     {
         _attackDelaySecondsLeft -= elapsedTime;
-        _attackDelaySecondsLeft -= elapsedTime;
+        if (_target == null || _target.Removed)
+        {
+            _isAttacking = false;
+            return;
+        }
+
+        if (_target is not Mob targetMob)
+        {
+            _isAttacking = false;
+            return;
+        }
+        
+        ReadonlyPosition targetPosition = _target.CenterMass;
+        ReadonlyPosition zombiePosition = CenterMass;
+        double distance = ReadonlyPosition.Distance(targetPosition, zombiePosition);
+        
+        _isAttacking = distance <= _attackRange;
+        if (!_isAttacking) 
+            return;
+        
+        if (_attackDelaySecondsLeft <= 0)
+        {
+            targetMob.HitBy(this);
+            _attackDelaySecondsLeft = _attackDelay;
+        }
+                
+        _aimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
+        _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
+    }
+    
+    protected virtual void _UpdateTarget()
+    {
+        if (_bileBombTarget != null)
+        {
+            if (_bileBombTarget.Removed)
+            {
+                _target = null;
+                _bileBombTarget = null;
+            }
+            else
+            {
+                ReadonlyPosition bileBombPosition = _bileBombTarget.CenterMass;
+                ReadonlyPosition zombiePosition = FootPosition;
+                double distance = ReadonlyPosition.Distance(bileBombPosition, zombiePosition);
+                if (distance < _bileBombRageDistance)
+                {
+                    _target = _level.GetNearestLivingZombie(Position, this);
+                }
+                else
+                {
+                    // this is here in the event the rage target dies 
+                    // and the zombie had chased it outside the range of the bile
+                    _target = _bileBombTarget; 
+                }
+            }
+            return;
+        }
+
+        BileBombProjectile? activeBileBomb = _level.GetNearestActiveBileBomb(Position);
+        if (activeBileBomb != null)
+        {
+            _target = activeBileBomb;
+            _bileBombTarget = activeBileBomb;
+            return;
+        }
+        
         PipeBombProjectile? activePipeBomb = _level.GetNearestActivePipeBomb(Position);
         if (activePipeBomb != null)
         {
@@ -39,29 +108,7 @@ public class Uncommon : Zombie
             return;
         }
         
-        if (_target == null || _target.Removed)
-        {
-            _isAttacking = false;
-            _target = _level.GetNearestLivingSurvivor(Position);
-        }
-        else
-        {
-            ReadonlyPosition targetPosition = _target.CenterMass;
-            ReadonlyPosition zombiePosition = CenterMass;
-            double distance = ReadonlyPosition.Distance(targetPosition, zombiePosition);
-
-            _isAttacking = distance <= _attackRange;
-            if (!_isAttacking) return;
-            
-            if (_target is Mob targetMob && _attackDelaySecondsLeft <= 0)
-            {
-                targetMob.HitBy(this);
-                _attackDelaySecondsLeft = _attackDelay;
-            }
-                
-            _aimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
-            _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
-        }
+        _target = _level.GetNearestLivingSurvivor(Position);
     }
     
     private void _UpdatePosition(double elapsedTime)

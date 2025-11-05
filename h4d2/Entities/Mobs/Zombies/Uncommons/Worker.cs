@@ -1,4 +1,5 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Entities.Projectiles;
+using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Zombies.Uncommons;
@@ -11,33 +12,36 @@ public class Worker : Uncommon
         
     }    
     
-    protected override void _UpdateTarget(double elapsedTime)
+    protected override void _UpdateTarget()
     {
-        _attackDelaySecondsLeft -= elapsedTime;
-        _attackDelaySecondsLeft -= elapsedTime;
-        
-        if (_target == null || _target.Removed)
+        if (_bileBombTarget != null)
         {
-            _isAttacking = false;
-            _target = _level.GetNearestLivingSurvivor(Position);
-        }
-        else
-        {
-            ReadonlyPosition targetPosition = _target.CenterMass;
-            ReadonlyPosition zombiePosition = CenterMass;
-            double distance = ReadonlyPosition.Distance(targetPosition, zombiePosition);
-
-            _isAttacking = distance <= _attackRange;
-            if (!_isAttacking) return;
-            
-            if (_target is Mob targetMob && _attackDelaySecondsLeft <= 0)
+            if (_bileBombTarget.Removed)
             {
-                targetMob.HitBy(this);
-                _attackDelaySecondsLeft = _attackDelay;
+                _target = null;
+                _bileBombTarget = null;
             }
-                
-            _aimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
-            _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
+            else
+            {
+                ReadonlyPosition bileBombPosition = _bileBombTarget.CenterMass;
+                ReadonlyPosition zombiePosition = FootPosition;
+                double distance = ReadonlyPosition.Distance(bileBombPosition, zombiePosition);
+                if (distance < _bileBombRageDistance)
+                {
+                    _target = _level.GetNearestLivingZombie(Position, this);
+                }
+            }
+            return;
         }
+
+        BileBombProjectile? activeBileBomb = _level.GetNearestActiveBileBomb(Position);
+        if (activeBileBomb != null)
+        {
+            _target = activeBileBomb;
+            _bileBombTarget = activeBileBomb;
+            return;
+        }
+        
+        _target = _level.GetNearestLivingSurvivor(Position);
     }
 }

@@ -81,6 +81,13 @@ public class Survivor : Mob
             = new PipeBombProjectile(_level, CenterMass.MutableCopy(), _aimDirectionRadians);
         _level.AddProjectile(pipeBombProjectile);
     }
+
+    public void ThrowBileBomb()
+    {
+        var bileBombProjectile
+            = new BileBombProjectile(_level, CenterMass.MutableCopy(), _aimDirectionRadians);
+        _level.AddProjectile(bileBombProjectile);
+    }
     
     private void _EmitHealParticles()
     {

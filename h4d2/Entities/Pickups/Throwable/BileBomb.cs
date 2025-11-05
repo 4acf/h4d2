@@ -16,6 +16,7 @@ public class BileBomb : Throwable
     {
         if (!Removed)
         {
+            survivor.ThrowBileBomb();
             base.PickUp(survivor);
         }
     }

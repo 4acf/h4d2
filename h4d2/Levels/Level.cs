@@ -44,21 +44,21 @@ public class Level
         _entities.Add(new Nick    (this, new Position(224, 120)));
         _entities.Add(new Coach   (this, new Position(256, 120)));
         
-        _entities.Add(new PipeBomb   (this, new Position(32, 192)));
-        _entities.Add(new PipeBomb         (this, new Position(64, 192)));
-        _entities.Add(new PipeBomb    (this, new Position(96, 192)));
+        _entities.Add(new BileBomb(this, new Position(32, 192)));
+        _entities.Add(new BileBomb(this, new Position(64, 192)));
+        _entities.Add(new BileBomb(this, new Position(96, 192)));
         
-        _entities.Add(new PipeBomb (this, new Position(128, 192)));
-        _entities.Add(new PipeBomb(this, new Position(160, 192)));
-        _entities.Add(new PipeBomb(this, new Position(192, 192)));
+        _entities.Add(new BileBomb(this, new Position(128, 192)));
+        _entities.Add(new BileBomb(this, new Position(160, 192)));
+        _entities.Add(new BileBomb(this, new Position(192, 192)));
         
-        _entities.Add(new PipeBomb   (this, new Position(32, 32)));
-        _entities.Add(new PipeBomb         (this, new Position(64, 32)));
-        _entities.Add(new PipeBomb    (this, new Position(96, 32)));
+        _entities.Add(new BileBomb(this, new Position(32, 32)));
+        _entities.Add(new BileBomb(this, new Position(64, 32)));
+        _entities.Add(new BileBomb(this, new Position(96, 32)));
         
-        _entities.Add(new PipeBomb (this, new Position(128, 32)));
-        _entities.Add(new PipeBomb(this, new Position(160, 32)));
-        _entities.Add(new PipeBomb(this, new Position(192, 32)));
+        _entities.Add(new BileBomb(this, new Position(128, 32)));
+        _entities.Add(new BileBomb(this, new Position(160, 32)));
+        _entities.Add(new BileBomb(this, new Position(192, 32)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position)
@@ -107,13 +107,14 @@ public class Level
             .ToList();
     }
     
-    public Zombie? GetNearestLivingZombie(ReadonlyPosition position)
+    public Zombie? GetNearestLivingZombie(ReadonlyPosition position, Zombie? exclude = null)
     {
         Zombie? result = null;
         double lowestDistance = double.MaxValue;
         foreach (Zombie zombie in _entities.OfType<Zombie>())
         {
             if (!zombie.IsAlive) continue;
+            if (exclude != null && zombie == exclude) continue;
             double distance = ReadonlyPosition.Distance(position, zombie.Position);
             if (distance < lowestDistance)
             {
@@ -135,6 +136,40 @@ public class Level
             if (distance < lowestDistance)
             {
                 result = pipeBomb;
+                lowestDistance = distance;
+            }
+        }
+        return result;
+    }
+
+    public BileBombProjectile? GetNearestActiveBileBomb(ReadonlyPosition position)
+    {
+        BileBombProjectile? result = null;
+        double lowestDistance = double.MaxValue;
+        foreach (BileBombProjectile bileBomb in _entities.OfType<BileBombProjectile>())
+        {
+            if (bileBomb.Removed) continue;
+            double distance = ReadonlyPosition.Distance(position, bileBomb.Position);
+            if (distance < lowestDistance)
+            {
+                result = bileBomb;
+                lowestDistance = distance;
+            }
+        }
+        return result;
+    }
+
+    public T? GetNearestEntity<T>(ReadonlyPosition position) where T : Entity
+    {
+        T? result = null;
+        double lowestDistance = double.MaxValue;
+        foreach (T t in _entities.OfType<T>())
+        {
+            if (t.Removed) continue;
+            double distance = ReadonlyPosition.Distance(position, t.Position);
+            if (distance < lowestDistance)
+            {
+                result = t;
                 lowestDistance = distance;
             }
         }
@@ -215,7 +250,7 @@ public class Level
             _entities.RemoveAt(indexesToRemove[i]);
         }
 
-        _SpawnZombies();
+        _ReplenishZombies();
     }
 
     private void _UpdateParticles(double elapsedTime)
@@ -275,19 +310,24 @@ public class Level
         }
     }
 
+    public void SpawnZombies()
+    {
+        int randomNewZombies = 
+            RandomSingleton.Instance.Next(_minSpawnWaveSize, _maxSpawnWaveSize);
+        for (int i = 0; i < randomNewZombies; i++)
+        {
+            Zombie zombie = _CreateRandomLevelZombie(_RandomZombieSpawnPosition());
+            _entities.Add(zombie);
+        }
+    }
+    
     // these functions are somewhat temporary until i add real levels
-    private void _SpawnZombies()
+    private void _ReplenishZombies()
     {
         List<Zombie> zombies = GetLivingZombies();
         if (zombies.Count < _minZombies)
         {
-            int randomNewZombies = 
-                RandomSingleton.Instance.Next(_minSpawnWaveSize, _maxSpawnWaveSize);
-            for (int i = 0; i < randomNewZombies; i++)
-            {
-                Zombie zombie = _CreateRandomLevelZombie(_RandomZombieSpawnPosition());
-                _entities.Add(zombie);
-            }
+            SpawnZombies();
         }
     }
 
