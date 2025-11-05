@@ -28,6 +28,7 @@ public class PipeBombProjectile : Projectile
         _lifetimeSecondsLeft = _maxLifetime;
         _type = 1;
         _spinStep = 0;
+        _timeSinceLastFrameUpdate = 0;
         _xFlip = (Math.PI / 2) < directionRadians && directionRadians < (3 * Math.PI / 2);
 
         _xVelocity = Math.Cos(_directionRadians);

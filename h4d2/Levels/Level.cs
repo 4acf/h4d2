@@ -44,21 +44,21 @@ public class Level
         _entities.Add(new Nick    (this, new Position(224, 120)));
         _entities.Add(new Coach   (this, new Position(256, 120)));
         
-        _entities.Add(new BileBomb(this, new Position(32, 192)));
-        _entities.Add(new BileBomb(this, new Position(64, 192)));
-        _entities.Add(new BileBomb(this, new Position(96, 192)));
+        _entities.Add(new Molotov(this, new Position(32, 192)));
+        _entities.Add(new Molotov(this, new Position(64, 192)));
+        _entities.Add(new Molotov(this, new Position(96, 192)));
         
-        _entities.Add(new BileBomb(this, new Position(128, 192)));
-        _entities.Add(new BileBomb(this, new Position(160, 192)));
-        _entities.Add(new BileBomb(this, new Position(192, 192)));
+        _entities.Add(new Molotov(this, new Position(128, 192)));
+        _entities.Add(new Molotov(this, new Position(160, 192)));
+        _entities.Add(new Molotov(this, new Position(192, 192)));
         
-        _entities.Add(new BileBomb(this, new Position(32, 32)));
-        _entities.Add(new BileBomb(this, new Position(64, 32)));
-        _entities.Add(new BileBomb(this, new Position(96, 32)));
+        _entities.Add(new Molotov(this, new Position(32, 32)));
+        _entities.Add(new Molotov(this, new Position(64, 32)));
+        _entities.Add(new Molotov(this, new Position(96, 32)));
         
-        _entities.Add(new BileBomb(this, new Position(128, 32)));
-        _entities.Add(new BileBomb(this, new Position(160, 32)));
-        _entities.Add(new BileBomb(this, new Position(192, 32)));
+        _entities.Add(new Molotov(this, new Position(128, 32)));
+        _entities.Add(new Molotov(this, new Position(160, 32)));
+        _entities.Add(new Molotov(this, new Position(192, 32)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position)
@@ -303,6 +303,24 @@ public class Level
 
     private void _RenderParticles(Bitmap screen)
     {
+        _particles.Sort((a, b) =>
+        {
+            int rank = Rank(a.GetType()).CompareTo(Rank(b.GetType()));
+            if (rank != 0)
+                return rank;
+
+            if (a.GetType() == typeof(Fire) && b.GetType() == typeof(Fire))
+                return a.Position.Y.CompareTo(b.Position.Y);    
+            
+            return 0;
+
+            int Rank(Type t)
+            {
+                if (t == typeof(FuelDebris)) return 0;
+                if (t == typeof(Fire)) return 2;
+                return 1;
+            }
+        });
         foreach (Particle particle in _particles)
         {
             if(!particle.Removed)

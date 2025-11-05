@@ -3,14 +3,14 @@ using H4D2.Levels;
 
 namespace H4D2.Particles;
 
-public class Flame : Particle
+public class ExplosionFlame : Particle
 {
     private const double _frameDuration = 1.0 / 16.0;
     
     private int _frame;
     private double _timeSinceLastFrameUpdate;
     
-    public Flame(Level level, Position position)
+    public ExplosionFlame(Level level, Position position)
         : base(level, position)
     {
         _frame = 0;

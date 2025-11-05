@@ -75,6 +75,13 @@ public class Survivor : Mob
         _adrenalineSecondsLeft = _adrenalineEffectSeconds;
     }
 
+    public void ThrowMolotov()
+    {
+        var molotovProjectile
+            = new MolotovProjectile(_level, CenterMass.MutableCopy(), _aimDirectionRadians);
+        _level.AddProjectile(molotovProjectile);
+    }
+    
     public void ThrowPipeBomb()
     {
         var pipeBombProjectile 

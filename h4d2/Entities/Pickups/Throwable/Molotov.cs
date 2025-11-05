@@ -16,6 +16,7 @@ public class Molotov : Throwable
     {
         if (!Removed)
         {
+            survivor.ThrowMolotov();
             base.PickUp(survivor);
         }
     }

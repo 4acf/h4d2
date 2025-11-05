@@ -4,19 +4,34 @@ using H4D2.Levels;
 namespace H4D2.Particles;
 using Cfg = ParticleConfig;
 
-public class BileDebris : Debris
+public class FuelDebris : Debris
 {
     private const double _decay = 0.05;
     private const double _inertia = 0.5;
-    private const double _bileDrag = 0.96;
-    private const double _bileBounce = 0.1;
+    private const double _fuelDrag = 0.98;
+    private const double _fuelBounce = 0;
     private const double _maxLifetime = 20.0;
-    private const int _color = 0x5a6e38;
+    private const int _color = 0x4d4c47;
     
-    public BileDebris(Level level, Position position)
-        : base(level, position, _bileDrag, _bileBounce)
+    public FuelDebris(Level level, Position position)
+        : base(level, position, _fuelDrag, _fuelBounce)
     {
         _timeToLiveSeconds = _maxLifetime;
+
+        if (RandomSingleton.Instance.Next(7) == 0)
+        {
+            var fire = new Fire(_level, _position.Copy());
+            _level.AddParticle(fire);
+        }
+    }
+
+    public override void Update(double elapsedTime)
+    {
+        _timeToLiveSeconds -= elapsedTime;
+        if (_timeToLiveSeconds <= 0)
+        {
+            Removed = true;
+        }
     }
 
     public void DampVelocities(double elapsedTime, double parentXVelocity, double parentYVelocity, double parentZVelocity)
@@ -34,10 +49,5 @@ public class BileDebris : Debris
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
         screen.SetPixel(xCorrected, yCorrected, _color);
-    }
-
-    protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
-    {
-        screen.SetPixelBlend(xCorrected, yCorrected, Art.ShadowColor, Art.ShadowBlend);
     }
 }

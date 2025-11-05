@@ -39,7 +39,7 @@ public class Explosion : Particle
             double dy = Math.Sin(randomDirection) * distance * randomMult;
             double dz = RandomSingleton.Instance.NextDouble() * 2;
             Position translatedPositionCopy = _position.CopyAndTranslate(dx, dy, dz);
-            var flame = new Flame(_level, translatedPositionCopy);
+            var flame = new ExplosionFlame(_level, translatedPositionCopy);
             _level.AddParticle(flame);
         }
     }
