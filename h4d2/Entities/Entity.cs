@@ -1,4 +1,6 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Entities.Hazards;
+using H4D2.Entities.Pickups;
+using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Entities;
@@ -81,7 +83,9 @@ public abstract class Entity : Isometric
         if (collidingEntity != null)
         {
             _Collide(collidingEntity);
-            return;
+            
+            if(collidingEntity is not Hazard and not Pickup)
+                return;
         }
 
         _position.X = destination.X;

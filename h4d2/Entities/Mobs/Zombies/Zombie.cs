@@ -8,7 +8,7 @@ namespace H4D2.Entities.Mobs.Zombies;
 
 public abstract class Zombie : Mob
 {
-    private const int _fireDamageMultipler = 10;
+    private const double _fireDamageMultipler = 15;
     
     public readonly int Damage;
     protected Entity? _target;
@@ -41,5 +41,18 @@ public abstract class Zombie : Mob
         }
         var bloodSplatter = new BloodSplatterDebris(_level, CenterMass.MutableCopy());
         _level.AddParticle(bloodSplatter);
+    }
+    
+    protected override void _Collide(Entity? entity)
+    {
+        if (entity == null)
+        {
+            base._Collide(entity);
+            return;
+        }
+        if (entity is Fire fire)
+            _TakeHazardDamage((int)(fire.Damage * _fireDamageMultipler));
+        else
+            base._Collide(entity);
     }
 }

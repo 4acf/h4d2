@@ -15,6 +15,7 @@ public abstract class Mob : Entity
     protected const int _upperBitmapOffset = 9;
     protected const int _attackingBitmapOffset = 18;
     protected const double _frameDuration = 1.0 / 8.0;
+    protected const double _hazardDamageCooldownSeconds = 0.5;
     
     protected int _health;
     protected double _speed;
@@ -27,6 +28,7 @@ public abstract class Mob : Entity
     protected int _upperFrame;
     protected double _timeSinceLastFrameUpdate;
     protected readonly int _gibColor;
+    protected double _hazardDamageSecondsLeft;
     
     protected Mob(Level level, Position position, MobConfig config) 
         : base(level, position, config.BoundingBox)
@@ -41,6 +43,7 @@ public abstract class Mob : Entity
         _upperFrame = _upperBitmapOffset;
         _timeSinceLastFrameUpdate = 0.0;
         _gibColor = config.GibColor;
+        _hazardDamageSecondsLeft = 0.0;
     }
 
     protected Mob(Level level, Position position, MobConfig config, double speed)
@@ -63,6 +66,31 @@ public abstract class Mob : Entity
         if (Removed)
             return;
         _health -= zombie.Damage;
+        if (!IsAlive)
+        {
+            _Die();
+        }
+        var bloodSplatter = new BloodSplatterDebris(_level, CenterMass.MutableCopy());
+        _level.AddParticle(bloodSplatter);
+    }
+
+    protected void _UpdateDamageCooldown(double elapsedTime)
+    {
+        if (_hazardDamageSecondsLeft > 0)
+        {
+            _hazardDamageSecondsLeft -= elapsedTime;
+            _hazardDamageSecondsLeft = Math.Max(0, _hazardDamageSecondsLeft);
+        }
+    }
+    
+    protected void _TakeHazardDamage(int damage)
+    {
+        if (Removed)
+            return;
+        if (_hazardDamageSecondsLeft > 0)
+            return;
+        _hazardDamageSecondsLeft = _hazardDamageCooldownSeconds;
+        _health -= damage;
         if (!IsAlive)
         {
             _Die();

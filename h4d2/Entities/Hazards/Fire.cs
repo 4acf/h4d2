@@ -12,6 +12,4 @@ public class Fire : Hazard
         var flame = new Flame(_level, _position.Copy());
         _level.AddParticle(flame);
     }
-    
-    
 }

@@ -15,6 +15,7 @@ public class Special : Zombie
 
     public override void Update(double elapsedTime)
     {
+        _UpdateDamageCooldown(elapsedTime);
         _UpdateTarget();
         _UpdatePosition(elapsedTime);
         _UpdateSprite(elapsedTime);

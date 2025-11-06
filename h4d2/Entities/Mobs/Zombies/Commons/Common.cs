@@ -30,6 +30,7 @@ public class Common : Zombie
 
     public override void Update(double elapsedTime)
     {
+        _UpdateDamageCooldown(elapsedTime);
         _UpdateAttackState(elapsedTime);
         _UpdateTarget();
         _UpdatePosition(elapsedTime);

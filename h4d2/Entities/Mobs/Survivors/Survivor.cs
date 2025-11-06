@@ -1,4 +1,5 @@
-﻿using H4D2.Entities.Mobs.Zombies;
+﻿using H4D2.Entities.Hazards;
+using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Pickups;
 using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
@@ -42,6 +43,7 @@ public class Survivor : Mob
 
     public override void Update(double elapsedTime)
     {
+        _UpdateDamageCooldown(elapsedTime);
         _UpdateTarget();
         _UpdateWeapon(elapsedTime);
         _UpdateSpeed(elapsedTime);
@@ -416,8 +418,15 @@ public class Survivor : Mob
 
     protected override void _Collide(Entity? entity)
     {
-        if (entity != null && entity is Pickup pickup)
+        if (entity == null)
+        {
+            base._Collide(entity);
+            return;
+        }
+        if (entity is Pickup pickup)
             pickup.PickUp(this);
+        else if (entity is Hazard hazard)
+            _TakeHazardDamage(hazard.Damage);
         else
             base._Collide(entity);
     }
