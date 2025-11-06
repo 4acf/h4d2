@@ -1,4 +1,5 @@
-﻿using H4D2.Entities.Projectiles;
+﻿using H4D2.Entities.Hazards;
+using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
 using H4D2.Levels;
 using H4D2.Particles;
@@ -7,6 +8,8 @@ namespace H4D2.Entities.Mobs.Zombies;
 
 public abstract class Zombie : Mob
 {
+    private const int _fireDamageMultipler = 10;
+    
     public readonly int Damage;
     protected Entity? _target;
     protected bool _isAttacking;

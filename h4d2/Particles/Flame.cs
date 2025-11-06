@@ -3,7 +3,7 @@ using H4D2.Levels;
 
 namespace H4D2.Particles;
 
-public class Fire : Particle
+public class Flame : Particle
 {
     private const double _frameDuration = 1.0 / 8.0;
     private const double _maxLifetime = 15.0;
@@ -12,7 +12,7 @@ public class Fire : Particle
     private double _timeSinceLastFrameUpdate;
     private double _timeToLiveSeconds;
     
-    public Fire(Level level, Position position)
+    public Flame(Level level, Position position)
         : base(level, position)
     {
         _frame = 0;
@@ -41,7 +41,6 @@ public class Fire : Particle
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
         Bitmap bitmap = Art.Fire[_frame];
-        int radius = Art.ParticleSize / 2;
-        screen.Draw(bitmap, xCorrected - radius, yCorrected + Art.ParticleSize);
+        screen.Draw(bitmap, xCorrected, yCorrected);
     }
 }

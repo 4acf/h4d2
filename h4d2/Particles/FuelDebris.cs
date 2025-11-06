@@ -1,4 +1,5 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Entities.Hazards;
+using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Particles;
@@ -20,8 +21,12 @@ public class FuelDebris : Debris
 
         if (RandomSingleton.Instance.Next(7) == 0)
         {
-            var fire = new Fire(_level, _position.Copy());
-            _level.AddParticle(fire);
+            var fire = new Fire(_level, _position.CopyAndTranslate(
+                -Art.ParticleSize / 2.0,
+                Art.ParticleSize,
+                0)
+            );
+            _level.AddHazard(fire);
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using H4D2.Entities;
+using H4D2.Entities.Hazards;
 using H4D2.Entities.Mobs.Zombies.Commons;
 using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Mobs.Zombies;
@@ -181,6 +182,11 @@ public class Level
         _entities.Add(projectile);
     }
 
+    public void AddHazard(Hazard hazard)
+    {
+        _entities.Add(hazard);
+    }
+    
     public void AddParticle(Particle particle)
     {
         _particles.Add(particle);
@@ -309,7 +315,7 @@ public class Level
             if (rank != 0)
                 return rank;
 
-            if (a.GetType() == typeof(Fire) && b.GetType() == typeof(Fire))
+            if (a.GetType() == typeof(Flame) && b.GetType() == typeof(Flame))
                 return a.Position.Y.CompareTo(b.Position.Y);    
             
             return 0;
@@ -317,7 +323,7 @@ public class Level
             int Rank(Type t)
             {
                 if (t == typeof(FuelDebris)) return 0;
-                if (t == typeof(Fire)) return 2;
+                if (t == typeof(Flame)) return 2;
                 return 1;
             }
         });

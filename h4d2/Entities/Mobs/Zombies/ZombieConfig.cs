@@ -8,5 +8,5 @@ public class ZombieConfig : MobConfig
 public static class ZombieCollision
 {
     public const int CollisionMask = 0b10;
-    public const int CollidesWith = 0b100;
+    public const int CollidesWith = 0b10100;
 }
