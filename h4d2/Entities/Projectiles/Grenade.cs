@@ -11,21 +11,21 @@ public class Grenade : Projectile
     public const double SplashRadius = 15.0;
     private const double _speed = 150;
     private const int _color = 0x333333;
-    private const int _numSmokeParticlesPerUpdate = 120;
+    private const int _numSmokeParticlesPerSecond = 120;
     private const double _gravity = 0.15;
     
     private readonly int _directionIndex;
     
     private static readonly (int, int)[][] _sprites =
     {
-        [(-1, 0), (1, 0), (-1, -1), (0, -1), (1, -1)], // E
-        [(1, 0), (-1, -1), (0, -1), (1, -1), (0, -2)], // NE
-        [(1, 0), (0, -1), (1, -1), (0, -2), (1, -2)],  // N
-        [(1, 0), (0, -1), (1, -1), (2, -1), (1, -2)],  // NW
-        [(1, 0), (2, 0), (0, -1), (1, -1), (2, -1)],   // W
-        [(1, 1), (1, 0), (2, 0), (0, -1), (1, -1)],    // SW
-        [(0, 1), (1, 1), (1, 0), (0, -1), (1, -1)],    // S 
-        [(0, 1), (-1, 0), (1, 0), (0, -1), (1, -1)]    // SE
+        [(-1,  0), ( 1,  0), (-1, -1), ( 0, -1), ( 1, -1)], // E
+        [( 1,  0), (-1, -1), ( 0, -1), ( 1, -1), ( 0, -2)], // NE
+        [( 1,  0), ( 0, -1), ( 1, -1), ( 0, -2), ( 1, -2)], // N
+        [( 1,  0), ( 0, -1), ( 1, -1), ( 2, -1), ( 1, -2)], // NW
+        [( 1,  0), ( 2,  0), ( 0, -1), ( 1, -1), ( 2, -1)], // W
+        [( 1,  1), ( 1,  0), ( 2,  0), ( 0, -1), ( 1, -1)], // SW
+        [( 0,  1), ( 1,  1), ( 1,  0), ( 0, -1), ( 1, -1)], // S
+        [( 0,  1), (-1,  0), ( 1,  0), ( 0, -1), ( 1, -1)]  // SE
     };
     
     public Grenade(Level level, Position position, int damage, double directionRadians)
@@ -55,7 +55,7 @@ public class Grenade : Projectile
     
     public override void Update(double elapsedTime)
     {
-        for (int i = 0; i < _numSmokeParticlesPerUpdate * elapsedTime; i++)
+        for (int i = 0; i < _numSmokeParticlesPerSecond * elapsedTime; i++)
         {
             var smoke = new Smoke(_level, _position.Copy(), _xVelocity, _yVelocity);
             _level.AddParticle(smoke);

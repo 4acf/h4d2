@@ -7,6 +7,7 @@ using H4D2.Entities.Mobs.Zombies.Uncommons;
 using H4D2.Entities.Pickups.Consumables;
 using H4D2.Entities.Pickups.Throwable;
 using H4D2.Entities.Projectiles;
+using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
 using H4D2.Particles;
 
