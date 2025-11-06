@@ -10,6 +10,7 @@ public abstract class Entity : Isometric
     public readonly BoundingBox BoundingBox;
     public ReadonlyPosition CenterMass => BoundingBox.CenterMass(Position); 
     public ReadonlyPosition FootPosition => BoundingBox.FootPosition(Position);
+    public bool IsBlockingEntity => this is not Pickup and not Hazard;
     
     protected double _xVelocity;
     protected double _yVelocity;
@@ -84,7 +85,7 @@ public abstract class Entity : Isometric
         {
             _Collide(collidingEntity);
             
-            if(collidingEntity is not Hazard and not Pickup)
+            if(collidingEntity.IsBlockingEntity)
                 return;
         }
 
