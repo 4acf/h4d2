@@ -5,7 +5,7 @@ namespace H4D2.Particles;
 
 public class HealCloud : Particle
 {
-    private const double _particleMultiplier = 2;
+    private const double _particleMultiplier = 2.0;
     private const double _lifetime = 0.5;
     private const double _radius = 25.0;
     

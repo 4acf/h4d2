@@ -20,9 +20,9 @@ public abstract class Entity : Isometric
         : base(level, position)
     {
         BoundingBox = boundingBox;
-        _xVelocity = 0;
-        _yVelocity = 0;
-        _zVelocity = 0;
+        _xVelocity = 0.0;
+        _yVelocity = 0.0;
+        _zVelocity = 0.0;
     }
     
     public abstract void Update(double elapsedTime);

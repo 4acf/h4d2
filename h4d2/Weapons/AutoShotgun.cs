@@ -1,5 +1,4 @@
-﻿using H4D2.Entities.Mobs.Survivors;
-using H4D2.Levels;
+﻿using H4D2.Levels;
 
 namespace H4D2.Weapons;
 
@@ -8,7 +7,7 @@ public class AutoShotgun : Weapon
     public AutoShotgun(Level level) : base(level)
     {
         Damage = 23;
-        ReloadTimeSeconds = 4;
+        ReloadTimeSeconds = 4.0;
         ShootDelaySeconds =  1 / 3.33;
         AmmoPerMagazine = 10;
         Spread = 0.5;

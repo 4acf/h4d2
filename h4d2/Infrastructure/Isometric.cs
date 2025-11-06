@@ -4,8 +4,8 @@ namespace H4D2.Infrastructure;
 
 public abstract class Isometric
 {
-    protected Level _level;
-    protected Position _position;
+    protected readonly Level _level;
+    protected readonly Position _position;
     public ReadonlyPosition Position => _position.ReadonlyCopy(); 
     public bool Removed { get; protected set; }
     public bool IsOnGround => _position.Z == 0;

@@ -10,7 +10,7 @@ public class FuelDebris : Debris
     private const double _decay = 0.05;
     private const double _inertia = 0.5;
     private const double _fuelDrag = 0.98;
-    private const double _fuelBounce = 0;
+    private const double _fuelBounce = 0.0;
     private const double _maxLifetime = 20.0;
     private const int _color = 0x4d4c47;
     

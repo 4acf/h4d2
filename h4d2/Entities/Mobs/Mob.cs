@@ -35,7 +35,7 @@ public abstract class Mob : Entity
     {
         _health = config.Health;
         _speed = config.RunSpeed;
-        _directionRadians = 0;
+        _directionRadians = 0.0;
         _xFlip = false;
         _walkStep = 0;
         _walkFrame = 0;

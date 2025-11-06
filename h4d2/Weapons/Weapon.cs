@@ -1,5 +1,4 @@
-﻿using H4D2.Entities.Mobs.Survivors;
-using H4D2.Entities.Projectiles;
+﻿using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
 using H4D2.Levels;
 
@@ -20,7 +19,7 @@ public abstract class Weapon
 
     public double ReloadSecondsLeft { get; protected set; } = 0;
     
-    protected double _shootDelaySecondsLeft = 0;
+    protected double _shootDelaySecondsLeft = 0.0;
 
     protected readonly Level _level;
     

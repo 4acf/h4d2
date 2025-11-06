@@ -7,7 +7,7 @@ using Cfg = ProjectileConfig;
 
 public class Bullet : Projectile
 {
-    private const double _speed = 200;
+    private const double _speed = 200.0;
     private const int _color = 0xffffff;
 
     private Position _oldPosition;

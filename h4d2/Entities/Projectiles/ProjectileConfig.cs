@@ -1,6 +1,4 @@
-﻿using H4D2.Infrastructure;
-
-namespace H4D2.Entities.Projectiles;
+﻿namespace H4D2.Entities.Projectiles;
 
 public static class ProjectileConfig
 {

@@ -5,7 +5,7 @@ namespace H4D2.Particles;
 
 public class Explosion : Particle
 {
-    private const double _particleMultiplier = 10;
+    private const double _particleMultiplier = 10.0;
     private const double _lifetime = 0.5;
     
     private double _timeToLiveSeconds;

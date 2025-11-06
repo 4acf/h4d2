@@ -11,7 +11,7 @@ public class Smoke : Particle
     private const double _inertia = 0.1;
     private const double _minLifetime = 0.1;
     private const double _maxLifetime = 0.3;
-    private const double _minOpacity = 0;
+    private const double _minOpacity = 0.0;
     private const double _maxOpacity = 0.5;
     
     private const int _color = 0x0;

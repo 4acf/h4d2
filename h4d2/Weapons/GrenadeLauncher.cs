@@ -1,5 +1,4 @@
-﻿using H4D2.Entities.Mobs.Survivors;
-using H4D2.Entities.Projectiles;
+﻿using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
 using H4D2.Levels;
 
@@ -10,10 +9,10 @@ public class GrenadeLauncher : Weapon
     public GrenadeLauncher(Level level) : base(level)
     {
         Damage = 400;
-        ReloadTimeSeconds = 0;
+        ReloadTimeSeconds = 0.0;
         ShootDelaySeconds = 3.3;
         AmmoPerMagazine = 2;
-        Spread = 0;
+        Spread = 0.0;
         Pellets = 1;
         
         AmmoLoaded = AmmoPerMagazine;

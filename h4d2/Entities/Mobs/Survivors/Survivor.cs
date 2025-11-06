@@ -38,8 +38,8 @@ public class Survivor : Mob
         _target = null;
         _isShooting = false;
         _isAdrenalineBoosted = false;
-        _adrenalineSecondsLeft = 0;
-        _aimDirectionRadians = 0;
+        _adrenalineSecondsLeft = 0.0;
+        _aimDirectionRadians = 0.0;
     }
 
     public override void Update(double elapsedTime)

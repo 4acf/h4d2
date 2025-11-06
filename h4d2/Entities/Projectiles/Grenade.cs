@@ -9,7 +9,7 @@ using Cfg = ProjectileConfig;
 public class Grenade : Projectile
 {
     public const double SplashRadius = 15.0;
-    private const double _speed = 150;
+    private const double _speed = 150.0;
     private const int _color = 0x333333;
     private const int _numSmokeParticlesPerSecond = 120;
     private const double _gravity = 0.15;

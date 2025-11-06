@@ -20,7 +20,7 @@ public static class HazardConfigs
     public static readonly HazardConfig Fire = new()
     {
         Damage = 10,
-        TimeToLiveSeconds = 15,
+        TimeToLiveSeconds = 15.0,
         BoundingBox = new BoundingBox(_collisionMask, _collidesWith, _fireDimensions)
     };
 }

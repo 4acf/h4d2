@@ -16,7 +16,7 @@ public class BileBombProjectile : ThrowableProjectile
         : base(level, position, ThrowableProjectileConfigs.BileBomb, directionRadians)
     {
         _collided = false;
-        _secondsSinceCollision = 0;
+        _secondsSinceCollision = 0.0;
     }
     
     public override void Update(double elapsedTime)

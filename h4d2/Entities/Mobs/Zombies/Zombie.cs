@@ -8,7 +8,7 @@ namespace H4D2.Entities.Mobs.Zombies;
 
 public abstract class Zombie : Mob
 {
-    private const double _fireDamageMultipler = 15;
+    private const double _fireDamageMultipler = 15.0;
     
     public readonly int Damage;
     protected Entity? _target;
