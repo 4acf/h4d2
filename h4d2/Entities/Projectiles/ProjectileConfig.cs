@@ -22,18 +22,18 @@ public static class ProjectileConfig
     private static readonly BoundingBoxDimensions _bileBombDimensions
         = new(3, 3, 3, Art.ProjectileSize, 2);
     
-    public static readonly BoundingBox BulletBoundingBox =
-        new (_collisionMask, _collidesWith, _bulletDimensions);
+    public static readonly BoundingBox BulletBoundingBox 
+        = new (_collisionMask, _collidesWith, _bulletDimensions);
 
-    public static readonly BoundingBox GrenadeBoundingBox =
-        new(_collisionMask, _collidesWith, _grenadeDimensions);
+    public static readonly BoundingBox GrenadeBoundingBox 
+        = new(_collisionMask, _collidesWith, _grenadeDimensions);
 
-    public static readonly BoundingBox MolotovBoundingBox =
-        new(_collisionMask, _collidesWith, _molotovDimensions);
+    public static readonly BoundingBox MolotovBoundingBox 
+        = new(_collisionMask, _collidesWith, _molotovDimensions);
     
-    public static readonly BoundingBox PipeBombBoundingBox =
-        new(_collisionMask, _collidesWith, _pipeBombDimensions);
+    public static readonly BoundingBox PipeBombBoundingBox 
+        = new(_collisionMask, _collidesWith, _pipeBombDimensions);
 
-    public static readonly BoundingBox BileBombBoundingBox =
-        new(_collisionMask, _collidesWith, _bileBombDimensions);
+    public static readonly BoundingBox BileBombBoundingBox 
+        = new(_collisionMask, _collidesWith, _bileBombDimensions);
 }

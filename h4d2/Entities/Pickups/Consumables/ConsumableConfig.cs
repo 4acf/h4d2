@@ -20,7 +20,7 @@ public static class ConsumableConfigs
         = new(4, 2, 6, Art.PickupSize, 2);
 
     private static readonly BoundingBoxDimensions _adrenalineBoundingBoxDimensions
-    = new(3, 2, 3, Art.PickupSize, 2);
+        = new(3, 2, 3, Art.PickupSize, 2);
     
     public static readonly ConsumableConfig FirstAidKit = new()
     {
