@@ -12,9 +12,9 @@ public abstract class Particle : Isometric
     protected Particle(Level level, Position position)
         : base(level, position)
     {
-        _xVelocity = 0;
-        _yVelocity = 0;
-        _zVelocity = 0;
+        _xVelocity = 0.0;
+        _yVelocity = 0.0;
+        _zVelocity = 0.0;
     }
     
     public abstract void Update(double elapsedTime);

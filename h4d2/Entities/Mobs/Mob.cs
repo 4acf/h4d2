@@ -105,7 +105,7 @@ public abstract class Mob : Entity
         {
             Position position = CenterMass.MutableCopy();
             position.Z += i;
-            var deathSplatter = new DeathSplatterDebris(_level, position, _gibColor);
+            var deathSplatter = new GibDebris(_level, position, _gibColor);
             _level.AddParticle(deathSplatter);
         }
         Removed = true;

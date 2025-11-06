@@ -3,15 +3,15 @@ using H4D2.Levels;
 
 namespace H4D2.Particles;
 
-public class DeathSplatterDebris : Debris
+public class GibDebris : Debris
 {
-    private const double _deathSplatterDrag = 0.96;
-    private const double _deathSplatterBounce = 0.6;
+    private const double _gibDrag = 0.96;
+    private const double _gibBounce = 0.6;
     private const double _lifetimeScale = 1.5;
     private readonly int _color;
     
-    public DeathSplatterDebris(Level level, Position position, int color)
-        : base(level, position, _deathSplatterDrag, _deathSplatterBounce)
+    public GibDebris(Level level, Position position, int color)
+        : base(level, position, _gibDrag, _gibBounce)
     {
         _color = color;
         _timeToLiveSeconds *= _lifetimeScale;
