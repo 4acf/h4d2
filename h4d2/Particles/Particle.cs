@@ -5,6 +5,8 @@ namespace H4D2.Particles;
 
 public abstract class Particle : Isometric
 {
+    protected const double _baseFramerate = 60.0;
+    
     protected double _xVelocity;
     protected double _yVelocity;
     protected double _zVelocity;

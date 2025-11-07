@@ -1,8 +1,7 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Levels;
 
-namespace H4D2.Particles;
-using Cfg = ParticleConfig;
+namespace H4D2.Particles.DebrisParticles;
 
 public abstract class Debris : Particle
 {
@@ -61,7 +60,7 @@ public abstract class Debris : Particle
             return;
         }
 
-        double elapsedTimeConstant = Cfg.BaseFramerate * elapsedTime;
+        double elapsedTimeConstant = _baseFramerate * elapsedTime;
         if (IsOnGround)
         {
             _xVelocity *= Math.Pow(_groundFriction, elapsedTimeConstant);

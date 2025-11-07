@@ -2,8 +2,7 @@
 using H4D2.Infrastructure;
 using H4D2.Levels;
 
-namespace H4D2.Particles;
-using Cfg = ParticleConfig;
+namespace H4D2.Particles.DebrisParticles;
 
 public class FuelDebris : Debris
 {
@@ -39,8 +38,8 @@ public class FuelDebris : Debris
 
     public void DampVelocities(double elapsedTime, double parentXVelocity, double parentYVelocity, double parentZVelocity)
     {
-        double deltaDecay = Math.Pow(_decay, Cfg.BaseFramerate * elapsedTime);
-        double deltaInertia = _inertia * (Cfg.BaseFramerate * elapsedTime);
+        double deltaDecay = Math.Pow(_decay, _baseFramerate * elapsedTime);
+        double deltaInertia = _inertia * (_baseFramerate * elapsedTime);
         _xVelocity *= deltaDecay;
         _yVelocity *= deltaDecay;
         _zVelocity *= deltaDecay;

@@ -1,7 +1,7 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Levels;
 
-namespace H4D2.Particles;
+namespace H4D2.Particles.DebrisParticles;
 
 public class GibDebris : Debris
 {

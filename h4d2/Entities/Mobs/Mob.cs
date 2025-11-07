@@ -3,6 +3,7 @@ using H4D2.Entities.Mobs.Zombies;
 using H4D2.Infrastructure;
 using H4D2.Levels;
 using H4D2.Particles;
+using H4D2.Particles.DebrisParticles;
 
 namespace H4D2.Entities.Mobs;
 

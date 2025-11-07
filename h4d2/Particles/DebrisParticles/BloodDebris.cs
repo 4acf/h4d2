@@ -1,28 +1,26 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Levels;
 
-namespace H4D2.Particles;
-using Cfg = ParticleConfig;
+namespace H4D2.Particles.DebrisParticles;
 
-public class BileDebris : Debris
+public class BloodDebris : Debris
 {
     private const double _decay = 0.05;
     private const double _inertia = 0.5;
-    private const double _bileDrag = 0.96;
-    private const double _bileBounce = 0.1;
-    private new const double _maxLifetime = 20.0;
-    private const int _color = 0x5a6e38;
+    private const double _bloodDrag = 0.96;
+    private const double _bloodBounce = 0.1;
+    private const int _color = 0xa00000;
     
-    public BileDebris(Level level, Position position)
-        : base(level, position, _bileDrag, _bileBounce, _maxLifetime)
+    public BloodDebris(Level level, Position position)
+        : base(level, position, _bloodDrag, _bloodBounce)
     {
         
     }
 
     public void DampVelocities(double elapsedTime, double parentXVelocity, double parentYVelocity, double parentZVelocity)
     {
-        double deltaDecay = Math.Pow(_decay, Cfg.BaseFramerate * elapsedTime);
-        double deltaInertia = _inertia * (Cfg.BaseFramerate * elapsedTime);
+        double deltaDecay = Math.Pow(_decay, _baseFramerate * elapsedTime);
+        double deltaInertia = _inertia * (_baseFramerate * elapsedTime);
         _xVelocity *= deltaDecay;
         _yVelocity *= deltaDecay;
         _zVelocity *= deltaDecay;

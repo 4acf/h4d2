@@ -43,8 +43,8 @@ public class Smoke : Particle
             return;
         }
 
-        double deltaDecay = Math.Pow(_decay, Cfg.BaseFramerate * elapsedTime);
-        double deltaInertia = _inertia * (Cfg.BaseFramerate * elapsedTime);
+        double deltaDecay = Math.Pow(_decay, _baseFramerate * elapsedTime);
+        double deltaInertia = _inertia * (_baseFramerate * elapsedTime);
         _xVelocity *= deltaDecay;
         _yVelocity *= deltaDecay;
         _xVelocity += _parentXVelocity * deltaInertia;
