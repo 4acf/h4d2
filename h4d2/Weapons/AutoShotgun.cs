@@ -4,15 +4,8 @@ namespace H4D2.Weapons;
 
 public class AutoShotgun : Weapon
 {
-    public AutoShotgun(Level level) : base(level)
+    public AutoShotgun(Level level) : base(level, WeaponConfigs.AutoShotgun)
     {
-        Damage = 23;
-        ReloadTimeSeconds = 4.0;
-        ShootDelaySeconds =  1 / 3.33;
-        AmmoPerMagazine = 10;
-        Spread = 0.5;
-        Pellets = 11;
         
-        AmmoLoaded = AmmoPerMagazine;
     }
 }

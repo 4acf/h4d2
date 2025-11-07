@@ -4,15 +4,8 @@ namespace H4D2.Weapons;
 
 public class M16 : Weapon
 {
-    public M16(Level level) : base(level)
+    public M16(Level level) : base(level, WeaponConfigs.M16)
     {
-        Damage = 33;
-        ReloadTimeSeconds = 2.2;
-        ShootDelaySeconds = 1 / 11.43;
-        AmmoPerMagazine = 30;
-        Spread = 0.25;
-        Pellets = 1;
         
-        AmmoLoaded = AmmoPerMagazine;
     }
 }

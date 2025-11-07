@@ -6,26 +6,19 @@ namespace H4D2.Weapons;
 
 public class GrenadeLauncher : Weapon
 {
-    public GrenadeLauncher(Level level) : base(level)
+    public GrenadeLauncher(Level level) : base(level, WeaponConfigs.GrenadeLauncher)
     {
-        Damage = 400;
-        ReloadTimeSeconds = 0.0;
-        ShootDelaySeconds = 3.3;
-        AmmoPerMagazine = 2;
-        Spread = 0.0;
-        Pellets = 1;
-        
-        AmmoLoaded = AmmoPerMagazine;
+
     }
 
     public override void Shoot(Position position, double directionRadians)
     {
         if (!CanShoot()) return;
         AmmoLoaded--;
-        _shootDelaySecondsLeft = ShootDelaySeconds;
-        for (int i = 0; i < Pellets; i++)
+        _shootDelaySecondsLeft = _shootDelaySeconds;
+        for (int i = 0; i < _pellets; i++)
         {
-            var grenade = new Grenade(_level, position, Damage, directionRadians);
+            var grenade = new Grenade(_level, position, _damage, directionRadians);
             _level.AddProjectile(grenade);
         }
     }

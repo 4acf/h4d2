@@ -6,35 +6,49 @@ namespace H4D2.Weapons;
 
 public abstract class Weapon
 {
-    public int Damage { get; init; }
-    public double ReloadTimeSeconds { get; init; }
-    public double ShootDelaySeconds { get; init; }
-    public int AmmoPerMagazine { get; init; }
-    public double Spread { get; init; }
-    public int Pellets { get; init; }
-
-    public bool IsReloading { get; protected set; } = false;
-
     public int AmmoLoaded { get; protected set; }
+    
+    protected readonly Level _level;
+    protected readonly int _damage;
+    protected readonly double _reloadTimeSeconds;
+    protected readonly double _shootDelaySeconds;
+    protected readonly int _ammoPerMagazine;
+    protected readonly double _spread;
+    protected readonly int _pellets;
 
+    protected bool _isReloading = false;
+
+    protected readonly CountdownTimer _reloadTimer;
+    protected readonly CountdownTimer _shootDelayTimer;
+    
     public double ReloadSecondsLeft { get; protected set; } = 0;
     
     protected double _shootDelaySecondsLeft = 0.0;
-
-    protected readonly Level _level;
     
-    protected Weapon(Level level)
+    protected Weapon(Level level, WeaponConfig config)
     {
         _level = level;
+        _damage = config.Damage;
+        _reloadTimeSeconds = config.ReloadTimeSeconds;
+        _shootDelaySeconds = config.ShootDelaySeconds;
+        _ammoPerMagazine = config.AmmoPerMagazine;
+        _spread = config.Spread;
+        _pellets = config.Pellets;
+
+        AmmoLoaded = config.AmmoPerMagazine;
+        _isReloading = false;
+        
+        _reloadTimer = new CountdownTimer(_reloadTimeSeconds);
+        _shootDelayTimer = new CountdownTimer(_shootDelaySeconds);
     }
     
     public void Update(double elapsedTime)
     {
-        if (IsReloading)
+        if (_isReloading)
         {
             ReloadSecondsLeft -= elapsedTime;
             if (ReloadSecondsLeft <= 0)
-                IsReloading = false;
+                _isReloading = false;
         }
         else
         {
@@ -50,7 +64,7 @@ public abstract class Weapon
     {
         if (AmmoLoaded == 0)
             return false;
-        if (IsReloading)
+        if (_isReloading)
             return false;
         if (_shootDelaySecondsLeft > 0)
             return false;
@@ -61,22 +75,22 @@ public abstract class Weapon
     {
         if (!CanShoot()) return;
         AmmoLoaded--;
-        _shootDelaySecondsLeft = ShootDelaySeconds;
-        for (int i = 0; i < Pellets; i++)
+        _shootDelaySecondsLeft = _shootDelaySeconds;
+        for (int i = 0; i < _pellets; i++)
         {
-            double newXComponent = Math.Cos(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * Spread;
-            double newYComponent = Math.Sin(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * Spread;
+            double newXComponent = Math.Cos(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * _spread;
+            double newYComponent = Math.Sin(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * _spread;
             double newDirection = Math.Atan2(newYComponent, newXComponent);
-            var bullet = new Bullet(_level, position.Copy(), Damage, newDirection);
+            var bullet = new Bullet(_level, position.Copy(), _damage, newDirection);
             _level.AddProjectile(bullet);
         }
     }
 
     public void Reload()
     {
-        if (IsReloading) return;
-        IsReloading = true;
-        ReloadSecondsLeft = ReloadTimeSeconds;
-        AmmoLoaded = AmmoPerMagazine;
+        if (_isReloading) return;
+        _isReloading = true;
+        ReloadSecondsLeft = _reloadTimeSeconds;
+        AmmoLoaded = _ammoPerMagazine;
     }
 }
