@@ -10,30 +10,29 @@ public abstract class Pickup : Entity
     private const double _maxPositionChangeSeconds = 0.55;
     
     protected readonly int _pickupType;
-    private readonly double _positionChangeSeconds;
-    private double _positionChangeSecondsLeft;
+    private readonly CountdownTimer _positionChangeTimer;
     private bool _isAtStartingPosition;
     
     protected Pickup(Level level, Position position, PickupConfig config)
         : base(level, position, config.BoundingBox)
     {
         _pickupType = config.PickupType;
-        _positionChangeSeconds 
+        double positionChangeSeconds 
             = _minPositionChangeSeconds + (RandomSingleton.Instance.NextDouble() *
             (_maxPositionChangeSeconds - _minPositionChangeSeconds));
-        _positionChangeSecondsLeft = _positionChangeSeconds;
+        _positionChangeTimer = new CountdownTimer(positionChangeSeconds);
         _isAtStartingPosition = true;
     }
 
     public override void Update(double elapsedTime)
     {
-        _positionChangeSecondsLeft -= elapsedTime;
-        if (_positionChangeSecondsLeft <= 0)
+        _positionChangeTimer.Update(elapsedTime);
+        _positionChangeTimer.DoIfFinished(() =>
         {
-            _positionChangeSecondsLeft = _positionChangeSeconds;
+            _positionChangeTimer.Reset();
             _position.Z += 1 * (_isAtStartingPosition ? 1 : -1);
             _isAtStartingPosition = !_isAtStartingPosition;
-        }
+        });
     }
 
     public virtual void PickUp(Survivor survivor)
