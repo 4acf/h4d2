@@ -8,21 +8,20 @@ public abstract class Debris : Particle
 {
     protected const double _gravity = 4.8;
     protected const double _groundFriction = 0.85;
-    private const double _minLifetime = 0.6;
-    private const double _maxLifetime = 1.0;
+    protected const double _minLifetime = 0.6;
+    protected const double _maxLifetime = 1.0;
     
     protected readonly double _drag;
-    protected readonly double _bounce;
-    protected double _timeToLiveSeconds;
+    protected readonly double _bounce; 
+    protected readonly CountdownTimer _despawnTimer;
     
-    protected Debris(Level level, Position position, double drag, double bounce)
+    protected Debris(Level level, Position position, double drag, double bounce, double lifetime)
         : base(level, position)
     {
         _drag = drag;
         _bounce = bounce;
-        _timeToLiveSeconds = RandomSingleton.Instance.NextDouble();
-        _timeToLiveSeconds = MathHelpers.ClampDouble(_timeToLiveSeconds, _minLifetime, _maxLifetime);
-
+        _despawnTimer = new CountdownTimer(lifetime);
+        
         do
         {
             _xVelocity = (RandomSingleton.Instance.NextDouble() * 2) - 1;
@@ -35,10 +34,28 @@ public abstract class Debris : Particle
         _zVelocity /= hypotenuse;
     }
 
+    protected Debris(Level level, Position position, double drag, double bounce)
+        : this(level, position, drag, bounce, _GenerateLifetime())
+    {
+        
+    }
+
+    protected Debris(Level level, Position position, double drag, double bounce, double minLifetime, double maxLifetime)
+        : this(level, position, drag, bounce, _GenerateLifetime(minLifetime, maxLifetime))
+    {
+        
+    }
+    
+    private static double _GenerateLifetime(double min = _minLifetime, double max = _maxLifetime)
+    {
+        double lifetime = RandomSingleton.Instance.NextDouble();
+        return MathHelpers.ClampDouble(lifetime, min, max);
+    }
+
     public override void Update(double elapsedTime)
     {
-        _timeToLiveSeconds -= elapsedTime;
-        if (_timeToLiveSeconds <= 0)
+        _despawnTimer.Update(elapsedTime);
+        if (_despawnTimer.IsFinished)
         {
             Removed = true;
             return;

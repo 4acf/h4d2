@@ -11,14 +11,12 @@ public class FuelDebris : Debris
     private const double _inertia = 0.5;
     private const double _fuelDrag = 0.98;
     private const double _fuelBounce = 0.0;
-    private const double _maxLifetime = 20.0;
+    private new const double _maxLifetime = 20.0;
     private const int _color = 0x4d4c47;
     
     public FuelDebris(Level level, Position position)
-        : base(level, position, _fuelDrag, _fuelBounce)
+        : base(level, position, _fuelDrag, _fuelBounce, _maxLifetime)
     {
-        _timeToLiveSeconds = _maxLifetime;
-
         if (RandomSingleton.Instance.Next(7) == 0)
         {
             var fire = new Fire(_level, _position.CopyAndTranslate(
@@ -32,8 +30,8 @@ public class FuelDebris : Debris
 
     public override void Update(double elapsedTime)
     {
-        _timeToLiveSeconds -= elapsedTime;
-        if (_timeToLiveSeconds <= 0)
+        _despawnTimer.Update(elapsedTime);
+        if (_despawnTimer.IsFinished)
         {
             Removed = true;
         }

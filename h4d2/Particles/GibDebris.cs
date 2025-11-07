@@ -11,10 +11,16 @@ public class GibDebris : Debris
     private readonly int _color;
     
     public GibDebris(Level level, Position position, int color)
-        : base(level, position, _gibDrag, _gibBounce)
+        : base(
+            level,
+            position,
+            _gibDrag,
+            _gibBounce,
+            _minLifetime * _lifetimeScale,
+            _maxLifetime * _lifetimeScale
+        )
     {
         _color = color;
-        _timeToLiveSeconds *= _lifetimeScale;
     }
 
     public override void Update(double elapsedTime)

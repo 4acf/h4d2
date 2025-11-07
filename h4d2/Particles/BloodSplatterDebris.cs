@@ -10,9 +10,16 @@ public class BloodSplatterDebris : Debris
     private const double _lifetimeScale = 0.25;
     
     public BloodSplatterDebris(Level level, Position position)
-        : base(level, position, _bloodSplatterDrag, _bloodSplatterBounce)
+        : base(
+            level, 
+            position, 
+            _bloodSplatterDrag,
+            _bloodSplatterBounce,
+            _minLifetime * _lifetimeScale,
+            _maxLifetime * _lifetimeScale
+        )
     {
-        _timeToLiveSeconds *= _lifetimeScale;
+        
     }
 
     public override void Update(double elapsedTime)
