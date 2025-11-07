@@ -15,7 +15,7 @@ public class Special : Zombie
 
     public override void Update(double elapsedTime)
     {
-        _UpdateDamageCooldown(elapsedTime);
+        _hazardDamageTimer.Update(elapsedTime);
         _UpdateTarget();
         _UpdatePosition(elapsedTime);
         _UpdateSprite(elapsedTime);
@@ -52,7 +52,7 @@ public class Special : Zombie
     
     private void _UpdateSprite(double elapsedTime)
     {
-        _timeSinceLastFrameUpdate += elapsedTime;
+        _frameUpdateTimer.Update(elapsedTime);
 
         int direction = 0;
         int degrees = MathHelpers.RadiansToDegrees(_directionRadians);
@@ -77,7 +77,7 @@ public class Special : Zombie
                 break;
         }
         
-        while (_timeSinceLastFrameUpdate >= _frameDuration)
+        while (_frameUpdateTimer.IsFinished)
         {
             _walkStep = (_walkStep + 1) % 4;
             if (_xVelocity == 0 && _yVelocity == 0) _walkStep = 0;
@@ -103,7 +103,7 @@ public class Special : Zombie
                 };
             }
             _walkFrame = nextFrame;
-            _timeSinceLastFrameUpdate -= _frameDuration;
+            _frameUpdateTimer.AddDuration();
         }
     }
 

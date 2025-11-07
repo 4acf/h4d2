@@ -31,7 +31,7 @@ public class Common : Zombie
 
     public override void Update(double elapsedTime)
     {
-        _UpdateDamageCooldown(elapsedTime);
+        _hazardDamageTimer.Update(elapsedTime);
         _UpdateAttackState(elapsedTime);
         _UpdateTarget();
         _UpdatePosition(elapsedTime);
@@ -151,7 +151,7 @@ public class Common : Zombie
     
     private void _UpdateSprite(double elapsedTime)
     {
-        _timeSinceLastFrameUpdate += elapsedTime;
+        _frameUpdateTimer.Update(elapsedTime);
         if (_isAttacking)
             _UpdateAttackingSprite();
         else
@@ -199,7 +199,7 @@ public class Common : Zombie
                 break;
         }
         
-        while (_timeSinceLastFrameUpdate >= _frameDuration)
+        while (_frameUpdateTimer.IsFinished)
         {
             _walkStep = (_walkStep + 1) % 4;
             if (_xVelocity == 0 && _yVelocity == 0) _walkStep = 0;
@@ -226,7 +226,7 @@ public class Common : Zombie
             }
             _lowerFrame = nextLowerFrame;
             _upperFrame = _attackingBitmapOffset + direction;
-            _timeSinceLastFrameUpdate -= _frameDuration;
+            _frameUpdateTimer.AddDuration();
         }
     }
 
@@ -255,7 +255,7 @@ public class Common : Zombie
                 break;
         }
         
-        while (_timeSinceLastFrameUpdate >= _frameDuration)
+        while (_frameUpdateTimer.IsFinished)
         {
             _walkStep = (_walkStep + 1) % 4;
             if (_xVelocity == 0 && _yVelocity == 0) _walkStep = 0;
@@ -283,7 +283,7 @@ public class Common : Zombie
 
             _lowerFrame = nextFrame;
             _upperFrame = nextFrame + _upperBitmapOffset;
-            _timeSinceLastFrameUpdate -= _frameDuration;
+            _frameUpdateTimer.AddDuration();
         }
     }
     

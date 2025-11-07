@@ -15,7 +15,7 @@ public class Survivor : Mob
     public bool IsFullHealth => _health == SurvivorConfigs.DefaultHealth;
     
     private const int _boundaryTolerance = 25;
-    private const int _runSpeed = 300;
+    private const int _runSpeed = 222;
     private const int _limpSpeed = 150;
     private const int _walkSpeed = 85;
     private const int _adrenalineRunSpeed = 320;
@@ -29,7 +29,7 @@ public class Survivor : Mob
     private bool _isShooting;
     private double _aimDirectionRadians;
     private bool _isAdrenalineBoosted;
-    private double _adrenalineSecondsLeft;
+    private CountdownTimer? _adrenalineTimer;
     
     protected Survivor(Level level, Position position, SurvivorConfig config) 
         : base(level, position, config)
@@ -38,13 +38,13 @@ public class Survivor : Mob
         _target = null;
         _isShooting = false;
         _isAdrenalineBoosted = false;
-        _adrenalineSecondsLeft = 0.0;
         _aimDirectionRadians = 0.0;
+        _adrenalineTimer = null;
     }
 
     public override void Update(double elapsedTime)
     {
-        _UpdateDamageCooldown(elapsedTime);
+        _hazardDamageTimer.Update(elapsedTime);
         _UpdateTarget();
         _UpdateWeapon(elapsedTime);
         _UpdateSpeed(elapsedTime);
@@ -75,7 +75,7 @@ public class Survivor : Mob
         int healthToRestore = Math.Min(25, missingHealth);
         _health += healthToRestore;
         _isAdrenalineBoosted = true;
-        _adrenalineSecondsLeft = _adrenalineEffectSeconds;
+        _adrenalineTimer = new CountdownTimer(_adrenalineEffectSeconds);
     }
 
     public void ThrowMolotov()
@@ -151,10 +151,14 @@ public class Survivor : Mob
     
     private void _UpdateSpeed(double elapsedTime)
     {
-        _adrenalineSecondsLeft -= elapsedTime;
-        if (_adrenalineSecondsLeft <= 0)
+        if (_adrenalineTimer != null)
         {
-            _isAdrenalineBoosted = false;
+            _adrenalineTimer.Update(elapsedTime);
+            if (_adrenalineTimer.IsFinished)
+            {
+                _isAdrenalineBoosted = false;
+                _adrenalineTimer = null;
+            } 
         }
 
         if (_isAdrenalineBoosted)
@@ -237,7 +241,7 @@ public class Survivor : Mob
     
     private void _UpdateSprite(double elapsedTime)
     {
-        _timeSinceLastFrameUpdate += elapsedTime;
+        _frameUpdateTimer.Update(elapsedTime);
         if (_isShooting)
             _UpdateShootingSprite();
         else
@@ -285,7 +289,7 @@ public class Survivor : Mob
                 break;
         }
         
-        while (_timeSinceLastFrameUpdate >= _frameDuration)
+        while (_frameUpdateTimer.IsFinished)
         {
             _walkStep = (_walkStep + 1) % 4;
             if (_xVelocity == 0 && _yVelocity == 0) _walkStep = 0;
@@ -312,7 +316,7 @@ public class Survivor : Mob
             }
             _lowerFrame = nextLowerFrame;
             _upperFrame = _attackingBitmapOffset + direction;
-            _timeSinceLastFrameUpdate -= _frameDuration;
+            _frameUpdateTimer.AddDuration();
         }
     }
     
@@ -341,7 +345,7 @@ public class Survivor : Mob
                 break;
         }
         
-        while (_timeSinceLastFrameUpdate >= _frameDuration)
+        while (_frameUpdateTimer.IsFinished)
         {
             _walkStep = (_walkStep + 1) % 4;
             if (_xVelocity == 0 && _yVelocity == 0) _walkStep = 0;
@@ -369,7 +373,7 @@ public class Survivor : Mob
 
             _lowerFrame = nextFrame;
             _upperFrame = nextFrame + _upperBitmapOffset;
-            _timeSinceLastFrameUpdate -= _frameDuration;
+            _frameUpdateTimer.AddDuration();
         }
     }
     

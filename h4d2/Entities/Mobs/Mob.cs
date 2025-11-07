@@ -26,9 +26,9 @@ public abstract class Mob : Entity
     protected int _walkFrame;
     protected int _lowerFrame;
     protected int _upperFrame;
-    protected double _timeSinceLastFrameUpdate;
     protected readonly int _gibColor;
-    protected double _hazardDamageSecondsLeft;
+    protected readonly CountdownTimer _frameUpdateTimer;
+    protected readonly CountdownTimer _hazardDamageTimer;
     
     protected Mob(Level level, Position position, MobConfig config) 
         : base(level, position, config.BoundingBox)
@@ -41,9 +41,9 @@ public abstract class Mob : Entity
         _walkFrame = 0;
         _lowerFrame = 0;
         _upperFrame = _upperBitmapOffset;
-        _timeSinceLastFrameUpdate = 0.0;
         _gibColor = config.GibColor;
-        _hazardDamageSecondsLeft = 0.0;
+        _frameUpdateTimer = new CountdownTimer(_frameDuration);
+        _hazardDamageTimer = new CountdownTimer(_hazardDamageCooldownSeconds);
     }
 
     protected Mob(Level level, Position position, MobConfig config, double speed)
@@ -57,8 +57,9 @@ public abstract class Mob : Entity
         _walkFrame = 0;
         _lowerFrame = 0;
         _upperFrame = _upperBitmapOffset;
-        _timeSinceLastFrameUpdate = 0.0;
         _gibColor = config.GibColor;
+        _frameUpdateTimer = new CountdownTimer(_frameDuration);
+        _hazardDamageTimer = new CountdownTimer(_hazardDamageCooldownSeconds);
     }
     
     public void HitBy(Zombie zombie)
@@ -73,23 +74,14 @@ public abstract class Mob : Entity
         var bloodSplatter = new BloodSplatterDebris(_level, CenterMass.MutableCopy());
         _level.AddParticle(bloodSplatter);
     }
-
-    protected void _UpdateDamageCooldown(double elapsedTime)
-    {
-        if (_hazardDamageSecondsLeft > 0)
-        {
-            _hazardDamageSecondsLeft -= elapsedTime;
-            _hazardDamageSecondsLeft = Math.Max(0, _hazardDamageSecondsLeft);
-        }
-    }
     
     protected void _TakeHazardDamage(int damage)
     {
         if (Removed)
             return;
-        if (_hazardDamageSecondsLeft > 0)
+        if (!_hazardDamageTimer.IsFinished)
             return;
-        _hazardDamageSecondsLeft = _hazardDamageCooldownSeconds;
+        _hazardDamageTimer.Reset();
         _health -= damage;
         if (!IsAlive)
         {
