@@ -10,8 +10,6 @@ public abstract class Weapon
     
     protected readonly Level _level;
     protected readonly int _damage;
-    protected readonly double _reloadTimeSeconds;
-    protected readonly double _shootDelaySeconds;
     protected readonly int _ammoPerMagazine;
     protected readonly double _spread;
     protected readonly int _pellets;
@@ -21,16 +19,10 @@ public abstract class Weapon
     protected readonly CountdownTimer _reloadTimer;
     protected readonly CountdownTimer _shootDelayTimer;
     
-    public double ReloadSecondsLeft { get; protected set; } = 0;
-    
-    protected double _shootDelaySecondsLeft = 0.0;
-    
     protected Weapon(Level level, WeaponConfig config)
     {
         _level = level;
         _damage = config.Damage;
-        _reloadTimeSeconds = config.ReloadTimeSeconds;
-        _shootDelaySeconds = config.ShootDelaySeconds;
         _ammoPerMagazine = config.AmmoPerMagazine;
         _spread = config.Spread;
         _pellets = config.Pellets;
@@ -38,22 +30,22 @@ public abstract class Weapon
         AmmoLoaded = config.AmmoPerMagazine;
         _isReloading = false;
         
-        _reloadTimer = new CountdownTimer(_reloadTimeSeconds);
-        _shootDelayTimer = new CountdownTimer(_shootDelaySeconds);
+        _reloadTimer = new CountdownTimer(config.ReloadTimeSeconds);
+        _shootDelayTimer = new CountdownTimer(config.ShootDelaySeconds);
     }
     
     public void Update(double elapsedTime)
     {
         if (_isReloading)
         {
-            ReloadSecondsLeft -= elapsedTime;
-            if (ReloadSecondsLeft <= 0)
+            _reloadTimer.Update(elapsedTime);
+            if (_reloadTimer.IsFinished)
                 _isReloading = false;
         }
         else
         {
-            _shootDelaySecondsLeft -= elapsedTime;
-            if (AmmoLoaded == 0 && _shootDelaySecondsLeft <= 0)
+            _shootDelayTimer.Update(elapsedTime);
+            if (AmmoLoaded == 0 && _shootDelayTimer.IsFinished)
             {
                 Reload();
             }
@@ -66,7 +58,7 @@ public abstract class Weapon
             return false;
         if (_isReloading)
             return false;
-        if (_shootDelaySecondsLeft > 0)
+        if (!_shootDelayTimer.IsFinished)
             return false;
         return true;
     }
@@ -75,7 +67,7 @@ public abstract class Weapon
     {
         if (!CanShoot()) return;
         AmmoLoaded--;
-        _shootDelaySecondsLeft = _shootDelaySeconds;
+        _shootDelayTimer.Reset();
         for (int i = 0; i < _pellets; i++)
         {
             double newXComponent = Math.Cos(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * _spread;
@@ -90,7 +82,7 @@ public abstract class Weapon
     {
         if (_isReloading) return;
         _isReloading = true;
-        ReloadSecondsLeft = _reloadTimeSeconds;
+        _reloadTimer.Reset();
         AmmoLoaded = _ammoPerMagazine;
     }
 }

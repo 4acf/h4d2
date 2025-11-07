@@ -15,7 +15,7 @@ public class GrenadeLauncher : Weapon
     {
         if (!CanShoot()) return;
         AmmoLoaded--;
-        _shootDelaySecondsLeft = _shootDelaySeconds;
+        _shootDelayTimer.Reset();
         for (int i = 0; i < _pellets; i++)
         {
             var grenade = new Grenade(_level, position, _damage, directionRadians);
