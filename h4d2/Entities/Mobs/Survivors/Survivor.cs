@@ -1,7 +1,6 @@
 ﻿using H4D2.Entities.Hazards;
 using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Pickups;
-using H4D2.Entities.Projectiles;
 using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
 using H4D2.Levels;
@@ -15,7 +14,7 @@ public class Survivor : Mob
     public bool IsFullHealth => _health == SurvivorConfigs.DefaultHealth;
     
     private const int _boundaryTolerance = 25;
-    private const int _runSpeed = 222;
+    private const int _runSpeed = 300;
     private const int _limpSpeed = 150;
     private const int _walkSpeed = 85;
     private const int _adrenalineRunSpeed = 320;

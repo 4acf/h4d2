@@ -1,5 +1,4 @@
-﻿using H4D2.Entities.Projectiles;
-using H4D2.Entities.Projectiles.ThrowableProjectiles;
+﻿using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
 using H4D2.Levels;
 
@@ -14,14 +13,14 @@ public class Uncommon : Zombie
     
     protected readonly int _type;
     protected double _aimDirectionRadians;
-    protected double _attackDelaySecondsLeft;
+    protected readonly CountdownTimer _attackDelayTimer;
     protected BileBombProjectile? _bileBombTarget;
     
     protected Uncommon(Level level, Position position, UncommonConfig config) 
         : base(level, position, config)
     {
         _type = config.Type;
-        _attackDelaySecondsLeft = 0.0;
+        _attackDelayTimer = new CountdownTimer(_attackDelay);
         _bileBombTarget = null;
     }
     
@@ -36,7 +35,7 @@ public class Uncommon : Zombie
 
     private void _UpdateAttackState(double elapsedTime)
     {
-        _attackDelaySecondsLeft -= elapsedTime;
+        _attackDelayTimer.Update(elapsedTime);
         if (_target == null || _target.Removed)
         {
             _isAttacking = false;
@@ -57,10 +56,10 @@ public class Uncommon : Zombie
         if (!_isAttacking) 
             return;
         
-        if (_attackDelaySecondsLeft <= 0)
+        if (_attackDelayTimer.IsFinished)
         {
             targetMob.HitBy(this);
-            _attackDelaySecondsLeft = _attackDelay;
+            _attackDelayTimer.Reset();
         }
                 
         _aimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);

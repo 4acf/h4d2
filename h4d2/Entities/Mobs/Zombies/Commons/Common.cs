@@ -1,5 +1,4 @@
-﻿using H4D2.Entities.Projectiles;
-using H4D2.Entities.Projectiles.ThrowableProjectiles;
+﻿using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
 using H4D2.Levels;
 
@@ -17,7 +16,7 @@ public class Common : Zombie
     
     private readonly int _type;
     private double _aimDirectionRadians;
-    private double _attackDelaySecondsLeft;
+    private readonly CountdownTimer _attackDelayTimer; 
     private BileBombProjectile? _bileBombTarget;
     
     public Common(Level level, Position position)
@@ -25,7 +24,7 @@ public class Common : Zombie
     {
         _type = RandomSingleton.Instance.Next(_numVariations);
         _aimDirectionRadians = 0.0;
-        _attackDelaySecondsLeft = 0.0;
+        _attackDelayTimer = new CountdownTimer(_attackDelay);
         _bileBombTarget = null;
     }
 
@@ -40,7 +39,7 @@ public class Common : Zombie
 
     private void _UpdateAttackState(double elapsedTime)
     {
-        _attackDelaySecondsLeft -= elapsedTime;
+        _attackDelayTimer.Update(elapsedTime);
         if (_target == null || _target.Removed)
         {
             _isAttacking = false;
@@ -61,10 +60,10 @@ public class Common : Zombie
         if (!_isAttacking) 
             return;
         
-        if (_attackDelaySecondsLeft <= 0)
+        if (_attackDelayTimer.IsFinished)
         {
             targetMob.HitBy(this);
-            _attackDelaySecondsLeft = _attackDelay;
+            _attackDelayTimer.Reset();
         }
                 
         _aimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
