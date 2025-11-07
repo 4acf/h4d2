@@ -7,18 +7,18 @@ public abstract class Debris : Particle
 {
     protected const double _gravity = 4.8;
     protected const double _groundFriction = 0.85;
-    protected const double _minLifetime = 0.6;
-    protected const double _maxLifetime = 1.0;
     
     protected readonly double _drag;
     protected readonly double _bounce; 
     protected readonly CountdownTimer _despawnTimer;
     
-    private Debris(Level level, Position position, double drag, double bounce, double lifetime)
+    protected Debris(Level level, Position position, DebrisConfig config)
         : base(level, position)
     {
-        _drag = drag;
-        _bounce = bounce;
+        _drag = config.Drag;
+        _bounce = config.Bounce;
+        double t = RandomSingleton.Instance.NextDouble();
+        double lifetime = config.MinLifetime + (t * (config.MaxLifetime - config.MinLifetime));
         _despawnTimer = new CountdownTimer(lifetime);
         
         do
@@ -31,24 +31,6 @@ public abstract class Debris : Particle
         _xVelocity /= hypotenuse;
         _yVelocity /= hypotenuse;
         _zVelocity /= hypotenuse;
-    }
-
-    protected Debris(Level level, Position position, DebrisConfig config)
-        : this(
-            level,
-            position,
-            config.Drag, 
-            config.Bounce,
-            _GenerateLifetime(config.MinLifetime, config.MaxLifetime)
-        )
-    {
-        
-    }
-    
-    private static double _GenerateLifetime(double min = _minLifetime, double max = _maxLifetime)
-    {
-        double lifetime = RandomSingleton.Instance.NextDouble();
-        return MathHelpers.ClampDouble(lifetime, min, max);
     }
 
     public override void Update(double elapsedTime)
