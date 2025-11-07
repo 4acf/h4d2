@@ -5,11 +5,8 @@ namespace H4D2.Particles.DebrisParticles;
 
 public class BileSplatterDebris : Debris
 {
-    private const double _bileSplatterDrag = 0.95;
-    private const double _bileSplatterBounce = 0.6;
-
     public BileSplatterDebris(Level level, Position position)
-        : base(level, position, _bileSplatterDrag, _bileSplatterBounce)
+        : base(level, position, DebrisConfigs.BileSplatter)
     {
         
     }

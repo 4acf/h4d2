@@ -5,12 +5,10 @@ namespace H4D2.Particles.DebrisParticles;
 
 public class FuelSplatterDebris : Debris
 {
-    private const double _fuelSplatterDrag = 0.98;
-    private const double _fuelSplatterBounce = 0.6;
-    
     public FuelSplatterDebris(Level level, Position position)
-        : base(level, position, _fuelSplatterDrag, _fuelSplatterBounce)
+        : base(level, position, DebrisConfigs.FuelSplatter)
     {
+        
     }
     
     public override void Update(double elapsedTime)

@@ -7,13 +7,10 @@ public class BileDebris : Debris
 {
     private const double _decay = 0.05;
     private const double _inertia = 0.5;
-    private const double _bileDrag = 0.96;
-    private const double _bileBounce = 0.1;
-    private new const double _maxLifetime = 20.0;
     private const int _color = 0x5a6e38;
     
     public BileDebris(Level level, Position position)
-        : base(level, position, _bileDrag, _bileBounce, _maxLifetime)
+        : base(level, position, DebrisConfigs.Bile)
     {
         
     }

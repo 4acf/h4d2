@@ -14,7 +14,7 @@ public abstract class Debris : Particle
     protected readonly double _bounce; 
     protected readonly CountdownTimer _despawnTimer;
     
-    protected Debris(Level level, Position position, double drag, double bounce, double lifetime)
+    private Debris(Level level, Position position, double drag, double bounce, double lifetime)
         : base(level, position)
     {
         _drag = drag;
@@ -33,14 +33,14 @@ public abstract class Debris : Particle
         _zVelocity /= hypotenuse;
     }
 
-    protected Debris(Level level, Position position, double drag, double bounce)
-        : this(level, position, drag, bounce, _GenerateLifetime())
-    {
-        
-    }
-
-    protected Debris(Level level, Position position, double drag, double bounce, double minLifetime, double maxLifetime)
-        : this(level, position, drag, bounce, _GenerateLifetime(minLifetime, maxLifetime))
+    protected Debris(Level level, Position position, DebrisConfig config)
+        : this(
+            level,
+            position,
+            config.Drag, 
+            config.Bounce,
+            _GenerateLifetime(config.MinLifetime, config.MaxLifetime)
+        )
     {
         
     }

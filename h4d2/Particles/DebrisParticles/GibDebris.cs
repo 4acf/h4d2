@@ -5,20 +5,10 @@ namespace H4D2.Particles.DebrisParticles;
 
 public class GibDebris : Debris
 {
-    private const double _gibDrag = 0.96;
-    private const double _gibBounce = 0.6;
-    private const double _lifetimeScale = 1.5;
     private readonly int _color;
     
     public GibDebris(Level level, Position position, int color)
-        : base(
-            level,
-            position,
-            _gibDrag,
-            _gibBounce,
-            _minLifetime * _lifetimeScale,
-            _maxLifetime * _lifetimeScale
-        )
+        : base(level, position, DebrisConfigs.Gib)
     {
         _color = color;
     }

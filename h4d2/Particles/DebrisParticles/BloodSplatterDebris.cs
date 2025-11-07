@@ -5,19 +5,8 @@ namespace H4D2.Particles.DebrisParticles;
 
 public class BloodSplatterDebris : Debris
 {
-    private const double _bloodSplatterDrag = 0.98;
-    private const double _bloodSplatterBounce = 0.6;
-    private const double _lifetimeScale = 0.25;
-    
     public BloodSplatterDebris(Level level, Position position)
-        : base(
-            level, 
-            position, 
-            _bloodSplatterDrag,
-            _bloodSplatterBounce,
-            _minLifetime * _lifetimeScale,
-            _maxLifetime * _lifetimeScale
-        )
+        : base(level, position, DebrisConfigs.BloodSplatter)
     {
         
     }

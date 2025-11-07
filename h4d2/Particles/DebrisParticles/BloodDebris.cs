@@ -7,12 +7,10 @@ public class BloodDebris : Debris
 {
     private const double _decay = 0.05;
     private const double _inertia = 0.5;
-    private const double _bloodDrag = 0.96;
-    private const double _bloodBounce = 0.1;
     private const int _color = 0xa00000;
     
     public BloodDebris(Level level, Position position)
-        : base(level, position, _bloodDrag, _bloodBounce)
+        : base(level, position, DebrisConfigs.Blood)
     {
         
     }
