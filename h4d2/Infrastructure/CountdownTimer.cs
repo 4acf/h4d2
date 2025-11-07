@@ -23,15 +23,7 @@ public class CountdownTimer
         _secondsLeft = _duration;
     }
 
-    public void DoIfFinished(Action action)
-    {
-        if (IsFinished)
-        {
-            action();
-        }
-    }
-    
-    public void SubtractDuration()
+    public void AddDuration()
     {
         _secondsLeft += _duration;
     }

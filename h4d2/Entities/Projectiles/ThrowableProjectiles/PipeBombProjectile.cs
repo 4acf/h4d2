@@ -6,22 +6,22 @@ namespace H4D2.Entities.Projectiles.ThrowableProjectiles;
 public class PipeBombProjectile : ThrowableProjectile
 {
     public const double SplashRadius = 50.0;
-    private const double _maxLifetime = 6.0;
+    private const double _lifetime = 6.0;
     private const double _bounce = 0.6;
     private const double _groundFriction = 0.6;
     
-    private double _lifetimeSecondsLeft;
+    private readonly CountdownTimer _explodeTimer;
     
     public PipeBombProjectile(Level level, Position position, double directionRadians)
         : base(level, position, ThrowableProjectileConfigs.PipeBomb, directionRadians)
     {
-        _lifetimeSecondsLeft = _maxLifetime;
+        _explodeTimer = new CountdownTimer(_lifetime);
     }
 
     public override void Update(double elapsedTime)
     {
-        _lifetimeSecondsLeft -= elapsedTime;
-        if (_lifetimeSecondsLeft <= 0)
+        _explodeTimer.Update(elapsedTime);
+        if (_explodeTimer.IsFinished)
         {
             _level.Explode(this);
             Removed = true;
@@ -51,9 +51,8 @@ public class PipeBombProjectile : ThrowableProjectile
     
     protected override void _UpdateSprite(double elapsedTime)
     {
-        _timeSinceLastFrameUpdate += elapsedTime;
-        
-        while (_timeSinceLastFrameUpdate >= _frameDuration)
+        _frameUpdateTimer.Update(elapsedTime);
+        while (_frameUpdateTimer.IsFinished)
         {
             if (IsOnGround)
             {
@@ -63,7 +62,7 @@ public class PipeBombProjectile : ThrowableProjectile
                 return;
             }
             _spinStep = (_spinStep + 1) % 4;
-            _timeSinceLastFrameUpdate -= _frameDuration;
+            _frameUpdateTimer.AddDuration();
         }
     }
 

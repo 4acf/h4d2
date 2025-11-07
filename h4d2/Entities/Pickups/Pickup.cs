@@ -27,12 +27,12 @@ public abstract class Pickup : Entity
     public override void Update(double elapsedTime)
     {
         _positionChangeTimer.Update(elapsedTime);
-        _positionChangeTimer.DoIfFinished(() =>
+        if(_positionChangeTimer.IsFinished)
         {
             _positionChangeTimer.Reset();
             _position.Z += 1 * (_isAtStartingPosition ? 1 : -1);
             _isAtStartingPosition = !_isAtStartingPosition;
-        });
+        }
     }
 
     public virtual void PickUp(Survivor survivor)

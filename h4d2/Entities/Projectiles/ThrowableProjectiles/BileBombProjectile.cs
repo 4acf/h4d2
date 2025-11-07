@@ -7,24 +7,24 @@ namespace H4D2.Entities.Projectiles.ThrowableProjectiles;
 public class BileBombProjectile : ThrowableProjectile
 {
     private const int _bileParticles = 25;
-    private const double _maxLifetime = 20.0;
+    private const double _lifetime = 20.0;
     
     private bool _collided;
-    private double _secondsSinceCollision;
+    private readonly CountdownTimer _despawnTimer;
     
     public BileBombProjectile(Level level, Position position, double directionRadians)
         : base(level, position, ThrowableProjectileConfigs.BileBomb, directionRadians)
     {
         _collided = false;
-        _secondsSinceCollision = 0.0;
+        _despawnTimer = new CountdownTimer(_lifetime);
     }
     
     public override void Update(double elapsedTime)
     {
         if (_collided)
         {
-            _secondsSinceCollision += elapsedTime;
-            if (_secondsSinceCollision >= _maxLifetime)
+            _despawnTimer.Update(elapsedTime);
+            if (_despawnTimer.IsFinished)
                 Removed = true;
         }
         _UpdatePosition(elapsedTime);

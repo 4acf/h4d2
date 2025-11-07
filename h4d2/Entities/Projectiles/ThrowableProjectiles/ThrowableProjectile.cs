@@ -12,7 +12,7 @@ public abstract class ThrowableProjectile : Projectile
     
     protected readonly int _type;
     protected int _spinStep;
-    protected double _timeSinceLastFrameUpdate;
+    protected readonly CountdownTimer _frameUpdateTimer;
     protected readonly bool _xFlip;
     
     protected ThrowableProjectile
@@ -21,7 +21,7 @@ public abstract class ThrowableProjectile : Projectile
     {
         _type = config.Type;
         _spinStep = 0;
-        _timeSinceLastFrameUpdate = 0.0;
+        _frameUpdateTimer = new CountdownTimer(_frameDuration);
         _xFlip = (Math.PI / 2) < directionRadians && directionRadians < (3 * Math.PI / 2);
         _xVelocity = Math.Cos(_directionRadians);
         _yVelocity = Math.Sin(_directionRadians);
@@ -39,12 +39,11 @@ public abstract class ThrowableProjectile : Projectile
     
     protected virtual void _UpdateSprite(double elapsedTime)
     {
-        _timeSinceLastFrameUpdate += elapsedTime;
-        
-        while (_timeSinceLastFrameUpdate >= _frameDuration)
+        _frameUpdateTimer.Update(elapsedTime);
+        while (_frameUpdateTimer.IsFinished)
         {
             _spinStep = (_spinStep + 1) % 4;
-            _timeSinceLastFrameUpdate -= _frameDuration;
+            _frameUpdateTimer.AddDuration();
         }
     }
     

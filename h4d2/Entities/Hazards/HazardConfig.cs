@@ -5,7 +5,7 @@ namespace H4D2.Entities.Hazards;
 public class HazardConfig
 {
     public required int Damage { get; init; }
-    public required double TimeToLiveSeconds { get; init; }
+    public required double Duration { get; init; }
     public required BoundingBox BoundingBox { get; init; }
 }
 
@@ -20,7 +20,7 @@ public static class HazardConfigs
     public static readonly HazardConfig Fire = new()
     {
         Damage = 10,
-        TimeToLiveSeconds = 15.0,
+        Duration = 15.0,
         BoundingBox = new BoundingBox(_collisionMask, _collidesWith, _fireDimensions)
     };
 }
