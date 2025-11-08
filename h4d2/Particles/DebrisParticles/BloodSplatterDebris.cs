@@ -1,5 +1,6 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Levels;
+using H4D2.Particles.DebrisParticles.Granules;
 
 namespace H4D2.Particles.DebrisParticles;
 
@@ -16,8 +17,7 @@ public class BloodSplatterDebris : Debris
         base.Update(elapsedTime);
         if (RandomSingleton.Instance.Next(2) != 0)
             return;
-        var blood = new BloodDebris(_level, _position.Copy());
-        blood.DampVelocities(_xVelocity, _yVelocity, _zVelocity);
+        var blood = new Blood(_level, _position.Copy(), _xVelocity, _yVelocity, _zVelocity);
         _level.AddParticle(blood);
     }
 }

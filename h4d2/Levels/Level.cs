@@ -11,6 +11,7 @@ using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
 using H4D2.Particles;
 using H4D2.Particles.DebrisParticles;
+using H4D2.Particles.DebrisParticles.Granules;
 
 namespace H4D2.Levels;
 
@@ -327,7 +328,7 @@ public class Level
 
             int Rank(Type t)
             {
-                if (t == typeof(FuelDebris)) return 0;
+                if (t == typeof(Fuel)) return 0;
                 if (t == typeof(Flame)) return 2;
                 return 1;
             }

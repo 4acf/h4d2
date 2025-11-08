@@ -10,26 +10,10 @@ public class DebrisConfig
 
 public static class DebrisConfigs
 {
-    public static readonly DebrisConfig Bile = new()
-    {
-        Drag = 0.96,
-        Bounce = 0.1,
-        MinLifetime = 20.0,
-        MaxLifetime = 20.0
-    };
-
     public static readonly DebrisConfig BileSplatter = new()
     {
         Drag = 0.95,
         Bounce = 0.6,
-        MinLifetime = 0.6,
-        MaxLifetime = 1.0
-    };
-
-    public static readonly DebrisConfig Blood = new()
-    {
-        Drag = 0.96,
-        Bounce = 0.1,
         MinLifetime = 0.6,
         MaxLifetime = 1.0
     };
@@ -40,14 +24,6 @@ public static class DebrisConfigs
         Bounce = 0.6,
         MinLifetime = 0.15,
         MaxLifetime = 0.25
-    };
-
-    public static readonly DebrisConfig Fuel = new()
-    {
-        Drag = 0.98,
-        Bounce = 0.0,
-        MinLifetime = 20.0,
-        MaxLifetime = 20.0
     };
 
     public static readonly DebrisConfig FuelSplatter = new()
