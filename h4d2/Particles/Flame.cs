@@ -7,35 +7,35 @@ namespace H4D2.Particles;
 public class Flame : Particle
 {
     private const double _frameDuration = 1.0 / 8.0;
-    private const double _maxLifetime = 15.0;
+    private const double _lifetime = 15.0;
     
     private int _frame;
-    private double _timeSinceLastFrameUpdate;
-    private double _timeToLiveSeconds;
+    private readonly CountdownTimer _frameUpdateTimer;
+    private readonly CountdownTimer _despawnTimer;
     
     public Flame(Level level, Position position)
         : base(level, position)
     {
         _frame = 0;
-        _timeSinceLastFrameUpdate = 0.0;
-        _timeToLiveSeconds = _maxLifetime;
+        _frameUpdateTimer = new CountdownTimer(_frameDuration);
+        _despawnTimer = new CountdownTimer(_lifetime);
     }
 
     public override void Update(double elapsedTime)
     {
-        _timeToLiveSeconds -= elapsedTime;
-        if (_timeToLiveSeconds <= 0)
+        _despawnTimer.Update(elapsedTime);
+        if (_despawnTimer.IsFinished)
         {
             var smoke = new Smoke(_level, _position.Copy(), 0, 0);
             _level.AddParticle(smoke);
             Removed = true;
         }
         
-        _timeSinceLastFrameUpdate += elapsedTime;
-        while (_timeSinceLastFrameUpdate >= _frameDuration)
+        _frameUpdateTimer.Update(elapsedTime);
+        while (_frameUpdateTimer.IsFinished)
         {
             _frame = RandomSingleton.Instance.Next(4);
-            _timeSinceLastFrameUpdate -= _frameDuration;
+            _frameUpdateTimer.AddDuration();
         }
     }
 
