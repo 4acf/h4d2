@@ -1,5 +1,6 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Levels;
+using H4D2.Particles.Clouds.Cloudlets;
 
 namespace H4D2.Particles;
 
@@ -38,7 +39,7 @@ public class HealCloud : Particle
             double dy = Math.Sin(randomDirection) * distance * randomMult;
             double dz = RandomSingleton.Instance.NextDouble() * 2;
             Position translatedPositionCopy = _position.CopyAndTranslate(dx, dy, dz);
-            var healParticle = new HealParticle(_level, translatedPositionCopy);
+            var healParticle = new HealCloudlet(_level, translatedPositionCopy);
             _level.AddParticle(healParticle);
         }
     }
