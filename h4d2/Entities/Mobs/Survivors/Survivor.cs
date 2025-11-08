@@ -5,6 +5,7 @@ using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
 using H4D2.Levels;
 using H4D2.Particles;
+using H4D2.Particles.Clouds;
 using H4D2.Weapons;
 
 namespace H4D2.Entities.Mobs.Survivors;

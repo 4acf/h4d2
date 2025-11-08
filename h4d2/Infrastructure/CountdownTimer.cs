@@ -3,6 +3,7 @@
 public class CountdownTimer
 {
     public bool IsFinished => _secondsLeft <= 0;
+    public double Percentage => _secondsLeft / _duration;
     
     private double _secondsLeft;
     private readonly double _duration;
