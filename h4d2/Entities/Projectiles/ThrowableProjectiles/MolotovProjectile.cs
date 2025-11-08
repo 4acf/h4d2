@@ -2,6 +2,7 @@
 using H4D2.Levels;
 using H4D2.Particles;
 using H4D2.Particles.DebrisParticles;
+using H4D2.Particles.DebrisParticles.Emitters;
 
 namespace H4D2.Entities.Projectiles.ThrowableProjectiles;
 
@@ -45,7 +46,7 @@ public class MolotovProjectile : ThrowableProjectile
         {
             for (int i = 0; i < _fuelParticles; i++)
             {
-                var fuelSplatterDebris = new FuelSplatterDebris(_level, CenterMass.MutableCopy());
+                var fuelSplatterDebris = new FuelSplatter(_level, CenterMass.MutableCopy());
                 _level.AddParticle(fuelSplatterDebris);
             }
             base._Collide(entity);

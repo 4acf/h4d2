@@ -4,6 +4,7 @@ using H4D2.Infrastructure;
 using H4D2.Levels;
 using H4D2.Particles;
 using H4D2.Particles.DebrisParticles;
+using H4D2.Particles.DebrisParticles.Emitters;
 
 namespace H4D2.Entities.Mobs.Zombies;
 
@@ -40,7 +41,7 @@ public abstract class Zombie : Mob
         {
             _Die();
         }
-        var bloodSplatter = new BloodSplatterDebris(_level, CenterMass.MutableCopy());
+        var bloodSplatter = new BloodSplatter(_level, CenterMass.MutableCopy());
         _level.AddParticle(bloodSplatter);
     }
     

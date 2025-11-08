@@ -2,6 +2,7 @@
 using H4D2.Levels;
 using H4D2.Particles;
 using H4D2.Particles.DebrisParticles;
+using H4D2.Particles.DebrisParticles.Emitters;
 
 namespace H4D2.Entities.Projectiles.ThrowableProjectiles;
 
@@ -65,7 +66,7 @@ public class BileBombProjectile : ThrowableProjectile
         _level.SpawnZombies();
         for (int i = 0; i < _bileParticles; i++)
         {
-            var bileSplatterDebris = new BileSplatterDebris(_level, CenterMass.MutableCopy());
+            var bileSplatterDebris = new BileSplatter(_level, CenterMass.MutableCopy());
             _level.AddParticle(bileSplatterDebris);
         }
         _collided = true;
