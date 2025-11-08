@@ -17,7 +17,7 @@ public class GibDebris : Debris
     {
         base.Update(elapsedTime);
         var blood = new BloodDebris(_level, _position.Copy());
-        blood.DampVelocities(elapsedTime, _xVelocity, _yVelocity, _zVelocity);
+        blood.DampVelocities(_xVelocity, _yVelocity, _zVelocity);
         _level.AddParticle(blood);
     }
     

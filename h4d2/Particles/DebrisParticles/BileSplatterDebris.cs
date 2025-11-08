@@ -17,7 +17,7 @@ public class BileSplatterDebris : Debris
         if (RandomSingleton.Instance.Next(2) != 0)
             return;
         var bile = new BileDebris(_level, _position.Copy());
-        bile.DampVelocities(elapsedTime, _xVelocity, _yVelocity, _zVelocity);
+        bile.DampVelocities(_xVelocity, _yVelocity, _zVelocity);
         _level.AddParticle(bile);
     }
 }

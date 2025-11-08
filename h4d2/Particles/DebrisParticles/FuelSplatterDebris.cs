@@ -17,7 +17,7 @@ public class FuelSplatterDebris : Debris
         if (RandomSingleton.Instance.Next(2) != 0)
             return;
         var fuel = new FuelDebris(_level, _position.Copy());
-        fuel.DampVelocities(elapsedTime, _xVelocity, _yVelocity, _zVelocity);
+        fuel.DampVelocities(_xVelocity, _yVelocity, _zVelocity);
         _level.AddParticle(fuel);
     }
 }
