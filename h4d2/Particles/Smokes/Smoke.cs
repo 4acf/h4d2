@@ -1,8 +1,7 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Levels;
 
-namespace H4D2.Particles;
-using Cfg = ParticleConfig;
+namespace H4D2.Particles.Smokes;
 
 public class Smoke : Particle
 {
