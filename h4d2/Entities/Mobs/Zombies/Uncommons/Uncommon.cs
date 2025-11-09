@@ -1,4 +1,5 @@
-﻿using H4D2.Entities.Projectiles.ThrowableProjectiles;
+﻿using H4D2.Entities.Mobs.Survivors;
+using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
 using H4D2.Levels;
 
@@ -82,7 +83,7 @@ public class Uncommon : Zombie
                 double distance = ReadonlyPosition.Distance(bileBombPosition, zombiePosition);
                 if (distance < _bileBombRageDistance)
                 {
-                    _target = _level.GetNearestLivingZombie(Position, this);
+                    _target = _level.GetNearestEntity<Zombie>(Position, this);
                 }
                 else
                 {
@@ -94,7 +95,7 @@ public class Uncommon : Zombie
             return;
         }
 
-        BileBombProjectile? activeBileBomb = _level.GetNearestActiveBileBomb(Position);
+        BileBombProjectile? activeBileBomb = _level.GetNearestEntity<BileBombProjectile>(Position);
         if (activeBileBomb != null)
         {
             _target = activeBileBomb;
@@ -102,14 +103,14 @@ public class Uncommon : Zombie
             return;
         }
         
-        PipeBombProjectile? activePipeBomb = _level.GetNearestActivePipeBomb(Position);
+        PipeBombProjectile? activePipeBomb = _level.GetNearestEntity<PipeBombProjectile>(Position);
         if (activePipeBomb != null)
         {
             _target = activePipeBomb;
             return;
         }
         
-        _target = _level.GetNearestLivingSurvivor(Position);
+        _target = _level.GetNearestEntity<Survivor>(Position);
     }
     
     private void _UpdatePosition(double elapsedTime)

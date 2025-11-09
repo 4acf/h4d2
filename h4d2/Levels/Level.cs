@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities;
 using H4D2.Entities.Hazards;
+using H4D2.Entities.Mobs;
 using H4D2.Entities.Mobs.Zombies.Commons;
 using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Mobs.Zombies;
@@ -28,7 +29,7 @@ public class Level
     public readonly int Height;
     private double _resetSecondsLeft;
     public bool CanReset => _resetSecondsLeft <= 0;
-    public bool IsGameOver => GetLivingSurvivors().Count == 0;
+    public bool IsGameOver => GetLivingMobs<Survivor>().Count == 0;
     private List<Entity> _entities;
     private List<Particle> _particles;
     
@@ -82,97 +83,21 @@ public class Level
         return null;
     }
 
-    public List<Survivor> GetLivingSurvivors()
+    public List<T> GetLivingMobs<T>() where T : Mob
     {
         return _entities
-            .OfType<Survivor>()
-            .Where(s => s.IsAlive)
+            .OfType<T>()
+            .Where(t => t.IsAlive)
             .ToList();
     }
-    
-    public Survivor? GetNearestLivingSurvivor(ReadonlyPosition position)
-    {
-        Survivor? result = null;
-        double lowestDistance = double.MaxValue;
-        foreach (Survivor survivor in _entities.OfType<Survivor>())
-        {
-            if (!survivor.IsAlive) continue;
-            double distance = ReadonlyPosition.Distance(position, survivor.Position);
-            if (distance < lowestDistance)
-            {
-                result = survivor;
-                lowestDistance = distance;
-            }
-        }
-        return result;
-    }
 
-    public List<Zombie> GetLivingZombies()
-    {
-        return _entities
-            .OfType<Zombie>()
-            .Where(z => z.IsAlive)
-            .ToList();
-    }
-    
-    public Zombie? GetNearestLivingZombie(ReadonlyPosition position, Zombie? exclude = null)
-    {
-        Zombie? result = null;
-        double lowestDistance = double.MaxValue;
-        foreach (Zombie zombie in _entities.OfType<Zombie>())
-        {
-            if (!zombie.IsAlive) continue;
-            if (exclude != null && zombie == exclude) continue;
-            double distance = ReadonlyPosition.Distance(position, zombie.Position);
-            if (distance < lowestDistance)
-            {
-                result = zombie;
-                lowestDistance = distance;
-            }
-        }
-        return result;
-    }
-
-    public PipeBombProjectile? GetNearestActivePipeBomb(ReadonlyPosition position)
-    {
-        PipeBombProjectile? result = null;
-        double lowestDistance = double.MaxValue;
-        foreach (PipeBombProjectile pipeBomb in _entities.OfType<PipeBombProjectile>())
-        {
-            if (pipeBomb.Removed) continue;
-            double distance = ReadonlyPosition.Distance(position, pipeBomb.Position);
-            if (distance < lowestDistance)
-            {
-                result = pipeBomb;
-                lowestDistance = distance;
-            }
-        }
-        return result;
-    }
-
-    public BileBombProjectile? GetNearestActiveBileBomb(ReadonlyPosition position)
-    {
-        BileBombProjectile? result = null;
-        double lowestDistance = double.MaxValue;
-        foreach (BileBombProjectile bileBomb in _entities.OfType<BileBombProjectile>())
-        {
-            if (bileBomb.Removed) continue;
-            double distance = ReadonlyPosition.Distance(position, bileBomb.Position);
-            if (distance < lowestDistance)
-            {
-                result = bileBomb;
-                lowestDistance = distance;
-            }
-        }
-        return result;
-    }
-
-    public T? GetNearestEntity<T>(ReadonlyPosition position) where T : Entity
+    public T? GetNearestEntity<T>(ReadonlyPosition position, T? exclude = null) where T : Entity
     {
         T? result = null;
         double lowestDistance = double.MaxValue;
         foreach (T t in _entities.OfType<T>())
         {
+            if (exclude != null && t == exclude) continue;
             if (t.Removed) continue;
             double distance = ReadonlyPosition.Distance(position, t.Position);
             if (distance < lowestDistance)
@@ -202,7 +127,7 @@ public class Level
     public void Explode(Grenade grenade)
     {
         AddParticle(new Explosion(this, grenade.Position.MutableCopy(), Grenade.SplashRadius));
-        List<Zombie> zombies = GetLivingZombies();
+        List<Zombie> zombies = GetLivingMobs<Zombie>();
         foreach (Zombie zombie in zombies)
         {
             double distance = ReadonlyPosition.Distance(grenade.Position, zombie.CenterMass);
@@ -216,7 +141,7 @@ public class Level
     public void Explode(PipeBombProjectile pipeBomb)
     {
         AddParticle(new Explosion(this, pipeBomb.Position.MutableCopy(), PipeBombProjectile.SplashRadius));
-        List<Zombie> zombies = GetLivingZombies();
+        List<Zombie> zombies = GetLivingMobs<Zombie>();
         foreach (Zombie zombie in zombies)
         {
             double distance = ReadonlyPosition.Distance(pipeBomb.Position, zombie.CenterMass);
@@ -355,7 +280,7 @@ public class Level
     // these functions are somewhat temporary until i add real levels
     private void _ReplenishZombies()
     {
-        List<Zombie> zombies = GetLivingZombies();
+        List<Zombie> zombies = GetLivingMobs<Zombie>();
         if (zombies.Count < _minZombies)
         {
             SpawnZombies();

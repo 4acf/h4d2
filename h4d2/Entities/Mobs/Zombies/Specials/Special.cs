@@ -1,4 +1,5 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Entities.Mobs.Survivors;
+using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Zombies.Specials;
@@ -26,7 +27,7 @@ public class Special : Zombie
         if (_target == null || _target.Removed)
         {
             _isAttacking = false;
-            _target = _level.GetNearestLivingSurvivor(Position);
+            _target = _level.GetNearestEntity<Survivor>(Position);
         }
     }
     

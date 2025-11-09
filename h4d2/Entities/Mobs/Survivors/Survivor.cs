@@ -108,11 +108,11 @@ public class Survivor : Mob
     private void _UpdateTarget()
     {
         ReadonlyPosition survivorPosition = CenterMass;
-        _target = _level.GetNearestLivingZombie(Position);
+        _target = _level.GetNearestEntity<Zombie>(Position);
         
         if (_target == null || !_target.IsAlive)
         {
-            _target = _level.GetNearestLivingZombie(Position);
+            _target = _level.GetNearestEntity<Zombie>(Position);
             if (_target == null) return;
             ReadonlyPosition targetPosition = _target.CenterMass;
             _aimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
