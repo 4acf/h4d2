@@ -23,17 +23,17 @@ public abstract class ThrowableProjectile : Projectile
         _spinStep = 0;
         _frameUpdateTimer = new CountdownTimer(_frameDuration);
         _xFlip = (Math.PI / 2) < directionRadians && directionRadians < (3 * Math.PI / 2);
-        _xVelocity = Math.Cos(_directionRadians);
-        _yVelocity = Math.Sin(_directionRadians);
-        _zVelocity = _startingZVelocity;
+        _velocity.X = Math.Cos(_directionRadians);
+        _velocity.Y = Math.Sin(_directionRadians);
+        _velocity.Z = _startingZVelocity;
     }
     
     protected virtual void _UpdatePosition(double elapsedTime)
     {
         double elapsedTimeConstant = 60 * elapsedTime;
-        _xVelocity *= Math.Pow(_drag, elapsedTimeConstant);
-        _yVelocity *= Math.Pow(_drag, elapsedTimeConstant);
-        _zVelocity -= _gravity * elapsedTime;
+        _velocity.X *= Math.Pow(_drag, elapsedTimeConstant);
+        _velocity.Y *= Math.Pow(_drag, elapsedTimeConstant);
+        _velocity.Z -= _gravity * elapsedTime;
         _AttemptMove();
     }
     

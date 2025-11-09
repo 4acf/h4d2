@@ -26,7 +26,7 @@ public class Flame : Particle
         _despawnTimer.Update(elapsedTime);
         if (_despawnTimer.IsFinished)
         {
-            var smoke = new Smoke(_level, _position.Copy(), 0, 0);
+            var smoke = new Smoke(_level, _position.Copy(), new ReadonlyVelocity());
             _level.AddParticle(smoke);
             Removed = true;
         }

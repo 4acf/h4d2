@@ -6,14 +6,14 @@ namespace H4D2.Particles.DebrisParticles.Emitters;
 
 public abstract class Emitter<T> : Debris where T : Granule
 {
-    protected readonly Func<Level, Position, double, double, double, T>
+    protected readonly Func<Level, Position, ReadonlyVelocity, T>
         _factory;
     
     protected Emitter(
         Level level,
         Position position,
         EmitterConfig config,
-        Func<Level, Position, double, double, double, T> factory
+        Func<Level, Position, ReadonlyVelocity, T> factory
     )
         : base(level, position, config)
     {
@@ -25,7 +25,7 @@ public abstract class Emitter<T> : Debris where T : Granule
         base.Update(elapsedTime);
         if (RandomSingleton.Instance.Next(2) != 0)
             return;
-        Granule granule = _factory(_level, _position.Copy(), _xVelocity, _yVelocity, _zVelocity);
+        Granule granule = _factory(_level, _position.Copy(), _velocity.ReadonlyCopy());
         _level.AddParticle(granule);
     }
 }

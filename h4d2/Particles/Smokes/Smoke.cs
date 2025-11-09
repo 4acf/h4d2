@@ -16,19 +16,17 @@ public class Smoke : Particle
     private const int _color = 0x0;
     private double _timeToLiveSeconds;
     private readonly double _maxLifeSeconds;
-    private readonly double _parentXVelocity;
-    private readonly double _parentYVelocity;
+    private readonly ReadonlyVelocity _parentVelocity;
     private readonly int _randomDx;
     private readonly int _randomDy;
     
-    public Smoke(Level level, Position position, double parentXVelocity, double parentYVelocity)
+    public Smoke(Level level, Position position, ReadonlyVelocity parentVelocity)
         : base(level, position)
     {
         _timeToLiveSeconds = RandomSingleton.Instance.NextDouble();
         _timeToLiveSeconds = MathHelpers.ClampDouble(_timeToLiveSeconds, _minLifetime, _maxLifetime);
         _maxLifeSeconds = _timeToLiveSeconds;
-        _parentXVelocity = parentXVelocity;
-        _parentYVelocity = parentYVelocity;
+        _parentVelocity = parentVelocity;
         _randomDx = RandomSingleton.Instance.Next(3) - 1;
         _randomDy = RandomSingleton.Instance.Next(3) - 1;
     }
@@ -44,22 +42,22 @@ public class Smoke : Particle
 
         double deltaDecay = Math.Pow(_decay, _baseFramerate * elapsedTime);
         double deltaInertia = _inertia * (_baseFramerate * elapsedTime);
-        _xVelocity *= deltaDecay;
-        _yVelocity *= deltaDecay;
-        _xVelocity += _parentXVelocity * deltaInertia;
-        _yVelocity += _parentYVelocity * deltaInertia;
-        _zVelocity += _gravity * elapsedTime;
+        _velocity.X *= deltaDecay;
+        _velocity.Y *= deltaDecay;
+        _velocity.X += _parentVelocity.X * deltaInertia;
+        _velocity.Y += _parentVelocity.Y * deltaInertia;
+        _velocity.Z += _gravity * elapsedTime;
         _AttemptMove();
     }
 
     private void _AttemptMove()
     {
-        int steps = (int)(Math.Sqrt(_xVelocity * _xVelocity + _yVelocity * _yVelocity + _zVelocity * _zVelocity) + 1);
+        int steps = (int)(Math.Sqrt(_velocity.HypotenuseSquared) + 1);
         for (int i = 0; i < steps; i++)
         {
-            _Move(_xVelocity / steps, 0, 0);
-            _Move(0,_yVelocity / steps, 0);
-            _Move(0, 0, _zVelocity / steps);
+            _Move(_velocity.X / steps, 0, 0);
+            _Move(0,_velocity.Y / steps, 0);
+            _Move(0, 0, _velocity.Z / steps);
         }
     }
     

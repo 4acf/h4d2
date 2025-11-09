@@ -8,7 +8,7 @@ public class FuelSplatter : Emitter<Fuel>
 {
     public FuelSplatter(Level level, Position position)
         : base(level, position, EmitterConfigs.FuelSplatter,
-            (lvl, pos, xv, yv, zv) => new Fuel(lvl, pos, xv, yv, zv)
+            (lvl, pos, v) => new Fuel(lvl, pos, v)
         )
     {
         

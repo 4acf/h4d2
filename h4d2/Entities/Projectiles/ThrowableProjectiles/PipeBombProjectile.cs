@@ -37,15 +37,15 @@ public class PipeBombProjectile : ThrowableProjectile
         double elapsedTimeConstant = 60 * elapsedTime;
         if (IsOnGround)
         {
-            _xVelocity *= Math.Pow(_groundFriction, elapsedTimeConstant);
-            _yVelocity *= Math.Pow(_groundFriction, elapsedTimeConstant);
+            _velocity.X *= Math.Pow(_groundFriction, elapsedTimeConstant);
+            _velocity.Y *= Math.Pow(_groundFriction, elapsedTimeConstant);
         }
         else
         {
-            _xVelocity *= Math.Pow(_drag, elapsedTimeConstant);
-            _yVelocity *= Math.Pow(_drag, elapsedTimeConstant);
+            _velocity.X *= Math.Pow(_drag, elapsedTimeConstant);
+            _velocity.Y *= Math.Pow(_drag, elapsedTimeConstant);
         }
-        _zVelocity -= _gravity * elapsedTime;
+        _velocity.Z -= _gravity * elapsedTime;
         _AttemptMove();
     }
     
@@ -82,9 +82,9 @@ public class PipeBombProjectile : ThrowableProjectile
     {
         if (entity != null)
         {
-            _xVelocity *= _bounce * -1;
-            _yVelocity *= _bounce * -1;
+            _velocity.X *= _bounce * -1;
+            _velocity.Y *= _bounce * -1;
         }
-        _zVelocity *= _bounce * -1;
+        _velocity.Z *= _bounce * -1;
     }
 }

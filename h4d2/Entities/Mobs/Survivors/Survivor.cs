@@ -177,8 +177,8 @@ public class Survivor : Mob
     
     private void _UpdatePosition(double elapsedTime)
     {
-        _xVelocity *= 0.5;
-        _yVelocity *= 0.5;
+        _velocity.X *= 0.5;
+        _velocity.Y *= 0.5;
 
         double targetDirection = _CalculateBestDirection();
         double directionDiff = targetDirection - _directionRadians;
@@ -187,8 +187,8 @@ public class Survivor : Mob
         _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
         
         double moveSpeed = (_speed * _speedFactor) * elapsedTime;
-        _xVelocity += Math.Cos(_directionRadians) * moveSpeed;
-        _yVelocity += Math.Sin(_directionRadians) * moveSpeed;
+        _velocity.X += Math.Cos(_directionRadians) * moveSpeed;
+        _velocity.Y += Math.Sin(_directionRadians) * moveSpeed;
 
         _AttemptMove();
     }
@@ -292,7 +292,7 @@ public class Survivor : Mob
         while (_frameUpdateTimer.IsFinished)
         {
             _walkStep = (_walkStep + 1) % 4;
-            if (_xVelocity == 0 && _yVelocity == 0) _walkStep = 0;
+            if (_velocity.X == 0 && _velocity.Y == 0) _walkStep = 0;
             int nextLowerFrame = 0;
             if (direction == 2)
             {
@@ -348,7 +348,7 @@ public class Survivor : Mob
         while (_frameUpdateTimer.IsFinished)
         {
             _walkStep = (_walkStep + 1) % 4;
-            if (_xVelocity == 0 && _yVelocity == 0) _walkStep = 0;
+            if (_velocity.X == 0 && _velocity.Y == 0) _walkStep = 0;
             int nextFrame = 0;
             if (direction == 1)
             {

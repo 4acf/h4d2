@@ -8,7 +8,7 @@ public class BloodSplatter : Emitter<Blood>
 {
     public BloodSplatter(Level level, Position position)
         : base(level, position, EmitterConfigs.BloodSplatter, 
-             (lvl, pos, xv, yv, zv) => new Blood(lvl, pos, xv, yv, zv)   
+             (lvl, pos, v) => new Blood(lvl, pos, v)   
         )
     {
         

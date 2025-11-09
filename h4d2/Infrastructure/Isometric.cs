@@ -6,6 +6,7 @@ public abstract class Isometric
 {
     protected readonly Level _level;
     protected readonly Position _position;
+    protected readonly Velocity _velocity;
     public ReadonlyPosition Position => _position.ReadonlyCopy(); 
     public bool Removed { get; protected set; }
     public bool IsOnGround => _position.Z == 0;
@@ -14,6 +15,7 @@ public abstract class Isometric
     {
         _level = level;
         _position = position;
+        _velocity = new Velocity();
         Removed = false;
     }
     

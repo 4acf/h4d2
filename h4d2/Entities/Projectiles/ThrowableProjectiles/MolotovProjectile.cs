@@ -39,8 +39,8 @@ public class MolotovProjectile : ThrowableProjectile
     {
         if (entity != null)
         {
-            _xVelocity *= _bounce * -1;
-            _yVelocity *= _bounce * -1;
+            _velocity.X *= _bounce * -1;
+            _velocity.Y *= _bounce * -1;
         }
         else
         {

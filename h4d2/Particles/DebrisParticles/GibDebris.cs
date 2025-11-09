@@ -17,7 +17,7 @@ public class GibDebris : Debris
     public override void Update(double elapsedTime)
     {
         base.Update(elapsedTime);
-        var blood = new Blood(_level, _position.Copy(), _xVelocity, _yVelocity, _zVelocity);
+        var blood = new Blood(_level, _position.Copy(), _velocity.ReadonlyCopy());
         _level.AddParticle(blood);
     }
     

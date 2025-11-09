@@ -6,8 +6,8 @@ namespace H4D2.Particles.DebrisParticles.Granules;
 
 public class Fuel : Granule
 {
-    public Fuel(Level level, Position position, double xv, double yv, double zv)
-        : base(level, position, GranuleConfigs.Fuel, xv, yv, zv)
+    public Fuel(Level level, Position position, ReadonlyVelocity parentVelocity)
+        : base(level, position, GranuleConfigs.Fuel, parentVelocity)
     {
         if (RandomSingleton.Instance.Next(7) == 0)
         {

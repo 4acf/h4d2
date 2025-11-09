@@ -24,7 +24,7 @@ public class ExplosionFlame : Cloudlet
         if (_frame >= _bitmaps.Length)
         {
             Removed = true;
-            var smoke = new Smoke(_level, _position.Copy(), 0, 0);
+            var smoke = new Smoke(_level, _position.Copy(), new ReadonlyVelocity());
             _level.AddParticle(smoke);
         }
     }

@@ -23,14 +23,14 @@ public abstract class Debris : Particle
         
         do
         {
-            _xVelocity = (RandomSingleton.Instance.NextDouble() * 2) - 1;
-            _yVelocity = (RandomSingleton.Instance.NextDouble() * 2) - 1;
-            _zVelocity = (RandomSingleton.Instance.NextDouble() * 2) - 1;
-        } while(_xVelocity * _xVelocity + _yVelocity * _yVelocity + _zVelocity * _zVelocity > 1);
-        double hypotenuse = Math.Sqrt(_xVelocity * _xVelocity + _yVelocity * _yVelocity + _zVelocity * _zVelocity);
-        _xVelocity /= hypotenuse;
-        _yVelocity /= hypotenuse;
-        _zVelocity /= hypotenuse;
+            _velocity.X = (RandomSingleton.Instance.NextDouble() * 2) - 1;
+            _velocity.Y = (RandomSingleton.Instance.NextDouble() * 2) - 1;
+            _velocity.Z = (RandomSingleton.Instance.NextDouble() * 2) - 1;
+        } while(_velocity.HypotenuseSquared > 1);
+        double hypotenuse = Math.Sqrt(_velocity.HypotenuseSquared);
+        _velocity.X /= hypotenuse;
+        _velocity.Y /= hypotenuse;
+        _velocity.Z /= hypotenuse;
     }
 
     public override void Update(double elapsedTime)
@@ -45,26 +45,26 @@ public abstract class Debris : Particle
         double elapsedTimeConstant = _baseFramerate * elapsedTime;
         if (IsOnGround)
         {
-            _xVelocity *= Math.Pow(_groundFriction, elapsedTimeConstant);
-            _yVelocity *= Math.Pow(_groundFriction, elapsedTimeConstant);
+            _velocity.X *= Math.Pow(_groundFriction, elapsedTimeConstant);
+            _velocity.Y *= Math.Pow(_groundFriction, elapsedTimeConstant);
         }
         else
         {
-            _xVelocity *= Math.Pow(_drag, elapsedTimeConstant);
-            _yVelocity *= Math.Pow(_drag, elapsedTimeConstant);
+            _velocity.X *= Math.Pow(_drag, elapsedTimeConstant);
+            _velocity.Y *= Math.Pow(_drag, elapsedTimeConstant);
         }
-        _zVelocity -= _gravity * elapsedTime;
+        _velocity.Z -= _gravity * elapsedTime;
         _AttemptMove();
     }
     
     private void _AttemptMove()
     {
-        int steps = (int)(Math.Sqrt(_xVelocity * _xVelocity + _yVelocity * _yVelocity + _zVelocity * _zVelocity) + 1);
+        int steps = (int)(Math.Sqrt(_velocity.HypotenuseSquared) + 1);
         for (int i = 0; i < steps; i++)
         {
-            _Move(_xVelocity / steps, 0, 0);
-            _Move(0,_yVelocity / steps, 0);
-            _Move(0, 0, _zVelocity / steps);
+            _Move(_velocity.X / steps, 0, 0);
+            _Move(0,_velocity.Y / steps, 0);
+            _Move(0, 0, _velocity.Z / steps);
         }
     }
 
@@ -98,8 +98,8 @@ public abstract class Debris : Particle
 
     private void _Collide(double xComponent, double yComponent, double zComponent)
     {
-        if (xComponent != 0) _xVelocity *= _bounce * -1;
-        if (yComponent != 0) _yVelocity *= _bounce * -1;
-        if (zComponent != 0) _zVelocity *= _bounce * -1;
+        if (xComponent != 0) _velocity.X *= _bounce * -1;
+        if (yComponent != 0) _velocity.Y *= _bounce * -1;
+        if (zComponent != 0) _velocity.Z *= _bounce * -1;
     }
 }

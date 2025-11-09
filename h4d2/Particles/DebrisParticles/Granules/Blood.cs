@@ -5,8 +5,8 @@ namespace H4D2.Particles.DebrisParticles.Granules;
 
 public class Blood : Granule
 {
-    public Blood(Level level, Position position, double xv, double yv, double zv)
-        : base(level, position, GranuleConfigs.Blood, xv, yv, zv)
+    public Blood(Level level, Position position, ReadonlyVelocity parentVelocity)
+        : base(level, position, GranuleConfigs.Blood, parentVelocity)
     {
         
     }

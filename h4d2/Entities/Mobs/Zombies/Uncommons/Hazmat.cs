@@ -16,9 +16,7 @@ public class Hazmat : Uncommon
     {
         if (entity is Fire)
             return;
-        
-        _xVelocity = 0;
-        _yVelocity = 0;
-        _zVelocity = 0;
+
+        _velocity.Stop();
     }
 }

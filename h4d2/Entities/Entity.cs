@@ -12,17 +12,10 @@ public abstract class Entity : Isometric
     public ReadonlyPosition FootPosition => BoundingBox.FootPosition(Position);
     public bool IsBlockingEntity => this is not Pickup and not Hazard;
     
-    protected double _xVelocity;
-    protected double _yVelocity;
-    protected double _zVelocity;
-    
     protected Entity(Level level, Position position, BoundingBox boundingBox)
         : base(level, position)
     {
         BoundingBox = boundingBox;
-        _xVelocity = 0.0;
-        _yVelocity = 0.0;
-        _zVelocity = 0.0;
     }
     
     public abstract void Update(double elapsedTime);
@@ -32,12 +25,12 @@ public abstract class Entity : Isometric
     
     protected void _AttemptMove()
     {
-        int steps = (int)(Math.Sqrt(_xVelocity * _xVelocity + _yVelocity * _yVelocity + _zVelocity * _zVelocity) + 1);
+        int steps = (int)(Math.Sqrt(_velocity.HypotenuseSquared) + 1);
         for (int i = 0; i < steps; i++)
         {
-            _Move(_xVelocity / steps, 0, 0);
-            _Move(0,_yVelocity / steps, 0);
-            _Move(0, 0, _zVelocity / steps);
+            _Move(_velocity.X / steps, 0, 0);
+            _Move(0,_velocity.Y / steps, 0);
+            _Move(0, 0, _velocity.Z / steps);
         }
     }
 
@@ -96,8 +89,6 @@ public abstract class Entity : Isometric
     
     protected virtual void _Collide(Entity? entity)
     {
-        _xVelocity = 0;
-        _yVelocity = 0;
-        _zVelocity = 0;
+        _velocity.Stop();
     }
 }

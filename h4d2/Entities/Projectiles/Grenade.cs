@@ -57,13 +57,13 @@ public class Grenade : Projectile
     {
         for (int i = 0; i < _numSmokeParticlesPerSecond * elapsedTime; i++)
         {
-            var smoke = new Smoke(_level, _position.Copy(), _xVelocity, _yVelocity);
+            var smoke = new Smoke(_level, _position.Copy(), _velocity.ReadonlyCopy());
             _level.AddParticle(smoke);
         }
         double timeAdjustedSpeed = _speed * elapsedTime;
-        _xVelocity = Math.Cos(_directionRadians) * timeAdjustedSpeed;
-        _yVelocity = Math.Sin(_directionRadians) * timeAdjustedSpeed;
-        _zVelocity -= _gravity * elapsedTime;
+        _velocity.X = Math.Cos(_directionRadians) * timeAdjustedSpeed;
+        _velocity.Y = Math.Sin(_directionRadians) * timeAdjustedSpeed;
+        _velocity.Z -= _gravity * elapsedTime;
         _AttemptMove();
     }
 

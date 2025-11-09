@@ -10,16 +10,16 @@ public abstract class Granule : Debris
     
     private readonly int _color;
     
-    protected Granule(Level level, Position position, GranuleConfig config, double xv, double yv, double zv)
+    protected Granule(Level level, Position position, GranuleConfig config, ReadonlyVelocity parentVelocity)
         : base(level, position, config)
     {
         _color = config.Color;
-        _xVelocity *= _decay;
-        _yVelocity *= _decay;
-        _zVelocity *= _decay;
-        _xVelocity += xv * _inertia;
-        _yVelocity += yv * _inertia;
-        _zVelocity += zv * _inertia;
+        _velocity.X *= _decay;
+        _velocity.Y *= _decay;
+        _velocity.Z *= _decay;
+        _velocity.X += parentVelocity.X * _inertia;
+        _velocity.Y += parentVelocity.Y * _inertia;
+        _velocity.Z += parentVelocity.Z * _inertia;
     }
     
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)

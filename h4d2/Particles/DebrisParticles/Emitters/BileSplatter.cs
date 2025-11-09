@@ -8,7 +8,7 @@ public class BileSplatter : Emitter<Bile>
 {
     public BileSplatter(Level level, Position position)
         : base(level, position, EmitterConfigs.BileSplatter,
-            (lvl, pos, xv, yv, zv) => new Bile(lvl, pos, xv, yv, zv)
+            (lvl, pos, v) => new Bile(lvl, pos, v)
         )
     {
         
