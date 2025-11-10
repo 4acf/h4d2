@@ -257,8 +257,10 @@ public class Level
             int Rank(Type t)
             {
                 if (t == typeof(Fuel)) return 0;
-                if (t == typeof(Flame)) return 2;
-                return 1;
+                if (t == typeof(GibDebris)) return 1;
+                if (t == typeof(Blood)) return 3;
+                if (t == typeof(Flame)) return 4;
+                return 2;
             }
         });
         foreach (Particle particle in _particles)
