@@ -27,8 +27,8 @@ public class Level
     
     public readonly int Width;
     public readonly int Height;
-    private double _resetSecondsLeft;
-    public bool CanReset => _resetSecondsLeft <= 0;
+    private readonly CountdownTimer _levelResetTimer;
+    public bool CanReset => _levelResetTimer.IsFinished;
     public bool IsGameOver => GetLivingMobs<Survivor>().Count == 0;
     private List<Entity> _entities;
     private List<Particle> _particles;
@@ -37,7 +37,7 @@ public class Level
     {
         Width = width;
         Height = height;
-        _resetSecondsLeft = _levelResetCooldownSeconds;
+        _levelResetTimer = new CountdownTimer(_levelResetCooldownSeconds);
         
         _entities = new List<Entity>();
         _particles = new List<Particle>();
@@ -155,7 +155,7 @@ public class Level
     public void Update(double elapsedTime)
     {
         if (IsGameOver)
-            _resetSecondsLeft -= elapsedTime;
+            _levelResetTimer.Update(elapsedTime);
         _UpdateEntities(elapsedTime);
         _UpdateParticles(elapsedTime);
     }
