@@ -21,15 +21,13 @@ public class Molotov : Throwable
         }
     }
 
-    protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
-        screen.BlendFill(
+        shadows.Fill(
             xCorrected + Art.PickupSize - 6,
             yCorrected - Art.PickupSize - 1,
             xCorrected + Art.PickupSize - 3,
-            yCorrected - Art.PickupSize - 1,
-            Art.ShadowColor,
-            Art.ShadowBlend            
+            yCorrected - Art.PickupSize - 1         
         );
     }
 }

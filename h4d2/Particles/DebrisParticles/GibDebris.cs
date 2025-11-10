@@ -26,8 +26,8 @@ public class GibDebris : Debris
         screen.Fill(xCorrected, yCorrected, xCorrected + 1, yCorrected + 1, _color);
     }
 
-    protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
-        screen.BlendFill(xCorrected, yCorrected, xCorrected + 1, yCorrected + 1, Art.ShadowColor, Art.ShadowBlend);
+        shadows.Fill(xCorrected, yCorrected, xCorrected + 1, yCorrected + 1);
     }
 }

@@ -160,10 +160,10 @@ public class Level
         _UpdateParticles(elapsedTime);
     }
     
-    public void Render(Bitmap screen)
+    public void Render(Bitmap screen, ShadowBitmap shadows)
     {
         _RenderBackground(screen);
-        _RenderShadows(screen);
+        _RenderShadows(screen, shadows);
         _RenderParticles(screen);
         _RenderEntities(screen);
     }
@@ -214,20 +214,22 @@ public class Level
     
     private void _RenderBackground(Bitmap screen)
     {
-        
+        screen.Fill(0, 0, Width, Height, 0x5c5b56);
     }
     
-    private void _RenderShadows(Bitmap screen)
+    private void _RenderShadows(Bitmap screen, ShadowBitmap shadows)
     {
         foreach (Entity entity in _entities)
         {
-            entity.RenderShadow(screen);
+            entity.RenderShadow(shadows);
         }
 
         foreach (Particle particle in _particles)
         {
-            particle.RenderShadow(screen);
+            particle.RenderShadow(shadows);
         }
+
+        screen.DrawShadows(shadows);
     }
     
     private void _RenderEntities(Bitmap screen)

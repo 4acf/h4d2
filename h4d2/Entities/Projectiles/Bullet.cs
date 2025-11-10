@@ -42,7 +42,7 @@ public class Bullet : Projectile
         }
     }
 
-    protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
         double xCorrectedDouble = _position.X;
         double yCorrectedDouble = _position.Y;
@@ -53,7 +53,9 @@ public class Bullet : Projectile
         int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
         for (int i = 0; i < steps; i++)
         {
-            screen.SetPixelBlend((int)(xCorrectedDouble + xDifference * i / steps), (int)(yCorrectedDouble + yDifference * i / steps), Art.ShadowColor, Art.ShadowBlend);
+            int x = (int)(xCorrectedDouble + xDifference * i / steps);
+            int y = (int)(yCorrectedDouble + yDifference * i / steps);
+            shadows.SetPixel(x, y);
         }
     }
 

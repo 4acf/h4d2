@@ -31,14 +31,14 @@ public abstract class Isometric
         
     }
 
-    public void RenderShadow(Bitmap screen)
+    public void RenderShadow(ShadowBitmap shadows)
     {
         int xCorrected = (int)_position.X;
         int yCorrected = (int)_position.Y;
-        RenderShadow(screen, xCorrected, yCorrected);
+        RenderShadow(shadows, xCorrected, yCorrected);
     }
 
-    protected virtual void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
+    protected virtual void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
         
     }

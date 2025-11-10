@@ -66,15 +66,13 @@ public class PipeBombProjectile : ThrowableProjectile
         }
     }
 
-    protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
-        screen.BlendFill(
+        shadows.Fill(
             xCorrected + Art.ProjectileSize - 6,
             yCorrected - Art.ProjectileSize - 1,
             xCorrected + Art.ProjectileSize - 2,
-            yCorrected - Art.ProjectileSize - 1,
-            Art.ShadowColor,
-            Art.ShadowBlend            
+            yCorrected - Art.ProjectileSize - 1
         );
     }
 

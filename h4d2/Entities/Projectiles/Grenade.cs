@@ -78,14 +78,14 @@ public class Grenade : Projectile
         }
     }
 
-    protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
-        screen.SetPixelBlend(xCorrected, yCorrected, Art.ShadowColor, Art.ShadowBlend);
+        shadows.SetPixel(xCorrected, yCorrected);
         for (int i = 0; i < _sprites[_directionIndex].Length; i++)
         {
             int dx = _sprites[_directionIndex][i].Item1;
             int dy = _sprites[_directionIndex][i].Item2;
-            screen.SetPixelBlend(xCorrected + dx, yCorrected + dy, Art.ShadowColor, Art.ShadowBlend);
+            shadows.SetPixel(xCorrected + dx, yCorrected + dy);
         }
     }
 

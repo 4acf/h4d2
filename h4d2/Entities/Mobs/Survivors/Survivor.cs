@@ -409,15 +409,13 @@ public class Survivor : Mob
         );
     }
     
-    protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
-        screen.BlendFill(
+        shadows.Fill(
             xCorrected + Art.SpriteSize - 10,
             yCorrected - Art.SpriteSize - 1,
             xCorrected + Art.SpriteSize - 7,
-            yCorrected - Art.SpriteSize - 1,
-            Art.ShadowColor,
-            Art.ShadowBlend            
+            yCorrected - Art.SpriteSize - 1
         );
     }
 

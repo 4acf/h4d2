@@ -42,18 +42,16 @@ public class BileBombProjectile : ThrowableProjectile
         screen.Draw(bitmap, xCorrected, yCorrected, _xFlip);
     }
 
-    protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
         if (_collided)
             return;
             
-        screen.BlendFill(
+        shadows.Fill(
             xCorrected + Art.ProjectileSize - 6,
             yCorrected - Art.ProjectileSize - 1,
             xCorrected + Art.ProjectileSize - 4,
-            yCorrected - Art.ProjectileSize - 1,
-            Art.ShadowColor,
-            Art.ShadowBlend            
+            yCorrected - Art.ProjectileSize - 1
         );
     }
     

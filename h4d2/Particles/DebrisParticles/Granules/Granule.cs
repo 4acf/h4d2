@@ -27,8 +27,8 @@ public abstract class Granule : Debris
         screen.SetPixel(xCorrected, yCorrected, _color);
     }
 
-    protected override void RenderShadow(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
-        screen.SetPixelBlend(xCorrected, yCorrected, Art.ShadowColor, Art.ShadowBlend);
+        shadows.SetPixel(xCorrected, yCorrected);
     }
 }

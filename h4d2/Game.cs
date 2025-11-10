@@ -6,11 +6,13 @@ namespace H4D2;
 public class Game
 {
     private readonly Bitmap _screen;
+    private readonly ShadowBitmap _shadows;
     private Level _level;
     
     public Game(int width, int height)
     {
         _screen = new Bitmap(width, height);
+        _shadows = new ShadowBitmap(width, height);
         _level = new Level(width, height);
     }
 
@@ -26,7 +28,8 @@ public class Game
     public byte[] Render()
     {
         _screen.Clear();
-        _level.Render(_screen);
+        _shadows.Clear();
+        _level.Render(_screen, _shadows);
         return _screen.Data;
     }
 }

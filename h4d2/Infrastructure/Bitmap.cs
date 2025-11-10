@@ -43,12 +43,9 @@ public class Bitmap
 
     public void Clear()
     {
-        for (int i = 0; i < Data.Length; i += 4)
+        for (int i = 0; i < Data.Length; i++)
         {
-            Data[i] = 0x5c;
-            Data[i + 1] = 0x5b;
-            Data[i + 2] = 0x56;
-            Data[i + 3] = 0xff;
+            Data[i] = 0;
         }
     }
 
@@ -82,12 +79,29 @@ public class Bitmap
         }
     }
 
-    public void Fill(int x0, int y0, int x1, int y1, int color)
+    public void DrawShadows(ShadowBitmap shadows)
     {
-        BlendFill(x0, y0, x1, y1, color, 0);
+        if (Width != shadows.Width || Height != shadows.Height)
+            throw new ArgumentException("Shadow bitmap dimensions do not match base bitmap dimensions.");
+
+        for (int i = 0; i < Data.Length; i += 4)
+        {
+            int j = i / 4;
+            bool set = shadows.Data[j];
+            if (!set) continue;
+            Data[i] = MathHelpers.ByteLerp(Data[i], Art.ShadowColor, Art.ShadowBlend);
+            Data[i + 1] = MathHelpers.ByteLerp(Data[i + 1], Art.ShadowColor, Art.ShadowBlend);
+            Data[i + 2] = MathHelpers.ByteLerp(Data[i + 2], Art.ShadowColor, Art.ShadowBlend);
+            Data[i + 3] = 0xff;
+        }
     }
     
-    public void BlendFill(int x0, int y0, int x1, int y1, int color, double blend)
+    public void Fill(int x0, int y0, int x1, int y1, int color)
+    {
+        FillBlend(x0, y0, x1, y1, color, 0);
+    }
+    
+    public void FillBlend(int x0, int y0, int x1, int y1, int color, double blend)
     {
         byte r = (byte)(color >> 16 & 0xff);
         byte g = (byte)(color >> 8 & 0xff);
@@ -119,7 +133,7 @@ public class Bitmap
 
     public void SetPixelBlend(int x, int y, int color, double blend)
     {
-        BlendFill(x, y, x, y, color, blend);
+        FillBlend(x, y, x, y, color, blend);
     }
     
     public bool IsOutOfBounds(int index)
