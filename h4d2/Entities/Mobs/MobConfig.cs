@@ -1,4 +1,6 @@
-﻿namespace H4D2.Entities.Mobs;
+﻿using H4D2.Infrastructure;
+
+namespace H4D2.Entities.Mobs;
 
 public class MobConfig
 {

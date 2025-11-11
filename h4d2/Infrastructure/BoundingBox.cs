@@ -1,6 +1,6 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Entities;
 
-namespace H4D2.Entities;
+namespace H4D2.Infrastructure;
 
 public record BoundingBoxDimensions
 {

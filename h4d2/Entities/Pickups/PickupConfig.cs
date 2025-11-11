@@ -1,4 +1,6 @@
-﻿namespace H4D2.Entities.Pickups;
+﻿using H4D2.Infrastructure;
+
+namespace H4D2.Entities.Pickups;
 
 public class PickupConfig
 {
