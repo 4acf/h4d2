@@ -12,8 +12,10 @@ using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
 using H4D2.Particles;
 using H4D2.Particles.Clouds;
+using H4D2.Particles.Clouds.Cloudlets;
 using H4D2.Particles.DebrisParticles;
 using H4D2.Particles.DebrisParticles.Granules;
+using H4D2.Particles.Smokes;
 
 namespace H4D2.Levels;
 
@@ -243,26 +245,7 @@ public class Level
 
     private void _RenderParticles(Bitmap screen)
     {
-        _particles.Sort((a, b) =>
-        {
-            int rank = Rank(a.GetType()).CompareTo(Rank(b.GetType()));
-            if (rank != 0)
-                return rank;
-
-            if (a.GetType() == typeof(Flame) && b.GetType() == typeof(Flame))
-                return a.Position.Y.CompareTo(b.Position.Y);    
-            
-            return 0;
-
-            int Rank(Type t)
-            {
-                if (t == typeof(Fuel)) return 0;
-                if (t == typeof(GibDebris)) return 1;
-                if (t == typeof(Blood)) return 3;
-                if (t == typeof(Flame)) return 4;
-                return 2;
-            }
-        });
+        _particles.Sort(Particle.Comparator);
         foreach (Particle particle in _particles)
         {
             if(!particle.Removed)

@@ -12,7 +12,7 @@ namespace H4D2.Entities.Mobs.Survivors;
 
 public class Survivor : Mob
 {
-    public bool IsFullHealth => _health == SurvivorConfigs.DefaultHealth;
+    public bool IsFullHealth => _health == _maxHealth;
     
     private const int _boundaryTolerance = 25;
     private const int _runSpeed = 300;
@@ -24,6 +24,7 @@ public class Survivor : Mob
     private const int _healthBarGreen = 0x56de47;
     
     private readonly int _character;
+    private readonly int _maxHealth;
     protected Weapon? _weapon;
     private Zombie? _target;
     private bool _isShooting;
@@ -35,6 +36,7 @@ public class Survivor : Mob
         : base(level, position, config)
     {
         _character = config.Character;
+        _maxHealth = config.Health;
         _target = null;
         _isShooting = false;
         _isAdrenalineBoosted = false;
@@ -55,7 +57,7 @@ public class Survivor : Mob
     public void ConsumeFirstAidKit()
     {
         _EmitHealParticles();
-        int missingHealth = SurvivorConfigs.DefaultHealth - _health;
+        int missingHealth = _maxHealth - _health;
         double healthToRestore = 0.8 * missingHealth;
         _health += (int)healthToRestore;
     }
@@ -63,7 +65,7 @@ public class Survivor : Mob
     public void ConsumePills()
     {
         _EmitHealParticles();
-        int missingHealth = SurvivorConfigs.DefaultHealth - _health;
+        int missingHealth = _maxHealth - _health;
         int healthToRestore = Math.Min(50, missingHealth);
         _health += healthToRestore;
     }
@@ -71,7 +73,7 @@ public class Survivor : Mob
     public void ConsumeAdrenaline()
     {
         _EmitHealParticles();
-        int missingHealth = SurvivorConfigs.DefaultHealth - _health;
+        int missingHealth = _maxHealth - _health;
         int healthToRestore = Math.Min(25, missingHealth);
         _health += healthToRestore;
         _isAdrenalineBoosted = true;
@@ -389,7 +391,7 @@ public class Survivor : Mob
 
     private void _RenderHealthBar(Bitmap screen, int xCorrected, int yCorrected)
     {
-        double percentage = _health / (double)SurvivorConfigs.DefaultHealth;
+        double percentage = _health / (double)_maxHealth;
         int greenPixels = (int)Math.Ceiling(percentage * 10);
         
         screen.Fill(
