@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.Entities.Hazards;
 
@@ -11,9 +12,6 @@ public class HazardConfig
 
 public static class HazardConfigs
 {
-    private const int _collisionMask = 0b10000;
-    private const int _collidesWith = 0b0;
-    
     private static readonly BoundingBoxDimensions _fireDimensions 
         = new(4, 4, 3, Art.ParticleSize, 2);
     
@@ -21,6 +19,6 @@ public static class HazardConfigs
     {
         Damage = 10,
         Duration = 15.0,
-        BoundingBox = new BoundingBox(_collisionMask, _collidesWith, _fireDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Hazard, _fireDimensions)
     };
 }

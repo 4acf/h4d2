@@ -10,12 +10,9 @@ using H4D2.Entities.Pickups.Throwable;
 using H4D2.Entities.Projectiles;
 using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Particles;
 using H4D2.Particles.Clouds;
-using H4D2.Particles.Clouds.Cloudlets;
-using H4D2.Particles.DebrisParticles;
-using H4D2.Particles.DebrisParticles.Granules;
-using H4D2.Particles.Smokes;
 
 namespace H4D2.Levels;
 
@@ -29,13 +26,14 @@ public class Level
     
     public readonly int Width;
     public readonly int Height;
+    public readonly CollisionManager<CollisionGroup> CollisionManager;
     private readonly CountdownTimer _levelResetTimer;
     public bool CanReset => _levelResetTimer.IsFinished;
     public bool IsGameOver => GetLivingMobs<Survivor>().Count == 0;
     private List<Entity> _entities;
     private List<Particle> _particles;
     
-    public Level(int width, int height)
+    public Level(int width, int height, CollisionManager<CollisionGroup> collisionManager)
     {
         Width = width;
         Height = height;
@@ -43,6 +41,7 @@ public class Level
         
         _entities = new List<Entity>();
         _particles = new List<Particle>();
+        CollisionManager = collisionManager;
         
         _entities.Add(new Louis   (this, new Position(32, 120)));
         _entities.Add(new Francis (this, new Position(64, 120)));
@@ -77,7 +76,7 @@ public class Level
         foreach (Entity e2 in _entities)
         {
             if (e2 != e1 &&
-                e1.BoundingBox.CanCollideWith(e2.BoundingBox) &&
+                e1.BoundingBox.CanCollideWith(CollisionManager, e2.BoundingBox) &&
                 e1.IsIntersecting(e2, position)
             )
                 return e2;

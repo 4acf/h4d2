@@ -1,64 +1,71 @@
 ﻿namespace H4D2.Infrastructure;
 
-public class CollisionManager
+public class CollisionManager<T> where T : Enum
 {
     private struct Collidable
     {
         public readonly int Mask;
         public int CollidesWith;
-
+        public int IsBlockedBy;
+        
         public Collidable(int mask)
         {
             Mask = mask;
             CollidesWith = 0;
+            IsBlockedBy = 0;
         }
     }
     
-    private readonly Dictionary<string, Collidable> _collidables;
+    private readonly Dictionary<T, Collidable> _collidables;
     
-    public CollisionManager(IEnumerable<string> collidableObjects)
+    public CollisionManager()
     {
-        _collidables = new Dictionary<string, Collidable>();
+        _collidables = new Dictionary<T, Collidable>();
         int i = 1;
-        foreach (string collidableObject in collidableObjects)
+        foreach (T key in Enum.GetValues(typeof(T)))
         {
             if (i >= int.MaxValue / 2)
                 throw new OverflowException("Max collidable objects reached");
             
-            var collidable = new Collidable(i);
-            _collidables.Add(collidableObject, collidable);
+            _collidables[key] = new Collidable(i);
             i *= 2;
         }
     }
 
-    public void AddOneWayCollision(string key1, string key2)
+    public void AddOneWayBlockingCollision(T key1, T key2)
     {
-        if (!_collidables.TryGetValue(key1, out Collidable collidable1))
-            return;
-
-        if (!_collidables.TryGetValue(key2, out Collidable collidable2))
-            return;
-
+        Collidable collidable1 = _collidables[key1];
+        Collidable collidable2 = _collidables[key2];
+        
         collidable1.CollidesWith |= collidable2.Mask;
-    }
-
-    public int GetCollisionMask(string key)
-    {
-        if(!_collidables.TryGetValue(key, out Collidable collidable))
-            return 0;
-        return collidable.Mask;
-    }
-
-    public int GetCollidesWith(string key)
-    {
-        if (!_collidables.TryGetValue(key, out Collidable collidable))
-            return 0;
-        return collidable.CollidesWith;
+        collidable1.IsBlockedBy |= collidable2.Mask;
+        _collidables[key1] = collidable1;
     }
     
-    public static bool CanCollideWith(int collidesWith, int otherMask)
+    public void AddOneWayNonBlockingCollision(T key1, T key2)
     {
-        return (collidesWith & otherMask) == otherMask
-            && (collidesWith & otherMask) != 0;
+        Collidable collidable1 = _collidables[key1];
+        Collidable collidable2 = _collidables[key2];
+        
+        collidable1.CollidesWith |= collidable2.Mask;
+        _collidables[key1] = collidable1;
+    }
+
+    public bool CanCollideWith(T key1, T key2)
+    {
+        Collidable c1 = _collidables[key1];
+        Collidable c2 = _collidables[key2];
+        
+        return (c1.CollidesWith & c2.Mask) == c2.Mask
+               && (c1.CollidesWith & c2.Mask) != 0;
+    }
+
+    public bool IsBlockedBy(T key1, T key2)
+    {
+        Collidable c1 = _collidables[key1];
+        Collidable c2 = _collidables[key2];
+        
+        return (c1.IsBlockedBy & c2.Mask) == c2.Mask
+               && (c1.IsBlockedBy & c2.Mask) != 0;
     }
 }

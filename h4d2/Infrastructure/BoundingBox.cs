@@ -1,4 +1,5 @@
 ﻿using H4D2.Entities;
+using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.Infrastructure;
 
@@ -9,7 +10,7 @@ public record BoundingBoxDimensions
     public readonly int ZHeight;
     public readonly int SpriteSize;
     public readonly int XOffset;
-
+    
     public BoundingBoxDimensions(int xWidth, int yWidth, int zHeight, int spriteSize, int xOffset = 0)
     {
         XWidth = xWidth;
@@ -22,18 +23,16 @@ public record BoundingBoxDimensions
 
 public class BoundingBox
 {
-    public readonly int CollisionMask;
-    private readonly int _collidesWith;
+    public readonly CollisionGroup CollisionGroup;
     private readonly int _xWidth;
     private readonly int _yWidth;
     private readonly int _zHeight;
     private readonly int _spriteSize;
     private readonly int _xOffset;
     
-    public BoundingBox(int collisionMask, int collidesWith, BoundingBoxDimensions dimensions)
+    public BoundingBox(CollisionGroup collisionGroup, BoundingBoxDimensions dimensions)
     {
-        CollisionMask = collisionMask;
-        _collidesWith = collidesWith;
+        CollisionGroup = collisionGroup;
         _xWidth = dimensions.XWidth;
         _yWidth = dimensions.YWidth;
         _zHeight = dimensions.ZHeight;
@@ -52,9 +51,9 @@ public class BoundingBox
     public double Top(double zPosition) => zPosition + _zHeight;
     public double Bottom(double zPosition) => zPosition;
     
-    public bool CanCollideWith(BoundingBox other)
+    public bool CanCollideWith(CollisionManager<CollisionGroup> collisionManager, BoundingBox other)
     {
-        return (_collidesWith & other.CollisionMask) == other.CollisionMask;
+        return collisionManager.CanCollideWith(CollisionGroup, other.CollisionGroup);
     }
     
     public bool IsIntersecting(Entity other, ReadonlyPosition position)

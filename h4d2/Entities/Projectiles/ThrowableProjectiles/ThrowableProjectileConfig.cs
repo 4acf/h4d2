@@ -1,7 +1,7 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.Entities.Projectiles.ThrowableProjectiles;
-using PCol = ProjectileCollision;
 
 public class ThrowableProjectileConfig
 {
@@ -22,13 +22,13 @@ public static class ThrowableProjectileConfigs
         = new(3, 3, 3, Art.ProjectileSize, 2);
     
     private static readonly BoundingBox _molotovBoundingBox 
-        = new(PCol.CollisionMask, PCol.CollidesWith, _molotovDimensions);
+        = new(CollisionGroup.Projectile, _molotovDimensions);
     
     private static readonly BoundingBox _pipeBombBoundingBox 
-        = new(PCol.CollisionMask, PCol.CollidesWith, _pipeBombDimensions);
+        = new(CollisionGroup.Projectile, _pipeBombDimensions);
 
     private static readonly BoundingBox _bileBombBoundingBox 
-        = new(PCol.CollisionMask, PCol.CollidesWith, _bileBombDimensions);
+        = new(CollisionGroup.Projectile, _bileBombDimensions);
     
     public static readonly ThrowableProjectileConfig Molotov = new()
     {

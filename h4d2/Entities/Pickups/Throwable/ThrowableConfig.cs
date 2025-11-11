@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.Entities.Pickups.Throwable;
 
@@ -10,8 +11,6 @@ public class ThrowableConfig : PickupConfig
 public static class ThrowableConfigs
 {
     private const int _pickupType = 1;
-    private const int _collisionMask = PickupCollision.CollisionMask;
-    private const int _collidesWith = PickupCollision.CollidesWith;
 
     private static readonly BoundingBoxDimensions _molotovBoundingBoxDimensions
         = new(4, 2, 6, Art.PickupSize, 2);
@@ -26,20 +25,20 @@ public static class ThrowableConfigs
     {
         PickupType = _pickupType,
         ThrowableType = 0,
-        BoundingBox = new BoundingBox(_collisionMask, _collidesWith, _molotovBoundingBoxDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Pickup, _molotovBoundingBoxDimensions)
     };
 
     public static readonly ThrowableConfig PipeBomb = new()
     {
         PickupType = _pickupType,
         ThrowableType = 1,
-        BoundingBox = new BoundingBox(_collisionMask, _collidesWith, _pipeBombBoundingBoxDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Pickup, _pipeBombBoundingBoxDimensions)
     };
 
     public static readonly ThrowableConfig BileBomb = new()
     {
         PickupType = _pickupType,
         ThrowableType = 2,
-        BoundingBox = new BoundingBox(_collisionMask, _collidesWith, _bileBombBoundingBoxDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Pickup, _bileBombBoundingBoxDimensions)
     };
 }

@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.Entities.Projectiles;
 
@@ -12,14 +13,8 @@ public static class ProjectileConfig
         = new(2, 2, 2, 0);
     
     public static readonly BoundingBox BulletBoundingBox 
-        = new (ProjectileCollision.CollisionMask, ProjectileCollision.CollidesWith, _bulletDimensions);
+        = new (CollisionGroup.Projectile, _bulletDimensions);
 
     public static readonly BoundingBox GrenadeBoundingBox 
-        = new(ProjectileCollision.CollisionMask, ProjectileCollision.CollidesWith, _grenadeDimensions);
-}
-
-public static class ProjectileCollision
-{
-    public const int CollisionMask = 0b1;
-    public const int CollidesWith = 0b10;
+        = new(CollisionGroup.Projectile, _grenadeDimensions);
 }

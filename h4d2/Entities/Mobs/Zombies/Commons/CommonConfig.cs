@@ -1,7 +1,7 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.Entities.Mobs.Zombies.Commons;
-using ZCol = ZombieCollision;
 
 public class CommonConfig : ZombieConfig;
 
@@ -16,6 +16,6 @@ public static class CommonConfigs
         RunSpeed = 250,
         Damage = 2,
         GibColor = 0x847b71,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _boundingBoxDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Zombie, _boundingBoxDimensions)
     };
 }

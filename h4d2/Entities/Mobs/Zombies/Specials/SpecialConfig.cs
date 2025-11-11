@@ -1,7 +1,7 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.Entities.Mobs.Zombies.Specials;
-using ZCol = ZombieCollision;
 
 public class SpecialConfig : ZombieConfig
 {
@@ -34,7 +34,7 @@ public static class SpecialConfigs
         RunSpeed = 250,
         Damage = 5,
         GibColor = 0x785953,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _hunterDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Zombie, _hunterDimensions)
     };
 
     public static readonly SpecialConfig Boomer = new()
@@ -44,7 +44,7 @@ public static class SpecialConfigs
         RunSpeed = 175,
         Damage = 0,
         GibColor = 0x847b71,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _boomerDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Zombie, _boomerDimensions)
     };
 
     public static readonly SpecialConfig Smoker = new()
@@ -54,7 +54,7 @@ public static class SpecialConfigs
         RunSpeed = 210,
         Damage = 5,
         GibColor = 0x7f7165,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _smokerDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Zombie, _smokerDimensions)
     };
 
     public static readonly SpecialConfig Charger = new()
@@ -64,7 +64,7 @@ public static class SpecialConfigs
         RunSpeed = 250,
         Damage = 15,
         GibColor = 0x435444,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _chargerDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Zombie, _chargerDimensions)
     };
 
     public static readonly SpecialConfig Jockey = new()
@@ -74,7 +74,7 @@ public static class SpecialConfigs
         RunSpeed = 250,
         Damage = 4,
         GibColor = 0xbc9e9e,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _jockeyDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Zombie, _jockeyDimensions)
     };
 
     public static readonly SpecialConfig Spitter = new()
@@ -84,7 +84,7 @@ public static class SpecialConfigs
         RunSpeed = 210,
         Damage = 7,
         GibColor = 0xbc9e9e,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _spitterDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Zombie, _spitterDimensions)
     };
 
     public static readonly SpecialConfig Tank = new()
@@ -94,7 +94,7 @@ public static class SpecialConfigs
         RunSpeed = 210,
         Damage = 24,
         GibColor = 0xd6896b,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _tankDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Zombie, _tankDimensions)
     };
 
     public static readonly SpecialConfig Witch = new()
@@ -104,6 +104,6 @@ public static class SpecialConfigs
         RunSpeed = 300,
         Damage = 100,
         GibColor = 0xbcb8b8,
-        BoundingBox = new BoundingBox(ZCol.CollisionMask, ZCol.CollidesWith, _witchDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Zombie, _witchDimensions)
     };
 }

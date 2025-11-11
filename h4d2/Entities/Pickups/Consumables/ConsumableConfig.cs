@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.Entities.Pickups.Consumables;
 
@@ -10,8 +11,6 @@ public class ConsumableConfig : PickupConfig
 public static class ConsumableConfigs
 {
     private const int _pickupType = 0;
-    private const int _collisionMask = PickupCollision.CollisionMask;
-    private const int _collidesWith = PickupCollision.CollidesWith;
 
     private static readonly BoundingBoxDimensions _firstAidKitBoundingBoxDimensions
         = new(5, 2, 8, Art.PickupSize);
@@ -26,20 +25,20 @@ public static class ConsumableConfigs
     {
         PickupType = _pickupType,
         ConsumableType = 0,
-        BoundingBox = new BoundingBox(_collisionMask, _collidesWith, _firstAidKitBoundingBoxDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Pickup, _firstAidKitBoundingBoxDimensions)
     };
     
     public static readonly ConsumableConfig Pills = new()
     {
         PickupType = _pickupType,
         ConsumableType = 1,
-        BoundingBox = new BoundingBox(_collisionMask, _collidesWith, _pillsBoundingBoxDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Pickup, _pillsBoundingBoxDimensions)
     };
 
     public static readonly ConsumableConfig Adrenaline = new()
     {
         PickupType = _pickupType,
         ConsumableType = 2,
-        BoundingBox = new BoundingBox(_collisionMask, _collidesWith, _adrenalineBoundingBoxDimensions)
+        BoundingBox = new BoundingBox(CollisionGroup.Pickup, _adrenalineBoundingBoxDimensions)
     };
 }

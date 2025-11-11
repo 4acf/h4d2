@@ -1,7 +1,7 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.Entities.Mobs.Zombies.Uncommons;
-using ZCol = ZombieCollision;
 
 public class UncommonConfig : ZombieConfig
 {
@@ -13,7 +13,7 @@ public static class UncommonConfigs
     private static readonly BoundingBoxDimensions _boundingBoxDimensions
         = new(2, 2, 10, Art.SpriteSize, 7);
     private static readonly BoundingBox _boundingBox 
-        = new(ZCol.CollisionMask, ZCol.CollidesWith, _boundingBoxDimensions);
+        = new(CollisionGroup.Zombie, _boundingBoxDimensions);
     private const int _damage = 2;
 
     public static readonly UncommonConfig Hazmat = new()

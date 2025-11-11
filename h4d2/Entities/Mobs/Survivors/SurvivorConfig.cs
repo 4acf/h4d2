@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.Entities.Mobs.Survivors;
 
@@ -16,7 +17,7 @@ public static class SurvivorConfigs
     private static readonly BoundingBoxDimensions _boundingBoxDimensions 
         = new(2, 2, 10, Art.SpriteSize, 7);
     private static readonly BoundingBox _boundingBox 
-        = new(0b100, 0b11010, _boundingBoxDimensions);
+        = new(CollisionGroup.Survivor, _boundingBoxDimensions);
     
     public static readonly SurvivorConfig Coach = new()
     {

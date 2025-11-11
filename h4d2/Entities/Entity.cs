@@ -1,6 +1,5 @@
-﻿using H4D2.Entities.Hazards;
-using H4D2.Entities.Pickups;
-using H4D2.Infrastructure;
+﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Entities;
@@ -10,7 +9,6 @@ public abstract class Entity : Isometric
     public readonly BoundingBox BoundingBox;
     public ReadonlyPosition CenterMass => BoundingBox.CenterMass(Position); 
     public ReadonlyPosition FootPosition => BoundingBox.FootPosition(Position);
-    public bool IsBlockingEntity => this is not Pickup and not Hazard;
     
     protected Entity(Level level, Position position, BoundingBox boundingBox)
         : base(level, position)
@@ -22,6 +20,11 @@ public abstract class Entity : Isometric
 
     public bool IsIntersecting(Entity other, ReadonlyPosition position) =>
         BoundingBox.IsIntersecting(other, position);
+
+    public bool IsBlockingEntity(CollisionGroup otherCollisionGroup)
+    {
+        return _level.CollisionManager.IsBlockedBy(BoundingBox.CollisionGroup, otherCollisionGroup);
+    }
     
     protected void _AttemptMove()
     {
@@ -78,7 +81,7 @@ public abstract class Entity : Isometric
         {
             _Collide(collidingEntity);
             
-            if(collidingEntity.IsBlockingEntity)
+            if(collidingEntity.IsBlockingEntity(BoundingBox.CollisionGroup))
                 return;
         }
 
