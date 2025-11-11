@@ -21,9 +21,9 @@ public abstract class Entity : Isometric
     public bool IsIntersecting(Entity other, ReadonlyPosition position) =>
         BoundingBox.IsIntersecting(other, position);
 
-    public bool IsBlockingEntity(CollisionGroup otherCollisionGroup)
+    public bool Blocks(CollisionGroup otherCollisionGroup)
     {
-        return _level.CollisionManager.IsBlockedBy(BoundingBox.CollisionGroup, otherCollisionGroup);
+        return _level.CollisionManager.IsBlockedBy(otherCollisionGroup, BoundingBox.CollisionGroup);
     }
     
     protected void _AttemptMove()
@@ -81,7 +81,7 @@ public abstract class Entity : Isometric
         {
             _Collide(collidingEntity);
             
-            if(collidingEntity.IsBlockingEntity(BoundingBox.CollisionGroup))
+            if(collidingEntity.Blocks(BoundingBox.CollisionGroup))
                 return;
         }
 
