@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Projectiles.ThrowableProjectiles;
@@ -69,10 +70,10 @@ public class PipeBombProjectile : ThrowableProjectile
     protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
         shadows.Fill(
-            xCorrected + Art.ProjectileSize - 6,
-            yCorrected - Art.ProjectileSize - 1,
-            xCorrected + Art.ProjectileSize - 2,
-            yCorrected - Art.ProjectileSize - 1
+            xCorrected + H4D2Art.ProjectileSize - 6,
+            yCorrected - H4D2Art.ProjectileSize - 1,
+            xCorrected + H4D2Art.ProjectileSize - 2,
+            yCorrected - H4D2Art.ProjectileSize - 1
         );
     }
 

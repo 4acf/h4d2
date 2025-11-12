@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 using H4D2.Particles;
 using H4D2.Particles.DebrisParticles;
@@ -38,7 +39,7 @@ public class BileBombProjectile : ThrowableProjectile
         if (_collided)
             return;
         
-        Bitmap bitmap = Art.Projectiles[_type][_spinStep];
+        Bitmap bitmap = H4D2Art.Projectiles[_type][_spinStep];
         screen.Draw(bitmap, xCorrected, yCorrected, _xFlip);
     }
 
@@ -48,10 +49,10 @@ public class BileBombProjectile : ThrowableProjectile
             return;
             
         shadows.Fill(
-            xCorrected + Art.ProjectileSize - 6,
-            yCorrected - Art.ProjectileSize - 1,
-            xCorrected + Art.ProjectileSize - 4,
-            yCorrected - Art.ProjectileSize - 1
+            xCorrected + H4D2Art.ProjectileSize - 6,
+            yCorrected - H4D2Art.ProjectileSize - 1,
+            xCorrected + H4D2Art.ProjectileSize - 4,
+            yCorrected - H4D2Art.ProjectileSize - 1
         );
     }
     

@@ -11,7 +11,7 @@ public class UncommonConfig : ZombieConfig
 public static class UncommonConfigs
 {
     private static readonly BoundingBoxDimensions _boundingBoxDimensions
-        = new(2, 2, 10, Art.SpriteSize, 7);
+        = new(2, 2, 10, H4D2Art.SpriteSize, 7);
     private static readonly BoundingBox _boundingBox 
         = new(CollisionGroup.Zombie, _boundingBoxDimensions);
     private const int _damage = 2;

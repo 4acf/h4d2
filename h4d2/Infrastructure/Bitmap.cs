@@ -79,7 +79,7 @@ public class Bitmap
         }
     }
 
-    public void DrawShadows(ShadowBitmap shadows)
+    public void DrawShadows(ShadowBitmap shadows, byte shadowColor, double shadowBlend)
     {
         if (Width != shadows.Width || Height != shadows.Height)
             throw new ArgumentException("Shadow bitmap dimensions do not match base bitmap dimensions.");
@@ -89,9 +89,9 @@ public class Bitmap
             int j = i / 4;
             bool set = shadows.Data[j];
             if (!set) continue;
-            Data[i] = MathHelpers.ByteLerp(Data[i], Art.ShadowColor, Art.ShadowBlend);
-            Data[i + 1] = MathHelpers.ByteLerp(Data[i + 1], Art.ShadowColor, Art.ShadowBlend);
-            Data[i + 2] = MathHelpers.ByteLerp(Data[i + 2], Art.ShadowColor, Art.ShadowBlend);
+            Data[i] = MathHelpers.ByteLerp(Data[i], shadowColor, shadowBlend);
+            Data[i + 1] = MathHelpers.ByteLerp(Data[i + 1], shadowColor, shadowBlend);
+            Data[i + 2] = MathHelpers.ByteLerp(Data[i + 2], shadowColor, shadowBlend);
             Data[i + 3] = 0xff;
         }
     }

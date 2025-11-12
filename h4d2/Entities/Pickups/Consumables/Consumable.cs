@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Pickups.Consumables;
@@ -15,7 +16,7 @@ public abstract class Consumable : Pickup
     
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        Bitmap bitmap = Art.Pickups[_pickupType][_consumableType];
+        Bitmap bitmap = H4D2Art.Pickups[_pickupType][_consumableType];
         screen.Draw(bitmap, xCorrected, yCorrected);
     }
 }

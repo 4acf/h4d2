@@ -230,7 +230,7 @@ public class Level
             particle.RenderShadow(shadows);
         }
 
-        screen.DrawShadows(shadows);
+        screen.DrawShadows(shadows, H4D2Art.ShadowColor, H4D2Art.ShadowBlend);
     }
     
     private void _RenderEntities(Bitmap screen)

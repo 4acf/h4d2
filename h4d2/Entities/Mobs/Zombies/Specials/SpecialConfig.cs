@@ -11,21 +11,21 @@ public class SpecialConfig : ZombieConfig
 public static class SpecialConfigs
 {
     private static readonly BoundingBoxDimensions _hunterDimensions
-        = new(2, 2, 9, Art.SpriteSize, 7);
+        = new(2, 2, 9, H4D2Art.SpriteSize, 7);
     private static readonly BoundingBoxDimensions _boomerDimensions
-        = new(6, 6, 9, Art.SpriteSize, 5);
+        = new(6, 6, 9, H4D2Art.SpriteSize, 5);
     private static readonly BoundingBoxDimensions _smokerDimensions
-        = new(2, 2, 12, Art.SpriteSize, 7);
+        = new(2, 2, 12, H4D2Art.SpriteSize, 7);
     private static readonly BoundingBoxDimensions _chargerDimensions
-        = new(7, 7, 12, Art.SpriteSize, 4);
+        = new(7, 7, 12, H4D2Art.SpriteSize, 4);
     private static readonly BoundingBoxDimensions _jockeyDimensions
-        = new(4, 4, 6, Art.SpriteSize, 6);
+        = new(4, 4, 6, H4D2Art.SpriteSize, 6);
     private static readonly BoundingBoxDimensions _spitterDimensions
-        = new(2, 2, 12, Art.SpriteSize, 7);
+        = new(2, 2, 12, H4D2Art.SpriteSize, 7);
     private static readonly BoundingBoxDimensions _tankDimensions
-        = new(10, 8, 12, Art.SpriteSize, 3);
+        = new(10, 8, 12, H4D2Art.SpriteSize, 3);
     private static readonly BoundingBoxDimensions _witchDimensions
-        = new(2, 2, 10, Art.SpriteSize, 7);
+        = new(2, 2, 10, H4D2Art.SpriteSize, 7);
     
     public static readonly SpecialConfig Hunter = new()
     {

@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Projectiles.ThrowableProjectiles;
@@ -49,7 +50,7 @@ public abstract class ThrowableProjectile : Projectile
     
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        Bitmap bitmap = Art.Projectiles[_type][_spinStep];
+        Bitmap bitmap = H4D2Art.Projectiles[_type][_spinStep];
         screen.Draw(bitmap, xCorrected, yCorrected, _xFlip);
     }
 }

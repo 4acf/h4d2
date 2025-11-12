@@ -1,6 +1,7 @@
 ﻿using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Zombies.Commons;
@@ -289,8 +290,8 @@ public class Common : Zombie
     
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        Bitmap lowerBitmap = Art.Commons[_type][_lowerFrame];
-        Bitmap upperBitmap = Art.Commons[_type][_upperFrame];
+        Bitmap lowerBitmap = H4D2Art.Commons[_type][_lowerFrame];
+        Bitmap upperBitmap = H4D2Art.Commons[_type][_upperFrame];
         screen.Draw(lowerBitmap, xCorrected, yCorrected, _xFlip);
         screen.Draw(upperBitmap, xCorrected, yCorrected, _xFlip);
     }
@@ -298,10 +299,10 @@ public class Common : Zombie
     protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
         shadows.Fill(
-            xCorrected + Art.SpriteSize - 10,
-            yCorrected - Art.SpriteSize - 1,
-            xCorrected + Art.SpriteSize - 7,
-            yCorrected - Art.SpriteSize - 1
+            xCorrected + H4D2Art.SpriteSize - 10,
+            yCorrected - H4D2Art.SpriteSize - 1,
+            xCorrected + H4D2Art.SpriteSize - 7,
+            yCorrected - H4D2Art.SpriteSize - 1
         );
     }
 }

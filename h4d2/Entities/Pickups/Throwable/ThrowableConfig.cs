@@ -13,13 +13,13 @@ public static class ThrowableConfigs
     private const int _pickupType = 1;
 
     private static readonly BoundingBoxDimensions _molotovBoundingBoxDimensions
-        = new(4, 2, 6, Art.PickupSize, 2);
+        = new(4, 2, 6, H4D2Art.PickupSize, 2);
     
     private static readonly BoundingBoxDimensions _pipeBombBoundingBoxDimensions
-        = new(2, 2, 7, Art.PickupSize, 2);
+        = new(2, 2, 7, H4D2Art.PickupSize, 2);
 
     private static readonly BoundingBoxDimensions _bileBombBoundingBoxDimensions
-        = new(3, 3, 7, Art.PickupSize, 2);
+        = new(3, 3, 7, H4D2Art.PickupSize, 2);
 
     public static readonly ThrowableConfig Molotov = new()
     {

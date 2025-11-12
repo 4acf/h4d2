@@ -13,13 +13,13 @@ public static class ConsumableConfigs
     private const int _pickupType = 0;
 
     private static readonly BoundingBoxDimensions _firstAidKitBoundingBoxDimensions
-        = new(5, 2, 8, Art.PickupSize);
+        = new(5, 2, 8, H4D2Art.PickupSize);
     
     private static readonly BoundingBoxDimensions _pillsBoundingBoxDimensions
-        = new(4, 2, 6, Art.PickupSize, 2);
+        = new(4, 2, 6, H4D2Art.PickupSize, 2);
 
     private static readonly BoundingBoxDimensions _adrenalineBoundingBoxDimensions
-        = new(3, 2, 3, Art.PickupSize, 2);
+        = new(3, 2, 3, H4D2Art.PickupSize, 2);
     
     public static readonly ConsumableConfig FirstAidKit = new()
     {

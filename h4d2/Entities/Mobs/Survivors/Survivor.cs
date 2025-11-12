@@ -3,6 +3,7 @@ using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Pickups;
 using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 using H4D2.Particles.Clouds;
 using H4D2.Weapons;
@@ -382,8 +383,8 @@ public class Survivor : Mob
     {
         _RenderHealthBar(screen, xCorrected, yCorrected);
         
-        Bitmap lowerBitmap = Art.Survivors[_character][_lowerFrame];
-        Bitmap upperBitmap = Art.Survivors[_character][_upperFrame];
+        Bitmap lowerBitmap = H4D2Art.Survivors[_character][_lowerFrame];
+        Bitmap upperBitmap = H4D2Art.Survivors[_character][_upperFrame];
         screen.Draw(lowerBitmap, xCorrected, yCorrected, _xFlip);
         screen.Draw(upperBitmap, xCorrected, yCorrected, _xFlip);
     }
@@ -394,17 +395,17 @@ public class Survivor : Mob
         int greenPixels = (int)Math.Ceiling(percentage * 10);
         
         screen.Fill(
-            xCorrected + Art.SpriteSize - 13 + greenPixels,
+            xCorrected + H4D2Art.SpriteSize - 13 + greenPixels,
             yCorrected - 3,
-            xCorrected + Art.SpriteSize - 4,
+            xCorrected + H4D2Art.SpriteSize - 4,
             yCorrected - 3,
             _healthBarRed
         );
         
         screen.Fill(
-            xCorrected + Art.SpriteSize - 13,
+            xCorrected + H4D2Art.SpriteSize - 13,
             yCorrected - 3,
-            xCorrected + Art.SpriteSize - 14 + greenPixels,
+            xCorrected + H4D2Art.SpriteSize - 14 + greenPixels,
             yCorrected - 3,
             _healthBarGreen
         );
@@ -413,10 +414,10 @@ public class Survivor : Mob
     protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
         shadows.Fill(
-            xCorrected + Art.SpriteSize - 10,
-            yCorrected - Art.SpriteSize - 1,
-            xCorrected + Art.SpriteSize - 7,
-            yCorrected - Art.SpriteSize - 1
+            xCorrected + H4D2Art.SpriteSize - 10,
+            yCorrected - H4D2Art.SpriteSize - 1,
+            xCorrected + H4D2Art.SpriteSize - 7,
+            yCorrected - H4D2Art.SpriteSize - 1
         );
     }
 

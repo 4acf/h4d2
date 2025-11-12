@@ -1,5 +1,5 @@
-﻿using H4D2.Entities.Mobs.Survivors;
-using H4D2.Infrastructure;
+﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Pickups.Throwable;
@@ -16,7 +16,7 @@ public abstract class Throwable : Pickup
     
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        Bitmap bitmap = Art.Pickups[_pickupType][_throwableType];
+        Bitmap bitmap = H4D2Art.Pickups[_pickupType][_throwableType];
         screen.Draw(bitmap, xCorrected, yCorrected);
     }
 }

@@ -13,13 +13,13 @@ public class ThrowableProjectileConfig
 public static class ThrowableProjectileConfigs
 {
     private static readonly BoundingBoxDimensions _molotovDimensions
-        = new(4, 4, 4, Art.ProjectileSize, 2);
+        = new(4, 4, 4, H4D2Art.ProjectileSize, 2);
     
     private static readonly BoundingBoxDimensions _pipeBombDimensions
-        = new(2, 2, 2, Art.ProjectileSize, 3);
+        = new(2, 2, 2, H4D2Art.ProjectileSize, 3);
 
     private static readonly BoundingBoxDimensions _bileBombDimensions
-        = new(3, 3, 3, Art.ProjectileSize, 2);
+        = new(3, 3, 3, H4D2Art.ProjectileSize, 2);
     
     private static readonly BoundingBox _molotovBoundingBox 
         = new(CollisionGroup.Projectile, _molotovDimensions);

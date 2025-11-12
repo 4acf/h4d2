@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 using H4D2.Particles.Smokes;
 
@@ -41,7 +42,7 @@ public class Flame : Particle
 
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        Bitmap bitmap = Art.Fire[_frame];
+        Bitmap bitmap = H4D2Art.Fire[_frame];
         screen.Draw(bitmap, xCorrected, yCorrected);
     }
 }

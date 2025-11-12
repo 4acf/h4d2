@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.Particles.Clouds.Cloudlets;
 
@@ -13,13 +14,13 @@ public static class CloudletConfigs
     public static readonly CloudletConfig ExplosionFlame = new()
     {
         FrameDuration = 1.0 / 16.0,
-        Bitmaps = Art.Explosion
+        Bitmaps = H4D2Art.Explosion
     };
     
     public static readonly CloudletConfig Heal = new()
     {
         FrameDuration = 1.0 / 16.0,
-        Bitmaps = Art.HealParticle
+        Bitmaps = H4D2Art.HealParticle
     };
 }
 

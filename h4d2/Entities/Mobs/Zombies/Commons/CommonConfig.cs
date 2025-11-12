@@ -8,7 +8,7 @@ public class CommonConfig : ZombieConfig;
 public static class CommonConfigs
 {
     private static readonly BoundingBoxDimensions _boundingBoxDimensions
-        = new(2, 2, 10, Art.SpriteSize, 7);
+        = new(2, 2, 10, H4D2Art.SpriteSize, 7);
     
     public static readonly CommonConfig Common = new()
     {

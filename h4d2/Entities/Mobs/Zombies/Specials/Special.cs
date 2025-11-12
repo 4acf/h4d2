@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities.Mobs.Survivors;
 using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Zombies.Specials;
@@ -110,17 +111,17 @@ public class Special : Zombie
 
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        Bitmap animationCycleBitmap = Art.Specials[_type][_walkFrame];
+        Bitmap animationCycleBitmap = H4D2Art.Specials[_type][_walkFrame];
         screen.Draw(animationCycleBitmap, xCorrected, yCorrected, _xFlip);
     }
     
     protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
         shadows.Fill(
-            xCorrected + Art.SpriteSize - 10,
-            yCorrected - Art.SpriteSize - 1,
-            xCorrected + Art.SpriteSize - 7,
-            yCorrected - Art.SpriteSize - 1
+            xCorrected + H4D2Art.SpriteSize - 10,
+            yCorrected - H4D2Art.SpriteSize - 1,
+            xCorrected + H4D2Art.SpriteSize - 7,
+            yCorrected - H4D2Art.SpriteSize - 1
         );
     }
 }
