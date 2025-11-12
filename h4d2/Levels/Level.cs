@@ -30,8 +30,8 @@ public class Level
     private readonly CountdownTimer _levelResetTimer;
     public bool CanReset => _levelResetTimer.IsFinished;
     public bool IsGameOver => GetLivingMobs<Survivor>().Count == 0;
-    private List<Entity> _entities;
-    private List<Particle> _particles;
+    private readonly List<Entity> _entities;
+    private readonly List<Particle> _particles;
     
     public Level(int width, int height, CollisionManager<CollisionGroup> collisionManager)
     {
@@ -39,8 +39,8 @@ public class Level
         Height = height;
         _levelResetTimer = new CountdownTimer(_levelResetCooldownSeconds);
         
-        _entities = new List<Entity>();
-        _particles = new List<Particle>();
+        _entities = [];
+        _particles = [];
         CollisionManager = collisionManager;
         
         _entities.Add(new Louis   (this, new Position(32, 120)));
@@ -235,7 +235,7 @@ public class Level
     
     private void _RenderEntities(Bitmap screen)
     {
-        _entities = _entities.OrderByDescending(e => e.FootPosition.Y).ToList();
+        _entities.Sort((a, b) => b.FootPosition.Y.CompareTo(a.FootPosition.Y));
         foreach (Entity entity in _entities)
         {
             entity.Render(screen);
