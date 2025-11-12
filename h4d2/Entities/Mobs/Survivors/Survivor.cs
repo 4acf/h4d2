@@ -10,7 +10,7 @@ using H4D2.Weapons;
 
 namespace H4D2.Entities.Mobs.Survivors;
 
-public class Survivor : Mob
+public abstract class Survivor : Mob
 {
     public bool IsFullHealth => _health == _maxHealth;
     

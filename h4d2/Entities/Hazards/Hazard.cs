@@ -3,7 +3,7 @@ using H4D2.Levels;
 
 namespace H4D2.Entities.Hazards;
 
-public class Hazard : Entity
+public abstract class Hazard : Entity
 {
     public readonly int Damage;
     protected readonly CountdownTimer _despawnTimer;

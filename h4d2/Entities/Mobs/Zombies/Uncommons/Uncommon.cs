@@ -6,7 +6,7 @@ using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Zombies.Uncommons;
 
-public class Uncommon : Zombie
+public abstract class Uncommon : Zombie
 {
     protected const double _attackRange = 5.0;
     protected const double _attackDelay = 1.0;
