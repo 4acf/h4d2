@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities.Hazards;
 using H4D2.Entities.Mobs.Zombies;
+using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Pickups;
 using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
@@ -423,16 +424,20 @@ public abstract class Survivor : Mob
 
     protected override void _Collide(Entity? entity)
     {
-        if (entity == null)
+        switch (entity)
         {
-            base._Collide(entity);
-            return;
+            case Pickup pickup:
+                pickup.PickUp(this);
+                break;
+            case Hazard hazard:
+                _TakeHazardDamage(hazard.Damage);
+                break;
+            case Witch witch:
+                witch.Alert();
+                break;
+            default:
+                base._Collide(entity);
+                break;
         }
-        if (entity is Pickup pickup)
-            pickup.PickUp(this);
-        else if (entity is Hazard hazard)
-            _TakeHazardDamage(hazard.Damage);
-        else
-            base._Collide(entity);
     }
 }

@@ -64,7 +64,7 @@ public abstract class Mob : Entity
         _hazardDamageTimer = new CountdownTimer(_hazardDamageCooldownSeconds);
     }
     
-    public void HitBy(Zombie zombie)
+    public virtual void HitBy(Zombie zombie)
     {
         if (Removed)
             return;
@@ -77,7 +77,7 @@ public abstract class Mob : Entity
         _level.AddParticle(bloodSplatter);
     }
     
-    protected void _TakeHazardDamage(int damage)
+    protected virtual void _TakeHazardDamage(int damage)
     {
         if (Removed)
             return;

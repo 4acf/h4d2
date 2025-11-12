@@ -4,6 +4,7 @@ using H4D2.Entities.Mobs;
 using H4D2.Entities.Mobs.Zombies.Commons;
 using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Mobs.Zombies;
+using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Mobs.Zombies.Uncommons;
 using H4D2.Entities.Pickups.Consumables;
 using H4D2.Entities.Pickups.Throwable;
@@ -43,32 +44,8 @@ public class Level
         _particles = [];
         CollisionManager = collisionManager;
         
-        _entities.Add(new Louis   (this, new Position(32, 120)));
-        _entities.Add(new Francis (this, new Position(64, 120)));
-        _entities.Add(new Zoey    (this, new Position(96, 120)));
-        _entities.Add(new Bill    (this, new Position(128, 120)));
-        _entities.Add(new Rochelle(this, new Position(160, 120)));
-        _entities.Add(new Ellis   (this, new Position(192, 120)));
-        _entities.Add(new Nick    (this, new Position(224, 120)));
-        _entities.Add(new Coach   (this, new Position(256, 120)));
-        
-        _entities.Add(new Molotov(this, new Position(32, 192)));
-        _entities.Add(new PipeBomb(this, new Position(64, 192)));
-        _entities.Add(new BileBomb(this, new Position(96, 192)));
-        _entities.Add(new Molotov(this, new Position(128, 192)));
-        _entities.Add(new PipeBomb(this, new Position(160, 192)));
-        _entities.Add(new BileBomb(this, new Position(192, 192)));
-        _entities.Add(new Molotov(this, new Position(224, 192)));
-        _entities.Add(new PipeBomb(this, new Position(256, 192)));
-        
-        _entities.Add(new FirstAidKit(this, new Position(32, 32)));
-        _entities.Add(new Pills(this, new Position(64, 32)));
-        _entities.Add(new Adrenaline(this, new Position(96, 32)));
-        _entities.Add(new FirstAidKit(this, new Position(128, 32)));
-        _entities.Add(new Pills(this, new Position(160, 32)));
-        _entities.Add(new Adrenaline(this, new Position(192, 32)));
-        _entities.Add(new FirstAidKit(this, new Position(224, 32)));
-        _entities.Add(new Pills(this, new Position(256, 32)));
+        _entities.Add(new Coach(this, new Position(256, 120)));
+        _entities.Add(new Witch(this, new Position(50, 50)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position)
@@ -189,7 +166,7 @@ public class Level
             _entities.RemoveAt(indexesToRemove[i]);
         }
 
-        _ReplenishZombies();
+        //_ReplenishZombies();
     }
 
     private void _UpdateParticles(double elapsedTime)

@@ -18,21 +18,23 @@ public abstract class Special : Zombie
     public override void Update(double elapsedTime)
     {
         _hazardDamageTimer.Update(elapsedTime);
+        _UpdateAttackState(elapsedTime);
         _UpdateTarget();
         _UpdatePosition(elapsedTime);
         _UpdateSprite(elapsedTime);
     }
 
-    private void _UpdateTarget()
+    protected virtual void _UpdateAttackState(double elapsedTime)
     {
-        if (_target == null || _target.Removed)
-        {
-            _isAttacking = false;
-            _target = _level.GetNearestEntity<Survivor>(Position);
-        }
+        
     }
     
-    private void _UpdatePosition(double elapsedTime)
+    protected virtual void _UpdateTarget()
+    {
+        _target = _level.GetNearestEntity<Survivor>(Position);
+    }
+    
+    protected virtual void _UpdatePosition(double elapsedTime)
     {
         _velocity.X *= 0.5;
         _velocity.Y *= 0.5;
@@ -52,7 +54,7 @@ public abstract class Special : Zombie
         _AttemptMove();
     }
     
-    private void _UpdateSprite(double elapsedTime)
+    protected virtual void _UpdateSprite(double elapsedTime)
     {
         _frameUpdateTimer.Update(elapsedTime);
 

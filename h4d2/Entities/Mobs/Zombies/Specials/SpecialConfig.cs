@@ -101,7 +101,7 @@ public static class SpecialConfigs
     {
         Type = 7,
         Health = 1000,
-        RunSpeed = 300,
+        RunSpeed = 350,
         Damage = 100,
         GibColor = 0xbcb8b8,
         BoundingBox = new BoundingBox(CollisionGroup.Zombie, _witchDimensions)
