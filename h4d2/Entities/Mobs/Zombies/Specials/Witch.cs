@@ -99,13 +99,13 @@ public class Witch : Special
     {
         if (!_isAlerted)
         {
-            _walkFrame = _idleFrame;
+            _frame = _idleFrame;
             return;
         }
 
         if (!_cooldownBeforeChasingTimer.IsFinished)
         {
-            _walkFrame = _alertedFrame;
+            _frame = _alertedFrame;
             return;
         }
         

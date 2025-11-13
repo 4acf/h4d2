@@ -7,6 +7,7 @@ namespace H4D2.Entities.Mobs.Zombies.Specials;
 
 public abstract class Special : Zombie
 {
+    protected int _frame;
     private readonly int _type;
     
     protected Special(Level level, Position position, SpecialConfig config) 
@@ -106,14 +107,14 @@ public abstract class Special : Zombie
                     _ => nextFrame
                 };
             }
-            _walkFrame = nextFrame;
+            _frame = nextFrame;
             _frameUpdateTimer.AddDuration();
         }
     }
 
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        Bitmap animationCycleBitmap = H4D2Art.Specials[_type][_walkFrame];
+        Bitmap animationCycleBitmap = H4D2Art.Specials[_type][_frame];
         screen.Draw(animationCycleBitmap, xCorrected, yCorrected, _xFlip);
     }
     

@@ -142,7 +142,7 @@ public abstract class Survivor : Mob
         _weapon.Update(elapsedTime);
         if (_weapon.CanShoot() && _target != null)
         {
-            _weapon.Shoot(CenterMass.MutableCopy(), _aimDirectionRadians);
+            //_weapon.Shoot(CenterMass.MutableCopy(), _aimDirectionRadians);
             _isShooting = true;
         }
         else

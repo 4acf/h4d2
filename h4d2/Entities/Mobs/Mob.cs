@@ -25,7 +25,6 @@ public abstract class Mob : Entity
     protected double _directionRadians;
     protected bool _xFlip;
     protected int _walkStep;
-    protected int _walkFrame;
     protected int _lowerFrame;
     protected int _upperFrame;
     protected readonly int _gibColor;
@@ -40,7 +39,6 @@ public abstract class Mob : Entity
         _directionRadians = 0.0;
         _xFlip = false;
         _walkStep = 0;
-        _walkFrame = 0;
         _lowerFrame = 0;
         _upperFrame = _upperBitmapOffset;
         _gibColor = config.GibColor;
@@ -56,7 +54,6 @@ public abstract class Mob : Entity
         _directionRadians = 0;
         _xFlip = false;
         _walkStep = 0;
-        _walkFrame = 0;
         _lowerFrame = 0;
         _upperFrame = _upperBitmapOffset;
         _gibColor = config.GibColor;

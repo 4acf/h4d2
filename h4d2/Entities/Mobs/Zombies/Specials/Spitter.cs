@@ -8,11 +8,13 @@ namespace H4D2.Entities.Mobs.Zombies.Specials;
 
 public class Spitter : Special
 {
+    private const int _spitFrameOffset = 9;
     private const int _numDeathSpitPuddles = 30;
     private const double _attackRange = 100.0;
     private const double _attackDelay = 4.0;
     private const double _footstepDelay = 0.03;
     private const double _spitFreezeTime = 1.0;
+    private int _spitFrame;
     private double _aimDirectionRadians;
     private readonly CountdownTimer _attackDelayTimer;
     private readonly CountdownTimer _footstepParticleTimer;
@@ -22,6 +24,7 @@ public class Spitter : Special
     public Spitter(Level level, Position position) 
         : base(level, position, SpecialConfigs.Spitter)
     {
+        _spitFrame = -1;
         _aimDirectionRadians = 0.0;
         _attackDelayTimer = new CountdownTimer(_attackDelay);
         _footstepParticleTimer = new CountdownTimer(_footstepDelay);
@@ -88,12 +91,59 @@ public class Spitter : Special
         }
     }
 
+    protected override void _UpdateSprite(double elapsedTime)
+    {
+        if (_isAttacking)
+        {
+            _UpdateAttackSprite(elapsedTime);
+        }
+        else
+        {
+            _spitFrame = -1;
+            base._UpdateSprite(elapsedTime);
+        }
+    }
+
+    private void _UpdateAttackSprite(double elapsedTime)
+    {
+        _frameUpdateTimer.Update(elapsedTime);
+        int direction = 0;
+        int degrees = MathHelpers.RadiansToDegrees(_directionRadians);
+        switch (degrees)
+        {
+            case >= 315:
+            case < 45:
+                direction = 1;
+                _xFlip = false;
+                break;
+            case < 135:
+                direction = 2;
+                _xFlip = false;
+                break;
+            case < 225:
+                direction = 1;
+                _xFlip = true;
+                break;
+            default:
+                direction = 0;
+                _xFlip = false;
+                break;
+        }
+        
+        while (_frameUpdateTimer.IsFinished)
+        {
+            _spitFrame = _spitFrame == 2 ? _spitFrame : _spitFrame + 1;
+            _frame = _spitFrameOffset + (_spitFrame + (3 * direction));
+            _frameUpdateTimer.AddDuration();
+        }
+    }
+    
     private void _Spit()
     {
         var spit = new SpitProjectile(_level, CenterMass.MutableCopy(), _aimDirectionRadians);
         _level.AddProjectile(spit);
     }
-
+    
     protected override void _Die()
     {
         base._Die();
