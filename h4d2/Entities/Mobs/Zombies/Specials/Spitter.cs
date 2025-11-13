@@ -1,12 +1,14 @@
 ﻿using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
 using H4D2.Levels;
+using H4D2.Particles.DebrisParticles.Emitters;
 using H4D2.Particles.DebrisParticles.Granules;
 
 namespace H4D2.Entities.Mobs.Zombies.Specials;
 
 public class Spitter : Special
 {
+    private const int _numDeathSpitPuddles = 30;
     private const double _attackRange = 100.0;
     private const double _attackDelay = 4.0;
     private const double _footstepDelay = 0.03;
@@ -90,5 +92,15 @@ public class Spitter : Special
     {
         var spit = new SpitProjectile(_level, CenterMass.MutableCopy(), _aimDirectionRadians);
         _level.AddProjectile(spit);
+    }
+
+    protected override void _Die()
+    {
+        base._Die();
+        for (int i = 0; i < _numDeathSpitPuddles; i++)
+        {
+            var spitSplatter = new SpitSplatter(_level, FootPosition.MutableCopy());
+            _level.AddParticle(spitSplatter);
+        }
     }
 }
