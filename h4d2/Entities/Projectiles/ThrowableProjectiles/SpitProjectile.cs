@@ -1,6 +1,7 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
+using H4D2.Particles.DebrisParticles.Emitters;
 using H4D2.Particles.DebrisParticles.Granules;
 
 namespace H4D2.Entities.Projectiles.ThrowableProjectiles;
@@ -34,7 +35,7 @@ public class SpitProjectile : ThrowableProjectile
             int randomDy = RandomSingleton.Instance.Next(2);
             int randomDz = RandomSingleton.Instance.Next(4);
             var position = new Position(CenterMass.X + randomDx, CenterMass.Y + randomDy, CenterMass.Z + randomDz);
-            var spit = new Spit(_level, position, _velocity.ReadonlyCopy());
+            var spit = new InvolatileSpit(_level, position, _velocity.ReadonlyCopy());
             _level.AddParticle(spit);
         }
     }
@@ -58,7 +59,13 @@ public class SpitProjectile : ThrowableProjectile
     protected override void _Collide(Entity? entity)
     {
         base._Collide(entity);
-
+        if (Removed)
+            return;
+        for (int i = 0; i < 60; i++)
+        {
+            var spitSplatter = new SpitSplatter(_level, CenterMass.MutableCopy());
+            _level.AddParticle(spitSplatter);
+        }
         Removed = true;
     }
 }

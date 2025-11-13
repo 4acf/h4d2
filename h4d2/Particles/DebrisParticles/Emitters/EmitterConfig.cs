@@ -27,4 +27,12 @@ public static class EmitterConfigs
         MinLifetime = 0.6,
         MaxLifetime = 1.0
     };
+
+    public static readonly EmitterConfig SpitSplatter = new()
+    {
+        Drag = 0.98,
+        Bounce = 0.3,
+        MinLifetime = 0.8,
+        MaxLifetime = 1.2
+    };
 }

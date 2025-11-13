@@ -15,10 +15,20 @@ public static class HazardConfigs
     private static readonly BoundingBoxDimensions _fireDimensions 
         = new(4, 4, 3, H4D2Art.ParticleSize, 2);
     
+    private static readonly BoundingBoxDimensions _spitDimensions
+        = new(2, 2, 3, H4D2Art.ParticleSize);
+    
     public static readonly HazardConfig Fire = new()
     {
         Damage = 10,
         Duration = 15.0,
         BoundingBox = new BoundingBox(CollisionGroup.Hazard, _fireDimensions)
+    };
+
+    public static readonly HazardConfig Spit = new()
+    {
+        Damage = 7,
+        Duration = 6.0,
+        BoundingBox = new BoundingBox(CollisionGroup.Hazard, _spitDimensions)
     };
 }

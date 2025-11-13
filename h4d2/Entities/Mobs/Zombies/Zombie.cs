@@ -45,14 +45,19 @@ public abstract class Zombie : Mob
     
     protected override void _Collide(Entity? entity)
     {
-        if (entity == null)
+        switch (entity)
         {
-            base._Collide(entity);
-            return;
+            case null:
+                base._Collide(entity);
+                return;
+            case Fire fire:
+                _TakeHazardDamage((int)(fire.Damage * _fireDamageMultipler));
+                break;
+            case SpitPuddle:
+                break;
+            default:
+                base._Collide(entity);
+                break;
         }
-        if (entity is Fire fire)
-            _TakeHazardDamage((int)(fire.Damage * _fireDamageMultipler));
-        else
-            base._Collide(entity);
     }
 }

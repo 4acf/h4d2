@@ -8,7 +8,7 @@ public abstract class Granule : Debris
     private const double _decay = 0.05;
     private const double _inertia = 0.5;
     
-    private readonly int _color;
+    protected readonly int _color;
     
     protected Granule(Level level, Position position, GranuleConfig config, ReadonlyVelocity parentVelocity)
         : base(level, position, config)

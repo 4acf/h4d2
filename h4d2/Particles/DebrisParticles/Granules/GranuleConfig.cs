@@ -34,12 +34,21 @@ public static class GranuleConfigs
         Color = 0x4d4c47
     };
 
-    public static readonly GranuleConfig Spit = new()
+    public static readonly GranuleConfig InvolatileSpit = new()
     {
         Drag = 0.98,
         Bounce = 0.0,
         MinLifetime = 0.8,
         MaxLifetime = 1.2,
-        Color = 0x9fff05,
+        Color = 0x9fff05
+    };
+    
+    public static readonly GranuleConfig VolatileSpit = new()
+    {
+        Drag = 0.98,
+        Bounce = 0.0,
+        MinLifetime = 5.6,
+        MaxLifetime = 6.4,
+        Color = 0x9fff05
     };
 }

@@ -35,7 +35,7 @@ public class Spitter : Special
             int randomInt = RandomSingleton.Instance.Next(5);
             if (randomInt != 0)
             {
-                var spit = new Spit(_level, FootPosition.MutableCopy(), _nullVelocity);
+                var spit = new InvolatileSpit(_level, FootPosition.MutableCopy(), _nullVelocity);
                 _level.AddParticle(spit);
             }
             _footstepParticleTimer.Reset();
