@@ -89,16 +89,8 @@ public class Grenade : Projectile
 
     protected override void _Collide(Entity? entity)
     {
-        // currently this will double grenade damage on a direct hit (Explode + HitBy damage will stack)
-        // im inclined to keep this for balancing reasons
         base._Collide(entity);
         _level.Explode(this);
-        if (entity == null || entity is not Zombie zombie)
-        {
-            Removed = true;
-            return;
-        }
-        zombie.HitBy(this);
         Removed = true;
     }
 }
