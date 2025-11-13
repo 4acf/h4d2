@@ -45,7 +45,7 @@ public class Level
         CollisionManager = collisionManager;
         
         _entities.Add(new Coach(this, new Position(256, 120)));
-        _entities.Add(new Witch(this, new Position(50, 50)));
+        _entities.Add(new Spitter(this, new Position(50, 50)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position)

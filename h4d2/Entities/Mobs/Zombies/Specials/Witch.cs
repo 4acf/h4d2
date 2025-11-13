@@ -61,20 +61,14 @@ public class Witch : Special
     protected override void _UpdateAttackState(double elapsedTime)
     {
         if (!_isAlerted)
-        {
             return;
-        }
         
         _attackDelayTimer.Update(elapsedTime);
         if (_target == null || _target.Removed)
-        {
             return;
-        }
 
         if (_target is not Survivor survivor)
-        {
             return;
-        }
         
         ReadonlyPosition targetPosition = _target.CenterMass;
         ReadonlyPosition zombiePosition = CenterMass;

@@ -1,17 +1,14 @@
-﻿using H4D2.Entities.Mobs.Zombies;
-using H4D2.Infrastructure;
+﻿using H4D2.Infrastructure;
 using H4D2.Levels;
-using H4D2.Particles.Smokes;
 
 namespace H4D2.Entities.Projectiles;
 
-public class Grenade : Projectile
+public class Spit : Projectile
 {
-    public const double SplashRadius = 15.0;
     private const double _speed = 150.0;
-    private const int _color = 0x333333;
-    private const int _numSmokeParticlesPerSecond = 120;
-    private const double _gravity = 0.15;
+    private const int _color = 0x9fff05;
+    private const int _numSpitParticlesPerSecond = 10;
+    private const double _gravity = 0.5;
     
     private readonly int _directionIndex;
     private static readonly (int, int)[][] _sprites =
@@ -26,8 +23,8 @@ public class Grenade : Projectile
         [( 0,  1), (-1,  0), ( 1,  0), ( 0, -1), ( 1, -1)]  // SE
     };
     
-    public Grenade(Level level, Position position, int damage, double directionRadians)
-        : base(level, position, ProjectileConfig.GrenadeBoundingBox, damage, directionRadians)
+    public Spit(Level level, Position position, double directionRadians)
+        : base(level, position, ProjectileConfig.SpitBoundingBox, 0, directionRadians)
     {
         _directionIndex = _ResolveDirectionIndex(directionRadians);
     }
@@ -50,13 +47,12 @@ public class Grenade : Projectile
         };
         return index;
     }
-    
+
     public override void Update(double elapsedTime)
     {
-        for (int i = 0; i < _numSmokeParticlesPerSecond * elapsedTime; i++)
+        for (int i = 0; i < _numSpitParticlesPerSecond * elapsedTime; i++)
         {
-            var smoke = new Smoke(_level, _position.Copy(), _velocity.ReadonlyCopy());
-            _level.AddParticle(smoke);
+            
         }
         double timeAdjustedSpeed = _speed * elapsedTime;
         _velocity.X = Math.Cos(_directionRadians) * timeAdjustedSpeed;
@@ -64,7 +60,7 @@ public class Grenade : Projectile
         _velocity.Z -= _gravity * elapsedTime;
         _AttemptMove();
     }
-
+    
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
         screen.SetPixel(xCorrected, yCorrected, _color);
@@ -89,16 +85,8 @@ public class Grenade : Projectile
 
     protected override void _Collide(Entity? entity)
     {
-        // currently this will double grenade damage on a direct hit (Explode + HitBy damage will stack)
-        // im inclined to keep this for balancing reasons
         base._Collide(entity);
-        _level.Explode(this);
-        if (entity == null || entity is not Zombie zombie)
-        {
-            Removed = true;
-            return;
-        }
-        zombie.HitBy(this);
+
         Removed = true;
     }
 }

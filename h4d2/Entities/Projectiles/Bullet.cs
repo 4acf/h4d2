@@ -3,7 +3,6 @@ using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Projectiles;
-using Cfg = ProjectileConfig;
 
 public class Bullet : Projectile
 {
@@ -13,7 +12,7 @@ public class Bullet : Projectile
     private Position _oldPosition;
     
     public Bullet(Level level, Position position, int damage, double directionRadians) 
-        : base(level, position, Cfg.BulletBoundingBox, damage, directionRadians)
+        : base(level, position, ProjectileConfig.BulletBoundingBox, damage, directionRadians)
     {
         _oldPosition = position.Copy();
     }
