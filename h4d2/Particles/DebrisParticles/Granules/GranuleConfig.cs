@@ -38,8 +38,8 @@ public static class GranuleConfigs
     {
         Drag = 0.98,
         Bounce = 0.0,
-        MinLifetime = 0.6,
-        MaxLifetime = 1.0,
+        MinLifetime = 0.8,
+        MaxLifetime = 1.2,
         Color = 0x9fff05,
     };
 }

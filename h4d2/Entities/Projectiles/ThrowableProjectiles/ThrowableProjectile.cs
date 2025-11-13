@@ -24,6 +24,8 @@ public abstract class ThrowableProjectile : Projectile
         _spinStep = 0;
         _frameUpdateTimer = new CountdownTimer(_frameDuration);
         _xFlip = (Math.PI / 2) < directionRadians && directionRadians < (3 * Math.PI / 2);
+        _position.X -= H4D2Art.ProjectileSize / 2.0;
+        _position.Y += H4D2Art.ProjectileSize / 2.0;
         _velocity.X = Math.Cos(_directionRadians);
         _velocity.Y = Math.Sin(_directionRadians);
         _velocity.Z = _startingZVelocity;

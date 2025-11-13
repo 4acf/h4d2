@@ -1,19 +1,20 @@
-﻿using H4D2.Entities.Projectiles;
+﻿using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
 using H4D2.Levels;
+using H4D2.Particles.DebrisParticles.Granules;
 
 namespace H4D2.Entities.Mobs.Zombies.Specials;
-using SpitParticle = Particles.DebrisParticles.Granules.Spit;
-using SpitProjectile = Spit;
 
 public class Spitter : Special
 {
     private const double _attackRange = 100.0;
-    private const double _attackDelay = 1.0;
+    private const double _attackDelay = 4.0;
     private const double _footstepDelay = 0.03;
+    private const double _spitFreezeTime = 1.0;
     private double _aimDirectionRadians;
     private readonly CountdownTimer _attackDelayTimer;
-    private readonly CountdownTimer _footstepTimer;
+    private readonly CountdownTimer _footstepParticleTimer;
+    private readonly CountdownTimer _spitFreezeTimer;
     private readonly ReadonlyVelocity _nullVelocity = new();
     
     public Spitter(Level level, Position position) 
@@ -21,30 +22,36 @@ public class Spitter : Special
     {
         _aimDirectionRadians = 0.0;
         _attackDelayTimer = new CountdownTimer(_attackDelay);
-        _footstepTimer = new CountdownTimer(_footstepDelay);
+        _footstepParticleTimer = new CountdownTimer(_footstepDelay);
+        _spitFreezeTimer = new CountdownTimer(_spitFreezeTime);
     }
 
     public override void Update(double elapsedTime)
     {
         base.Update(elapsedTime);
-        _footstepTimer.Update(elapsedTime);
-        if (_footstepTimer.IsFinished)
+        _footstepParticleTimer.Update(elapsedTime);
+        if (_footstepParticleTimer.IsFinished)
         {
             int randomInt = RandomSingleton.Instance.Next(5);
             if (randomInt != 0)
             {
-                var spit = new SpitParticle(_level, FootPosition.MutableCopy(), _nullVelocity);
+                var spit = new Spit(_level, FootPosition.MutableCopy(), _nullVelocity);
                 _level.AddParticle(spit);
             }
-
-            _footstepTimer.Reset();
+            _footstepParticleTimer.Reset();
         }
     }
 
     protected override void _UpdateAttackState(double elapsedTime)
     {
         _attackDelayTimer.Update(elapsedTime);
-
+        if (_isAttacking)
+        {
+            _spitFreezeTimer.Update(elapsedTime);
+            if(_spitFreezeTimer.IsFinished)
+                _isAttacking = false;
+        }
+        
         if (_target == null || _target.Removed)
             return;
         
@@ -60,8 +67,22 @@ public class Spitter : Special
         
         if (_attackDelayTimer.IsFinished)
         {
+            _isAttacking = true;
             _Spit();
             _attackDelayTimer.Reset();
+            _spitFreezeTimer.Reset();
+        }
+    }
+
+    protected override void _UpdatePosition(double elapsedTime)
+    {
+        if (_isAttacking)
+        {
+            _velocity.Stop();
+        }
+        else
+        {
+            base._UpdatePosition(elapsedTime);
         }
     }
 

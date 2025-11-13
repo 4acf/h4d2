@@ -26,6 +26,6 @@ public static class H4D2Art
     private static Bitmap[][] _LoadUncommons() => Art.LoadBitmaps($"{_resourcePrefix}uncommon.png", SpriteSize, 5, 23);
     private static Bitmap[][] _LoadSpecials() => Art.LoadBitmaps($"{_resourcePrefix}special.png", SpriteSize, 8, 10);
     private static Bitmap[][] _LoadPickups() => Art.LoadBitmaps($"{_resourcePrefix}pickup.png", PickupSize, 2, 3);
-    private static Bitmap[][] _LoadProjectiles() => Art.LoadBitmaps($"{_resourcePrefix}projectile.png", ProjectileSize, 3, 4);
+    private static Bitmap[][] _LoadProjectiles() => Art.LoadBitmaps($"{_resourcePrefix}projectile.png", ProjectileSize, 4, 4);
     private static Bitmap[][] _LoadParticles() => Art.LoadBitmaps($"{_resourcePrefix}particle.png", ParticleSize, 3, 4);
 }

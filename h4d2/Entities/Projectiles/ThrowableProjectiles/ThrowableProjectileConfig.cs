@@ -21,6 +21,9 @@ public static class ThrowableProjectileConfigs
     private static readonly BoundingBoxDimensions _bileBombDimensions
         = new(3, 3, 3, H4D2Art.ProjectileSize, 2);
     
+    private static readonly BoundingBoxDimensions _spitDimensions
+        = new(4, 4, 4, H4D2Art.ParticleSize, 2);
+    
     private static readonly BoundingBox _molotovBoundingBox 
         = new(CollisionGroup.Projectile, _molotovDimensions);
     
@@ -29,6 +32,9 @@ public static class ThrowableProjectileConfigs
 
     private static readonly BoundingBox _bileBombBoundingBox 
         = new(CollisionGroup.Projectile, _bileBombDimensions);
+
+    private static readonly BoundingBox _spitBoundingBox
+        = new(CollisionGroup.ZombieProjectile, _spitDimensions);
     
     public static readonly ThrowableProjectileConfig Molotov = new()
     {
@@ -49,5 +55,12 @@ public static class ThrowableProjectileConfigs
         Type = 2,
         Damage = 0,
         BoundingBox = _bileBombBoundingBox
+    };
+
+    public static readonly ThrowableProjectileConfig Spit = new()
+    {
+        Type = 3,
+        Damage = 0,
+        BoundingBox = _spitBoundingBox
     };
 }

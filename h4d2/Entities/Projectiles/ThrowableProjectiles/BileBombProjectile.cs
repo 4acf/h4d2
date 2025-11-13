@@ -1,8 +1,6 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
-using H4D2.Particles;
-using H4D2.Particles.DebrisParticles;
 using H4D2.Particles.DebrisParticles.Emitters;
 
 namespace H4D2.Entities.Projectiles.ThrowableProjectiles;
