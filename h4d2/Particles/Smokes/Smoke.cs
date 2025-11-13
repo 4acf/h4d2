@@ -14,8 +14,7 @@ public class Smoke : Particle
     private const double _maxOpacity = 0.5;
     
     private const int _color = 0x0;
-    private double _timeToLiveSeconds;
-    private readonly double _maxLifeSeconds;
+    private readonly CountdownTimer _despawnTimer;
     private readonly ReadonlyVelocity _parentVelocity;
     private readonly int _randomDx;
     private readonly int _randomDy;
@@ -23,9 +22,9 @@ public class Smoke : Particle
     public Smoke(Level level, Position position, ReadonlyVelocity parentVelocity)
         : base(level, position)
     {
-        _timeToLiveSeconds = RandomSingleton.Instance.NextDouble();
-        _timeToLiveSeconds = MathHelpers.ClampDouble(_timeToLiveSeconds, _minLifetime, _maxLifetime);
-        _maxLifeSeconds = _timeToLiveSeconds;
+        double randomDouble = RandomSingleton.Instance.NextDouble();
+        double lifetime = randomDouble * (_maxLifetime - _minLifetime) + _minLifetime;
+        _despawnTimer = new CountdownTimer(lifetime);
         _parentVelocity = parentVelocity;
         _randomDx = RandomSingleton.Instance.Next(3) - 1;
         _randomDy = RandomSingleton.Instance.Next(3) - 1;
@@ -33,8 +32,8 @@ public class Smoke : Particle
 
     public override void Update(double elapsedTime)
     {
-        _timeToLiveSeconds -= elapsedTime;
-        if (_timeToLiveSeconds <= 0)
+        _despawnTimer.Update(elapsedTime);
+        if (_despawnTimer.IsFinished)
         {
             Removed = true;
             return;
@@ -70,7 +69,7 @@ public class Smoke : Particle
     
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        double opacity = 1 - (_timeToLiveSeconds) / _maxLifeSeconds;
+        double opacity = 1 - _despawnTimer.Percentage;
         opacity = MathHelpers.ClampDouble(opacity, _minOpacity, _maxOpacity);
         screen.SetPixelBlend(xCorrected + _randomDx, yCorrected + _randomDy, _color, opacity);
     }
