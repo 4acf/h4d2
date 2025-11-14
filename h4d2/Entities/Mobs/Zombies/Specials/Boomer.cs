@@ -13,7 +13,6 @@ public class Boomer : Special
     private const double _pukeFreezeTime = 0.5;
     private const int _numPukeProjectilesPerUpdate = 10;
 
-    private int _pukeFrame;
     private double _aimDirectionRadians;
     private readonly CountdownTimer _attackDelayTimer;
     private readonly CountdownTimer _pukeFreezeTimer;
@@ -21,7 +20,6 @@ public class Boomer : Special
     public Boomer(Level level, Position position) 
         : base(level, position, SpecialConfigs.Boomer)
     {
-        _pukeFrame = -1;
         _aimDirectionRadians = 0.0;
         _attackDelayTimer = new CountdownTimer(_attackDelay);
         _attackDelayTimer.Update(_attackDelay);
@@ -88,8 +86,68 @@ public class Boomer : Special
         }
         else
         {
-            _pukeFrame = -1;
             base._UpdatePosition(elapsedTime);
+        }
+    }
+    
+    protected override void _UpdateSprite(double elapsedTime)
+    {
+        if (_isAttacking)
+        {
+            _UpdateAttackSprite(elapsedTime);
+        }
+        else
+        {
+            base._UpdateSprite(elapsedTime);
+        }
+    }
+
+    private void _UpdateAttackSprite(double elapsedTime)
+    {
+        _frameUpdateTimer.Update(elapsedTime);
+        int direction = 0;
+        double degrees = MathHelpers.RadiansToDegrees(_aimDirectionRadians);
+        switch (degrees)
+        {
+            case >= 337.5:
+            case < 22.5:
+                direction = 2;
+                _xFlip = false;
+                break;
+            case < 67.5:
+                direction = 3;
+                _xFlip = false;
+                break;
+            case < 112.5:
+                direction = 4;
+                _xFlip = false;
+                break;
+            case < 157.5:
+                direction = 3;
+                _xFlip = true;
+                break;
+            case < 202.5:
+                direction = 2;
+                _xFlip = true;
+                break;
+            case < 247.5:
+                direction = 1;
+                _xFlip = true;
+                break;
+            case < 292.5:
+                direction = 0;
+                _xFlip = false;
+                break;
+            default:
+                direction = 1;
+                _xFlip = false;
+                break;
+        }
+        
+        while (_frameUpdateTimer.IsFinished)
+        {
+            _frame = _pukeFrameOffset + direction;
+            _frameUpdateTimer.AddDuration();
         }
     }
 
