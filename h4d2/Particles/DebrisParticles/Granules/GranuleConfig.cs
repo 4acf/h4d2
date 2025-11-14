@@ -7,15 +7,6 @@ public class GranuleConfig : DebrisConfig
 
 public static class GranuleConfigs
 {
-    public static readonly GranuleConfig Bile = new()
-    {
-        Drag = 0.96,
-        Bounce = 0.1,
-        MinLifetime = 20.0,
-        MaxLifetime = 20.0,
-        Color = 0x5a6e38
-    };
-    
     public static readonly GranuleConfig Blood = new()
     {
         Drag = 0.96,
@@ -50,5 +41,23 @@ public static class GranuleConfigs
         MinLifetime = 5.6,
         MaxLifetime = 6.4,
         Color = 0x9fff05
+    };
+
+    public static readonly GranuleConfig InvolatileBile = new()
+    {
+        Drag = 0.96,
+        Bounce = 0.1,
+        MinLifetime = 0.8,
+        MaxLifetime = 1.2,
+        Color = 0x5a6e38
+    };
+    
+    public static readonly GranuleConfig VolatileBile = new()
+    {
+        Drag = 0.96,
+        Bounce = 0.1,
+        MinLifetime = 20.0,
+        MaxLifetime = 20.0,
+        Color = 0x5a6e38
     };
 }

@@ -11,10 +11,16 @@ public static class ProjectileConfig
 
     private static readonly BoundingBoxDimensions _grenadeDimensions
         = new(2, 2, 2, 0);
+
+    private static readonly BoundingBoxDimensions _pukeDimensions
+        = new(1, 1, 1, 0);
     
     public static readonly BoundingBox BulletBoundingBox 
         = new (CollisionGroup.Projectile, _bulletDimensions);
 
     public static readonly BoundingBox GrenadeBoundingBox 
         = new(CollisionGroup.Projectile, _grenadeDimensions);
+
+    public static readonly BoundingBox PukeBoundingBox
+        = new(CollisionGroup.ZombieProjectile, _pukeDimensions);
 }
