@@ -44,7 +44,7 @@ public class Level
         _particles = [];
         CollisionManager = collisionManager;
         
-        _entities.Add(new Coach(this, new Position(256, 120)));
+        _entities.Add(new Coach(this, new Position(120, 120)));
         _entities.Add(new Boomer(this, new Position(50, 50)));
     }
     
@@ -81,6 +81,23 @@ public class Level
             if (distance < lowestDistance)
             {
                 result = t;
+                lowestDistance = distance;
+            }
+        }
+        return result;
+    }
+
+    public Survivor? GetNearestBiledSurvivor(ReadonlyPosition position)
+    {
+        Survivor? result = null;
+        double lowestDistance = double.MaxValue;
+        foreach (Survivor survivor in _entities.OfType<Survivor>())
+        {
+            if (survivor.Removed || !survivor.IsAlive || !survivor.IsBiled) continue;
+            double distance = ReadonlyPosition.Distance(position, survivor.Position);
+            if (distance < lowestDistance)
+            {
+                result = survivor;
                 lowestDistance = distance;
             }
         }

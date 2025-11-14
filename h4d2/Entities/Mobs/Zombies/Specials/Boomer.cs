@@ -8,10 +8,11 @@ public class Boomer : Special
 {
     private const int _pukeFrameOffset = 9;
     private const double _attackRange = 30.0;
-    private const double _attackDelay = 1.0;
+    private const double _attackDelay = 30.0;
     private const double _angleVariance = Math.PI / 16.0;
     private const double _pukeFreezeTime = 0.5;
     private const int _numPukeProjectilesPerUpdate = 10;
+    private const int _numPukeProjectilesOnDeath = 500;
 
     private double _aimDirectionRadians;
     private readonly CountdownTimer _attackDelayTimer;
@@ -154,5 +155,12 @@ public class Boomer : Special
     protected override void _Die()
     {
         base._Die();
+        for (int i = 0; i < _numPukeProjectilesOnDeath; i++)
+        {
+            double randomDouble = RandomSingleton.Instance.NextDouble();
+            double directionRadians = randomDouble * (Math.PI * 2);
+            var puke = new DeathPuke(_level, CenterMass.MutableCopy(), directionRadians);
+            _level.AddProjectile(puke);
+        }
     }
 }

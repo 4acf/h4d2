@@ -5,19 +5,21 @@ using H4D2.Particles.DebrisParticles.Granules;
 
 namespace H4D2.Entities.Projectiles;
 
-public class Puke : Projectile
+public class DeathPuke : Projectile
 {
     private const int _color = 0x5a6e38;
-    private const double _gravity = 2.2;
-    private const double _minSpeed = 75.0;
-    private const double _maxSpeed = 125.0;
-    
+    private const double _gravity = 4.0;
+    private const double _minSpeed = 25.0;
+    private const double _maxSpeed = 75.0;
+    private const double _startingZVelocity = 0.5;
+
     private readonly double _speed;
-    
-    public Puke(Level level, Position position, double directionRadians)
+
+    public DeathPuke(Level level, Position position, double directionRadians)
         : base(level, position, ProjectileConfig.PukeBoundingBox, 0, directionRadians)
     {
         _speed = MathHelpers.GaussianRandom((_minSpeed + _maxSpeed) / 2, (_maxSpeed - _minSpeed) / 2);
+        _velocity.Z = _startingZVelocity;
     }
 
     public override void Update(double elapsedTime)
@@ -38,7 +40,7 @@ public class Puke : Projectile
     {
         shadows.SetPixel(xCorrected, yCorrected);
     }
-    
+
     protected override void _Collide(Entity? entity)
     {
         base._Collide(entity);
@@ -54,6 +56,7 @@ public class Puke : Projectile
                 survivor.Biled();
                 break;
         }
+
         Removed = true;
     }
 }

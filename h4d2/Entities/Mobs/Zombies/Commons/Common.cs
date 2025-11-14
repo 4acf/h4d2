@@ -115,6 +115,13 @@ public class Common : Zombie
             return;
         }
         
+        Survivor? nearestBiledSurvivor = _level.GetNearestBiledSurvivor(Position);
+        if (nearestBiledSurvivor != null)
+        {
+            _target = nearestBiledSurvivor;
+            return;
+        }
+        
         _target = _level.GetNearestEntity<Survivor>(Position);
     }
     

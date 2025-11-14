@@ -7,6 +7,7 @@ using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 using H4D2.Particles.Clouds;
+using H4D2.Particles.DebrisParticles.Granules;
 using H4D2.Weapons;
 
 namespace H4D2.Entities.Mobs.Survivors;
@@ -14,6 +15,7 @@ namespace H4D2.Entities.Mobs.Survivors;
 public abstract class Survivor : Mob
 {
     public bool IsFullHealth => _health == _maxHealth;
+    public bool IsBiled { get; protected set; }
     
     private const int _boundaryTolerance = 25;
     private const int _runSpeed = 300;
@@ -23,6 +25,8 @@ public abstract class Survivor : Mob
     private const int _adrenalineEffectSeconds = 15;
     private const int _healthBarRed = 0xe61515;
     private const int _healthBarGreen = 0x56de47;
+    private const double _biledDuration = 20.0;
+    private const double _bileParticleCooldown = 0.1;
     
     private readonly int _character;
     private readonly int _maxHealth;
@@ -32,10 +36,14 @@ public abstract class Survivor : Mob
     private double _aimDirectionRadians;
     private bool _isAdrenalineBoosted;
     private CountdownTimer? _adrenalineTimer;
+    private readonly CountdownTimer _biledTimer;
+    private readonly CountdownTimer _bileParticleTimer;
     
     protected Survivor(Level level, Position position, SurvivorConfig config) 
         : base(level, position, config)
     {
+        IsBiled = false;
+        
         _character = config.Character;
         _maxHealth = config.Health;
         _target = null;
@@ -43,11 +51,13 @@ public abstract class Survivor : Mob
         _isAdrenalineBoosted = false;
         _aimDirectionRadians = 0.0;
         _adrenalineTimer = null;
+        _biledTimer = new CountdownTimer(_biledDuration);
+        _bileParticleTimer = new CountdownTimer(_bileParticleCooldown);
     }
 
     public override void Update(double elapsedTime)
     {
-        _hazardDamageTimer.Update(elapsedTime);
+        _UpdateStatusEffects(elapsedTime);
         _UpdateTarget();
         _UpdateWeapon(elapsedTime);
         _UpdateSpeed(elapsedTime);
@@ -101,11 +111,46 @@ public abstract class Survivor : Mob
             = new BileBombProjectile(_level, CenterMass.MutableCopy(), _aimDirectionRadians);
         _level.AddProjectile(bileBombProjectile);
     }
+
+    public void Biled()
+    {
+        if (!IsBiled)
+        {
+            IsBiled = true;
+            _biledTimer.Reset();
+            _level.SpawnZombies();
+        }
+    }
     
     private void _EmitHealParticles()
     {
         var healCloud = new HealCloud(_level, CenterMass.MutableCopy());
         _level.AddParticle(healCloud);
+    }
+
+    private void _UpdateStatusEffects(double elapsedTime)
+    {
+        _hazardDamageTimer.Update(elapsedTime);
+        if (IsBiled)
+        {
+            _bileParticleTimer.Update(elapsedTime);
+            if (_bileParticleTimer.IsFinished)
+            {
+                var footBile = new InvolatileBile(_level, FootPosition.MutableCopy());
+                _level.AddParticle(footBile);
+
+                var cmBile = new InvolatileBile(_level, CenterMass.MutableCopy());
+                _level.AddParticle(cmBile);
+                
+                _bileParticleTimer.Reset();
+            }
+            
+            _biledTimer.Update(elapsedTime);
+            if (_biledTimer.IsFinished)
+            {
+                IsBiled = false;
+            }
+        }
     }
     
     private void _UpdateTarget()
@@ -142,7 +187,7 @@ public abstract class Survivor : Mob
         _weapon.Update(elapsedTime);
         if (_weapon.CanShoot() && _target != null)
         {
-            //_weapon.Shoot(CenterMass.MutableCopy(), _aimDirectionRadians);
+            _weapon.Shoot(CenterMass.MutableCopy(), _aimDirectionRadians);
             _isShooting = true;
         }
         else
