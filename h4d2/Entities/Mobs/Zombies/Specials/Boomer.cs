@@ -11,8 +11,8 @@ public class Boomer : Special
     private const double _attackDelay = 30.0;
     private const double _angleVariance = Math.PI / 16.0;
     private const double _pukeFreezeTime = 0.5;
-    private const int _numPukeProjectilesPerUpdate = 10;
-    private const int _numPukeProjectilesOnDeath = 500;
+    private const int _numPukeProjectilesPerUpdate = 6;
+    private const int _numPukeProjectilesOnDeath = 200;
 
     private double _aimDirectionRadians;
     private readonly CountdownTimer _attackDelayTimer;

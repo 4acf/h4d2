@@ -79,6 +79,46 @@ public class Bitmap
         }
     }
 
+    public void DrawBiledCharacter(Bitmap characterBitmap, Bitmap bileBitmap, int x, int y, bool flip = false)
+    {
+        if(characterBitmap.Width != bileBitmap.Width || characterBitmap.Height != bileBitmap.Height)
+            throw new ArgumentException("Character and bile bitmaps must have the same width and height.");
+     
+        const double blend = 0.3;
+        
+        for (int i = 0; i < characterBitmap.Height; i++)
+        {
+            for (int j = 0; j < characterBitmap.Width; j++)
+            {
+                int k = j;
+                if (flip)
+                {
+                    k = characterBitmap.Width - j - 1;
+                }
+                
+                int parentIndex = _GetBytespaceIndex(Width, x + j, y - i - 1);
+                int characterIndex = _GetBytespaceIndex(characterBitmap.Width, k, i);
+                int bileIndex = _GetBytespaceIndex(bileBitmap.Width, k, i);
+                
+                if (IsOutOfBounds(parentIndex) || characterBitmap.IsOutOfBounds(characterIndex)) continue;
+                if (characterBitmap.Data[characterIndex + 3] == 0) continue;
+
+                int expectedY = y - i - 1;
+                int actualY = parentIndex / (Width * 4);
+                if (expectedY != actualY) continue;
+                
+                byte r = BlendModes.HardLight(characterBitmap.Data[characterIndex], bileBitmap.Data[bileIndex]);
+                byte g = BlendModes.HardLight(characterBitmap.Data[characterIndex + 1], bileBitmap.Data[bileIndex + 1]);
+                byte b = BlendModes.HardLight(characterBitmap.Data[characterIndex + 2], bileBitmap.Data[bileIndex + 2]);
+
+                Data[parentIndex] = MathHelpers.ByteLerp(characterBitmap.Data[characterIndex], r, blend);
+                Data[parentIndex + 1] = MathHelpers.ByteLerp(characterBitmap.Data[characterIndex + 1], g, blend);
+                Data[parentIndex + 2] = MathHelpers.ByteLerp(characterBitmap.Data[characterIndex + 2], b, blend);
+                Data[parentIndex + 3] = characterBitmap.Data[characterIndex + 3];
+            }
+        }
+    }
+    
     public void DrawShadows(ShadowBitmap shadows, byte shadowColor, double shadowBlend)
     {
         if (Width != shadows.Width || Height != shadows.Height)

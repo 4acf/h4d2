@@ -38,6 +38,7 @@ public abstract class Survivor : Mob
     private CountdownTimer? _adrenalineTimer;
     private readonly CountdownTimer _biledTimer;
     private readonly CountdownTimer _bileParticleTimer;
+    private int _bileOverlayIndex;
     
     protected Survivor(Level level, Position position, SurvivorConfig config) 
         : base(level, position, config)
@@ -53,6 +54,7 @@ public abstract class Survivor : Mob
         _adrenalineTimer = null;
         _biledTimer = new CountdownTimer(_biledDuration);
         _bileParticleTimer = new CountdownTimer(_bileParticleCooldown);
+        _bileOverlayIndex = 0;
     }
 
     public override void Update(double elapsedTime)
@@ -119,6 +121,7 @@ public abstract class Survivor : Mob
             IsBiled = true;
             _biledTimer.Reset();
             _level.SpawnZombies();
+            _bileOverlayIndex = RandomSingleton.Instance.Next(H4D2Art.BileOverlays.Length);
         }
     }
     
@@ -431,8 +434,18 @@ public abstract class Survivor : Mob
         
         Bitmap lowerBitmap = H4D2Art.Survivors[_character][_lowerFrame];
         Bitmap upperBitmap = H4D2Art.Survivors[_character][_upperFrame];
-        screen.Draw(lowerBitmap, xCorrected, yCorrected, _xFlip);
-        screen.Draw(upperBitmap, xCorrected, yCorrected, _xFlip);
+
+        if (IsBiled)
+        {
+            Bitmap bileOverlay = H4D2Art.BileOverlays[_bileOverlayIndex];
+            screen.DrawBiledCharacter(lowerBitmap, bileOverlay, xCorrected, yCorrected, _xFlip);
+            screen.DrawBiledCharacter(upperBitmap, bileOverlay, xCorrected, yCorrected, _xFlip);
+        }
+        else
+        {
+            screen.Draw(lowerBitmap, xCorrected, yCorrected, _xFlip);
+            screen.Draw(upperBitmap, xCorrected, yCorrected, _xFlip);
+        }
     }
 
     private void _RenderHealthBar(Bitmap screen, int xCorrected, int yCorrected)

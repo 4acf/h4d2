@@ -44,7 +44,7 @@ public class Level
         _particles = [];
         CollisionManager = collisionManager;
         
-        _entities.Add(new Coach(this, new Position(120, 120)));
+        _entities.Add(new Nick(this, new Position(60, 60)));
         _entities.Add(new Boomer(this, new Position(50, 50)));
     }
     
