@@ -27,6 +27,7 @@ public abstract class Survivor : Mob
     private const int _healthBarGreen = 0x56de47;
     private const double _biledDuration = 20.0;
     private const double _bileParticleCooldown = 0.1;
+    private const double _gravity = 4.0;
     
     private readonly int _character;
     private readonly int _maxHealth;
@@ -228,19 +229,25 @@ public abstract class Survivor : Mob
     
     private void _UpdatePosition(double elapsedTime)
     {
-        _velocity.X *= 0.5;
-        _velocity.Y *= 0.5;
+        if (IsOnGround)
+        {
+            _velocity.X *= 0.5;
+            _velocity.Y *= 0.5;
 
-        double targetDirection = _CalculateBestDirection();
-        double directionDiff = targetDirection - _directionRadians;
-        directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
-        _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
-        _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
+            double targetDirection = _CalculateBestDirection();
+            double directionDiff = targetDirection - _directionRadians;
+            directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
+            _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
+            _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
         
-        double moveSpeed = (_speed * _speedFactor) * elapsedTime;
-        _velocity.X += Math.Cos(_directionRadians) * moveSpeed;
-        _velocity.Y += Math.Sin(_directionRadians) * moveSpeed;
-
+            double moveSpeed = (_speed * _speedFactor) * elapsedTime;
+            _velocity.X += Math.Cos(_directionRadians) * moveSpeed;
+            _velocity.Y += Math.Sin(_directionRadians) * moveSpeed;
+        }
+        else
+        {
+            _velocity.Z -= _gravity * elapsedTime;
+        }
         _AttemptMove();
     }
     

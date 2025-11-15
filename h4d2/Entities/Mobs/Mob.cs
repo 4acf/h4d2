@@ -1,8 +1,7 @@
-﻿using H4D2.Entities.Hazards;
-using H4D2.Entities.Mobs.Zombies;
+﻿using H4D2.Entities.Mobs.Zombies;
+using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Infrastructure;
 using H4D2.Levels;
-using H4D2.Particles;
 using H4D2.Particles.DebrisParticles;
 using H4D2.Particles.DebrisParticles.Emitters;
 
@@ -18,6 +17,8 @@ public abstract class Mob : Entity
     protected const int _attackingBitmapOffset = 18;
     protected const double _frameDuration = 1.0 / 8.0;
     protected const double _hazardDamageCooldownSeconds = 0.5;
+    private const double _punchedScale = 2.5;
+    private const double _punchedZVelocity = 1.0;
     
     protected int _health;
     protected double _speed;
@@ -72,6 +73,13 @@ public abstract class Mob : Entity
         }
         var bloodSplatter = new BloodSplatter(_level, CenterMass.MutableCopy());
         _level.AddParticle(bloodSplatter);
+
+        if (zombie is not Tank tank)
+            return;
+
+        _velocity.X = Math.Cos(tank.AimDirectionRadians) * _punchedScale;
+        _velocity.Y = Math.Sin(tank.AimDirectionRadians) * _punchedScale;
+        _velocity.Z = _punchedZVelocity;
     }
     
     protected virtual void _TakeHazardDamage(int damage)

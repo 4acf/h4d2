@@ -10,9 +10,10 @@ public class Tank : Special
     private const double _attackRange = 15.0;
     private const double _attackDelay = 0.5;
     private const double _attackCompleteTime = 0.5;
+ 
+    public double AimDirectionRadians { get; private set; }
     
     private int _attackFrame;
-    private double _aimDirectionRadians;
     private readonly CountdownTimer _attackDelayTimer;
     private readonly CountdownTimer _attackCompleteTimer;
     
@@ -20,7 +21,7 @@ public class Tank : Special
         : base(level, position, SpecialConfigs.Tank)
     {
         _attackFrame = -1;
-        _aimDirectionRadians = 0.0;
+        AimDirectionRadians = 0.0;
         _attackDelayTimer = new CountdownTimer(_attackDelay);
         _attackDelayTimer.Update(_attackDelay);
         _attackCompleteTimer = new CountdownTimer(_attackCompleteTime);
@@ -67,8 +68,8 @@ public class Tank : Special
             _attackCompleteTimer.Reset();
         }
                 
-        _aimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
-        _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
+        AimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
+        AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
     }
 
     protected override void _UpdateSprite(double elapsedTime)
@@ -83,7 +84,7 @@ public class Tank : Special
     private void _UpdateAttackingSprite()
     {
         int direction = 0;
-        double degrees = MathHelpers.RadiansToDegrees(_aimDirectionRadians);
+        double degrees = MathHelpers.RadiansToDegrees(AimDirectionRadians);
         switch (degrees)
         {
             case >= 315:
