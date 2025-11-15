@@ -46,6 +46,7 @@ public class Level
         
         _entities.Add(new Nick(this, new Position(60, 60)));
         _entities.Add(new Boomer(this, new Position(50, 50)));
+        _entities.Add(new Spitter(this, new Position(40, 40)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position)

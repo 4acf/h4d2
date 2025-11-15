@@ -28,6 +28,7 @@ public class Spitter : Special
         _spitFrame = -1;
         _aimDirectionRadians = 0.0;
         _attackDelayTimer = new CountdownTimer(_attackDelay);
+        _attackDelayTimer.Update(_attackDelay);
         _footstepParticleTimer = new CountdownTimer(_footstepDelay);
         _spitFreezeTimer = new CountdownTimer(_spitFreezeTime);
     }
