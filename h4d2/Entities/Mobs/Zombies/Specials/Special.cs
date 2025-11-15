@@ -8,7 +8,7 @@ namespace H4D2.Entities.Mobs.Zombies.Specials;
 public abstract class Special : Zombie
 {
     protected int _frame;
-    private readonly int _type;
+    protected readonly int _type;
     
     protected Special(Level level, Position position, SpecialConfig config) 
         : base(level, position, config)
