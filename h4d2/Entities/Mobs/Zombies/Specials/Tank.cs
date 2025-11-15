@@ -8,11 +8,13 @@ namespace H4D2.Entities.Mobs.Zombies.Specials;
 public class Tank : Special
 {
     private const double _attackRange = 15.0;
-    private const double _attackDelay = 2.0;
-
+    private const double _attackDelay = 0.5;
+    private const double _attackCompleteTime = 0.5;
+    
     private int _attackFrame;
     private double _aimDirectionRadians;
     private readonly CountdownTimer _attackDelayTimer;
+    private readonly CountdownTimer _attackCompleteTimer;
     
     public Tank(Level level, Position position) 
         : base(level, position, SpecialConfigs.Tank)
@@ -21,10 +23,21 @@ public class Tank : Special
         _aimDirectionRadians = 0.0;
         _attackDelayTimer = new CountdownTimer(_attackDelay);
         _attackDelayTimer.Update(_attackDelay);
+        _attackCompleteTimer = new CountdownTimer(_attackCompleteTime);
     }
     
     protected override void _UpdateAttackState(double elapsedTime)
     {
+        if (_isAttacking)
+        {
+            _attackCompleteTimer.Update(elapsedTime);
+            if (_attackCompleteTimer.IsFinished)
+            {
+                _isAttacking = false;
+            }
+            return;
+        }
+        
         _attackDelayTimer.Update(elapsedTime);
         if (_target == null || _target.Removed)
         {
@@ -51,6 +64,7 @@ public class Tank : Special
             _attackFrame = -1;
             survivor.HitBy(this);
             _attackDelayTimer.Reset();
+            _attackCompleteTimer.Reset();
         }
                 
         _aimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
