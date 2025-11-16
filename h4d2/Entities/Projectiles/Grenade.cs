@@ -89,6 +89,8 @@ public class Grenade : Projectile
     protected override void _Collide(Entity? entity)
     {
         base._Collide(entity);
+        if (Removed)
+            return;
         _level.Explode(this);
         Removed = true;
     }
