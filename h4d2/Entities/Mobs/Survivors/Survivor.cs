@@ -1,4 +1,5 @@
-﻿using H4D2.Entities.Hazards;
+﻿using System.Globalization;
+using H4D2.Entities.Hazards;
 using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Pickups;
@@ -16,6 +17,7 @@ public abstract class Survivor : Mob
 {
     public bool IsFullHealth => _health == _maxHealth;
     public bool IsBiled { get; protected set; }
+    public bool IsPinned { get; protected set; }
     
     private const int _boundaryTolerance = 25;
     private const int _runSpeed = 300;
@@ -28,6 +30,7 @@ public abstract class Survivor : Mob
     private const double _biledDuration = 20.0;
     private const double _bileParticleCooldown = 0.1;
     private const double _gravity = 4.0;
+    private const int _jockeyFramesOffset = 23;
     
     private readonly int _character;
     private readonly int _maxHealth;
@@ -40,11 +43,14 @@ public abstract class Survivor : Mob
     private readonly CountdownTimer _biledTimer;
     private readonly CountdownTimer _bileParticleTimer;
     private int _bileOverlayIndex;
+    private Special? _pinner;
+    private int _jockeyedStep;
     
     protected Survivor(Level level, Position position, SurvivorConfig config) 
         : base(level, position, config)
     {
         IsBiled = false;
+        IsPinned = false;
         
         _character = config.Character;
         _maxHealth = config.Health;
@@ -56,14 +62,19 @@ public abstract class Survivor : Mob
         _biledTimer = new CountdownTimer(_biledDuration);
         _bileParticleTimer = new CountdownTimer(_bileParticleCooldown);
         _bileOverlayIndex = 0;
+        _pinner = null;
+        _jockeyedStep = 0;
     }
 
     public override void Update(double elapsedTime)
     {
         _UpdateStatusEffects(elapsedTime);
-        _UpdateTarget();
-        _UpdateWeapon(elapsedTime);
-        _UpdateSpeed(elapsedTime);
+        if (!IsPinned)
+        {
+            _UpdateTarget();
+            _UpdateWeapon(elapsedTime);
+            _UpdateSpeed(elapsedTime);
+        }
         _UpdatePosition(elapsedTime);
         _UpdateSprite(elapsedTime);
     }
@@ -124,6 +135,23 @@ public abstract class Survivor : Mob
             _level.SpawnZombies();
             _bileOverlayIndex = RandomSingleton.Instance.Next(H4D2Art.BileOverlays.Length);
         }
+    }
+
+    public void Pinned(Special special)
+    {
+        IsPinned = true;
+        _pinner = special;
+        if (special is Jockey)
+        {
+            _collisionExcludedEntity = special;
+        }
+    }
+    
+    public void Cleared()
+    {
+        IsPinned = false;
+        _pinner = null;
+        _collisionExcludedEntity = null;
     }
     
     private void _EmitHealParticles()
@@ -229,6 +257,15 @@ public abstract class Survivor : Mob
     
     private void _UpdatePosition(double elapsedTime)
     {
+        if (IsPinned)
+        {
+            if (_pinner is Jockey jockey)
+            {
+                _UpdateJockeyedPosition(jockey);
+            }
+            return;
+        }
+        
         if (IsOnGround)
         {
             _velocity.X *= 0.5;
@@ -250,15 +287,22 @@ public abstract class Survivor : Mob
         }
         _AttemptMove();
     }
+
+    private void _UpdateJockeyedPosition(Jockey jockey)
+    {
+        _directionRadians = jockey.DirectionRadians;
+        _position.X = jockey.Position.X;
+        _position.Y = jockey.Position.Y;
+    }
     
     private double _CalculateBestDirection()
     {
         double direction = RandomSingleton.Instance.NextDouble() * (2 * Math.PI);
-        direction = CorrectDirectionToAvoidWalls(direction);
+        direction = _CorrectDirectionToAvoidWalls(direction);
         return direction;
     }
 
-    private double CorrectDirectionToAvoidWalls(double direction)
+    private double _CorrectDirectionToAvoidWalls(double direction)
     {
         ReadonlyPosition centerMass = CenterMass;
         
@@ -300,12 +344,77 @@ public abstract class Survivor : Mob
     private void _UpdateSprite(double elapsedTime)
     {
         _frameUpdateTimer.Update(elapsedTime);
+        
+        if (IsPinned)
+        {
+            if (_pinner is Jockey)
+                _UpdateJockeyedSprite();
+            return;
+        }
+        
         if (_isShooting)
             _UpdateShootingSprite();
         else
             _UpdateRunningSprite();
     }
 
+    private void _UpdateJockeyedSprite()
+    {
+        int direction = 0;
+        int degrees = MathHelpers.RadiansToDegrees(_directionRadians);
+        switch (degrees)
+        {
+            case >= 315:
+            case < 45:
+                direction = 1;
+                _xFlip = false;
+                break;
+            case < 135:
+                direction = 2;
+                _xFlip = false;
+                break;
+            case < 225:
+                direction = 1;
+                _xFlip = true;
+                break;
+            default:
+                direction = 0;
+                _xFlip = false;
+                break;
+        }
+        
+        while (_frameUpdateTimer.IsFinished)
+        {
+            _jockeyedStep = _jockeyedStep == 0 ? 1 : 0;
+            _walkStep = (_walkStep + 1) % 4;
+            int nextFrame = 0;
+            if (direction == 1)
+            {
+                nextFrame = _walkStep switch
+                {
+                    0 => 3,
+                    1 or 3 => 4,
+                    2 => 5,
+                    _ => nextFrame
+                };
+            }
+            else
+            {
+                nextFrame = _walkStep switch
+                {
+                    0 or 2 => 0 + (3 * direction),
+                    1 => 1 + (3 * direction),
+                    3 => 2 + (3 * direction),
+                    _ => nextFrame
+                };
+            }
+
+            _lowerFrame = nextFrame;
+            _upperFrame = _jockeyFramesOffset + _jockeyedStep + (direction * 2);
+            _frameUpdateTimer.AddDuration();
+        }
+    }
+    
     private void _UpdateShootingSprite()
     {
         int direction = 0;

@@ -25,7 +25,7 @@ public static class H4D2Art
     public static Bitmap[] BileOverlays => _bileOverlays.SelectMany(x => x).ToArray();
     
     private static Bitmap[][] _LoadSurvivors() => 
-        Art.LoadBitmaps($"{_resourcePrefix}survivor.png", SpriteSize, 8, 23);
+        Art.LoadBitmaps($"{_resourcePrefix}survivor.png", SpriteSize, 8, 29);
     private static Bitmap[][] _LoadCommons() => 
         Art.LoadBitmaps($"{_resourcePrefix}common.png", SpriteSize, 9, 23);
     private static Bitmap[][] _LoadUncommons() => 

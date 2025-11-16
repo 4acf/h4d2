@@ -9,11 +9,14 @@ public abstract class Entity : Isometric
     public readonly BoundingBox BoundingBox;
     public ReadonlyPosition CenterMass => BoundingBox.CenterMass(Position); 
     public ReadonlyPosition FootPosition => BoundingBox.FootPosition(Position);
+
+    protected Entity? _collisionExcludedEntity;
     
     protected Entity(Level level, Position position, BoundingBox boundingBox)
         : base(level, position)
     {
         BoundingBox = boundingBox;
+        _collisionExcludedEntity = null;
     }
     
     public abstract void Update(double elapsedTime);
@@ -76,7 +79,7 @@ public abstract class Entity : Isometric
             return;
         }
 
-        Entity? collidingEntity = _level.GetFirstCollidingEntity(this, destination);
+        Entity? collidingEntity = _level.GetFirstCollidingEntity(this, destination, _collisionExcludedEntity);
         if (collidingEntity != null)
         {
             _Collide(collidingEntity);

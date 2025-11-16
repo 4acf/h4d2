@@ -44,14 +44,18 @@ public class Level
         _particles = [];
         CollisionManager = collisionManager;
         
+        _entities.Add(new Coach(this, new Position(150, 150)));
         _entities.Add(new Ellis(this, new Position(150, 150)));
         _entities.Add(new Jockey(this, new Position(100, 100)));
     }
     
-    public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position)
+    public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position, Entity? exclude)
     {
         foreach (Entity e2 in _entities)
         {
+            if (e2 == exclude)
+                continue;
+            
             if (e2 != e1 &&
                 e1.BoundingBox.CanCollideWith(CollisionManager, e2.BoundingBox) &&
                 e1.IsIntersecting(e2, position)
