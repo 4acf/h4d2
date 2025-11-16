@@ -106,48 +106,13 @@ public class Boomer : Special
     private void _UpdateAttackSprite(double elapsedTime)
     {
         _frameUpdateTimer.Update(elapsedTime);
-        int direction = 0;
-        double degrees = MathHelpers.RadiansToDegrees(_aimDirectionRadians);
-        switch (degrees)
-        {
-            case >= 337.5:
-            case < 22.5:
-                direction = 2;
-                _xFlip = false;
-                break;
-            case < 67.5:
-                direction = 3;
-                _xFlip = false;
-                break;
-            case < 112.5:
-                direction = 4;
-                _xFlip = false;
-                break;
-            case < 157.5:
-                direction = 3;
-                _xFlip = true;
-                break;
-            case < 202.5:
-                direction = 2;
-                _xFlip = true;
-                break;
-            case < 247.5:
-                direction = 1;
-                _xFlip = true;
-                break;
-            case < 292.5:
-                direction = 0;
-                _xFlip = false;
-                break;
-            default:
-                direction = 1;
-                _xFlip = false;
-                break;
-        }
+
+        SpriteDirection spriteDirection = Direction.Intercardinal(_aimDirectionRadians);
+        _xFlip = spriteDirection.XFlip;
         
         while (_frameUpdateTimer.IsFinished)
         {
-            _frame = _pukeFrameOffset + direction;
+            _frame = _pukeFrameOffset + spriteDirection.Offset;
             _frameUpdateTimer.AddDuration();
         }
     }

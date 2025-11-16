@@ -168,51 +168,15 @@ public class Common : Zombie
 
     private void _UpdateAttackingSprite()
     {
-        int direction = 0;
-        double degrees = MathHelpers.RadiansToDegrees(_aimDirectionRadians);
-        switch (degrees)
-        {
-            case >= 337.5:
-            case < 22.5:
-                direction = 2;
-                _xFlip = false;
-                break;
-            case < 67.5:
-                direction = 3;
-                _xFlip = false;
-                break;
-            case < 112.5:
-                direction = 4;
-                _xFlip = false;
-                break;
-            case < 157.5:
-                direction = 3;
-                _xFlip = true;
-                break;
-            case < 202.5:
-                direction = 2;
-                _xFlip = true;
-                break;
-            case < 247.5:
-                direction = 1;
-                _xFlip = true;
-                break;
-            case < 292.5:
-                direction = 0;
-                _xFlip = false;
-                break;
-            default:
-                direction = 1;
-                _xFlip = false;
-                break;
-        }
+        SpriteDirection spriteDirection = Direction.Intercardinal(_aimDirectionRadians);
+        _xFlip = spriteDirection.XFlip;
         
         while (_frameUpdateTimer.IsFinished)
         {
             _walkStep = (_walkStep + 1) % 4;
             if (_velocity.X == 0 && _velocity.Y == 0) _walkStep = 0;
             int nextLowerFrame = 0;
-            if (direction == 2)
+            if (spriteDirection.Offset == 2)
             {
                 nextLowerFrame = _walkStep switch
                 {
@@ -233,42 +197,22 @@ public class Common : Zombie
                 };
             }
             _lowerFrame = nextLowerFrame;
-            _upperFrame = _attackingBitmapOffset + direction;
+            _upperFrame = _attackingBitmapOffset + spriteDirection.Offset;
             _frameUpdateTimer.AddDuration();
         }
     }
 
     private void _UpdateRunningSprite()
     {
-        int direction = 0;
-        int degrees = MathHelpers.RadiansToDegrees(_directionRadians);
-        switch (degrees)
-        {
-            case >= 315:
-            case < 45:
-                direction = 1;
-                _xFlip = false;
-                break;
-            case < 135:
-                direction = 2;
-                _xFlip = false;
-                break;
-            case < 225:
-                direction = 1;
-                _xFlip = true;
-                break;
-            default:
-                direction = 0;
-                _xFlip = false;
-                break;
-        }
+        SpriteDirection spriteDirection = Direction.Intercardinal(_aimDirectionRadians);
+        _xFlip = spriteDirection.XFlip;
         
         while (_frameUpdateTimer.IsFinished)
         {
             _walkStep = (_walkStep + 1) % 4;
             if (_velocity.X == 0 && _velocity.Y == 0) _walkStep = 0;
             int nextFrame = 0;
-            if (direction == 1)
+            if (spriteDirection.Offset == 1)
             {
                 nextFrame = _walkStep switch
                 {
@@ -282,9 +226,9 @@ public class Common : Zombie
             {
                 nextFrame = _walkStep switch
                 {
-                    0 or 2 => 0 + (3 * direction),
-                    1 => 1 + (3 * direction),
-                    3 => 2 + (3 * direction),
+                    0 or 2 => 0 + (3 * spriteDirection.Offset),
+                    1 => 1 + (3 * spriteDirection.Offset),
+                    3 => 2 + (3 * spriteDirection.Offset),
                     _ => nextFrame
                 };
             }

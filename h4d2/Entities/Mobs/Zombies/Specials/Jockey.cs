@@ -187,30 +187,9 @@ public class Jockey : Special
 
     private void _UpdateNonRunningSprite(int offset)
     {
-        int direction = 0;
-        int degrees = MathHelpers.RadiansToDegrees(_directionRadians);
-        switch (degrees)
-        {
-            case >= 315:
-            case < 45:
-                direction = 1;
-                _xFlip = false;
-                break;
-            case < 135:
-                direction = 2;
-                _xFlip = false;
-                break;
-            case < 225:
-                direction = 1;
-                _xFlip = true;
-                break;
-            default:
-                direction = 0;
-                _xFlip = false;
-                break;
-        }
-        
-        _frame = offset + direction;
+        SpriteDirection spriteDirection = Direction.Cardinal(_directionRadians);
+        _xFlip = spriteDirection.XFlip;
+        _frame = offset + spriteDirection.Offset;
     }
     
     private void _Jump()

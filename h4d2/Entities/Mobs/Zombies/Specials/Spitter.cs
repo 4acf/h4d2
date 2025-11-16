@@ -109,33 +109,14 @@ public class Spitter : Special
     private void _UpdateAttackSprite(double elapsedTime)
     {
         _frameUpdateTimer.Update(elapsedTime);
-        int direction = 0;
-        int degrees = MathHelpers.RadiansToDegrees(_directionRadians);
-        switch (degrees)
-        {
-            case >= 315:
-            case < 45:
-                direction = 1;
-                _xFlip = false;
-                break;
-            case < 135:
-                direction = 2;
-                _xFlip = false;
-                break;
-            case < 225:
-                direction = 1;
-                _xFlip = true;
-                break;
-            default:
-                direction = 0;
-                _xFlip = false;
-                break;
-        }
+        
+        SpriteDirection spriteDirection = Direction.Cardinal(_aimDirectionRadians);
+        _xFlip = spriteDirection.XFlip;
         
         while (_frameUpdateTimer.IsFinished)
         {
             _spitFrame = _spitFrame == 2 ? _spitFrame : _spitFrame + 1;
-            _frame = _spitFrameOffset + (_spitFrame + (3 * direction));
+            _frame = _spitFrameOffset + (_spitFrame + (3 * spriteDirection.Offset));
             _frameUpdateTimer.AddDuration();
         }
     }
