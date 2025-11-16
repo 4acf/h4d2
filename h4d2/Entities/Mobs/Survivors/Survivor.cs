@@ -571,17 +571,17 @@ public abstract class Survivor : Mob
         
         screen.Fill(
             xCorrected + H4D2Art.SpriteSize - 13 + greenPixels,
-            yCorrected - 3,
+            yCorrected - 2,
             xCorrected + H4D2Art.SpriteSize - 4,
-            yCorrected - 3,
+            yCorrected - 2,
             _healthBarRed
         );
         
         screen.Fill(
             xCorrected + H4D2Art.SpriteSize - 13,
-            yCorrected - 3,
+            yCorrected - 2,
             xCorrected + H4D2Art.SpriteSize - 14 + greenPixels,
-            yCorrected - 3,
+            yCorrected - 2,
             _healthBarGreen
         );
     }

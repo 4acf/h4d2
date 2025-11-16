@@ -45,7 +45,13 @@ public class Level
         CollisionManager = collisionManager;
         
         _entities.Add(new Coach(this, new Position(150, 150)));
+        _entities.Add(new Nick(this, new Position(150, 150)));
         _entities.Add(new Ellis(this, new Position(150, 150)));
+        _entities.Add(new Rochelle(this, new Position(150, 150)));
+        _entities.Add(new Bill(this, new Position(150, 150)));
+        _entities.Add(new Francis(this, new Position(150, 150)));
+        _entities.Add(new Louis(this, new Position(150, 150)));
+        _entities.Add(new Zoey(this, new Position(150, 150)));
         _entities.Add(new Jockey(this, new Position(100, 100)));
     }
     
