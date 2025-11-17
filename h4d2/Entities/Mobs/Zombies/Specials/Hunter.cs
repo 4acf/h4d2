@@ -6,17 +6,18 @@ namespace H4D2.Entities.Mobs.Zombies.Specials;
 
 public class Hunter : Special
 {
+    public double DirectionRadians => _directionRadians;
+    
     private const int _crouchingFramesOffset = 9;
     private const int _jumpingFramesOffset = 12;
     private const int _pinningFramesOffset = 15;
-    private const double _crouchTime = 0.75;
+    private const double _crouchTime = 0.5;
     private const double _gravity = 4.0;
     private const double _crouchRange = 50.0;
     private const double _jumpRange = 75.0;
     private const double _attackDelay = 0.5;
     private const double _jumpSpeedScale = 2.0;
-    private const double _jumpZVelocity = 1.5;
-    private const double _survivorHeight = 2;
+    private const double _jumpZVelocity = 1.25;
 
     private int _attackStep;
     private bool _isCrouching;
@@ -167,7 +168,6 @@ public class Hunter : Special
         }
     }
     
-/*  FOR NOW, UNCOMMENT THIS WHEN CROUCHING AND POUNCING IS FIGURED OUT AND U HAVE THE BITMAPS
     protected override void _Collide(Entity? entity)
     {
         base._Collide(entity);
@@ -177,7 +177,6 @@ public class Hunter : Special
             return;
         _Pin(survivor);
     }
-*/
     
     private void _Jump()
     {
@@ -196,7 +195,7 @@ public class Hunter : Special
         survivor.Pinned(this);
         _position.X = survivor.Position.X;
         _position.Y = survivor.Position.Y;
-        _position.Z = _survivorHeight;
+        _position.Z = 0;
     }
     
     protected override void _Die()

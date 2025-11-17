@@ -31,6 +31,7 @@ public abstract class Survivor : Mob
     private const double _bileParticleCooldown = 0.1;
     private const double _gravity = 4.0;
     private const int _jockeyFramesOffset = 23;
+    private const int _hunterFramesOffset = 29;
     
     private readonly int _character;
     private readonly int _maxHealth;
@@ -349,6 +350,8 @@ public abstract class Survivor : Mob
         {
             if (_pinner is Jockey)
                 _UpdateJockeyedSprite();
+            else if (_pinner is Hunter hunter)
+                _UpdatePouncedSprite(hunter);
             return;
         }
         
@@ -393,6 +396,14 @@ public abstract class Survivor : Mob
             _upperFrame = _jockeyFramesOffset + _jockeyedStep + (spriteDirection.Offset * 2);
             _frameUpdateTimer.AddDuration();
         }
+    }
+
+    private void _UpdatePouncedSprite(Hunter hunter)
+    {
+        SpriteDirection spriteDirection = Direction.Cardinal(hunter.DirectionRadians);
+        _xFlip = spriteDirection.XFlip;
+        _lowerFrame = H4D2Art.Survivors[_character].Length - 1;
+        _upperFrame = _hunterFramesOffset + spriteDirection.Offset;
     }
     
     private void _UpdateShootingSprite()
