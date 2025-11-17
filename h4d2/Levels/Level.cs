@@ -6,8 +6,6 @@ using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Mobs.Zombies.Uncommons;
-using H4D2.Entities.Pickups.Consumables;
-using H4D2.Entities.Pickups.Throwable;
 using H4D2.Entities.Projectiles;
 using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
@@ -52,7 +50,7 @@ public class Level
         _entities.Add(new Francis(this, new Position(150, 150)));
         _entities.Add(new Louis(this, new Position(150, 150)));
         _entities.Add(new Zoey(this, new Position(150, 150)));
-        _entities.Add(new Jockey(this, new Position(100, 100)));
+        _entities.Add(new Spitter(this, new Position(100, 100)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position, Entity? exclude)

@@ -13,15 +13,13 @@ public class Boomer : Special
     private const double _pukeFreezeTime = 0.5;
     private const int _numPukeProjectilesPerUpdate = 6;
     private const int _numPukeProjectilesOnDeath = 200;
-
-    private double _aimDirectionRadians;
+    
     private readonly CountdownTimer _attackDelayTimer;
     private readonly CountdownTimer _pukeFreezeTimer;
     
     public Boomer(Level level, Position position) 
         : base(level, position, SpecialConfigs.Boomer)
     {
-        _aimDirectionRadians = 0.0;
         _attackDelayTimer = new CountdownTimer(_attackDelay);
         _attackDelayTimer.Update(_attackDelay);
         _pukeFreezeTimer = new CountdownTimer(_pukeFreezeTime);
@@ -41,7 +39,7 @@ public class Boomer : Special
         for (int i = 0; i < _numPukeProjectilesPerUpdate; i++)
         {
             double randomDirectionShift = MathHelpers.GaussianRandom(0, _angleVariance);
-            double directionRadians = _aimDirectionRadians + randomDirectionShift;
+            double directionRadians = _directionRadians + randomDirectionShift;
             directionRadians = MathHelpers.NormalizeRadians(directionRadians);
             var puke = new Puke(_level, CenterMass.MutableCopy(), directionRadians);
             _level.AddProjectile(puke);
@@ -68,8 +66,8 @@ public class Boomer : Special
         if (distance > _attackRange)
             return;
         
-        _aimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
-        _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
+        _directionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
+        _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
         
         if (_attackDelayTimer.IsFinished)
         {
@@ -107,7 +105,7 @@ public class Boomer : Special
     {
         _frameUpdateTimer.Update(elapsedTime);
 
-        SpriteDirection spriteDirection = Direction.Intercardinal(_aimDirectionRadians);
+        SpriteDirection spriteDirection = Direction.Intercardinal(_directionRadians);
         _xFlip = spriteDirection.XFlip;
         
         while (_frameUpdateTimer.IsFinished)

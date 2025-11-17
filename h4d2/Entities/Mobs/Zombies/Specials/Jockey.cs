@@ -1,6 +1,5 @@
 ﻿using H4D2.Entities.Mobs.Survivors;
 using H4D2.Infrastructure;
-using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Zombies.Specials;
@@ -22,7 +21,6 @@ public class Jockey : Special
     
     private bool _isJumping;
     private bool _isPinning;
-    private double _aimDirectionRadians;
     private readonly CountdownTimer _jumpTimer;
     private readonly CountdownTimer _attackTimer;
     private Survivor? _pinTarget; 
@@ -32,7 +30,6 @@ public class Jockey : Special
     {
         _isJumping = false;
         _isPinning = false;
-        _aimDirectionRadians = 0.0;
         _jumpTimer = new CountdownTimer(_jumpCooldown);
         _attackTimer = new CountdownTimer(_attackDelay);
         _pinTarget = null;
@@ -68,8 +65,8 @@ public class Jockey : Special
         
         if (_jumpTimer.IsFinished)
         {
-            _aimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
-            _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
+            _directionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
+            _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
             _Jump();
             _jumpTimer.Reset();
         }
@@ -195,8 +192,8 @@ public class Jockey : Special
     private void _Jump()
     {
         _isJumping = true;
-        _velocity.X = Math.Cos(_aimDirectionRadians) * _jumpSpeedScale;
-        _velocity.Y = Math.Sin(_aimDirectionRadians) * _jumpSpeedScale;
+        _velocity.X = Math.Cos(_directionRadians) * _jumpSpeedScale;
+        _velocity.Y = Math.Sin(_directionRadians) * _jumpSpeedScale;
         _velocity.Z = _jumpZVelocity;
     }
     
@@ -207,6 +204,11 @@ public class Jockey : Special
             return;
         if (survivor.IsPinned)
             return;
+        _Pin(survivor);
+    }
+
+    private void _Pin(Survivor survivor)
+    {
         _isPinning = true;
         _isJumping = false;
         _pinTarget = survivor;

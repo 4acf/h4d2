@@ -16,7 +16,6 @@ public class Spitter : Special
     private const double _spitFreezeTime = 1.0;
     
     private int _spitFrame;
-    private double _aimDirectionRadians;
     private readonly CountdownTimer _attackDelayTimer;
     private readonly CountdownTimer _footstepParticleTimer;
     private readonly CountdownTimer _spitFreezeTimer;
@@ -26,7 +25,6 @@ public class Spitter : Special
         : base(level, position, SpecialConfigs.Spitter)
     {
         _spitFrame = -1;
-        _aimDirectionRadians = 0.0;
         _attackDelayTimer = new CountdownTimer(_attackDelay);
         _attackDelayTimer.Update(_attackDelay);
         _footstepParticleTimer = new CountdownTimer(_footstepDelay);
@@ -69,8 +67,8 @@ public class Spitter : Special
         if (distance > _attackRange)
             return;
         
-        _aimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
-        _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
+        _directionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
+        _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
         
         if (_attackDelayTimer.IsFinished)
         {
@@ -110,7 +108,7 @@ public class Spitter : Special
     {
         _frameUpdateTimer.Update(elapsedTime);
         
-        SpriteDirection spriteDirection = Direction.Cardinal(_aimDirectionRadians);
+        SpriteDirection spriteDirection = Direction.Cardinal(_directionRadians);
         _xFlip = spriteDirection.XFlip;
         
         while (_frameUpdateTimer.IsFinished)
@@ -123,7 +121,7 @@ public class Spitter : Special
     
     private void _Spit()
     {
-        var spit = new SpitProjectile(_level, CenterMass.MutableCopy(), _aimDirectionRadians);
+        var spit = new SpitProjectile(_level, CenterMass.MutableCopy(), _directionRadians);
         _level.AddProjectile(spit);
     }
     
