@@ -7,10 +7,10 @@ public static class ProjectileConfig
 {
     
     private static readonly BoundingBoxDimensions _bulletDimensions
-        = new(1, 1, 5, 0);
+        = new(1, 1, 1, 0);
 
     private static readonly BoundingBoxDimensions _grenadeDimensions
-        = new(2, 2, 5, 0);
+        = new(2, 2, 2, 0);
 
     private static readonly BoundingBoxDimensions _pukeDimensions
         = new(1, 1, 1, 0);

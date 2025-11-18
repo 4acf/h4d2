@@ -15,7 +15,6 @@ public class Jockey : Special
     private const double _jumpSpeedScale = 2.0;
     private const double _jumpZVelocity = 1.0;
     private const int _boundaryTolerance = 25;
-    private const int _survivorHeight = 9;
     
     private bool _isJumping;
     private bool _isPinning;
@@ -214,7 +213,7 @@ public class Jockey : Special
         survivor.Pinned(this);
         _position.X = survivor.Position.X;
         _position.Y = survivor.Position.Y;
-        _position.Z = _survivorHeight;
+        _position.Z = 0;
     }
     
     protected override void _Die()
