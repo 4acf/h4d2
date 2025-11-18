@@ -6,8 +6,6 @@ namespace H4D2.Entities.Mobs.Zombies.Specials;
 
 public class Hunter : Special
 {
-    public double DirectionRadians => _directionRadians;
-    
     private const int _crouchingFramesOffset = 9;
     private const int _jumpingFramesOffset = 12;
     private const int _pinningFramesOffset = 15;

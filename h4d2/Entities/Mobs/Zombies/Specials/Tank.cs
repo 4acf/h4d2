@@ -10,8 +10,6 @@ public class Tank : Special
     private const double _attackRange = 15.0;
     private const double _attackDelay = 0.5;
     private const double _attackCompleteTime = 0.5;
- 
-    public double AimDirectionRadians { get; private set; }
     
     private int _attackFrame;
     private readonly CountdownTimer _attackDelayTimer;
@@ -21,7 +19,6 @@ public class Tank : Special
         : base(level, position, SpecialConfigs.Tank)
     {
         _attackFrame = -1;
-        AimDirectionRadians = 0.0;
         _attackDelayTimer = new CountdownTimer(_attackDelay);
         _attackDelayTimer.Update(_attackDelay);
         _attackCompleteTimer = new CountdownTimer(_attackCompleteTime);
@@ -63,13 +60,13 @@ public class Tank : Special
         if (_attackDelayTimer.IsFinished)
         {
             _attackFrame = -1;
-            survivor.HitBy(this);
+            survivor.KnockbackHitBy(this);
             _attackDelayTimer.Reset();
             _attackCompleteTimer.Reset();
         }
                 
-        AimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
-        AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
+        _directionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
+        _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
     }
 
     protected override void _UpdateSprite(double elapsedTime)
@@ -83,7 +80,7 @@ public class Tank : Special
 
     private void _UpdateAttackingSprite()
     {
-        SpriteDirection spriteDirection = Direction.Cardinal(AimDirectionRadians);
+        SpriteDirection spriteDirection = Direction.Cardinal(_directionRadians);
         _xFlip = spriteDirection.XFlip;
         
         while (_frameUpdateTimer.IsFinished)

@@ -11,6 +11,7 @@ public abstract class Zombie : Mob
     private const double _fireDamageMultipler = 15.0;
     
     public readonly int Damage;
+    public double DirectionRadians => _directionRadians;
     protected Entity? _target;
     protected bool _isAttacking;
     

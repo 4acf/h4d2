@@ -6,8 +6,6 @@ namespace H4D2.Entities.Mobs.Zombies.Specials;
 
 public class Jockey : Special
 {
-    public double DirectionRadians => _directionRadians;
-    
     private const int _jumpingFramesOffset = 9;
     private const int _pinningFramesOffset = 12;
     private const double _jumpCooldown = 0.5;
