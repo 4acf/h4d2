@@ -15,7 +15,7 @@ public class Spitter : Special
     private const double _footstepDelay = 0.03;
     private const double _spitFreezeTime = 1.0;
     
-    private int _spitFrame;
+    private int _spitStep;
     private readonly CountdownTimer _attackDelayTimer;
     private readonly CountdownTimer _footstepParticleTimer;
     private readonly CountdownTimer _spitFreezeTimer;
@@ -24,7 +24,7 @@ public class Spitter : Special
     public Spitter(Level level, Position position) 
         : base(level, position, SpecialConfigs.Spitter)
     {
-        _spitFrame = -1;
+        _spitStep = -1;
         _attackDelayTimer = new CountdownTimer(_attackDelay);
         _attackDelayTimer.Update(_attackDelay);
         _footstepParticleTimer = new CountdownTimer(_footstepDelay);
@@ -99,7 +99,7 @@ public class Spitter : Special
         }
         else
         {
-            _spitFrame = -1;
+            _spitStep = -1;
             base._UpdateSprite(elapsedTime);
         }
     }
@@ -113,8 +113,8 @@ public class Spitter : Special
         
         while (_frameUpdateTimer.IsFinished)
         {
-            _spitFrame = _spitFrame == 2 ? _spitFrame : _spitFrame + 1;
-            _frame = _spitFrameOffset + (_spitFrame + (3 * spriteDirection.Offset));
+            _spitStep = _spitStep == 2 ? _spitStep : _spitStep + 1;
+            _frame = _spitFrameOffset + (_spitStep + (3 * spriteDirection.Offset));
             _frameUpdateTimer.AddDuration();
         }
     }

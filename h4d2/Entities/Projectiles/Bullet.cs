@@ -37,7 +37,11 @@ public class Bullet : Projectile
         int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
         for (int i = 0; i < steps; i++)
         {
-            screen.SetPixel((int)(_position.X + xDifference * i / steps), (int)(yCorrectedDouble + yDifference * i / steps), _color);
+            screen.SetPixel(
+                (int)(_position.X + xDifference * i / steps), 
+                (int)(yCorrectedDouble + yDifference * i / steps),
+                _color
+            );
         }
     }
 

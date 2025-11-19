@@ -14,6 +14,9 @@ public static class ProjectileConfig
 
     private static readonly BoundingBoxDimensions _pukeDimensions
         = new(1, 1, 1, 0);
+
+    private static readonly BoundingBoxDimensions _tongueDimensions
+        = new(1, 1, 1, 0);
     
     public static readonly BoundingBox BulletBoundingBox 
         = new (CollisionGroup.Projectile, _bulletDimensions);
@@ -23,4 +26,7 @@ public static class ProjectileConfig
 
     public static readonly BoundingBox PukeBoundingBox
         = new(CollisionGroup.ZombieProjectile, _pukeDimensions);
+
+    public static readonly BoundingBox TongueBoundingBox
+        = new(CollisionGroup.ZombieProjectile, _tongueDimensions);
 }
