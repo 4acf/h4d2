@@ -70,7 +70,7 @@ public class Smoker : Special
         ReadonlyPosition zombiePosition = CenterMass;
         double distance = ReadonlyPosition.Distance(targetPosition, zombiePosition);
         
-        if (distance > _tongueRange)
+        if (distance > _tongueRange || !survivor.IsOnGround || survivor.IsPinned)
             return;
         
         _directionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
