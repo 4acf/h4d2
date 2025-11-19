@@ -9,11 +9,12 @@ namespace H4D2.Entities.Mobs.Zombies.Specials;
 public class Smoker : Special
 {
     public bool IsTongueConnected => _tongue is { IsConnected: true };
+    public ReadonlyPosition? TonguePosition => _tongue?.Position;
     
     private const int _pullFramesOffset = 9;
     private const int _scratchFramesOffset = 19;
     private const double _tongueRange = 100.0;
-    private const double _scratchRange = 10.0;
+    private const double _scratchRange = 5.0;
     private const double _pullCooldown = 15.0;
     private const double _pullAttackDelay = 0.75;
     private const double _scratchAttackDelay = 0.45;
@@ -76,7 +77,6 @@ public class Smoker : Special
         _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
 
         _Pin(survivor);
-        _pullCooldownTimer.Reset();
     }
 
     private void _UpdatePinState(double elapsedTime)
@@ -87,6 +87,7 @@ public class Smoker : Special
             _isScratching = false;
             _pinTarget = null;
             _tongue!.Remove();
+            _pullCooldownTimer.Reset();
             return;   
         }
         
@@ -106,6 +107,7 @@ public class Smoker : Special
             if (distance > _scratchRange)
                 return;
 
+            _tongue!.StopPulling();
             _isPulling = false;
             _isScratching = true;
             

@@ -46,6 +46,7 @@ public abstract class Survivor : Mob
     private int _bileOverlayIndex;
     private Special? _pinner;
     private int _jockeyedStep;
+    private ReadonlyPosition? _tongueOffset;
     
     protected Survivor(Level level, Position position, SurvivorConfig config) 
         : base(level, position, config)
@@ -65,6 +66,7 @@ public abstract class Survivor : Mob
         _bileOverlayIndex = 0;
         _pinner = null;
         _jockeyedStep = 0;
+        _tongueOffset = null;
     }
 
     public override void Update(double elapsedTime)
@@ -153,6 +155,7 @@ public abstract class Survivor : Mob
         IsPinned = false;
         _pinner = null;
         _collisionExcludedEntity = null;
+        _tongueOffset = null;
     }
     
     private void _EmitHealParticles()
@@ -261,9 +264,9 @@ public abstract class Survivor : Mob
         if (IsPinned)
         {
             if (_pinner is Jockey jockey)
-            {
                 _UpdateJockeyedPosition(jockey);
-            }
+            else if(_pinner is Smoker smoker)
+                _UpdateSmokedPosition(smoker);
             return;
         }
         
@@ -294,6 +297,27 @@ public abstract class Survivor : Mob
         _directionRadians = jockey.DirectionRadians;
         _position.X = jockey.Position.X;
         _position.Y = jockey.Position.Y;
+    }
+
+    private void _UpdateSmokedPosition(Smoker smoker)
+    {
+        if (!smoker.IsTongueConnected)
+            return;
+        ReadonlyPosition? tonguePositionNullable = smoker.TonguePosition;
+        if (tonguePositionNullable == null) return;
+        ReadonlyPosition tonguePosition = tonguePositionNullable.Value;
+        
+        _tongueOffset ??= new ReadonlyPosition(
+            tonguePosition.X - _position.X,
+            tonguePosition.Y - _position.Y,
+            0.0
+        );
+
+        if (_tongueOffset == null) return;
+        ReadonlyPosition usableTongueOffset = _tongueOffset.Value;
+
+        _position.X = tonguePosition.X - usableTongueOffset.X;
+        _position.Y = tonguePosition.Y - usableTongueOffset.Y;
     }
     
     private double _CalculateBestDirection()

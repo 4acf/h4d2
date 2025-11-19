@@ -8,15 +8,20 @@ public class Tongue : Projectile
 {
     public bool IsConnected { get; private set; }
 
-    private const double _speed = 150.0;
+    private const double _shootSpeed = 250.0;
+    private const double _pullSpeed = 25.0;
     private const int _color = 0x8c5972;
-    
+
+    private bool _isStopped;
+    private double _speed;
     private readonly ReadonlyPosition _startPosition;
     private readonly Survivor _pinTarget;
     
     public Tongue(Level level, Position startPosition, Survivor pinTarget, double directionRadians)
         : base(level, startPosition, ProjectileConfig.TongueBoundingBox, 0, directionRadians)
     {
+        _isStopped = false;
+        _speed = _shootSpeed;
         _startPosition = startPosition.ReadonlyCopy();
         _pinTarget = pinTarget;
     }
@@ -24,6 +29,11 @@ public class Tongue : Projectile
     public void Remove()
     {
         Removed = true;
+    }
+
+    public void StopPulling()
+    {
+        _isStopped = true;
     }
     
     public override void Update(double elapsedTime)
@@ -34,15 +44,19 @@ public class Tongue : Projectile
             return;
         }
 
+        if (_isStopped)
+            return;
+        
+        double directionRadians = _directionRadians;
         if (IsConnected)
         {
-            _velocity.Stop();
-            return;
+            directionRadians += Math.PI;
+            directionRadians = MathHelpers.NormalizeRadians(directionRadians);
         }
         
         double timeAdjustedSpeed = _speed * elapsedTime;
-        _velocity.X = Math.Cos(_directionRadians) * timeAdjustedSpeed;
-        _velocity.Y = Math.Sin(_directionRadians) * timeAdjustedSpeed;
+        _velocity.X = Math.Cos(directionRadians) * timeAdjustedSpeed;
+        _velocity.Y = Math.Sin(directionRadians) * timeAdjustedSpeed;
         _AttemptMove();
     }
 
@@ -87,5 +101,6 @@ public class Tongue : Projectile
         if (entity == null || entity != _pinTarget)
             return;
         IsConnected = true;
+        _speed = _pullSpeed;
     }
 }
