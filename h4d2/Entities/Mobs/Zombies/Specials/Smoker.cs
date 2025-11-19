@@ -3,6 +3,7 @@ using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
+using H4D2.Particles.Smokes;
 
 namespace H4D2.Entities.Mobs.Zombies.Specials;
 
@@ -48,7 +49,11 @@ public class Smoker : Special
     public override void Update(double elapsedTime)
     {
         base.Update(elapsedTime);
-        // SMOKE PARTICLES
+        if (RandomSingleton.Instance.Next(3) != 0)
+        {
+            var smokerSmoke = new SmokerSmoke(_level, CenterMass.MutableCopy(), _velocity.ReadonlyCopy());
+            _level.AddParticle(smokerSmoke);
+        }
     }
 
     protected override void _UpdateAttackState(double elapsedTime)
@@ -195,7 +200,6 @@ public class Smoker : Special
         base._Die();
         _pinTarget?.Cleared();
         _tongue?.Remove();
-        // SMOKE PARTICLES
     }
 
     protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)

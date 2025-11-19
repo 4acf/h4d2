@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using H4D2.Entities.Hazards;
+﻿using H4D2.Entities.Hazards;
 using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Pickups;
