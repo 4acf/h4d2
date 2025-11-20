@@ -64,14 +64,14 @@ public class Smoker : Special
         if (!_pullCooldownTimer.IsFinished)
             return;
         
-        if (_target == null || _target.Removed || _target is not Survivor survivor)
-            return;
-        
         if (_isPinning)
         {
             _UpdatePinState(elapsedTime);
             return;
         }
+        
+        if (_target == null || _target.Removed || _target is not Survivor survivor)
+            return;
         
         ReadonlyPosition targetPosition = survivor.CenterMass;
         ReadonlyPosition zombiePosition = CenterMass;

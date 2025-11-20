@@ -31,6 +31,7 @@ public abstract class Survivor : Mob
     private const double _gravity = 4.0;
     private const int _jockeyFramesOffset = 23;
     private const int _hunterFramesOffset = 26;
+    private const int _smokedFramesOffset = 29;
     
     private readonly int _character;
     private readonly int _maxHealth;
@@ -373,6 +374,8 @@ public abstract class Survivor : Mob
                 _UpdateJockeyedSprite();
             else if (_pinner is Hunter hunter)
                 _UpdatePouncedSprite(hunter);
+            else if (_pinner is Smoker smoker)
+                _UpdateSmokedSprite(smoker);
             return;
         }
         
@@ -424,6 +427,23 @@ public abstract class Survivor : Mob
         _xFlip = spriteDirection.XFlip;
         _lowerFrame = H4D2Art.Survivors[_character].Length - 1;
         _upperFrame = _hunterFramesOffset + spriteDirection.Offset;
+    }
+
+    private void _UpdateSmokedSprite(Smoker smoker)
+    {
+        SpriteDirection spriteDirection = Direction.Cardinal(_aimDirectionRadians);
+        _xFlip = spriteDirection.XFlip;
+        
+        if (smoker.IsTongueConnected)
+        {
+            _upperFrame = _smokedFramesOffset + spriteDirection.Offset;
+        }
+        else
+        {
+            _upperFrame = _upperBitmapOffset + (spriteDirection.Offset * 3);    
+        }
+        
+        _lowerFrame = spriteDirection.Offset * 3;
     }
     
     private void _UpdateShootingSprite()
