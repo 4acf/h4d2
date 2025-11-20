@@ -50,7 +50,7 @@ public class Level
         _entities.Add(new Francis(this, new Position(150, 150)));
         _entities.Add(new Louis(this, new Position(150, 150)));
         _entities.Add(new Zoey(this, new Position(150, 150)));
-        _entities.Add(new Smoker(this, new Position(40, 40)));
+        _entities.Add(new Jockey(this, new Position(40, 40)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position, Entity? exclude)

@@ -30,7 +30,7 @@ public abstract class Survivor : Mob
     private const double _bileParticleCooldown = 0.1;
     private const double _gravity = 4.0;
     private const int _jockeyFramesOffset = 23;
-    private const int _hunterFramesOffset = 29;
+    private const int _hunterFramesOffset = 26;
     
     private readonly int _character;
     private readonly int _maxHealth;
@@ -44,7 +44,6 @@ public abstract class Survivor : Mob
     private readonly CountdownTimer _bileParticleTimer;
     private int _bileOverlayIndex;
     private Special? _pinner;
-    private int _jockeyedStep;
     private ReadonlyPosition? _tongueOffset;
     
     protected Survivor(Level level, Position position, SurvivorConfig config) 
@@ -64,7 +63,6 @@ public abstract class Survivor : Mob
         _bileParticleTimer = new CountdownTimer(_bileParticleCooldown);
         _bileOverlayIndex = 0;
         _pinner = null;
-        _jockeyedStep = 0;
         _tongueOffset = null;
     }
 
@@ -391,7 +389,6 @@ public abstract class Survivor : Mob
         
         while (_frameUpdateTimer.IsFinished)
         {
-            _jockeyedStep = _jockeyedStep == 0 ? 1 : 0;
             _walkStep = (_walkStep + 1) % 4;
             int nextFrame = 0;
             if (spriteDirection.Offset == 1)
@@ -416,7 +413,7 @@ public abstract class Survivor : Mob
             }
 
             _lowerFrame = nextFrame;
-            _upperFrame = _jockeyFramesOffset + _jockeyedStep + (spriteDirection.Offset * 2);
+            _upperFrame = _jockeyFramesOffset + spriteDirection.Offset;
             _frameUpdateTimer.AddDuration();
         }
     }
