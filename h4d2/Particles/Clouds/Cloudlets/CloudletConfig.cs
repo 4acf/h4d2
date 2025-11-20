@@ -22,5 +22,11 @@ public static class CloudletConfigs
         FrameDuration = 1.0 / 16.0,
         Bitmaps = H4D2Art.HealParticle
     };
+
+    public static readonly CloudletConfig SmokerSmoke = new()
+    {
+        FrameDuration = 0.0,
+        Bitmaps = H4D2Art.NullParticle
+    };
 }
 

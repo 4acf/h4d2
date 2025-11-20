@@ -19,4 +19,10 @@ public static class CloudConfigs
         ParticleMultiplier = 2.0,
         Lifetime = 0.5
     };
+
+    public static readonly CloudConfig SmokerSmoke = new()
+    {
+        ParticleMultiplier = 5.0,
+        Lifetime = 0.75
+    };
 }

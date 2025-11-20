@@ -22,6 +22,7 @@ public static class H4D2Art
     public static Bitmap[] Explosion => _particles[0];
     public static Bitmap[] HealParticle => _particles[1];
     public static Bitmap[] Fire => _particles[2];
+    public static Bitmap[] NullParticle => _particles[3];
     public static Bitmap[] BileOverlays => _bileOverlays.SelectMany(x => x).ToArray();
     
     private static Bitmap[][] _LoadSurvivors() => 
@@ -37,7 +38,7 @@ public static class H4D2Art
     private static Bitmap[][] _LoadProjectiles() => 
         Art.LoadBitmaps($"{_resourcePrefix}projectile.png", ProjectileSize, 4, 4);
     private static Bitmap[][] _LoadParticles() => 
-        Art.LoadBitmaps($"{_resourcePrefix}particle.png", ParticleSize, 3, 4);
+        Art.LoadBitmaps($"{_resourcePrefix}particle.png", ParticleSize, 4, 4);
     private static Bitmap[][] _LoadBileOverlays() => 
         Art.LoadBitmaps($"{_resourcePrefix}bileoverlay.png", SpriteSize, 2, 2);
 }

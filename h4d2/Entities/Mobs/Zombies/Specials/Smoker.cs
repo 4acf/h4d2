@@ -3,6 +3,7 @@ using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
+using H4D2.Particles.Clouds;
 using H4D2.Particles.Smokes;
 
 namespace H4D2.Entities.Mobs.Zombies.Specials;
@@ -19,7 +20,8 @@ public class Smoker : Special
     private const double _pullCooldown = 15.0;
     private const double _pullAttackDelay = 0.75;
     private const double _scratchAttackDelay = 0.45;
-
+    private const double _deathSmokeRadius = 20.0;
+    
     private int _pullStep;
     private int _scratchStep;
     private bool _isPulling;
@@ -200,6 +202,9 @@ public class Smoker : Special
         base._Die();
         _pinTarget?.Cleared();
         _tongue?.Remove();
+
+        var smokerSmokeCloud = new SmokerSmokeCloud(_level, CenterMass.MutableCopy(), _deathSmokeRadius);
+        _level.AddParticle(smokerSmokeCloud);
     }
 
     protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
