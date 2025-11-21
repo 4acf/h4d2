@@ -17,7 +17,7 @@ namespace H4D2.Levels;
 
 public class Level
 {
-    public const int Padding = 32;
+    public const int Padding = 0;
     private const double _levelResetCooldownSeconds = 8.0;
     private const int _minZombies = 20;
     private const int _minSpawnWaveSize = 5;
@@ -50,7 +50,7 @@ public class Level
         _entities.Add(new Francis(this, new Position(150, 150)));
         _entities.Add(new Louis(this, new Position(150, 150)));
         _entities.Add(new Zoey(this, new Position(150, 150)));
-        _entities.Add(new Smoker(this, new Position(40, 40)));
+        _entities.Add(new Charger(this, new Position(40, 40)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position, Entity? exclude)

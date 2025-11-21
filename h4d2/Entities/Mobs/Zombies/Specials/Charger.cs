@@ -1,13 +1,226 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Entities.Mobs.Survivors;
+using H4D2.Infrastructure;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Zombies.Specials;
 
 public class Charger : Special
 {
+    private const int _chargingFramesOffset = 9;
+    private const double _chargeCooldown = 1.0;
+    private const double _chargeRange = 50.0;
+    private const double _maxChargeTime = 3.0;
+    private const double _defaultSpeed = 250;
+    private const double _chargeSpeed = 500;
+    private const double _slamDelay = 1.5;
+    
+    private bool _isCharging;
+    private bool _isSlamming;
+    private readonly CountdownTimer _chargeTimer;
+    private readonly CountdownTimer _chargeCooldownTimer;
+    private readonly CountdownTimer _slamTimer;
+    private Survivor? _pinTarget;
+    private readonly HashSet<Survivor> _alreadyKnockbacked;
+    
     public Charger(Level level, Position position) 
         : base(level, position, SpecialConfigs.Charger)
     {
+        _isCharging = false;
+        _isSlamming = false;
+        _chargeTimer = new CountdownTimer(_maxChargeTime);
+        _chargeCooldownTimer = new CountdownTimer(_chargeCooldown);
+        _chargeCooldownTimer.Update(_chargeCooldown);
+        _slamTimer = new CountdownTimer(_slamDelay);
+        _pinTarget = null;
+        _alreadyKnockbacked = new HashSet<Survivor>();
+    }
+
+    protected override void _UpdateAttackState(double elapsedTime)
+    {
+        if (_isCharging)
+        {
+            _UpdateChargeState(elapsedTime);
+            return;
+        }
         
+        if (_isSlamming)
+        {
+            _UpdateSlamState(elapsedTime);
+            return;
+        }
+
+        if (_target == null || _target.Removed || _target is not Survivor survivor)
+            return;
+        
+        ReadonlyPosition targetPosition = survivor.CenterMass;
+        ReadonlyPosition zombiePosition = CenterMass;
+        double distance = ReadonlyPosition.Distance(targetPosition, zombiePosition);
+        
+        if (distance > _chargeRange || !survivor.IsOnGround || survivor.IsPinned)
+            return;
+        
+        _directionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
+        _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
+
+        _chargeCooldownTimer.Update(elapsedTime);
+        if (_chargeCooldownTimer.IsFinished)
+        {
+            _Charge();
+            _chargeCooldownTimer.Reset();
+        }
+    }
+
+    private void _UpdateChargeState(double elapsedTime)
+    {
+        _chargeTimer.Update(elapsedTime);
+        if (_chargeTimer.IsFinished)
+        {
+            _StopCharging(_pinTarget);
+            _chargeTimer.Reset();
+        }
+    }
+    
+    private void _UpdateSlamState(double elapsedTime)
+    {
+        if (_pinTarget == null || _pinTarget.Removed)
+        {
+            _isSlamming = false;
+            _pinTarget = null;
+            _collisionExcludedEntity = null;
+            _chargeCooldownTimer.Reset();
+            return;   
+        }
+        
+        _slamTimer.Update(elapsedTime);
+        if (_slamTimer.IsFinished)
+        {
+            _pinTarget.HitBy(this);
+            _slamTimer.Reset();
+        }
+    }
+    
+    protected override void _UpdatePosition(double elapsedTime)
+    {
+        if (_isSlamming)
+        {
+            _velocity.Stop();
+            return;
+        }
+        
+        _velocity.X *= 0.5;
+        _velocity.Y *= 0.5;
+
+        if (!_isCharging)
+        {
+            double targetDirection = _target == null ? 
+                _directionRadians : 
+                Math.Atan2(_target.CenterMass.Y - CenterMass.Y, _target.CenterMass.X - CenterMass.X);
+            double directionDiff = targetDirection - _directionRadians;
+            directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
+            _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
+            _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
+        }
+        
+        double moveSpeed = (_speed * _speedFactor) * elapsedTime;
+        _velocity.X += Math.Cos(_directionRadians) * moveSpeed;
+        _velocity.Y += Math.Sin(_directionRadians) * moveSpeed;
+
+        _AttemptMove();
+    }
+    
+    protected override void _UpdateSprite(double elapsedTime)
+    {
+        if (_isCharging)
+            _UpdateChargeSprite(elapsedTime);
+        else if (_isSlamming)
+            _UpdateSlamSprite(elapsedTime);
+        else
+            base._UpdateSprite(elapsedTime);
+    }
+
+    private void _UpdateChargeSprite(double elapsedTime)
+    {
+        _frameUpdateTimer.Update(elapsedTime);
+        
+        SpriteDirection spriteDirection = Direction.Intercardinal(_directionRadians);
+        _xFlip = spriteDirection.XFlip;
+        
+        while (_frameUpdateTimer.IsFinished)
+        {
+            _walkStep = (_walkStep + 1) % 4;
+            int nextFrame = 0;
+            nextFrame = _walkStep switch
+            {
+                0 or 2 => 0 + _chargingFramesOffset + (3 * spriteDirection.Offset),
+                1 => 1 + _chargingFramesOffset +  (3 * spriteDirection.Offset),
+                3 => 2 + _chargingFramesOffset +  (3 * spriteDirection.Offset),
+                _ => nextFrame
+            };
+            _frame = nextFrame;
+            _frameUpdateTimer.AddDuration();
+        }
+    }
+
+    private void _UpdateSlamSprite(double elapsedTime)
+    {
+        
+    }
+
+    private void _Charge()
+    {
+        _isCharging = true;
+        _speed = _chargeSpeed;
+    }
+
+    private void _StopCharging(Survivor? pinTarget = null)
+    {
+        _isCharging = false;
+        _isSlamming = pinTarget != null;
+        _speed = _defaultSpeed;
+        _alreadyKnockbacked.Clear();
+        _chargeTimer.Reset();
+    }
+    
+    protected override void _Collide(Entity? entity)
+    {
+        if (!_isCharging)
+        {
+            base._Collide(entity);
+            return;
+        }
+
+        if (entity == null)
+        {
+            _pinTarget?.HitBy(this);
+            _StopCharging(_pinTarget);
+            // add stumble knockback here
+            base._Collide(entity); // temporary
+            return;
+        }
+
+        if (_pinTarget == null && entity is Survivor survivor)
+        {
+            _Pin(survivor);
+            return;
+        }
+
+        if (_pinTarget != null && entity is Survivor survivor2 && !_alreadyKnockbacked.Contains(survivor2))
+        {
+            survivor2.KnockbackHitBy(this);
+            _alreadyKnockbacked.Add(survivor2);
+        }
+    }
+    
+    private void _Pin(Survivor survivor)
+    {
+        _pinTarget = survivor;
+        _collisionExcludedEntity = survivor;
+        survivor.Pinned(this);
+    }
+
+    protected override void _Die()
+    {
+        base._Die();
+        _pinTarget?.Cleared();
     }
 }

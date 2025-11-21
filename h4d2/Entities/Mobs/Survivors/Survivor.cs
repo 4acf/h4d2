@@ -261,8 +261,8 @@ public abstract class Survivor : Mob
     {
         if (IsPinned)
         {
-            if (_pinner is Jockey jockey)
-                _UpdateJockeyedPosition(jockey);
+            if (_pinner is Jockey or Charger)
+                _BindPositionToSpecial(_pinner);
             else if(_pinner is Smoker smoker)
                 _UpdateSmokedPosition(smoker);
             return;
@@ -290,11 +290,11 @@ public abstract class Survivor : Mob
         _AttemptMove();
     }
 
-    private void _UpdateJockeyedPosition(Jockey jockey)
+    private void _BindPositionToSpecial(Special special)
     {
-        _directionRadians = jockey.DirectionRadians;
-        _position.X = jockey.Position.X;
-        _position.Y = jockey.Position.Y;
+        _directionRadians = special.DirectionRadians;
+        _position.X = special.Position.X;
+        _position.Y = special.Position.Y;
     }
 
     private void _UpdateSmokedPosition(Smoker smoker)

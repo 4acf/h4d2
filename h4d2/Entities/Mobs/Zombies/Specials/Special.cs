@@ -25,10 +25,7 @@ public abstract class Special : Zombie
         _UpdateSprite(elapsedTime);
     }
 
-    protected virtual void _UpdateAttackState(double elapsedTime)
-    {
-        
-    }
+    protected abstract void _UpdateAttackState(double elapsedTime);
     
     protected virtual void _UpdateTarget()
     {
