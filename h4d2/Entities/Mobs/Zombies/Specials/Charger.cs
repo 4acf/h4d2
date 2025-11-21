@@ -7,14 +7,17 @@ namespace H4D2.Entities.Mobs.Zombies.Specials;
 public class Charger : Special
 {
     private const int _chargingFramesOffset = 9;
-    private const double _chargeCooldown = 1.0;
+    private const double _chargeCooldown = 10.0;
     private const double _chargeRange = 50.0;
     private const double _maxChargeTime = 3.0;
     private const double _defaultSpeed = 250;
     private const double _chargeSpeed = 500;
     private const double _slamDelay = 1.5;
+    private const double _gravity = 0.5;
+    private const double _stumbleHeight = 3.0;
     
     private bool _isCharging;
+    private bool _isStumbling;
     private bool _isSlamming;
     private readonly CountdownTimer _chargeTimer;
     private readonly CountdownTimer _chargeCooldownTimer;
@@ -26,6 +29,7 @@ public class Charger : Special
         : base(level, position, SpecialConfigs.Charger)
     {
         _isCharging = false;
+        _isStumbling = false;
         _isSlamming = false;
         _chargeTimer = new CountdownTimer(_maxChargeTime);
         _chargeCooldownTimer = new CountdownTimer(_chargeCooldown);
@@ -42,6 +46,12 @@ public class Charger : Special
             _UpdateChargeState(elapsedTime);
             return;
         }
+
+        if (_isStumbling)
+        {
+            _UpdateStumbleState();
+            return;
+        }
         
         if (_isSlamming)
         {
@@ -49,6 +59,8 @@ public class Charger : Special
             return;
         }
 
+        _chargeCooldownTimer.Update(elapsedTime);
+        
         if (_target == null || _target.Removed || _target is not Survivor survivor)
             return;
         
@@ -61,8 +73,7 @@ public class Charger : Special
         
         _directionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
         _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
-
-        _chargeCooldownTimer.Update(elapsedTime);
+        
         if (_chargeCooldownTimer.IsFinished)
         {
             _Charge();
@@ -78,6 +89,12 @@ public class Charger : Special
             _StopCharging(_pinTarget);
             _chargeTimer.Reset();
         }
+    }
+
+    private void _UpdateStumbleState()
+    {
+        if (IsOnGround)
+            _isStumbling = false;
     }
     
     private void _UpdateSlamState(double elapsedTime)
@@ -101,6 +118,12 @@ public class Charger : Special
     
     protected override void _UpdatePosition(double elapsedTime)
     {
+        if (_isStumbling)
+        {
+            _UpdateStumblingPosition(elapsedTime);
+            return;
+        }
+        
         if (_isSlamming)
         {
             _velocity.Stop();
@@ -127,10 +150,21 @@ public class Charger : Special
 
         _AttemptMove();
     }
+
+    private void _UpdateStumblingPosition(double elapsedTime)
+    {
+        _velocity.X *= 0.5;
+        _velocity.Y *= 0.5;
+        double stumbleSpeed = (_speed * _speedFactor) * elapsedTime;
+        _velocity.X += Math.Cos(_directionRadians) * stumbleSpeed;
+        _velocity.Y += Math.Sin(_directionRadians) * stumbleSpeed;
+        _velocity.Z -= _gravity * elapsedTime;
+        _AttemptMove();
+    }
     
     protected override void _UpdateSprite(double elapsedTime)
     {
-        if (_isCharging)
+        if (_isCharging || _isStumbling)
             _UpdateChargeSprite(elapsedTime);
         else if (_isSlamming)
             _UpdateSlamSprite(elapsedTime);
@@ -141,8 +175,11 @@ public class Charger : Special
     private void _UpdateChargeSprite(double elapsedTime)
     {
         _frameUpdateTimer.Update(elapsedTime);
-        
-        SpriteDirection spriteDirection = Direction.Intercardinal(_directionRadians);
+
+        double directionRadians = _isStumbling ?
+            MathHelpers.NormalizeRadians(_directionRadians + Math.PI) :
+            _directionRadians;
+        SpriteDirection spriteDirection = Direction.Intercardinal(directionRadians);
         _xFlip = spriteDirection.XFlip;
         
         while (_frameUpdateTimer.IsFinished)
@@ -180,6 +217,14 @@ public class Charger : Special
         _alreadyKnockbacked.Clear();
         _chargeTimer.Reset();
     }
+
+    private void _Stumble()
+    {
+        _isStumbling = true;
+        _directionRadians += Math.PI;
+        _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
+        _position.Z = _stumbleHeight;
+    }
     
     protected override void _Collide(Entity? entity)
     {
@@ -193,8 +238,7 @@ public class Charger : Special
         {
             _pinTarget?.HitBy(this);
             _StopCharging(_pinTarget);
-            // add stumble knockback here
-            base._Collide(entity); // temporary
+            _Stumble();
             return;
         }
 
@@ -204,10 +248,13 @@ public class Charger : Special
             return;
         }
 
-        if (_pinTarget != null && entity is Survivor survivor2 && !_alreadyKnockbacked.Contains(survivor2))
+        if (_pinTarget != null && entity is Survivor survivor2)
         {
-            survivor2.KnockbackHitBy(this);
-            _alreadyKnockbacked.Add(survivor2);
+            if (!_alreadyKnockbacked.Contains(survivor2))
+            {
+                survivor2.KnockbackHitBy(this);
+                _alreadyKnockbacked.Add(survivor2);
+            }
         }
     }
     
