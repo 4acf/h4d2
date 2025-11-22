@@ -237,7 +237,7 @@ public class Level
     
     private void _RenderEntities(Bitmap screen)
     {
-        _entities.Sort(Entity.Comparator);
+        _entities.Sort(RenderingComparators.Entity);
         foreach (Entity entity in _entities)
         {
             entity.Render(screen);
@@ -246,7 +246,7 @@ public class Level
 
     private void _RenderParticles(Bitmap screen)
     {
-        _particles.Sort(Particle.Comparator);
+        _particles.Sort(RenderingComparators.Particle);
         foreach (Particle particle in _particles)
         {
             if(!particle.Removed)

@@ -1,0 +1,91 @@
+﻿using H4D2.Entities;
+using H4D2.Entities.Mobs.Survivors;
+using H4D2.Entities.Mobs.Zombies.Specials;
+using H4D2.Particles;
+using H4D2.Particles.Clouds.Cloudlets;
+using H4D2.Particles.DebrisParticles;
+using H4D2.Particles.DebrisParticles.Granules;
+using H4D2.Particles.Smokes;
+
+namespace H4D2.Infrastructure.H4D2;
+
+public static class RenderingComparators
+{
+    public static readonly Comparison<Entity> Entity = (a, b) =>
+    {
+        if (a is Survivor sa && sa.Pinner == b)
+            return ResolvePinnedSort(b);
+        if (b is Survivor sb && sb.Pinner == a)
+            return -ResolvePinnedSort(a);
+        
+        int diff = b.FootPosition.Y.CompareTo(a.FootPosition.Y);
+        if (diff != 0)
+            return diff;
+        
+        return 0;
+        
+        int ResolvePinnedSort(Entity pinner)
+        {
+            return pinner switch
+            {
+                Hunter hunter => ResolveHunterSort(hunter),
+                Charger charger => ResolveChargerSort(charger),
+                _ => 0
+            };
+        }
+
+        int ResolveHunterSort(Hunter hunter)
+        {
+            double degrees = MathHelpers.RadiansToDegrees(hunter.DirectionRadians);
+            bool drawSurvivorAfterHunter = 45 <= degrees && degrees < 135;
+            if(drawSurvivorAfterHunter)
+                return 1;
+            return -1;
+        }
+        
+        int ResolveChargerSort(Charger charger)
+        {
+            bool drawSurvivorAfterCharger = false;
+
+            if (charger.IsCharging || charger.IsStumbling)
+            {
+                
+                double degrees = MathHelpers.RadiansToDegrees(charger.DirectionRadians);
+                bool facingWest = 157.5 <= degrees && degrees < 202.5;
+                bool facingEast = 337.5 <= degrees || degrees < 22.5;
+                drawSurvivorAfterCharger = 202.5 <= degrees && degrees < 337.5;
+                if(charger.IsStumbling && !facingWest && !facingEast)
+                    drawSurvivorAfterCharger = !drawSurvivorAfterCharger;
+            }
+            else
+                drawSurvivorAfterCharger = true;
+            
+            if (drawSurvivorAfterCharger)
+                return 1;
+            return -1;
+        }
+    };
+    
+    public static readonly Comparison<Particle> Particle = (a, b) =>
+    {
+        int rank = Rank(a.GetType()).CompareTo(Rank(b.GetType()));
+        if (rank != 0)
+            return rank;
+
+        if (a.GetType() == typeof(Flame) && b.GetType() == typeof(Flame))
+            return a.Position.Y.CompareTo(b.Position.Y);
+
+        return 0;
+
+        int Rank(Type t)
+        {
+            if (t == typeof(Fuel)) return 0;
+            if (t == typeof(GibDebris)) return 1;
+            if (t == typeof(Blood)) return 3;
+            if (t == typeof(ExplosionFlame)) return 4;
+            if (t == typeof(Flame)) return 5;
+            if (t == typeof(Smoke)) return 6;
+            return 2;
+        }
+    };
+}
