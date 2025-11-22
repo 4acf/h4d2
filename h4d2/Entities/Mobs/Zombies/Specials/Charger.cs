@@ -7,7 +7,8 @@ namespace H4D2.Entities.Mobs.Zombies.Specials;
 public class Charger : Special
 {
     private const int _chargingFramesOffset = 9;
-    private const double _chargeCooldown = 10.0;
+    private const int _slamFramesOffset = 24;
+    private const double _chargeCooldown = 1.0;
     private const double _chargeRange = 50.0;
     private const double _maxChargeTime = 3.0;
     private const double _defaultSpeed = 250;
@@ -16,44 +17,46 @@ public class Charger : Special
     private const double _gravity = 0.5;
     private const double _stumbleHeight = 3.0;
     
-    private bool _isCharging;
-    private bool _isStumbling;
-    private bool _isSlamming;
+    public bool IsCharging { get; private set; }
+    public bool IsStumbling { get; private set; }
+    public bool IsSlamming { get; private set; }
+    public int SlamStep { get; private set; }
+    
     private readonly CountdownTimer _chargeTimer;
     private readonly CountdownTimer _chargeCooldownTimer;
     private readonly CountdownTimer _slamTimer;
     private Survivor? _pinTarget;
-    private readonly HashSet<Survivor> _alreadyKnockbacked;
     
     public Charger(Level level, Position position) 
         : base(level, position, SpecialConfigs.Charger)
     {
-        _isCharging = false;
-        _isStumbling = false;
-        _isSlamming = false;
+        IsCharging = false;
+        IsStumbling = false;
+        IsSlamming = false;
+        SlamStep = -1;
+        
         _chargeTimer = new CountdownTimer(_maxChargeTime);
         _chargeCooldownTimer = new CountdownTimer(_chargeCooldown);
         _chargeCooldownTimer.Update(_chargeCooldown);
         _slamTimer = new CountdownTimer(_slamDelay);
         _pinTarget = null;
-        _alreadyKnockbacked = new HashSet<Survivor>();
     }
 
     protected override void _UpdateAttackState(double elapsedTime)
     {
-        if (_isCharging)
+        if (IsCharging)
         {
             _UpdateChargeState(elapsedTime);
             return;
         }
 
-        if (_isStumbling)
+        if (IsStumbling)
         {
             _UpdateStumbleState();
             return;
         }
         
-        if (_isSlamming)
+        if (IsSlamming)
         {
             _UpdateSlamState(elapsedTime);
             return;
@@ -94,17 +97,21 @@ public class Charger : Special
     private void _UpdateStumbleState()
     {
         if (IsOnGround)
-            _isStumbling = false;
+        {
+            IsStumbling = false;
+            _directionRadians = MathHelpers.NormalizeRadians(_directionRadians + Math.PI);
+        }
     }
     
     private void _UpdateSlamState(double elapsedTime)
     {
         if (_pinTarget == null || _pinTarget.Removed)
         {
-            _isSlamming = false;
+            IsSlamming = false;
             _pinTarget = null;
             _collisionExcludedEntity = null;
             _chargeCooldownTimer.Reset();
+            SlamStep = -1;
             return;   
         }
         
@@ -118,13 +125,13 @@ public class Charger : Special
     
     protected override void _UpdatePosition(double elapsedTime)
     {
-        if (_isStumbling)
+        if (IsStumbling)
         {
             _UpdateStumblingPosition(elapsedTime);
             return;
         }
         
-        if (_isSlamming)
+        if (IsSlamming)
         {
             _velocity.Stop();
             return;
@@ -133,7 +140,7 @@ public class Charger : Special
         _velocity.X *= 0.5;
         _velocity.Y *= 0.5;
 
-        if (!_isCharging)
+        if (!IsCharging)
         {
             double targetDirection = _target == null ? 
                 _directionRadians : 
@@ -164,9 +171,9 @@ public class Charger : Special
     
     protected override void _UpdateSprite(double elapsedTime)
     {
-        if (_isCharging || _isStumbling)
+        if (IsCharging || IsStumbling)
             _UpdateChargeSprite(elapsedTime);
-        else if (_isSlamming)
+        else if (IsSlamming)
             _UpdateSlamSprite(elapsedTime);
         else
             base._UpdateSprite(elapsedTime);
@@ -176,7 +183,7 @@ public class Charger : Special
     {
         _frameUpdateTimer.Update(elapsedTime);
 
-        double directionRadians = _isStumbling ?
+        double directionRadians = IsStumbling ?
             MathHelpers.NormalizeRadians(_directionRadians + Math.PI) :
             _directionRadians;
         SpriteDirection spriteDirection = Direction.Intercardinal(directionRadians);
@@ -185,42 +192,56 @@ public class Charger : Special
         while (_frameUpdateTimer.IsFinished)
         {
             _walkStep = (_walkStep + 1) % 4;
-            int nextFrame = 0;
-            nextFrame = _walkStep switch
+            _frame = _walkStep switch
             {
                 0 or 2 => 0 + _chargingFramesOffset + (3 * spriteDirection.Offset),
                 1 => 1 + _chargingFramesOffset +  (3 * spriteDirection.Offset),
                 3 => 2 + _chargingFramesOffset +  (3 * spriteDirection.Offset),
-                _ => nextFrame
+                _ => _frame
             };
-            _frame = nextFrame;
             _frameUpdateTimer.AddDuration();
         }
     }
 
     private void _UpdateSlamSprite(double elapsedTime)
     {
+        _frameUpdateTimer.Update(elapsedTime);
         
+        SpriteDirection spriteDirection = Direction.Intercardinal(_directionRadians);
+        _xFlip = spriteDirection.XFlip;
+
+        while (_frameUpdateTimer.IsFinished)
+        {
+            SlamStep = (SlamStep + 1) % 12;
+            int nextFrame = 0;
+            nextFrame = SlamStep switch
+            {
+                <= 4 or 11 => 2,
+                5 => 1,
+                _ => 0
+            };
+            _frame = nextFrame + _slamFramesOffset + (spriteDirection.Offset * 3);
+            _frameUpdateTimer.AddDuration();
+        }
     }
 
     private void _Charge()
     {
-        _isCharging = true;
+        IsCharging = true;
         _speed = _chargeSpeed;
     }
 
     private void _StopCharging(Survivor? pinTarget = null)
     {
-        _isCharging = false;
-        _isSlamming = pinTarget != null;
+        IsCharging = false;
+        IsSlamming = pinTarget != null;
         _speed = _defaultSpeed;
-        _alreadyKnockbacked.Clear();
         _chargeTimer.Reset();
     }
 
     private void _Stumble()
     {
-        _isStumbling = true;
+        IsStumbling = true;
         _directionRadians += Math.PI;
         _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
         _position.Z = _stumbleHeight;
@@ -228,7 +249,7 @@ public class Charger : Special
     
     protected override void _Collide(Entity? entity)
     {
-        if (!_isCharging)
+        if (!IsCharging)
         {
             base._Collide(entity);
             return;
@@ -250,11 +271,10 @@ public class Charger : Special
 
         if (_pinTarget != null && entity is Survivor survivor2)
         {
-            if (!_alreadyKnockbacked.Contains(survivor2))
-            {
-                survivor2.KnockbackHitBy(this);
-                _alreadyKnockbacked.Add(survivor2);
-            }
+            // this will stack in certain conditions (e.g. survivor2 is against a wall)
+            // i could easily add a cooldown but i'd rather not because its a rare and
+            // funny occurrence when a survivor gets crushed and dies instantly
+            survivor2.KnockbackHitBy(this);
         }
     }
     

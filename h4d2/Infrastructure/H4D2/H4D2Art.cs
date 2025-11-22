@@ -26,13 +26,13 @@ public static class H4D2Art
     public static Bitmap[] BileOverlays => _bileOverlays.SelectMany(x => x).ToArray();
     
     private static Bitmap[][] _LoadSurvivors() => 
-        Art.LoadBitmaps($"{_resourcePrefix}survivor.png", SpriteSize, 8, 34);
+        Art.LoadBitmaps($"{_resourcePrefix}survivor.png", SpriteSize, 8, 53);
     private static Bitmap[][] _LoadCommons() => 
         Art.LoadBitmaps($"{_resourcePrefix}common.png", SpriteSize, 9, 23);
     private static Bitmap[][] _LoadUncommons() => 
         Art.LoadBitmaps($"{_resourcePrefix}uncommon.png", SpriteSize, 5, 23);
     private static Bitmap[][] _LoadSpecials() => 
-        Art.LoadBitmaps($"{_resourcePrefix}special.png", SpriteSize, 8, 29);
+        Art.LoadBitmaps($"{_resourcePrefix}special.png", SpriteSize, 8, 39);
     private static Bitmap[][] _LoadPickups() => 
         Art.LoadBitmaps($"{_resourcePrefix}pickup.png", PickupSize, 2, 3);
     private static Bitmap[][] _LoadProjectiles() => 

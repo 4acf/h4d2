@@ -32,6 +32,8 @@ public abstract class Survivor : Mob
     private const int _jockeyFramesOffset = 23;
     private const int _hunterFramesOffset = 26;
     private const int _smokedFramesOffset = 29;
+    private const int _chargedFramesOffset = 32;
+    private const int _slamFramesOffset = 37;
     
     private readonly int _character;
     private readonly int _maxHealth;
@@ -370,12 +372,21 @@ public abstract class Survivor : Mob
         
         if (IsPinned)
         {
-            if (_pinner is Jockey)
-                _UpdateJockeyedSprite();
-            else if (_pinner is Hunter hunter)
-                _UpdatePouncedSprite(hunter);
-            else if (_pinner is Smoker smoker)
-                _UpdateSmokedSprite(smoker);
+            switch (_pinner)
+            {
+                case Jockey:
+                    _UpdateJockeyedSprite();
+                    break;
+                case Hunter hunter:
+                    _UpdatePouncedSprite(hunter);
+                    break;
+                case Smoker smoker:
+                    _UpdateSmokedSprite(smoker);
+                    break;
+                case Charger charger:
+                    _UpdateChargedSprite(charger);
+                    break;
+            }
             return;
         }
         
@@ -444,6 +455,37 @@ public abstract class Survivor : Mob
         }
         
         _lowerFrame = spriteDirection.Offset * 3;
+    }
+
+    private void _UpdateChargedSprite(Charger charger)
+    {
+        double directionRadians = charger.IsStumbling ?
+            MathHelpers.NormalizeRadians(charger.DirectionRadians + Math.PI) :
+            charger.DirectionRadians;
+        
+        SpriteDirection spriteDirection = Direction.Intercardinal(directionRadians);
+        _xFlip = spriteDirection.XFlip;
+        
+        if (!charger.IsStumbling && charger.IsSlamming)
+        {
+            while (_frameUpdateTimer.IsFinished)
+            {
+                int nextFrame = 0;
+                nextFrame = charger.SlamStep switch
+                {
+                    <= 4 or 11 => 2,
+                    5 => 1,
+                    _ => 0
+                };
+                _upperFrame = nextFrame + _slamFramesOffset + (spriteDirection.Offset * 3);
+                _frameUpdateTimer.AddDuration();
+            }
+        }
+        else
+        {
+            _upperFrame = _chargedFramesOffset + (spriteDirection.Offset);
+        }
+        _lowerFrame = H4D2Art.Survivors[_character].Length - 1;
     }
     
     private void _UpdateShootingSprite()
