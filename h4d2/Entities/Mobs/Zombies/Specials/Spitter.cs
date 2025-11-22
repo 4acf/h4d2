@@ -10,7 +10,7 @@ public class Spitter : Special
 {
     private const int _spitFrameOffset = 9;
     private const int _numDeathSpitPuddles = 30;
-    private const double _attackRange = 100.0;
+    private const double _attackRange = 90.0;
     private const double _attackDelay = 20.0;
     private const double _footstepDelay = 0.03;
     private const double _spitFreezeTime = 1.0;

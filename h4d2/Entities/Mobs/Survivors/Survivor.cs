@@ -268,6 +268,11 @@ public abstract class Survivor : Mob
                 _MatchSpecialPosition(Pinner);
             else if(Pinner is Smoker smoker)
                 _UpdateSmokedPosition(smoker);
+            
+            // needed for hazard damage
+            _velocity.Stop();
+            _AttemptMove();
+            
             return;
         }
         
@@ -290,6 +295,7 @@ public abstract class Survivor : Mob
         {
             _velocity.Z -= _gravity * elapsedTime;
         }
+        
         _AttemptMove();
     }
 
