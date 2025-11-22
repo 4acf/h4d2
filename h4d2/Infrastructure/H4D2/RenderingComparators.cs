@@ -1,6 +1,6 @@
 ﻿using H4D2.Entities;
 using H4D2.Entities.Mobs.Survivors;
-using H4D2.Entities.Mobs.Zombies.Specials;
+using H4D2.Entities.Mobs.Zombies.Specials.Pinners;
 using H4D2.Particles;
 using H4D2.Particles.Clouds.Cloudlets;
 using H4D2.Particles.DebrisParticles;

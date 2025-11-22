@@ -2,9 +2,9 @@
 using H4D2.Infrastructure;
 using H4D2.Levels;
 
-namespace H4D2.Entities.Mobs.Zombies.Specials;
+namespace H4D2.Entities.Mobs.Zombies.Specials.Pinners;
 
-public class Jockey : Special
+public class Jockey : Pinner
 {
     private const int _jumpingFramesOffset = 9;
     private const int _pinningFramesOffset = 12;
@@ -20,7 +20,6 @@ public class Jockey : Special
     private bool _isPinning;
     private readonly CountdownTimer _jumpTimer;
     private readonly CountdownTimer _attackTimer;
-    private Survivor? _pinTarget; 
     
     public Jockey(Level level, Position position) 
         : base(level, position, SpecialConfigs.Jockey)
@@ -29,7 +28,6 @@ public class Jockey : Special
         _isPinning = false;
         _jumpTimer = new CountdownTimer(_jumpCooldown);
         _attackTimer = new CountdownTimer(_attackDelay);
-        _pinTarget = null;
     }
 
     protected override void _UpdateAttackState(double elapsedTime)
@@ -214,11 +212,5 @@ public class Jockey : Special
         _position.X = survivor.Position.X;
         _position.Y = survivor.Position.Y;
         _position.Z = 0;
-    }
-    
-    protected override void _Die()
-    {
-        base._Die();
-        _pinTarget?.Cleared();
     }
 }

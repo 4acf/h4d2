@@ -6,9 +6,9 @@ using H4D2.Levels;
 using H4D2.Particles.Clouds;
 using H4D2.Particles.Smokes;
 
-namespace H4D2.Entities.Mobs.Zombies.Specials;
+namespace H4D2.Entities.Mobs.Zombies.Specials.Pinners;
 
-public class Smoker : Special
+public class Smoker : Pinner
 {
     public bool IsTongueConnected => _tongue is { IsConnected: true };
     public ReadonlyPosition? TonguePosition => _tongue?.Position;
@@ -30,7 +30,6 @@ public class Smoker : Special
     private readonly CountdownTimer _pullCooldownTimer;
     private readonly CountdownTimer _pullAttackTimer;
     private readonly CountdownTimer _scratchAttackTimer;
-    private Survivor? _pinTarget;
     private Tongue? _tongue;
     
     public Smoker(Level level, Position position) 
@@ -44,7 +43,6 @@ public class Smoker : Special
         _pullCooldownTimer.Update(_pullCooldown);
         _pullAttackTimer = new CountdownTimer(_pullAttackDelay);
         _scratchAttackTimer = new CountdownTimer(_scratchAttackDelay);
-        _pinTarget = null;
         _tongue = null;
     }
 

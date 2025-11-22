@@ -4,7 +4,7 @@ using H4D2.Entities.Mobs;
 using H4D2.Entities.Mobs.Zombies.Commons;
 using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Mobs.Zombies;
-using H4D2.Entities.Mobs.Zombies.Specials;
+using H4D2.Entities.Mobs.Zombies.Specials.Pinners;
 using H4D2.Entities.Mobs.Zombies.Uncommons;
 using H4D2.Entities.Projectiles;
 using H4D2.Entities.Projectiles.ThrowableProjectiles;

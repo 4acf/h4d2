@@ -2,13 +2,13 @@
 using H4D2.Infrastructure;
 using H4D2.Levels;
 
-namespace H4D2.Entities.Mobs.Zombies.Specials;
+namespace H4D2.Entities.Mobs.Zombies.Specials.Pinners;
 
-public class Charger : Special
+public class Charger : Pinner
 {
     private const int _chargingFramesOffset = 9;
     private const int _slamFramesOffset = 24;
-    private const double _chargeCooldown = 1.0;
+    private const double _chargeCooldown = 10.0;
     private const double _chargeRange = 50.0;
     private const double _maxChargeTime = 3.0;
     private const double _defaultSpeed = 250;
@@ -25,7 +25,6 @@ public class Charger : Special
     private readonly CountdownTimer _chargeTimer;
     private readonly CountdownTimer _chargeCooldownTimer;
     private readonly CountdownTimer _slamTimer;
-    private Survivor? _pinTarget;
     
     public Charger(Level level, Position position) 
         : base(level, position, SpecialConfigs.Charger)
@@ -39,7 +38,6 @@ public class Charger : Special
         _chargeCooldownTimer = new CountdownTimer(_chargeCooldown);
         _chargeCooldownTimer.Update(_chargeCooldown);
         _slamTimer = new CountdownTimer(_slamDelay);
-        _pinTarget = null;
     }
 
     protected override void _UpdateAttackState(double elapsedTime)
@@ -283,11 +281,5 @@ public class Charger : Special
         _pinTarget = survivor;
         _collisionExcludedEntity = survivor;
         survivor.Pinned(this);
-    }
-
-    protected override void _Die()
-    {
-        base._Die();
-        _pinTarget?.Cleared();
     }
 }

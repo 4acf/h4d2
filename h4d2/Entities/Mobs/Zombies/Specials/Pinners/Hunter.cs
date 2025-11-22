@@ -2,9 +2,9 @@
 using H4D2.Infrastructure;
 using H4D2.Levels;
 
-namespace H4D2.Entities.Mobs.Zombies.Specials;
+namespace H4D2.Entities.Mobs.Zombies.Specials.Pinners;
 
-public class Hunter : Special
+public class Hunter : Pinner
 {
     private const int _crouchingFramesOffset = 9;
     private const int _jumpingFramesOffset = 12;
@@ -23,7 +23,6 @@ public class Hunter : Special
     private bool _isPinning;
     private readonly CountdownTimer _crouchTimer;
     private readonly CountdownTimer _attackTimer;
-    private Survivor? _pinTarget;
     
     public Hunter(Level level, Position position) 
         : base(level, position, SpecialConfigs.Hunter)
@@ -34,7 +33,6 @@ public class Hunter : Special
         _isPinning = false;
         _crouchTimer = new CountdownTimer(_crouchTime);
         _attackTimer = new CountdownTimer(_attackDelay);
-        _pinTarget = null;
     }
     
     protected override void _UpdateAttackState(double elapsedTime)
@@ -194,11 +192,5 @@ public class Hunter : Special
         _position.X = survivor.Position.X;
         _position.Y = survivor.Position.Y;
         _position.Z = 0;
-    }
-    
-    protected override void _Die()
-    {
-        base._Die();
-        _pinTarget?.Cleared();
     }
 }

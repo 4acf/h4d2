@@ -1,6 +1,7 @@
 ﻿using H4D2.Entities.Hazards;
 using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Specials;
+using H4D2.Entities.Mobs.Zombies.Specials.Pinners;
 using H4D2.Entities.Pickups;
 using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
