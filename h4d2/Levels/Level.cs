@@ -237,7 +237,7 @@ public class Level
     
     private void _RenderEntities(Bitmap screen)
     {
-        _entities.Sort((a, b) => b.FootPosition.Y.CompareTo(a.FootPosition.Y));
+        _entities.Sort(Entity.Comparator);
         foreach (Entity entity in _entities)
         {
             entity.Render(screen);

@@ -2,9 +2,9 @@
 
 public static class MathHelpers
 {
-    public static int RadiansToDegrees(double radians)
+    public static double RadiansToDegrees(double radians)
     {
-        return (int)(radians * 180 / Math.PI) % 360;
+        return (radians * 180 / Math.PI) % 360;
     }
 
     public static double NormalizeRadians(double radians)

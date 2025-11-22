@@ -32,7 +32,7 @@ public static class Direction
     {
         int direction = 0;
         bool xFlip = false;
-        int degrees = MathHelpers.RadiansToDegrees(directionRadians);
+        double degrees = MathHelpers.RadiansToDegrees(directionRadians);
         switch (degrees)
         {
             case >= 315:

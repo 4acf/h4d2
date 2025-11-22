@@ -16,6 +16,7 @@ public abstract class Survivor : Mob
 {
     public bool IsFullHealth => _health == _maxHealth;
     public bool IsBiled { get; protected set; }
+    public Special? Pinner { get; private set; }
     public bool IsPinned { get; protected set; }
     
     private const int _boundaryTolerance = 25;
@@ -46,7 +47,6 @@ public abstract class Survivor : Mob
     private readonly CountdownTimer _biledTimer;
     private readonly CountdownTimer _bileParticleTimer;
     private int _bileOverlayIndex;
-    private Special? _pinner;
     private ReadonlyPosition? _tongueOffset;
     
     protected Survivor(Level level, Position position, SurvivorConfig config) 
@@ -54,6 +54,7 @@ public abstract class Survivor : Mob
     {
         IsBiled = false;
         IsPinned = false;
+        Pinner = null;
         
         _character = config.Character;
         _maxHealth = config.Health;
@@ -65,7 +66,6 @@ public abstract class Survivor : Mob
         _biledTimer = new CountdownTimer(_biledDuration);
         _bileParticleTimer = new CountdownTimer(_bileParticleCooldown);
         _bileOverlayIndex = 0;
-        _pinner = null;
         _tongueOffset = null;
     }
 
@@ -143,7 +143,7 @@ public abstract class Survivor : Mob
     public void Pinned(Special special)
     {
         IsPinned = true;
-        _pinner = special;
+        Pinner = special;
         if (special is Jockey)
         {
             _collisionExcludedEntity = special;
@@ -153,7 +153,7 @@ public abstract class Survivor : Mob
     public void Cleared()
     {
         IsPinned = false;
-        _pinner = null;
+        Pinner = null;
         _collisionExcludedEntity = null;
         _tongueOffset = null;
     }
@@ -263,9 +263,9 @@ public abstract class Survivor : Mob
     {
         if (IsPinned)
         {
-            if (_pinner is Jockey or Charger)
-                _BindPositionToSpecial(_pinner);
-            else if(_pinner is Smoker smoker)
+            if (Pinner is Jockey or Charger)
+                _MatchSpecialPosition(Pinner);
+            else if(Pinner is Smoker smoker)
                 _UpdateSmokedPosition(smoker);
             return;
         }
@@ -292,11 +292,12 @@ public abstract class Survivor : Mob
         _AttemptMove();
     }
 
-    private void _BindPositionToSpecial(Special special)
+    private void _MatchSpecialPosition(Special special)
     {
         _directionRadians = special.DirectionRadians;
         _position.X = special.Position.X;
         _position.Y = special.Position.Y;
+        _position.Z = special.Position.Z;
     }
 
     private void _UpdateSmokedPosition(Smoker smoker)
@@ -372,7 +373,7 @@ public abstract class Survivor : Mob
         
         if (IsPinned)
         {
-            switch (_pinner)
+            switch (Pinner)
             {
                 case Jockey:
                     _UpdateJockeyedSprite();
