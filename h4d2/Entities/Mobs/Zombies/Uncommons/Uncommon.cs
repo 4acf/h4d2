@@ -14,7 +14,6 @@ public abstract class Uncommon : Zombie
     protected const double _bileBombRageDistance = 10.0;
     
     protected readonly int _type;
-    protected double _aimDirectionRadians;
     protected readonly CountdownTimer _attackDelayTimer;
     protected BileBombProjectile? _bileBombTarget;
     
@@ -64,8 +63,8 @@ public abstract class Uncommon : Zombie
             _attackDelayTimer.Reset();
         }
                 
-        _aimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
-        _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
+        _directionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
+        _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
     }
     
     protected virtual void _UpdateTarget()
@@ -164,7 +163,7 @@ public abstract class Uncommon : Zombie
 
     private void _UpdateAttackingSprite()
     {
-        SpriteDirection spriteDirection = Direction.Intercardinal(_aimDirectionRadians);
+        SpriteDirection spriteDirection = Direction.Intercardinal(_directionRadians);
         _xFlip = spriteDirection.XFlip;
         
         while (_frameUpdateTimer.IsFinished)

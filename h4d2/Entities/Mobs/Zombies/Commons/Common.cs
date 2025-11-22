@@ -17,7 +17,6 @@ public class Common : Zombie
     private const double _bileBombRageDistance = 10.0;
     
     private readonly int _type;
-    private double _aimDirectionRadians;
     private readonly CountdownTimer _attackDelayTimer; 
     private BileBombProjectile? _bileBombTarget;
     
@@ -25,7 +24,6 @@ public class Common : Zombie
         : base(level, position, CommonConfigs.Common, RandomSingleton.Instance.Next(_minSpeed, _maxSpeed))
     {
         _type = RandomSingleton.Instance.Next(_numVariations);
-        _aimDirectionRadians = 0.0;
         _attackDelayTimer = new CountdownTimer(_attackDelay);
         _bileBombTarget = null;
     }
@@ -68,8 +66,8 @@ public class Common : Zombie
             _attackDelayTimer.Reset();
         }
                 
-        _aimDirectionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
-        _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
+        _directionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
+        _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
     }
     
     private void _UpdateTarget()
@@ -168,7 +166,7 @@ public class Common : Zombie
 
     private void _UpdateAttackingSprite()
     {
-        SpriteDirection spriteDirection = Direction.Intercardinal(_aimDirectionRadians);
+        SpriteDirection spriteDirection = Direction.Intercardinal(_directionRadians);
         _xFlip = spriteDirection.XFlip;
         
         while (_frameUpdateTimer.IsFinished)
@@ -204,7 +202,7 @@ public class Common : Zombie
 
     private void _UpdateRunningSprite()
     {
-        SpriteDirection spriteDirection = Direction.Intercardinal(_aimDirectionRadians);
+        SpriteDirection spriteDirection = Direction.Cardinal(_directionRadians);
         _xFlip = spriteDirection.XFlip;
         
         while (_frameUpdateTimer.IsFinished)
