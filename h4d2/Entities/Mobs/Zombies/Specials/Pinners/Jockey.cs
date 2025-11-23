@@ -30,6 +30,13 @@ public class Jockey : Pinner
         _attackTimer = new CountdownTimer(_attackDelay);
     }
 
+    protected override void _StopPinning()
+    {
+        base._StopPinning();
+        _isPinning = false;
+        _collisionExcludedEntity = null;
+    }
+
     protected override void _UpdateAttackState(double elapsedTime)
     {
         if(!_isPinning)
@@ -71,9 +78,7 @@ public class Jockey : Pinner
     {
         if (_pinTarget == null || _pinTarget.Removed)
         {
-            _isPinning = false;
-            _pinTarget = null;
-            _collisionExcludedEntity = null;
+            _StopPinning();
             return;
         }
         

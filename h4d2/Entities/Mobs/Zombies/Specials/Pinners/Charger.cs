@@ -40,6 +40,15 @@ public class Charger : Pinner
         _slamTimer = new CountdownTimer(_slamDelay);
     }
 
+    protected override void _StopPinning()
+    {
+        base._StopPinning();
+        IsSlamming = false;
+        _collisionExcludedEntity = null;
+        _chargeCooldownTimer.Reset();
+        SlamStep = -1;
+    }
+    
     protected override void _UpdateAttackState(double elapsedTime)
     {
         if (IsCharging)
@@ -105,11 +114,7 @@ public class Charger : Pinner
     {
         if (_pinTarget == null || _pinTarget.Removed)
         {
-            IsSlamming = false;
-            _pinTarget = null;
-            _collisionExcludedEntity = null;
-            _chargeCooldownTimer.Reset();
-            SlamStep = -1;
+            _StopPinning();
             return;   
         }
         

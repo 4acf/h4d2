@@ -17,7 +17,7 @@ public abstract class Survivor : Mob
 {
     public bool IsFullHealth => _health == _maxHealth;
     public bool IsBiled { get; protected set; }
-    public Special? Pinner { get; private set; }
+    public Pinner? Pinner { get; private set; }
     public bool IsPinned { get; protected set; }
     
     private const int _boundaryTolerance = 25;
@@ -141,14 +141,16 @@ public abstract class Survivor : Mob
         }
     }
 
-    public void Pinned(Special special)
+    public void Pinned(Pinner pinner)
     {
         IsPinned = true;
-        Pinner = special;
-        if (special is Jockey)
+        Pinner = pinner;
+        if (pinner is Jockey)
         {
-            _collisionExcludedEntity = special;
+            _collisionExcludedEntity = pinner;
         }
+
+        _position.Z = 0;
     }
     
     public void Cleared()
@@ -158,7 +160,17 @@ public abstract class Survivor : Mob
         _collisionExcludedEntity = null;
         _tongueOffset = null;
     }
-    
+
+    public override void KnockbackHitBy(Zombie zombie)
+    {
+        base.KnockbackHitBy(zombie);
+        if (Pinner != null)
+        {
+            Pinner?.TankCleared();
+            Cleared();
+        }
+    }
+
     private void _EmitHealParticles()
     {
         var healCloud = new HealCloud(_level, CenterMass.MutableCopy());

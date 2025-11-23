@@ -1,4 +1,5 @@
-﻿using H4D2.Entities.Mobs.Zombies;
+﻿using H4D2.Entities.Mobs.Survivors;
+using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Infrastructure;
 using H4D2.Levels;
@@ -75,7 +76,7 @@ public abstract class Mob : Entity
         _level.AddParticle(bloodSplatter);
     }
 
-    public void KnockbackHitBy(Zombie zombie)
+    public virtual void KnockbackHitBy(Zombie zombie)
     {
         HitBy(zombie);
         _velocity.X = Math.Cos(zombie.DirectionRadians) * _knockbackScale;

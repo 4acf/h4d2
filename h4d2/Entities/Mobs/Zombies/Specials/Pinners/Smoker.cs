@@ -56,6 +56,15 @@ public class Smoker : Pinner
         }
     }
 
+    protected override void _StopPinning()
+    {
+        base._StopPinning();
+        _isPulling = false;
+        _isScratching = false;
+        _tongue!.Remove();
+        _pullCooldownTimer.Reset();
+    }
+
     protected override void _UpdateAttackState(double elapsedTime)
     {
         _pullCooldownTimer.Update(elapsedTime);
@@ -88,11 +97,7 @@ public class Smoker : Pinner
     {
         if (_pinTarget == null || _pinTarget.Removed)
         {
-            _isPulling = false;
-            _isScratching = false;
-            _pinTarget = null;
-            _tongue!.Remove();
-            _pullCooldownTimer.Reset();
+            _StopPinning();
             return;   
         }
         

@@ -34,7 +34,13 @@ public class Hunter : Pinner
         _crouchTimer = new CountdownTimer(_crouchTime);
         _attackTimer = new CountdownTimer(_attackDelay);
     }
-    
+
+    protected override void _StopPinning()
+    {
+        base._StopPinning();
+        _isPinning = false;
+    }
+
     protected override void _UpdateAttackState(double elapsedTime)
     {
         if (_isPinning)
@@ -100,8 +106,7 @@ public class Hunter : Pinner
     {
         if (_pinTarget == null || _pinTarget.Removed)
         {
-            _isPinning = false;
-            _pinTarget = null;
+            _StopPinning();
             return;
         }
         

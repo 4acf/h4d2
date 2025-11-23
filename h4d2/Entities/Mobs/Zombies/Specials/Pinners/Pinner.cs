@@ -14,6 +14,19 @@ public abstract class Pinner : Special
         
     }
 
+    public void TankCleared()
+    {
+        if (this is Smoker)
+            _StopPinning();
+        else
+            _Die();
+    }
+    
+    protected virtual void _StopPinning()
+    {
+        _pinTarget = null;
+    }
+    
     protected override void _Die()
     {
         base._Die();
