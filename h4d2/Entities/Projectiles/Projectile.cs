@@ -6,12 +6,12 @@ namespace H4D2.Entities.Projectiles;
 public abstract class Projectile : Entity
 {
     public readonly int Damage;
-    protected readonly double _directionRadians;
+    public readonly double DirectionRadians;
     
     protected Projectile(Level level, Position position, BoundingBox boundingBox, int damage, double directionRadians) 
         : base(level, position, boundingBox)
     {
         Damage = damage;
-        _directionRadians = directionRadians;
+        DirectionRadians = directionRadians;
     }
 }

@@ -72,7 +72,7 @@ public abstract class Weapon
         {
             double newXComponent = Math.Cos(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * _spread;
             double newYComponent = Math.Sin(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * _spread;
-            double newDirection = Math.Atan2(newYComponent, newXComponent);
+            double newDirection = MathHelpers.NormalizeRadians(Math.Atan2(newYComponent, newXComponent));
             var bullet = new Bullet(_level, position.Copy(), _damage, newDirection);
             _level.AddProjectile(bullet);
         }

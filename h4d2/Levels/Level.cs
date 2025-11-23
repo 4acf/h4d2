@@ -43,9 +43,8 @@ public class Level
         _particles = [];
         CollisionManager = collisionManager;
         
-        _entities.Add(new Coach(this, new Position(150, 150)));
-        _entities.Add(new Nick(this, new Position(150, 150)));
-        _entities.Add(new Jockey(this, new Position(180, 180)));
+        _entities.Add(new Nick(this, new Position(120, 180)));
+        _entities.Add(new Riot(this, new Position(120, 200)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position, Entity? exclude)

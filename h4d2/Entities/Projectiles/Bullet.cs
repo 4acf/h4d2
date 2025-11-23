@@ -21,8 +21,8 @@ public class Bullet : Projectile
     {
         _oldPosition = _position.Copy();
         double timeAdjustedSpeed = _speed * elapsedTime;
-        _velocity.X = Math.Cos(_directionRadians) * timeAdjustedSpeed;
-        _velocity.Y = Math.Sin(_directionRadians) * timeAdjustedSpeed;
+        _velocity.X = Math.Cos(DirectionRadians) * timeAdjustedSpeed;
+        _velocity.Y = Math.Sin(DirectionRadians) * timeAdjustedSpeed;
         _AttemptMove();
     }
 

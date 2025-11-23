@@ -25,8 +25,8 @@ public class DeathPuke : Projectile
     public override void Update(double elapsedTime)
     {
         double timeAdjustedSpeed = _speed * elapsedTime;
-        _velocity.X = Math.Cos(_directionRadians) * timeAdjustedSpeed;
-        _velocity.Y = Math.Sin(_directionRadians) * timeAdjustedSpeed;
+        _velocity.X = Math.Cos(DirectionRadians) * timeAdjustedSpeed;
+        _velocity.Y = Math.Sin(DirectionRadians) * timeAdjustedSpeed;
         _velocity.Z -= _gravity * elapsedTime;
         _AttemptMove();
     }

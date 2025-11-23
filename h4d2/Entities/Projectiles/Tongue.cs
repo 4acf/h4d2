@@ -47,7 +47,7 @@ public class Tongue : Projectile
         if (_isStopped)
             return;
         
-        double directionRadians = _directionRadians;
+        double directionRadians = DirectionRadians;
         if (IsConnected)
         {
             directionRadians += Math.PI;
