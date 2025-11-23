@@ -9,6 +9,7 @@ public class Jockey : Pinner
     private const int _jumpingFramesOffset = 9;
     private const int _pinningFramesOffset = 12;
     private const double _jumpCooldown = 0.5;
+    private const double _rejockCooldown = 6.0;
     private const double _gravity = 4.0;
     private const double _jumpRange = 30.0;
     private const double _attackDelay = 0.5;
@@ -19,6 +20,7 @@ public class Jockey : Pinner
     private bool _isJumping;
     private bool _isPinning;
     private readonly CountdownTimer _jumpTimer;
+    private readonly CountdownTimer _rejockTimer;
     private readonly CountdownTimer _attackTimer;
     
     public Jockey(Level level, Position position) 
@@ -27,6 +29,8 @@ public class Jockey : Pinner
         _isJumping = false;
         _isPinning = false;
         _jumpTimer = new CountdownTimer(_jumpCooldown);
+        _rejockTimer = new CountdownTimer(_rejockCooldown);
+        _rejockTimer.Update(_rejockCooldown);
         _attackTimer = new CountdownTimer(_attackDelay);
     }
 
@@ -35,6 +39,7 @@ public class Jockey : Pinner
         base._StopPinning();
         _isPinning = false;
         _collisionExcludedEntity = null;
+        _rejockTimer.Reset();
     }
 
     protected override void _UpdateAttackState(double elapsedTime)
@@ -51,6 +56,10 @@ public class Jockey : Pinner
             _isJumping = false;
         
         if (_isJumping)
+            return;
+        
+        _rejockTimer.Update(elapsedTime);
+        if (!_rejockTimer.IsFinished)
             return;
         
         _jumpTimer.Update(elapsedTime);

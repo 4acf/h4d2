@@ -276,10 +276,15 @@ public abstract class Survivor : Mob
     {
         if (IsPinned)
         {
-            if (Pinner is Jockey or Charger)
-                _MatchSpecialPosition(Pinner);
-            else if(Pinner is Smoker smoker)
-                _UpdateSmokedPosition(smoker);
+            switch (Pinner)
+            {
+                case Jockey or Charger:
+                    _MatchSpecialPosition(Pinner);
+                    break;
+                case Smoker smoker:
+                    _UpdateSmokedPosition(smoker);
+                    break;
+            }
             
             // needed for hazard damage
             _velocity.Stop();
