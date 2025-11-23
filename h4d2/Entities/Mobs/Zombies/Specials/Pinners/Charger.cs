@@ -8,7 +8,7 @@ public class Charger : Pinner
 {
     private const int _chargingFramesOffset = 9;
     private const int _slamFramesOffset = 24;
-    private const double _chargeCooldown = 10.0;
+    private const double _chargeCooldown = 1.0;
     private const double _chargeRange = 50.0;
     private const double _maxChargeTime = 3.0;
     private const double _defaultSpeed = 250;
@@ -286,5 +286,6 @@ public class Charger : Pinner
         _pinTarget = survivor;
         _collisionExcludedEntity = survivor;
         survivor.Pinned(this);
+        _level.PrioritizePinner(this, survivor);
     }
 }

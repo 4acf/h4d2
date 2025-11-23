@@ -43,8 +43,15 @@ public class Level
         _particles = [];
         CollisionManager = collisionManager;
         
+        _entities.Add(new Coach(this, new Position(120, 180)));
         _entities.Add(new Nick(this, new Position(120, 180)));
-        _entities.Add(new Riot(this, new Position(120, 200)));
+        _entities.Add(new Ellis(this, new Position(120, 180)));
+        _entities.Add(new Rochelle(this, new Position(120, 180)));
+        _entities.Add(new Bill(this, new Position(120, 180)));
+        _entities.Add(new Francis(this, new Position(120, 180)));
+        _entities.Add(new Louis(this, new Position(120, 180)));
+        _entities.Add(new Zoey(this, new Position(120, 180)));
+        _entities.Add(new Jockey(this, new Position(100, 100)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position, Entity? exclude)
@@ -147,6 +154,22 @@ public class Level
                 zombie.HitBy(pipeBomb);
             }
         }
+    }
+
+    public void PrioritizePinner(Pinner pinner, Survivor survivor)
+    {
+        int pIndex = 0;
+        int sIndex = 0;
+        for (int i = 0; i < _entities.Count; i++)
+        {
+            if (_entities[i] == pinner)
+                pIndex = i;
+            if(_entities[i] == survivor)
+                sIndex = i;
+        }
+        
+        _entities.RemoveAt(pIndex);
+        _entities.Insert(sIndex, pinner);
     }
     
     public void Update(double elapsedTime)
