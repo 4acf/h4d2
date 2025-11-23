@@ -167,12 +167,12 @@ public class Level
     
     private void _UpdateEntities(double elapsedTime)
     {
-        var indexesToRemove = new List<int>();
+        var indicesToRemove = new List<int>();
         for (int i = 0; i < _entities.Count; i++)
         {
             if (_entities[i].Removed)
             {
-                indexesToRemove.Add(i);
+                indicesToRemove.Add(i);
             }
             else
             {
@@ -180,9 +180,9 @@ public class Level
             }
         }
 
-        for (int i = indexesToRemove.Count - 1; i >= 0; i--)
+        for (int i = indicesToRemove.Count - 1; i >= 0; i--)
         {
-            _entities.RemoveAt(indexesToRemove[i]);
+            _entities.RemoveAt(indicesToRemove[i]);
         }
 
         //_ReplenishZombies();
@@ -190,12 +190,12 @@ public class Level
 
     private void _UpdateParticles(double elapsedTime)
     {
-        var indexesToRemove = new List<int>();
+        var indicesToRemove = new List<int>();
         for (int i = 0; i < _particles.Count; i++)
         {
             if (_particles[i].Removed)
             {
-                indexesToRemove.Add(i);
+                indicesToRemove.Add(i);
             }
             else
             {
@@ -203,9 +203,9 @@ public class Level
             }
         }
 
-        for (int i = indexesToRemove.Count - 1; i >= 0; i--)
+        for (int i = indicesToRemove.Count - 1; i >= 0; i--)
         {
-            _particles.RemoveAt(indexesToRemove[i]);
+            _particles.RemoveAt(indicesToRemove[i]);
         }
     }
     
