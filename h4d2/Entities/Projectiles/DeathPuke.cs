@@ -11,7 +11,7 @@ public class DeathPuke : Projectile
     private const double _gravity = 4.0;
     private const double _minSpeed = 25.0;
     private const double _maxSpeed = 75.0;
-    private const double _startingZVelocity = 0.5;
+    private const double _startingZVelocity = 0.75;
 
     private readonly double _speed;
 

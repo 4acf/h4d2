@@ -118,8 +118,6 @@ public class Boomer : Special
     protected override void _Die()
     {
         base._Die();
-        
-        // todo: optimize this!!
         for (int i = 0; i < _numPukeProjectilesOnDeath; i++)
         {
             double randomDouble = RandomSingleton.Instance.NextDouble();
