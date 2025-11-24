@@ -29,9 +29,9 @@ public static class RenderingComparators
     
     public static readonly Comparison<Entity> EntityRendering = (a, b) =>
     {
-        if (a is Survivor sa && sa.Pinner == b)
+        if (a is Survivor sa && sa.Pinner == b && b is not Smoker)
             return ResolvePinnedSort(b);
-        if (b is Survivor sb && sb.Pinner == a)
+        if (b is Survivor sb && sb.Pinner == a && b is not Smoker)
             return -ResolvePinnedSort(a);
         
         int diff = b.FootPosition.Y.CompareTo(a.FootPosition.Y);

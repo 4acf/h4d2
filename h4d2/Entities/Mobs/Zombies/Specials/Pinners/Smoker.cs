@@ -23,7 +23,6 @@ public class Smoker : Pinner
     private const double _deathSmokeRadius = 20.0;
     
     private int _pullStep;
-    private int _scratchStep;
     private bool _isPulling;
     private bool _isScratching;
     private bool _isPinning => _isPulling || _isScratching;
@@ -36,7 +35,6 @@ public class Smoker : Pinner
         : base(level, position, SpecialConfigs.Smoker)
     {
         _pullStep = -1;
-        _scratchStep = 0;
         _isPulling = false;
         _isScratching = false;
         _pullCooldownTimer = new CountdownTimer(_pullCooldown);
@@ -185,8 +183,7 @@ public class Smoker : Pinner
 
         while (_frameUpdateTimer.IsFinished)
         {
-            _scratchStep = _scratchStep == 0 ? 1 : 0;
-            _frame = _scratchFramesOffset + _scratchStep + (spriteDirection.Offset * 2);
+            _frame = _scratchFramesOffset + spriteDirection.Offset;
             _frameUpdateTimer.AddDuration();
         }
     }
