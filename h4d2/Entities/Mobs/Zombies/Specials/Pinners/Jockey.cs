@@ -226,6 +226,5 @@ public class Jockey : Pinner
         _position.X = survivor.Position.X;
         _position.Y = survivor.Position.Y;
         _position.Z = 0;
-        _level.PrioritizePinner(this, survivor);
     }
 }

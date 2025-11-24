@@ -155,22 +155,6 @@ public class Level
             }
         }
     }
-
-    public void PrioritizePinner(Pinner pinner, Survivor survivor)
-    {
-        int pIndex = 0;
-        int sIndex = 0;
-        for (int i = 0; i < _entities.Count; i++)
-        {
-            if (_entities[i] == pinner)
-                pIndex = i;
-            if(_entities[i] == survivor)
-                sIndex = i;
-        }
-        
-        _entities.RemoveAt(pIndex);
-        _entities.Insert(sIndex, pinner);
-    }
     
     public void Update(double elapsedTime)
     {
@@ -190,6 +174,8 @@ public class Level
     
     private void _UpdateEntities(double elapsedTime)
     {
+        _entities.Sort(RenderingComparators.EntityUpdating);
+        
         var indicesToRemove = new List<int>();
         for (int i = 0; i < _entities.Count; i++)
         {
@@ -254,7 +240,7 @@ public class Level
     
     private void _RenderEntities(Bitmap screen)
     {
-        _entities.Sort(RenderingComparators.Entity);
+        _entities.Sort(RenderingComparators.EntityRendering);
         foreach (Entity entity in _entities)
         {
             entity.Render(screen);

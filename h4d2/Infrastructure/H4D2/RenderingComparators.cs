@@ -1,6 +1,9 @@
 ﻿using H4D2.Entities;
+using H4D2.Entities.Hazards;
 using H4D2.Entities.Mobs.Survivors;
+using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Mobs.Zombies.Specials.Pinners;
+using H4D2.Entities.Projectiles;
 using H4D2.Particles;
 using H4D2.Particles.Clouds.Cloudlets;
 using H4D2.Particles.DebrisParticles;
@@ -11,7 +14,20 @@ namespace H4D2.Infrastructure.H4D2;
 
 public static class RenderingComparators
 {
-    public static readonly Comparison<Entity> Entity = (a, b) =>
+    public static readonly Comparison<Entity> EntityUpdating = (a, b) =>
+    {
+        return Rank(a.GetType()).CompareTo(Rank(b.GetType()));
+
+        int Rank(Type t)
+        {
+            if (typeof(Projectile).IsAssignableFrom(t)) return -1;
+            if (typeof(Hazard).IsAssignableFrom(t)) return -1;
+            if (typeof(Special).IsAssignableFrom(t)) return 0;
+            return 1;
+        }
+    };
+    
+    public static readonly Comparison<Entity> EntityRendering = (a, b) =>
     {
         if (a is Survivor sa && sa.Pinner == b)
             return ResolvePinnedSort(b);
@@ -49,7 +65,6 @@ public static class RenderingComparators
 
             if (charger.IsCharging || charger.IsStumbling)
             {
-                
                 double degrees = MathHelpers.RadiansToDegrees(charger.DirectionRadians);
                 bool facingWest = 157.5 <= degrees && degrees < 202.5;
                 bool facingEast = 337.5 <= degrees || degrees < 22.5;
@@ -68,9 +83,9 @@ public static class RenderingComparators
     
     public static readonly Comparison<Particle> Particle = (a, b) =>
     {
-        int rank = Rank(a.GetType()).CompareTo(Rank(b.GetType()));
-        if (rank != 0)
-            return rank;
+        int diff = Rank(a.GetType()).CompareTo(Rank(b.GetType()));
+        if (diff != 0)
+            return diff;
 
         if (a.GetType() == typeof(Flame) && b.GetType() == typeof(Flame))
             return a.Position.Y.CompareTo(b.Position.Y);
