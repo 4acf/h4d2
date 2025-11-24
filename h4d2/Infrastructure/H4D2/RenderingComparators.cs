@@ -44,6 +44,7 @@ public static class RenderingComparators
         {
             return pinner switch
             {
+                Jockey => -1,
                 Hunter hunter => ResolveHunterSort(hunter),
                 Charger charger => ResolveChargerSort(charger),
                 _ => 0
