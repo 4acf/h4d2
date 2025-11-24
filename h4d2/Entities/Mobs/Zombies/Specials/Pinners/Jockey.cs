@@ -184,18 +184,23 @@ public class Jockey : Pinner
     protected override void _UpdateSprite(double elapsedTime)
     {
         if(_isPinning)
-            _UpdateNonRunningSprite(_pinningFramesOffset);
+            _UpdateNonRunningSprite(elapsedTime, _pinningFramesOffset);
         else if(_isJumping)
-            _UpdateNonRunningSprite(_jumpingFramesOffset);
+            _UpdateNonRunningSprite(elapsedTime, _jumpingFramesOffset);
         else
             base._UpdateSprite(elapsedTime);
     }
 
-    private void _UpdateNonRunningSprite(int offset)
+    private void _UpdateNonRunningSprite(double elapsedTime, int offset)
     {
-        SpriteDirection spriteDirection = Direction.Cardinal(_directionRadians);
-        _xFlip = spriteDirection.XFlip;
-        _frame = offset + spriteDirection.Offset;
+        _frameUpdateTimer.Update(elapsedTime);
+        while (_frameUpdateTimer.IsFinished)
+        {
+            SpriteDirection spriteDirection = Direction.Cardinal(_directionRadians);
+            _xFlip = spriteDirection.XFlip;
+            _frame = offset + spriteDirection.Offset;
+            _frameUpdateTimer.AddDuration();
+        }
     }
     
     private void _Jump()
