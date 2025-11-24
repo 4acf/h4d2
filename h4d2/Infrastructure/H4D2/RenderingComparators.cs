@@ -54,7 +54,7 @@ public static class RenderingComparators
         int ResolveHunterSort(Hunter hunter)
         {
             double degrees = MathHelpers.RadiansToDegrees(hunter.DirectionRadians);
-            bool drawSurvivorAfterHunter = 45 <= degrees && degrees < 135;
+            bool drawSurvivorAfterHunter = 225 <= degrees && degrees < 315;
             if(drawSurvivorAfterHunter)
                 return 1;
             return -1;

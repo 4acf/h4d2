@@ -14,8 +14,8 @@ public class Hunter : Pinner
     private const double _crouchRange = 50.0;
     private const double _jumpRange = 75.0;
     private const double _attackDelay = 0.5;
-    private const double _jumpSpeedScale = 2.0;
-    private const double _jumpZVelocity = 1.25;
+    private const double _jumpSpeedScale = 2.25;
+    private const double _jumpZVelocity = 0.75;
 
     private int _attackStep;
     private bool _isCrouching;
