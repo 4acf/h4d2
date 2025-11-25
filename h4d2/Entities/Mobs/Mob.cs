@@ -16,6 +16,7 @@ public abstract class Mob : Entity
     protected const double _speedFactor = 15.0 / 220.0;
     protected const int _upperBitmapOffset = 9;
     protected const int _attackingBitmapOffset = 18;
+    private const int _gibs = 3;
     protected const double _frameDuration = 1.0 / 8.0;
     protected const double _hazardDamageCooldownSeconds = 0.5;
     private const double _knockbackScale = 2.5;
@@ -102,7 +103,7 @@ public abstract class Mob : Entity
     
     protected virtual void _Die()
     {
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < _gibs; i++)
         {
             Position position = CenterMass.MutableCopy();
             position.Z += i;

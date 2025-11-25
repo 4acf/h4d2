@@ -16,7 +16,7 @@ public static class HazardConfigs
         = new(4, 4, 3, H4D2Art.ParticleSize, 2);
     
     private static readonly BoundingBoxDimensions _spitDimensions
-        = new(2, 2, 3, H4D2Art.ParticleSize);
+        = new(4, 4, 3, H4D2Art.ParticleSize);
     
     public static readonly HazardConfig Fire = new()
     {

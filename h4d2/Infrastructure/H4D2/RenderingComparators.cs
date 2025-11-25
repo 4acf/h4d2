@@ -39,11 +39,7 @@ public static class RenderingComparators
         if (b is Survivor sbt && sbt.Pinner is Smoker && a is Tongue bt)
             return -ResolveTongueSort(bt);
         
-        int diff = b.FootPosition.Y.CompareTo(a.FootPosition.Y);
-        if (diff != 0)
-            return diff;
-        
-        return 0;
+        return b.FootPosition.Y.CompareTo(a.FootPosition.Y);
         
         int ResolvePinnedSort(Entity pinner)
         {

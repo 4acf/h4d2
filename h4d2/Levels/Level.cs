@@ -7,6 +7,8 @@ using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Mobs.Zombies.Specials.Pinners;
 using H4D2.Entities.Mobs.Zombies.Uncommons;
+using H4D2.Entities.Pickups.Consumables;
+using H4D2.Entities.Pickups.Throwable;
 using H4D2.Entities.Projectiles;
 using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
@@ -18,11 +20,13 @@ namespace H4D2.Levels;
 
 public class Level
 {
-    public const int Padding = 0;
+    public const int Padding = 32;
     private const double _levelResetCooldownSeconds = 8.0;
     private const int _minZombies = 20;
     private const int _minSpawnWaveSize = 5;
-    private const int _maxSpawnWaveSize = 20;
+    private const int _maxSpawnWaveSize = 15;
+    private const int _maxZombiesAlive = 50;
+    private const int _maxParticles = 5000;
     
     public readonly int Width;
     public readonly int Height;
@@ -43,15 +47,32 @@ public class Level
         _particles = [];
         CollisionManager = collisionManager;
         
-        _entities.Add(new Coach(this, new Position(120, 180)));
-        _entities.Add(new Nick(this, new Position(120, 180)));
-        _entities.Add(new Ellis(this, new Position(120, 180)));
-        _entities.Add(new Rochelle(this, new Position(120, 180)));
-        _entities.Add(new Bill(this, new Position(120, 180)));
-        _entities.Add(new Francis(this, new Position(120, 180)));
-        _entities.Add(new Louis(this, new Position(120, 180)));
-        _entities.Add(new Zoey(this, new Position(120, 180)));
-        _entities.Add(new Smoker(this, new Position(100, 100)));
+        _entities.Add(new Louis   (this, new Position(32, 120)));
+        _entities.Add(new Francis (this, new Position(64, 120)));
+        _entities.Add(new Zoey    (this, new Position(96, 120)));
+        _entities.Add(new Bill    (this, new Position(128, 120)));
+        _entities.Add(new Rochelle(this, new Position(160, 120)));
+        _entities.Add(new Ellis   (this, new Position(192, 120)));
+        _entities.Add(new Nick    (this, new Position(224, 120)));
+        _entities.Add(new Coach   (this, new Position(256, 120)));
+        
+        _entities.Add(new Molotov(this, new Position(32, 192)));
+        _entities.Add(new PipeBomb(this, new Position(64, 192)));
+        _entities.Add(new BileBomb(this, new Position(96, 192)));
+        _entities.Add(new Molotov(this, new Position(128, 192)));
+        _entities.Add(new PipeBomb(this, new Position(160, 192)));
+        _entities.Add(new BileBomb(this, new Position(192, 192)));
+        _entities.Add(new Molotov(this, new Position(224, 192)));
+        _entities.Add(new PipeBomb(this, new Position(256, 192)));
+        
+        _entities.Add(new FirstAidKit(this, new Position(32, 32)));
+        _entities.Add(new Pills(this, new Position(64, 32)));
+        _entities.Add(new Adrenaline(this, new Position(96, 32)));
+        _entities.Add(new FirstAidKit(this, new Position(128, 32)));
+        _entities.Add(new Pills(this, new Position(160, 32)));
+        _entities.Add(new Adrenaline(this, new Position(192, 32)));
+        _entities.Add(new FirstAidKit(this, new Position(224, 32)));
+        _entities.Add(new Pills(this, new Position(256, 32)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position, Entity? exclude)
@@ -125,7 +146,8 @@ public class Level
     
     public void AddParticle(Particle particle)
     {
-        _particles.Add(particle);
+        if(_particles.Count < _maxParticles)
+            _particles.Add(particle);
     }
     
     public void Explode(Grenade grenade)
@@ -175,7 +197,6 @@ public class Level
     private void _UpdateEntities(double elapsedTime)
     {
         _entities.Sort(RenderingComparators.EntityUpdating);
-        
         var indicesToRemove = new List<int>();
         for (int i = 0; i < _entities.Count; i++)
         {
@@ -194,7 +215,7 @@ public class Level
             _entities.RemoveAt(indicesToRemove[i]);
         }
 
-        //_ReplenishZombies();
+        _ReplenishZombies();
     }
 
     private void _UpdateParticles(double elapsedTime)
@@ -261,6 +282,7 @@ public class Level
     {
         int randomNewZombies = 
             RandomSingleton.Instance.Next(_minSpawnWaveSize, _maxSpawnWaveSize);
+        randomNewZombies = Math.Min(randomNewZombies, _maxZombiesAlive);
         for (int i = 0; i < randomNewZombies; i++)
         {
             Zombie zombie = _CreateRandomLevelZombie(_RandomZombieSpawnPosition());
@@ -306,16 +328,31 @@ public class Level
     private Zombie _CreateRandomLevelZombie(Position position)
     {
         int random = RandomSingleton.Instance.Next(20);
-        if (random != 0) 
+        if (random > 1) 
             return new Common(this, position);
-        int randomUncommon = RandomSingleton.Instance.Next(5);
-        return randomUncommon switch
+        if (random == 0)
         {
-            0 => new Hazmat(this, position),
-            1 => new Clown(this, position),
-            2 => new Mudman(this, position),
-            3 => new Worker(this, position),
-            4 => new Riot(this, position),
+            int randomUncommon = RandomSingleton.Instance.Next(5);
+            return randomUncommon switch
+            {
+                0 => new Hazmat(this, position),
+                1 => new Clown(this, position),
+                2 => new Mudman(this, position),
+                3 => new Worker(this, position),
+                4 => new Riot(this, position),
+                _ => new Common(this, position)
+            };
+        }
+        int randomSpecial = RandomSingleton.Instance.Next(8);
+        return randomSpecial switch
+        {
+            0 => new Hunter(this, position),
+            1 => new Boomer(this, position),
+            2 => new Smoker(this, position),
+            3 => new Charger(this, position),
+            4 => new Jockey(this, position),
+            6 => new Spitter(this, position),
+            7 => new Tank(this, position),
             _ => new Common(this, position)
         };
     }
