@@ -33,6 +33,11 @@ public static class RenderingComparators
             return ResolvePinnedSort(b);
         if (b is Survivor sb && sb.Pinner == a && b is not Smoker)
             return -ResolvePinnedSort(a);
+
+        if (a is Survivor sat && sat.Pinner is Smoker && b is Tongue at)
+            return ResolveTongueSort(at);
+        if (b is Survivor sbt && sbt.Pinner is Smoker && a is Tongue bt)
+            return -ResolveTongueSort(bt);
         
         int diff = b.FootPosition.Y.CompareTo(a.FootPosition.Y);
         if (diff != 0)
@@ -79,6 +84,15 @@ public static class RenderingComparators
             if (drawSurvivorAfterCharger)
                 return 1;
             return -1;
+        }
+
+        int ResolveTongueSort(Tongue tongue)
+        {
+            double degrees = MathHelpers.RadiansToDegrees(tongue.DirectionRadians);
+            bool drawTongueAfterSurvivor = 67.5 <= degrees && degrees < 112.5;
+            if(drawTongueAfterSurvivor)
+                return -1;
+            return 1;
         }
     };
     

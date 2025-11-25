@@ -101,6 +101,7 @@ public class Tongue : Projectile
         if (entity == null || entity != _pinTarget)
             return;
         IsConnected = true;
+        _collisionExcludedEntity = _pinTarget;
         _speed = _pullSpeed;
     }
 }
