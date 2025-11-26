@@ -35,26 +35,29 @@ public static class Comparators
         int positionDiff = b.FootPosition.Y.CompareTo(a.FootPosition.Y);
         if (positionDiff != 0) 
             return positionDiff;
-        
-        if (a is Survivor sa && sa.Pinner == b && b is not Smoker)
-            return ResolvePinnedSort(b);
-        if (b is Survivor sb && sb.Pinner == a && a is not Smoker)
-            return -ResolvePinnedSort(a);
 
-        if (a is Survivor sat && sat.Pinner is Smoker && b is Tongue at)
-            return ResolveTongueSort(at);
-        if (b is Survivor sbt && sbt.Pinner is Smoker && a is Tongue bt)
-            return -ResolveTongueSort(bt);
+        bool aIsSurvivor = a is Survivor;
+        bool bIsSurvivor = b is Survivor;
+        if (aIsSurvivor == bIsSurvivor)
+            return 0;
+        
+        int rankA = ResolveSort(a);
+        int rankB = ResolveSort(b);
+
+        int rankDiff = rankA.CompareTo(rankB);
+        if (rankDiff != 0)
+            return rankDiff;
         
         return 0;
         
-        int ResolvePinnedSort(Entity pinner)
+        int ResolveSort(Entity entity)
         {
-            return pinner switch
+            return entity switch
             {
-                Jockey => -1,
+                Jockey => 1,
                 Hunter hunter => ResolveHunterSort(hunter),
                 Charger charger => ResolveChargerSort(charger),
+                Tongue tongue => ResolveTongueSort(tongue),
                 _ => 0
             };
         }
@@ -64,8 +67,8 @@ public static class Comparators
             double degrees = MathHelpers.RadiansToDegrees(hunter.DirectionRadians);
             bool drawSurvivorAfterHunter = 225 <= degrees && degrees < 315;
             if(drawSurvivorAfterHunter)
-                return 1;
-            return -1;
+                return -1;
+            return 1;
         }
         
         int ResolveChargerSort(Charger charger)
@@ -85,8 +88,8 @@ public static class Comparators
                 drawSurvivorAfterCharger = true;
             
             if (drawSurvivorAfterCharger)
-                return 1;
-            return -1;
+                return -1;
+            return 1;
         }
 
         int ResolveTongueSort(Tongue tongue)
@@ -94,8 +97,8 @@ public static class Comparators
             double degrees = MathHelpers.RadiansToDegrees(tongue.DirectionRadians);
             bool drawTongueAfterSurvivor = 67.5 <= degrees && degrees < 112.5;
             if(drawTongueAfterSurvivor)
-                return -1;
-            return 1;
+                return 1;
+            return -1;
         }
     };
     

@@ -360,12 +360,12 @@ public class Level
         return randomSpecial switch
         {
             0 => new Hunter(this, position),
-            1 => new Boomer(this, position),
-            2 => new Smoker(this, position),
+            1 => new Jockey(this, position),
+            2 => new Charger(this, position),
             3 => new Charger(this, position),
             4 => new Jockey(this, position),
-            6 => new Spitter(this, position),
-            7 => new Tank(this, position),
+            6 => new Hunter(this, position),
+            7 => new Jockey(this, position),
             _ => new Common(this, position)
         };
     }
