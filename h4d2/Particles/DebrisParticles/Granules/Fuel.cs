@@ -10,7 +10,7 @@ public class Fuel : Granule
     public Fuel(Level level, Position position, ReadonlyVelocity parentVelocity)
         : base(level, position, GranuleConfigs.Fuel, parentVelocity)
     {
-        if (RandomSingleton.Instance.Next(15) == 0)
+        if (Probability.OneIn(15))
         {
             var fire = new Fire(_level, _position.CopyAndTranslate(
                 -H4D2Art.ParticleSize / 2.0,

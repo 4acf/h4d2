@@ -19,7 +19,7 @@ public class VolatileSpit : Granule
         double smokeDelay =  randomDouble * ((_maxSmokeDelay - _minSmokeDelay) + _minSmokeDelay);
         _smokeTimer = new CountdownTimer(smokeDelay);
 
-        if (RandomSingleton.Instance.Next(10) == 0)
+        if (Probability.OneIn(10))
         {
             var spitPuddle = new SpitPuddle(_level, _position.Copy());
             _level.AddHazard(spitPuddle);
@@ -30,10 +30,8 @@ public class VolatileSpit : Granule
     {
         base.Update(elapsedTime);
         _smokeTimer.Update(elapsedTime);
-        if (_smokeTimer.IsFinished)
+        if (_smokeTimer.IsFinished && Probability.OneIn(1000))
         {
-            if (RandomSingleton.Instance.Next(1000) != 0)
-                return;
             var spitSmoke = new SpitSmoke(_level, _position.Copy());
             _level.AddParticle(spitSmoke);
             _smokeTimer.Reset();

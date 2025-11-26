@@ -37,8 +37,7 @@ public class Spitter : Special
         _footstepParticleTimer.Update(elapsedTime);
         if (_footstepParticleTimer.IsFinished)
         {
-            int randomInt = RandomSingleton.Instance.Next(5);
-            if (randomInt != 0)
+            if (Probability.Percent(80))
             {
                 var spit = new InvolatileSpit(_level, FootPosition.MutableCopy(), _nullVelocity);
                 _level.AddParticle(spit);

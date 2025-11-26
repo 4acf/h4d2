@@ -27,7 +27,7 @@ public class Flame : Particle
         _despawnTimer.Update(elapsedTime);
         if (_despawnTimer.IsFinished)
         {
-            if (RandomSingleton.Instance.Next(2) == 0)
+            if (Probability.OneIn(2))
             {
                 var smoke = new Smoke(_level, _position.Copy(), new ReadonlyVelocity());
                 _level.AddParticle(smoke);

@@ -23,7 +23,7 @@ public abstract class Emitter<T> : Debris where T : Granule
     public override void Update(double elapsedTime)
     {
         base.Update(elapsedTime);
-        if (RandomSingleton.Instance.Next(2) != 0)
+        if (Probability.OneIn(2))
             return;
         Granule granule = _factory(_level, _position.Copy(), _velocity.ReadonlyCopy());
         _level.AddParticle(granule);

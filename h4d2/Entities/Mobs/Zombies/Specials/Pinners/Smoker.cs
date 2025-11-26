@@ -47,7 +47,7 @@ public class Smoker : Pinner
     public override void Update(double elapsedTime)
     {
         base.Update(elapsedTime);
-        if (RandomSingleton.Instance.Next(3) != 0)
+        if (Probability.Percent(66))
         {
             var smokerSmoke = new SmokerSmoke(_level, CenterMass.MutableCopy(), _velocity.ReadonlyCopy());
             _level.AddParticle(smokerSmoke);

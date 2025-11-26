@@ -317,19 +317,18 @@ public class Level
     {
         double x = 0;
         double y = 0;
-        int random = RandomSingleton.Instance.Next(2);
-        if (random == 0)
+        if (Probability.OneIn(2))
         {
             // NS
             x = RandomSingleton.Instance.NextDouble() * Width;
-            y = RandomSingleton.Instance.Next(2) == 0 ? 
+            y = Probability.OneIn(2) ? 
                 Height + Padding - 1 : 
                 0;
         }
         else
         {
             // WE
-            x = RandomSingleton.Instance.Next(2) == 0 ?
+            x = Probability.OneIn(2) ?
                -Padding + 1 :
                Width;
             y = RandomSingleton.Instance.NextDouble() * Height;
@@ -360,12 +359,12 @@ public class Level
         return randomSpecial switch
         {
             0 => new Hunter(this, position),
-            1 => new Jockey(this, position),
-            2 => new Charger(this, position),
+            1 => new Boomer(this, position),
+            2 => new Smoker(this, position),
             3 => new Charger(this, position),
             4 => new Jockey(this, position),
-            6 => new Hunter(this, position),
-            7 => new Jockey(this, position),
+            6 => new Spitter(this, position),
+            7 => new Tank(this, position),
             _ => new Common(this, position)
         };
     }
