@@ -185,10 +185,12 @@ public abstract class Survivor : Mob
             _bileParticleTimer.Update(elapsedTime);
             if (_bileParticleTimer.IsFinished)
             {
-                var footBile = new InvolatileBile(_level, FootPosition.MutableCopy());
+                ReadonlyVelocity readonlyVelocity = _velocity.ReadonlyCopy();
+                
+                var footBile = new InvolatileBile(_level, FootPosition.MutableCopy(), readonlyVelocity);
                 _level.AddParticle(footBile);
 
-                var cmBile = new InvolatileBile(_level, CenterMass.MutableCopy());
+                var cmBile = new InvolatileBile(_level, CenterMass.MutableCopy(), readonlyVelocity);
                 _level.AddParticle(cmBile);
                 
                 _bileParticleTimer.Reset();

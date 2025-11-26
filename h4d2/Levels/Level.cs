@@ -177,6 +177,19 @@ public class Level
             }
         }
     }
+
+    public void ExplodeBile(Boomer boomer, double radius)
+    {
+        List<Survivor> survivors = GetLivingMobs<Survivor>();
+        foreach (Survivor survivor in survivors)
+        {
+            double distance = ReadonlyPosition.Distance(boomer.CenterMass, survivor.CenterMass);
+            if (distance <= radius && !survivor.IsBiled)
+            {
+                survivor.Biled();
+            }
+        }
+    }
     
     public void Update(double elapsedTime)
     {

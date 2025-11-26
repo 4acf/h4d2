@@ -1,0 +1,33 @@
+﻿using H4D2.Infrastructure;
+using H4D2.Levels;
+using H4D2.Particles.DebrisParticles.Granules;
+
+namespace H4D2.Particles.DebrisParticles;
+
+public class BileGibDebris : Debris
+{
+    private readonly int _color;
+    
+    public BileGibDebris(Level level, Position position, int color)
+        : base(level, position, DebrisConfigs.Gib)
+    {
+        _color = color;
+    }
+
+    public override void Update(double elapsedTime)
+    {
+        base.Update(elapsedTime);
+        var involatileBile = new InvolatileBile(_level, _position.Copy(), _velocity.ReadonlyCopy());
+        _level.AddParticle(involatileBile);
+    }
+    
+    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
+    {
+        screen.Fill(xCorrected, yCorrected, xCorrected + 1, yCorrected + 1, _color);
+    }
+
+    protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
+    {
+        shadows.Fill(xCorrected, yCorrected, xCorrected + 1, yCorrected + 1);
+    }
+}

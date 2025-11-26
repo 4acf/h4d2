@@ -1,6 +1,7 @@
 ﻿using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
 using H4D2.Levels;
+using H4D2.Particles.DebrisParticles;
 
 namespace H4D2.Entities.Mobs.Zombies.Specials;
 
@@ -12,7 +13,8 @@ public class Boomer : Special
     private const double _angleVariance = Math.PI / 16.0;
     private const double _pukeFreezeTime = 0.5;
     private const int _numPukeProjectilesPerUpdate = 6;
-    private const int _numPukeProjectilesOnDeath = 200;
+    private const int _bileGibs = 5;
+    private const double _splashRadius = 25.0;
     
     private readonly CountdownTimer _attackDelayTimer;
     private readonly CountdownTimer _pukeFreezeTimer;
@@ -118,12 +120,13 @@ public class Boomer : Special
     protected override void _Die()
     {
         base._Die();
-        for (int i = 0; i < _numPukeProjectilesOnDeath; i++)
+        _level.ExplodeBile(this, _splashRadius);
+        for (int i = 0; i < _bileGibs; i++)
         {
-            double randomDouble = RandomSingleton.Instance.NextDouble();
-            double directionRadians = randomDouble * (Math.PI * 2);
-            var puke = new DeathPuke(_level, CenterMass.MutableCopy(), directionRadians);
-            _level.AddProjectile(puke);
+            Position position = CenterMass.MutableCopy();
+            position.Z += i;
+            var deathSplatter = new BileGibDebris(_level, position, _gibColor);
+            _level.AddParticle(deathSplatter);
         }
     }
 }

@@ -31,7 +31,7 @@ public static class RenderingComparators
     {
         if (a is Survivor sa && sa.Pinner == b && b is not Smoker)
             return ResolvePinnedSort(b);
-        if (b is Survivor sb && sb.Pinner == a && b is not Smoker)
+        if (b is Survivor sb && sb.Pinner == a && a is not Smoker)
             return -ResolvePinnedSort(a);
 
         if (a is Survivor sat && sat.Pinner is Smoker && b is Tongue at)

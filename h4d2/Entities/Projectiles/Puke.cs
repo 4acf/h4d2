@@ -12,6 +12,7 @@ public class Puke : Projectile
     private const double _minSpeed = 75.0;
     private const double _maxSpeed = 125.0;
     
+    private static readonly ReadonlyVelocity _nullVelocity = new();
     private readonly double _speed;
     
     public Puke(Level level, Position position, double directionRadians)
@@ -46,7 +47,7 @@ public class Puke : Projectile
         {
             case null:
             {
-                var bile = new InvolatileBile(_level, _position.Copy());
+                var bile = new InvolatileBile(_level, _position.Copy(), _nullVelocity);
                 _level.AddParticle(bile);
                 break;
             }
