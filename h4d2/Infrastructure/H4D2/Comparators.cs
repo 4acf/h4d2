@@ -12,12 +12,15 @@ using H4D2.Particles.Smokes;
 
 namespace H4D2.Infrastructure.H4D2;
 
-public static class RenderingComparators
+public static class Comparators
 {
     public static readonly Comparison<Entity> EntityUpdating = (a, b) =>
     {
-        return Rank(a.GetType()).CompareTo(Rank(b.GetType()));
-
+        int diff = Rank(a.GetType()).CompareTo(Rank(b.GetType()));
+        if (diff != 0)
+            return diff;
+        return b.FootPosition.Y.CompareTo(a.FootPosition.Y);
+        
         int Rank(Type t)
         {
             if (typeof(Projectile).IsAssignableFrom(t)) return -1;
@@ -29,6 +32,10 @@ public static class RenderingComparators
     
     public static readonly Comparison<Entity> EntityRendering = (a, b) =>
     {
+        int positionDiff = b.FootPosition.Y.CompareTo(a.FootPosition.Y);
+        if (positionDiff != 0) 
+            return positionDiff;
+        
         if (a is Survivor sa && sa.Pinner == b && b is not Smoker)
             return ResolvePinnedSort(b);
         if (b is Survivor sb && sb.Pinner == a && a is not Smoker)
@@ -39,7 +46,7 @@ public static class RenderingComparators
         if (b is Survivor sbt && sbt.Pinner is Smoker && a is Tongue bt)
             return -ResolveTongueSort(bt);
         
-        return b.FootPosition.Y.CompareTo(a.FootPosition.Y);
+        return 0;
         
         int ResolvePinnedSort(Entity pinner)
         {

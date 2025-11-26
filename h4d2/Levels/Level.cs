@@ -209,7 +209,7 @@ public class Level
     
     private void _UpdateEntities(double elapsedTime)
     {
-        _entities.Sort(RenderingComparators.EntityUpdating);
+        _entities.Sort(Comparators.EntityUpdating);
         var indicesToRemove = new List<int>();
         for (int i = 0; i < _entities.Count; i++)
         {
@@ -274,7 +274,7 @@ public class Level
     
     private void _RenderEntities(Bitmap screen)
     {
-        _entities.Sort(RenderingComparators.EntityRendering);
+        _entities.Sort(Comparators.EntityRendering);
         foreach (Entity entity in _entities)
         {
             entity.Render(screen);
@@ -283,7 +283,7 @@ public class Level
 
     private void _RenderParticles(Bitmap screen)
     {
-        _particles.Sort(RenderingComparators.Particle);
+        _particles.Sort(Comparators.Particle);
         foreach (Particle particle in _particles)
         {
             if(!particle.Removed)
