@@ -117,13 +117,13 @@ public class Level
         return result;
     }
 
-    public Survivor? GetNearestBiledSurvivor(ReadonlyPosition position)
+    private Survivor? _GetNearestSurvivor(ReadonlyPosition position, Func<Survivor, bool> predicate)
     {
         Survivor? result = null;
         double lowestDistance = double.MaxValue;
         foreach (Survivor survivor in _entities.OfType<Survivor>())
         {
-            if (survivor.Removed || !survivor.IsAlive || !survivor.IsBiled) continue;
+            if (survivor.Removed || !survivor.IsAlive || !predicate(survivor)) continue;
             double distance = ReadonlyPosition.Distance(position, survivor.Position);
             if (distance < lowestDistance)
             {
@@ -133,6 +133,12 @@ public class Level
         }
         return result;
     }
+
+    public Survivor? GetNearestBiledSurvivor(ReadonlyPosition position)
+        => _GetNearestSurvivor(position, s => s.IsBiled);
+    
+    public Survivor? GetNearestUnpinnedSurvivor(ReadonlyPosition position)
+        => _GetNearestSurvivor(position, s => !s.IsPinned);
     
     public void AddProjectile(Projectile projectile)
     {

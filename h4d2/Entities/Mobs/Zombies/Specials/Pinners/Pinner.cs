@@ -21,7 +21,12 @@ public abstract class Pinner : Special
         else
             _Die();
     }
-    
+
+    protected override void _UpdateTarget()
+    {
+        _target = _level.GetNearestUnpinnedSurvivor(Position);
+    }
+
     protected virtual void _StopPinning()
     {
         _pinTarget = null;
