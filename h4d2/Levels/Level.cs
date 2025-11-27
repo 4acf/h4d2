@@ -155,6 +155,11 @@ public class Level
         if(_particles.Count < _maxParticles)
             _particles.Add(particle);
     }
+
+    public void AddSpecial(Special special)
+    {
+        _entities.Add(special);
+    }
     
     public void Explode(Grenade grenade)
     {
@@ -346,31 +351,16 @@ public class Level
     private Zombie _CreateRandomLevelZombie(Position position)
     {
         int random = RandomSingleton.Instance.Next(20);
-        if (random > 1) 
+        if (random != 0) 
             return new Common(this, position);
-        if (random == 0)
+        int randomUncommon = RandomSingleton.Instance.Next(5);
+        return randomUncommon switch
         {
-            int randomUncommon = RandomSingleton.Instance.Next(5);
-            return randomUncommon switch
-            {
-                0 => new Hazmat(this, position),
-                1 => new Clown(this, position),
-                2 => new Mudman(this, position),
-                3 => new Worker(this, position),
-                4 => new Riot(this, position),
-                _ => new Common(this, position)
-            };
-        }
-        int randomSpecial = RandomSingleton.Instance.Next(8);
-        return randomSpecial switch
-        {
-            0 => new Hunter(this, position),
-            1 => new Boomer(this, position),
-            2 => new Smoker(this, position),
-            3 => new Charger(this, position),
-            4 => new Jockey(this, position),
-            6 => new Spitter(this, position),
-            7 => new Tank(this, position),
+            0 => new Hazmat(this, position),
+            1 => new Clown(this, position),
+            2 => new Mudman(this, position),
+            3 => new Worker(this, position),
+            4 => new Riot(this, position),
             _ => new Common(this, position)
         };
     }
