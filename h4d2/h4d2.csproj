@@ -36,6 +36,10 @@
       <EmbeddedResource Include="Resources\bileoverlay.png" />
       <None Remove="Resources\pixuf.png" />
       <EmbeddedResource Include="Resources\pixuf.png" />
+      <None Remove="Resources\levels\level1.png" />
+      <EmbeddedResource Include="Resources\levels\level1.png" />
+      <None Remove="Resources\levels\tiles.png" />
+      <EmbeddedResource Include="Resources\levels\tiles.png" />
     </ItemGroup>
 
 </Project>
