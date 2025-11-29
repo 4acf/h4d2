@@ -18,7 +18,8 @@ public static class H4D2Art
     public static readonly Bitmap[][] Projectiles = _LoadProjectiles();
     private static readonly Bitmap[][] _particles = _LoadParticles();
     private static readonly Bitmap[][] _bileOverlays = _LoadBileOverlays();
-    
+
+    public static TextBitmap[] Text => _LoadPixufFont();
     public static Bitmap[] Explosion => _particles[0];
     public static Bitmap[] HealParticle => _particles[1];
     public static Bitmap[] Fire => _particles[2];
@@ -41,4 +42,6 @@ public static class H4D2Art
         Art.LoadBitmaps($"{_resourcePrefix}particle.png", ParticleSize, 4, 4);
     private static Bitmap[][] _LoadBileOverlays() => 
         Art.LoadBitmaps($"{_resourcePrefix}bileoverlay.png", SpriteSize, 2, 2);
+    private static TextBitmap[] _LoadPixufFont() =>
+        Art.LoadFontBitmaps($"{_resourcePrefix}pixuf.png", Pixuf.Characters, Pixuf.Widths, 7);
 }

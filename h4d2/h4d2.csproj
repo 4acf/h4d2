@@ -34,6 +34,8 @@
       <EmbeddedResource Include="Resources\projectile.png" />
       <None Remove="Resources\bileoverlay.png" />
       <EmbeddedResource Include="Resources\bileoverlay.png" />
+      <None Remove="Resources\pixuf.png" />
+      <EmbeddedResource Include="Resources\pixuf.png" />
     </ItemGroup>
 
 </Project>

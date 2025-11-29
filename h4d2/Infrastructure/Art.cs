@@ -41,4 +41,15 @@ public static class Art
         
         return result;
     }
+
+    public static TextBitmap[] LoadFontBitmaps(string resourceName, int characters, int[] widths, int height)
+    {
+        var result = new TextBitmap[characters];
+        SKBitmap fullResourceBitmap = ResourceLoader.LoadEmbeddedResource(resourceName);
+        for (int i = 0; i < characters; i++)
+        {
+            result[i] = new TextBitmap(fullResourceBitmap, i, widths, height);
+        }
+        return result;
+    }
 }

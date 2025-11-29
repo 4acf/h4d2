@@ -79,6 +79,45 @@ public class Bitmap
         }
     }
 
+    public void DrawLineOfText(TextBitmap[] textBitmaps, string text, int x, int y, int color = 0x0)
+    {
+        int startingX = x;
+        for (int i = 0; i < text.Length; i++)
+        {
+            TextBitmap letterBitmap = textBitmaps[text[i] - ' '];
+            _DrawLetter(letterBitmap, startingX, y, color);
+            startingX += letterBitmap.Width;
+        }
+    }
+
+    private void _DrawLetter(TextBitmap letterBitmap, int x, int y, int color)
+    {
+        byte r = (byte)(color >> 16 & 0xff);
+        byte g = (byte)(color >> 8 & 0xff);
+        byte b = (byte)(color & 0xff);
+        
+        for (int i = 0; i < letterBitmap.Height; i++)
+        {
+            for (int j = 0; j < letterBitmap.Width; j++)
+            {
+                int parentIndex = _GetBytespaceIndex(Width, x + j, y - i - 1);
+                int childIndex = letterBitmap.GetBytespaceIndex(j, i);
+                
+                if (IsOutOfBounds(parentIndex) || letterBitmap.IsOutOfBounds(childIndex)) continue;
+                if (!letterBitmap.Data[childIndex]) continue;
+
+                int expectedY = y - i - 1;
+                int actualY = parentIndex / (Width * 4);
+                if (expectedY != actualY) continue;
+                
+                Data[parentIndex] = r;
+                Data[parentIndex + 1] = g;
+                Data[parentIndex + 2] = b;
+                Data[parentIndex + 3] = 0xff;
+            }
+        }
+    }
+    
     public void DrawBiledCharacter(Bitmap characterBitmap, Bitmap bileBitmap, int x, int y, bool flip = false)
     {
         if(characterBitmap.Width != bileBitmap.Width || characterBitmap.Height != bileBitmap.Height)
