@@ -8,6 +8,8 @@ namespace H4D2;
 
 public class Game
 {
+    private const double _cameraMoveSpeed = 100; 
+    
     private readonly Camera _camera;
     private readonly Bitmap _screen;
     private readonly ShadowBitmap _shadows;
@@ -29,7 +31,7 @@ public class Game
 
     public void Update(Input input, double elapsedTime)
     {
-        _HandleInputCommands(input);
+        _HandleInputCommands(input, elapsedTime);
         _level.Update(elapsedTime);
         /*
         if (_level.IsGameOver && _level.CanReset)
@@ -47,17 +49,27 @@ public class Game
         return _screen.Data;
     }
 
-    private void _HandleInputCommands(Input input)
+    private void _HandleInputCommands(Input input, double elapsedTime)
     {
         if (input.IsNumberPressed)
             _selectedSpecial = input.LastNumberPressed;
 
-        if (!input.IsMousePressed)
-            return;
-        
+        if (input.IsMousePressed)
+        {
+            _HandleMousePressed(input.MousePositionScreen);
+        }
+
+        if (input.PressedMovementKeys.Count > 0)
+        {
+             _HandleCameraMove(input.PressedMovementKeys, elapsedTime);
+        }
+    }
+
+    private void _HandleMousePressed(Position mousePosition)
+    {
         var position = new Position(
-            input.MousePositionScreen.X - (H4D2Art.SpriteSize / 2.0),
-            input.MousePositionScreen.Y + H4D2Art.SpriteSize
+            mousePosition.X - (H4D2Art.SpriteSize / 2.0),
+            mousePosition.Y + H4D2Art.SpriteSize
         );
         Special special = _selectedSpecial switch
         {
@@ -72,5 +84,28 @@ public class Game
             _ => new Tank(_level, position)
         };
         _level.AddSpecial(special);
+    }
+    
+    private void _HandleCameraMove(IReadOnlyCollection<MovementKey> keys, double elapsedTime)
+    {
+        foreach (MovementKey key in keys)
+        {
+            switch (key)
+            {
+                case MovementKey.W:
+                    _camera.MoveY((int)(_cameraMoveSpeed * elapsedTime) + 1);
+                    break;
+                case MovementKey.A:
+                    _camera.MoveX((int)(-_cameraMoveSpeed * elapsedTime) - 1);
+                    break;
+                case MovementKey.S:
+                    _camera.MoveY((int)(-_cameraMoveSpeed * elapsedTime) - 1);
+                    break;
+                case MovementKey.D:
+                default:
+                    _camera.MoveX((int)(_cameraMoveSpeed * elapsedTime) + 1);
+                    break;
+            }
+        }  
     }
 }
