@@ -8,12 +8,36 @@ public class Bitmap
     public readonly int Width;
     public readonly int Height;
 
-    public Bitmap(int width, int height)
+    private readonly Camera? _camera;
+    
+    public Bitmap(int width, int height, Camera? camera = null)
     {
         int numBytes = width * height * 4;
         Data = new byte[numBytes];
         Width = width;
         Height = height;
+        _camera = camera;
+    }
+
+    public Bitmap(SKBitmap bitmap)
+    {
+        Width = bitmap.Width;
+        Height = bitmap.Height;
+        int numBytes = Width * Height * 4;
+        Data = new byte[numBytes];
+
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                SKColor color = bitmap.GetPixel(x, y);
+                int index = (y * Width * 4) + (x * 4);
+                Data[index] = color.Red;
+                Data[index + 1] = color.Green;
+                Data[index + 2] = color.Blue;
+                Data[index + 3] = color.Alpha;
+            }
+        }
     }
     
     public Bitmap(SKBitmap bitmap, int spriteSize, int row, int col)
@@ -41,16 +65,48 @@ public class Bitmap
         Height = spriteSize;
     }
 
-    public void Clear()
+    public int ColorAt(int x, int y)
     {
-        for (int i = 0; i < Data.Length; i++)
+        int result = 0x0;
+        int index = _GetBytespaceIndex(Width, x, y);
+        if (IsOutOfBounds(index))
+            return result;
+        byte r = Data[index];
+        byte g = Data[index + 1];
+        byte b = Data[index + 2];
+        result = r;
+        result = (result << 8) | g;
+        result = (result << 8) | b;
+        return result;
+    }
+    
+    public void Clear(int? color = 0x0)
+    {
+        byte r = 0, g = 0, b = 0;
+        
+        if (color != null)
         {
-            Data[i] = 0;
+            r = (byte)(color >> 16 & 0xff);
+            g = (byte)(color >> 8 & 0xff);
+            b = (byte)(color & 0xff);
+        }
+        
+        for (int i = 0; i < Data.Length; i += 4)
+        {
+            Data[i] = r;
+            Data[i + 1] = g;
+            Data[i + 2] = b;
         }
     }
-
+    
     public void Draw(Bitmap bitmap, int x, int y, bool flip = false)
     {
+        if (_camera != null)
+        {
+            x += _camera.XOffset;
+            y += _camera.YOffset;
+        }
+        
         for (int i = 0; i < bitmap.Height; i++)
         {
             for (int j = 0; j < bitmap.Width; j++)
@@ -81,6 +137,12 @@ public class Bitmap
 
     public void DrawLineOfText(TextBitmap[] textBitmaps, string text, int x, int y, int color = 0x0)
     {
+        if (_camera != null)
+        {
+            x += _camera.XOffset;
+            y += _camera.YOffset;
+        }
+        
         int startingX = x;
         for (int i = 0; i < text.Length; i++)
         {
@@ -123,6 +185,12 @@ public class Bitmap
         if(characterBitmap.Width != bileBitmap.Width || characterBitmap.Height != bileBitmap.Height)
             throw new ArgumentException("Character and bile bitmaps must have the same width and height.");
      
+        if (_camera != null)
+        {
+            x += _camera.XOffset;
+            y += _camera.YOffset;
+        }
+        
         const double blend = 0.3;
         
         for (int i = 0; i < characterBitmap.Height; i++)
@@ -182,6 +250,14 @@ public class Bitmap
     
     public void FillBlend(int x0, int y0, int x1, int y1, int color, double blend)
     {
+        if (_camera != null)
+        {
+            x0 += _camera.XOffset;
+            x1 += _camera.XOffset;
+            y0 += _camera.YOffset;
+            y1 += _camera.YOffset;
+        }
+        
         byte r = (byte)(color >> 16 & 0xff);
         byte g = (byte)(color >> 8 & 0xff);
         byte b = (byte)(color & 0xff);

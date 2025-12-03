@@ -276,6 +276,8 @@ public abstract class Survivor : Mob
     
     private void _UpdatePosition(double elapsedTime)
     {
+        return;
+        
         if (IsPinned)
         {
             switch (Pinner)

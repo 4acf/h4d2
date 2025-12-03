@@ -6,12 +6,15 @@ public class ShadowBitmap
     public readonly int Width;
     public readonly int Height;
 
-    public ShadowBitmap(int width, int height)
+    private readonly Camera? _camera;
+    
+    public ShadowBitmap(int width, int height, Camera? camera = null)
     {
         int numBytes = width * height;
         Data = new bool[numBytes];
         Width = width;
         Height = height;
+        _camera = camera;
     }
 
     public void Clear()
@@ -24,6 +27,14 @@ public class ShadowBitmap
 
     public void Fill(int x0, int y0, int x1, int y1)
     {
+        if (_camera != null)
+        {
+            x0 += _camera.XOffset;
+            x1 += _camera.XOffset;
+            y0 += _camera.YOffset;
+            y1 += _camera.YOffset;
+        }
+        
         for (int i = y0; i <= y1; i++)
         {
             for (int j = x0; j <= x1; j++)

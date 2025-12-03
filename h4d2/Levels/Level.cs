@@ -13,20 +13,36 @@ using H4D2.Entities.Projectiles;
 using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
+using H4D2.Levels.LevelElements;
 using H4D2.Particles;
 using H4D2.Particles.Clouds;
 
 namespace H4D2.Levels;
 
+public enum Tile
+{
+    Floor,
+    Wall,
+    ZombieWall,
+    SurvivorFloor
+}
+
 public class Level
 {
-    public const int Padding = 32;
+    public const int Padding = 0;
     private const double _levelResetCooldownSeconds = 8.0;
-    private const int _minZombies = 20;
+    private const int _minZombiesAlive = 20;
     private const int _minSpawnWaveSize = 5;
     private const int _maxSpawnWaveSize = 15;
     private const int _maxZombiesAlive = 50;
     private const int _maxParticles = 5000;
+    
+    private const int _wallColor = 0x0;
+    private const int _floorColor = 0xffffff;
+    private const int _healthPickupColor = 0xff0000;
+    private const int _zombieSpawnColor = 0x00ff00;
+    private const int _throwablePickupColor = 0x0000ff;
+    private const int _survivorSpawnColor = 0xff00ff;
     
     public readonly int Width;
     public readonly int Height;
@@ -36,43 +52,57 @@ public class Level
     public bool IsGameOver => GetLivingMobs<Survivor>().Count == 0;
     private readonly List<Entity> _entities;
     private readonly List<Particle> _particles;
+    private readonly List<LevelElement> _levelElements;
+    private readonly Tile[] _tiles;
     
-    public Level(int width, int height, CollisionManager<CollisionGroup> collisionManager)
+    public Level(CollisionManager<CollisionGroup> collisionManager, Camera camera)
     {
-        Width = width;
-        Height = height;
         _levelResetTimer = new CountdownTimer(_levelResetCooldownSeconds);
         
         _entities = [];
         _particles = [];
+        _levelElements = [];
         CollisionManager = collisionManager;
-        
-        _entities.Add(new Louis   (this, new Position(32, 120)));
-        _entities.Add(new Francis (this, new Position(64, 120)));
-        _entities.Add(new Zoey    (this, new Position(96, 120)));
-        _entities.Add(new Bill    (this, new Position(128, 120)));
-        _entities.Add(new Rochelle(this, new Position(160, 120)));
-        _entities.Add(new Ellis   (this, new Position(192, 120)));
-        _entities.Add(new Nick    (this, new Position(224, 120)));
-        _entities.Add(new Coach   (this, new Position(256, 120)));
-        
-        _entities.Add(new Molotov(this, new Position(32, 192)));
-        _entities.Add(new PipeBomb(this, new Position(64, 192)));
-        _entities.Add(new BileBomb(this, new Position(96, 192)));
-        _entities.Add(new Molotov(this, new Position(128, 192)));
-        _entities.Add(new PipeBomb(this, new Position(160, 192)));
-        _entities.Add(new BileBomb(this, new Position(192, 192)));
-        _entities.Add(new Molotov(this, new Position(224, 192)));
-        _entities.Add(new PipeBomb(this, new Position(256, 192)));
-        
-        _entities.Add(new FirstAidKit(this, new Position(32, 32)));
-        _entities.Add(new Pills(this, new Position(64, 32)));
-        _entities.Add(new Adrenaline(this, new Position(96, 32)));
-        _entities.Add(new FirstAidKit(this, new Position(128, 32)));
-        _entities.Add(new Pills(this, new Position(160, 32)));
-        _entities.Add(new Adrenaline(this, new Position(192, 32)));
-        _entities.Add(new FirstAidKit(this, new Position(224, 32)));
-        _entities.Add(new Pills(this, new Position(256, 32)));
+
+        Bitmap levelBitmap = H4D2Art.Level1;
+        Width = levelBitmap.Width;
+        Height = levelBitmap.Height;
+        _tiles = new Tile[Width * Height];
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                if (x < 0 || y < 0 || x >= levelBitmap.Width || y >= levelBitmap.Height)
+                {
+                    _tiles[(y * Width) + x] = Tile.Wall;
+                    continue;
+                }
+
+                int color = levelBitmap.ColorAt(x, y);
+                int tileIndex = (y * Width) + x; 
+                switch (color)
+                {
+                    case _wallColor:
+                        _tiles[tileIndex] = Tile.Wall;
+                        break;
+                    case _zombieSpawnColor:
+                        _tiles[tileIndex] = Tile.ZombieWall;
+                        break;
+                    case _survivorSpawnColor:
+                        _tiles[tileIndex] = Tile.SurvivorFloor;
+                        // temporary hardcoded values
+                        camera.MoveX(-((320 / 2) - (H4D2Art.TileSize / 2)) + ((x + y) * (H4D2Art.TileSize / 2)));
+                        camera.MoveY(-19);
+                        camera.MoveY(((x - y) * 6) - (240 / 2));
+                        break;
+                    default:
+                        _tiles[tileIndex] = Tile.Floor;
+                        break;
+                }
+            }
+        }
+
+        _entities.Add(new Coach(this, new Position(0, 0)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position, Entity? exclude)
@@ -239,7 +269,7 @@ public class Level
             _entities.RemoveAt(indicesToRemove[i]);
         }
 
-        _ReplenishZombies();
+        //_ReplenishZombies();
     }
 
     private void _UpdateParticles(double elapsedTime)
@@ -265,7 +295,43 @@ public class Level
     
     private void _RenderBackground(Bitmap screen)
     {
-        screen.Fill(0, 0, Width, Height, 0x5c5b56);
+        //screen.Clear(0x2b2b2b);
+        screen.Clear(0x312422);
+        _levelElements.Clear();
+        for (int y = 0; y < Height; y++)
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                int index = (y * Width) + x;
+                int xScreenPos = (y * 12) + (x * 12);
+                int yScreenPos = (y * -6) + (x * 6);
+                
+                Tile tile = _tiles[index];
+                switch (tile)
+                {
+                    case Tile.SurvivorFloor:
+                        screen.Draw(H4D2Art.Floors[2], xScreenPos, yScreenPos);
+                        break;
+                    case Tile.Wall:
+                        _levelElements.Add(new Wall(this, new Position(0, 0)));
+                        screen.Draw(H4D2Art.Floors[2], xScreenPos, yScreenPos);
+                        break;
+                    case Tile.ZombieWall:
+                        _levelElements.Add(new ZombieWall(this, new Position(0, 0)));
+                        screen.Draw(H4D2Art.Floors[2], xScreenPos, yScreenPos);
+                        break;
+                    case Tile.Floor:
+                    default:
+                    {
+                        Bitmap floorBitmap = (x + y) % 2 == 0 ? 
+                            H4D2Art.Floors[0] :
+                            H4D2Art.Floors[1];
+                        screen.Draw(floorBitmap, xScreenPos, yScreenPos);
+                        break;
+                    }
+                }
+            }
+        }
     }
     
     private void _RenderShadows(Bitmap screen, ShadowBitmap shadows)
@@ -302,6 +368,14 @@ public class Level
         }
     }
 
+    private void _RenderLevelElements(Bitmap screen)
+    {
+        foreach (LevelElement levelElement in _levelElements)
+        {
+            levelElement.Render(screen);
+        }
+    }
+    
     public void SpawnZombies()
     {
         int randomNewZombies = 
@@ -318,7 +392,7 @@ public class Level
     private void _ReplenishZombies()
     {
         List<Zombie> zombies = GetLivingMobs<Zombie>();
-        if (zombies.Count < _minZombies)
+        if (zombies.Count < _minZombiesAlive)
         {
             SpawnZombies();
         }

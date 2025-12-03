@@ -4,6 +4,9 @@ namespace H4D2.Infrastructure;
 
 public abstract class Isometric
 {
+    protected const double _scaleX = 3.0 / 4.0;
+    protected const double _scaleY = 3.0 / 8.0;
+    
     protected readonly Level _level;
     protected readonly Position _position;
     protected readonly Velocity _velocity;
@@ -21,8 +24,8 @@ public abstract class Isometric
     
     public void Render(Bitmap screen)
     {
-        int xCorrected = (int)_position.X;
-        int yCorrected = (int)(_position.Y + _position.Z);
+        int xCorrected = (int)(Math.Floor(_position.X - _position.Y) * _scaleX);
+        int yCorrected = (int)(Math.Floor(_position.Y + _position.X) * _scaleY - _position.Z);
         Render(screen, xCorrected, yCorrected);
     }
 
@@ -33,8 +36,8 @@ public abstract class Isometric
 
     public void RenderShadow(ShadowBitmap shadows)
     {
-        int xCorrected = (int)_position.X;
-        int yCorrected = (int)_position.Y;
+        int xCorrected = (int)(Math.Floor(_position.X - _position.Y) * _scaleX);
+        int yCorrected = (int)(Math.Floor(_position.Y + _position.X) * _scaleY);
         RenderShadow(shadows, xCorrected, yCorrected);
     }
 

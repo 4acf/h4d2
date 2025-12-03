@@ -8,6 +8,7 @@ namespace H4D2;
 
 public class Game
 {
+    private readonly Camera _camera;
     private readonly Bitmap _screen;
     private readonly ShadowBitmap _shadows;
     private Level _level;
@@ -18,21 +19,24 @@ public class Game
     public Game(int width, int height)
     {
         _selectedSpecial = 1;
-        _screen = new Bitmap(width, height);
-        _shadows = new ShadowBitmap(width, height);
         _collisionManager = new CollisionManager<CollisionGroup>();
         Collisions.Configure(_collisionManager);
-        _level = new Level(width, height, _collisionManager);
+        _camera = new Camera();
+        _level = new Level(_collisionManager, _camera);
+        _screen = new Bitmap(width, height, _camera);
+        _shadows = new ShadowBitmap(width, height, _camera);
     }
 
     public void Update(Input input, double elapsedTime)
     {
         _HandleInputCommands(input);
         _level.Update(elapsedTime);
+        /*
         if (_level.IsGameOver && _level.CanReset)
         {
             _level = new Level(_level.Width, _level.Height, _collisionManager);
         }
+        */
     }
     
     public byte[] Render()

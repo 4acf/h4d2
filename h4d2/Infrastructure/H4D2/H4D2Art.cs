@@ -6,6 +6,7 @@ public static class H4D2Art
     public const int ParticleSize = 8;
     public const int PickupSize = 8;
     public const int ProjectileSize = 8;
+    public const int TileSize = 24;
     public const int ShadowColor = 0x0;
     public const double ShadowBlend = 0.9;
     private const string _resourcePrefix = "h4d2.Resources.";
@@ -19,6 +20,11 @@ public static class H4D2Art
     private static readonly Bitmap[][] _particles = _LoadParticles();
     private static readonly Bitmap[][] _bileOverlays = _LoadBileOverlays();
 
+    public static readonly Bitmap Level1 = Art.LoadBitmap($"{_resourcePrefix}levels.level1.png");
+    private static readonly Bitmap[][] _tiles = _LoadTiles();
+    public static Bitmap[] Floors => _tiles[0];
+    public static Bitmap[] Walls => _tiles[1];
+    
     public static TextBitmap[] Text => _LoadPixufFont();
     public static Bitmap[] Explosion => _particles[0];
     public static Bitmap[] HealParticle => _particles[1];
@@ -42,6 +48,9 @@ public static class H4D2Art
         Art.LoadBitmaps($"{_resourcePrefix}particle.png", ParticleSize, 4, 4);
     private static Bitmap[][] _LoadBileOverlays() => 
         Art.LoadBitmaps($"{_resourcePrefix}bileoverlay.png", SpriteSize, 2, 2);
+
+    private static Bitmap[][] _LoadTiles() =>
+        Art.LoadBitmaps($"{_resourcePrefix}levels.tiles.png", TileSize, 2, 3);
     private static TextBitmap[] _LoadPixufFont() =>
         Art.LoadFontBitmaps($"{_resourcePrefix}pixuf.png", Pixuf.Characters, Pixuf.Widths, 7);
 }

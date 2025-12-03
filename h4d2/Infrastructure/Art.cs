@@ -16,6 +16,11 @@ public static class Art
                 SKBitmap.Decode(stream);
         }
     }
+
+    public static Bitmap LoadBitmap(string resourceName)
+    {
+        return new Bitmap(ResourceLoader.LoadEmbeddedResource(resourceName));
+    }
     
     public static Bitmap[][] LoadBitmaps(string resourceName, int spriteSize, int rows, int columns)
     {
