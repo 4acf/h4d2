@@ -37,6 +37,9 @@ public class Level
     private const int _maxSpawnWaveSize = 15;
     private const int _maxZombiesAlive = 50;
     private const int _maxParticles = 5000;
+    private const double _tilePhysicalSize = 16;
+    private const double _pickupXOffset = -7;
+    private const double _pickupYOffset = -18;
     
     private const int _wallColor = 0x0;
     private const int _floorColor = 0xffffff;
@@ -55,6 +58,8 @@ public class Level
     private readonly List<Particle> _particles;
     private readonly List<LevelElement> _levelElements;
     private readonly Tile[] _tiles;
+    private readonly List<int> _healthPickupLocations;
+    private readonly List<int> _throwablePickupLocations;
     
     public Level(Bitmap levelBitmap, CollisionManager<CollisionGroup> collisionManager, Camera camera)
     {
@@ -68,6 +73,8 @@ public class Level
         Width = levelBitmap.Width + Padding;
         Height = levelBitmap.Height + Padding;
         _tiles = new Tile[Width * Height];
+        _healthPickupLocations = [];
+        _throwablePickupLocations = [];
         for (int y = 0; y < Height; y++)
         {
             for (int x = 0; x < Width; x++)
@@ -97,6 +104,38 @@ public class Level
                         camera.MoveX(-((320 / 2) - (H4D2Art.TileSize / 2)) + ((x + y) * (H4D2Art.TileSize / 2)));
                         camera.MoveY(-H4D2Art.TileCenterOffset);
                         camera.MoveY(((x - y) * H4D2Art.TileIsoHalfHeight) - (240 / 2));
+                        break;
+                    case _healthPickupColor:
+                        _tiles[tileIndex] = Tile.Floor;
+                        _healthPickupLocations.Add(tileIndex);
+                        int randomConsumable = RandomSingleton.Instance.Next(3);
+                        Position consumablePos = new Position(
+                            (x * _tilePhysicalSize) + _pickupXOffset,
+                            (-y * _tilePhysicalSize) + _pickupYOffset
+                        );
+                        Consumable consumable = randomConsumable switch
+                        {
+                            0 => new FirstAidKit(this, consumablePos),
+                            1 => new Pills(this, consumablePos),
+                            _ => new Adrenaline(this, consumablePos)
+                        };
+                        _entities.Add(consumable);
+                        break;
+                    case _throwablePickupColor:
+                        _tiles[tileIndex] = Tile.Floor;
+                        _throwablePickupLocations.Add(tileIndex);
+                        int randomThrowable = RandomSingleton.Instance.Next(3);
+                        Position throwablePos = new Position(
+                            (x * _tilePhysicalSize) + _pickupXOffset,
+                            (-y * _tilePhysicalSize) + _pickupYOffset
+                        );
+                        Throwable throwable = randomThrowable switch
+                        {
+                            0 => new Molotov(this, throwablePos),
+                            1 => new PipeBomb(this, throwablePos),
+                            _ => new BileBomb(this, throwablePos)
+                        };
+                        _entities.Add(throwable);
                         break;
                     default:
                         _tiles[tileIndex] = Tile.Floor;
@@ -315,13 +354,28 @@ public class Level
                         screen.Draw(H4D2Art.Floors[2], xScreenPos, yScreenPos);
                         break;
                     case Tile.Wall:
-                        _levelElements.Add(new Wall(this, new Position(x * 16, -y * 16)));
+                        _levelElements.Add(
+                            new Wall(
+                                this,
+                                new Position(x * _tilePhysicalSize, -y * _tilePhysicalSize)
+                            )
+                        );
                         break;
                     case Tile.ZombieWall:
-                        _levelElements.Add(new ZombieWall(this, new Position(x * 16, -y * 16)));
+                        _levelElements.Add(
+                            new ZombieWall(
+                                this,
+                                new Position(x * _tilePhysicalSize, -y * _tilePhysicalSize)
+                            )
+                        );
                         break;
                     case Tile.EdgeWall:
-                        _levelElements.Add(new EdgeWall(this, new Position(x * 16, -y * 16)));
+                        _levelElements.Add(
+                            new EdgeWall(
+                                this,
+                                new Position(x * _tilePhysicalSize, -y * _tilePhysicalSize)
+                            )
+                        );
                         break;
                     case Tile.Floor:
                     default:
