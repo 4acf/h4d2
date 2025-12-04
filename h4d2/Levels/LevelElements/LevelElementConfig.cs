@@ -16,4 +16,9 @@ public static class LevelElementConfigs
     {
         Type = 1
     };
+
+    public static readonly LevelElementConfig EdgeWall = new()
+    {
+        Type = 2
+    };
 }

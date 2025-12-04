@@ -4,8 +4,8 @@ namespace H4D2.Infrastructure;
 
 public abstract class Isometric
 {
-    protected const double _scaleX = 3.0 / 4.0;
-    protected const double _scaleY = 3.0 / 8.0;
+    protected const double _scaleX = 12.0 / 16.0;
+    protected const double _scaleY = 6.0 / 16.0;
     
     protected readonly Level _level;
     protected readonly Position _position;

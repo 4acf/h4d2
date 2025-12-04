@@ -41,7 +41,6 @@ public class Game
 
     public void Update(Input input, double elapsedTime)
     {
-        Console.WriteLine($"X{_camera.XOffset}, Y{_camera.YOffset}");
         _HandleInputCommands(input, elapsedTime);
         _level.Update(elapsedTime);
         /*
@@ -66,14 +65,10 @@ public class Game
             _selectedSpecial = input.LastNumberPressed;
 
         if (input.IsMousePressed)
-        {
             _HandleMousePressed(input.MousePositionScreen);
-        }
 
         if (input.PressedMovementKeys.Count > 0)
-        {
              _HandleCameraMove(input.PressedMovementKeys, elapsedTime);
-        }
     }
 
     private void _HandleMousePressed(Position mousePosition)

@@ -4,6 +4,7 @@ using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Mobs.Zombies.Specials.Pinners;
 using H4D2.Entities.Projectiles;
+using H4D2.Levels.LevelElements;
 using H4D2.Particles;
 using H4D2.Particles.Clouds.Cloudlets;
 using H4D2.Particles.DebrisParticles;
@@ -123,5 +124,21 @@ public static class Comparators
             if (t == typeof(Smoke)) return 6;
             return 2;
         }
+    };
+
+    public static readonly Comparison<LevelElement> LevelElement = (a, b) =>
+    {
+        ReadonlyPosition aPos = a.Position;
+        ReadonlyPosition bPos = b.Position;
+        
+        if (aPos.Y + aPos.X < bPos.Y + bPos.X) return 1;
+        if (aPos.Y + aPos.X > bPos.Y + bPos.X) return -1;
+        if (aPos.Z < bPos.Z) return 1;
+        if (aPos.Z > bPos.Z) return -1;
+        if (aPos.X < bPos.X) return 1;
+        if (aPos.X > bPos.X) return -1;
+        if (aPos.Y < bPos.Y) return 1;
+        if (aPos.Y > bPos.Y) return -1;
+        return 0;
     };
 }

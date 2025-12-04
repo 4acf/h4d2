@@ -24,12 +24,13 @@ public enum Tile
     Floor,
     Wall,
     ZombieWall,
+    EdgeWall,
     SurvivorFloor
 }
 
 public class Level
 {
-    public const int Padding = 0;
+    public const int Padding = 2;
     private const double _levelResetCooldownSeconds = 8.0;
     private const int _minZombiesAlive = 20;
     private const int _minSpawnWaveSize = 5;
@@ -64,20 +65,23 @@ public class Level
         _levelElements = [];
         CollisionManager = collisionManager;
         
-        Width = levelBitmap.Width;
-        Height = levelBitmap.Height;
+        Width = levelBitmap.Width + Padding;
+        Height = levelBitmap.Height + Padding;
         _tiles = new Tile[Width * Height];
         for (int y = 0; y < Height; y++)
         {
             for (int x = 0; x < Width; x++)
             {
-                if (x < 0 || y < 0 || x >= levelBitmap.Width || y >= levelBitmap.Height)
+                int paddedX = x - (Padding / 2);
+                int paddedY = y - (Padding / 2);
+                
+                if (paddedX < 0 || paddedY < 0 || paddedX >= levelBitmap.Width || paddedY >= levelBitmap.Height)
                 {
-                    _tiles[(y * Width) + x] = Tile.Wall;
+                    _tiles[(y * Width) + x] = Tile.EdgeWall;
                     continue;
                 }
 
-                int color = levelBitmap.ColorAt(x, y);
+                int color = levelBitmap.ColorAt(paddedX, paddedY);
                 int tileIndex = (y * Width) + x; 
                 switch (color)
                 {
@@ -245,6 +249,7 @@ public class Level
         _RenderShadows(screen, shadows);
         _RenderParticles(screen);
         _RenderEntities(screen);
+        _RenderLevelElements(screen);
     }
     
     private void _UpdateEntities(double elapsedTime)
@@ -294,16 +299,15 @@ public class Level
     
     private void _RenderBackground(Bitmap screen)
     {
-        //screen.Clear(0x2b2b2b);
-        screen.Clear(0x312422);
+        screen.Clear(0x2b2b2b);
         _levelElements.Clear();
         for (int y = 0; y < Height; y++)
         {
             for (int x = 0; x < Width; x++)
             {
                 int index = (y * Width) + x;
-                int xScreenPos = (y * 12) + (x * 12);
-                int yScreenPos = (y * -6) + (x * 6);
+                int xScreenPos = (y * H4D2Art.TileIsoWidth / 2) + (x * H4D2Art.TileIsoWidth / 2);
+                int yScreenPos = (y * -H4D2Art.TileIsoHalfHeight) + (x * H4D2Art.TileIsoHalfHeight);
                 
                 Tile tile = _tiles[index];
                 switch (tile)
@@ -312,12 +316,13 @@ public class Level
                         screen.Draw(H4D2Art.Floors[2], xScreenPos, yScreenPos);
                         break;
                     case Tile.Wall:
-                        _levelElements.Add(new Wall(this, new Position(0, 0)));
-                        screen.Draw(H4D2Art.Floors[2], xScreenPos, yScreenPos);
+                        _levelElements.Add(new Wall(this, new Position(x * 16, -y * 16)));
                         break;
                     case Tile.ZombieWall:
-                        _levelElements.Add(new ZombieWall(this, new Position(0, 0)));
-                        screen.Draw(H4D2Art.Floors[2], xScreenPos, yScreenPos);
+                        _levelElements.Add(new ZombieWall(this, new Position(x * 16, -y * 16)));
+                        break;
+                    case Tile.EdgeWall:
+                        _levelElements.Add(new EdgeWall(this, new Position(x * 16, -y * 16)));
                         break;
                     case Tile.Floor:
                     default:
@@ -369,6 +374,7 @@ public class Level
 
     private void _RenderLevelElements(Bitmap screen)
     {
+        _levelElements.Sort(Comparators.LevelElement);
         foreach (LevelElement levelElement in _levelElements)
         {
             levelElement.Render(screen);
