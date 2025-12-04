@@ -105,7 +105,8 @@ public class Level
             }
         }
 
-        _entities.Add(new Coach(this, new Position(0, 0)));
+        _entities.Add(new Coach(this, new Position(150, -152)));
+        _entities.Add(new Nick(this, new Position(100, -170)));
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position, Entity? exclude)
@@ -247,9 +248,7 @@ public class Level
     {
         _RenderBackground(screen);
         _RenderShadows(screen, shadows);
-        _RenderParticles(screen);
-        _RenderEntities(screen);
-        _RenderLevelElements(screen);
+        _RenderIsometrics(screen);
     }
     
     private void _UpdateEntities(double elapsedTime)
@@ -352,32 +351,17 @@ public class Level
 
         screen.DrawShadows(shadows, H4D2Art.ShadowColor, H4D2Art.ShadowBlend);
     }
-    
-    private void _RenderEntities(Bitmap screen)
-    {
-        _entities.Sort(Comparators.EntityRendering);
-        foreach (Entity entity in _entities)
-        {
-            entity.Render(screen);
-        }
-    }
 
-    private void _RenderParticles(Bitmap screen)
+    private void _RenderIsometrics(Bitmap screen)
     {
-        _particles.Sort(Comparators.Particle);
-        foreach (Particle particle in _particles)
+        var isometrics = new List<Isometric>();
+        isometrics.AddRange(_entities);
+        isometrics.AddRange(_particles);
+        isometrics.AddRange(_levelElements);
+        isometrics.Sort(Comparators.IsometricRendering);
+        foreach (Isometric isometric in isometrics)
         {
-            if(!particle.Removed)
-                particle.Render(screen);
-        }
-    }
-
-    private void _RenderLevelElements(Bitmap screen)
-    {
-        _levelElements.Sort(Comparators.LevelElement);
-        foreach (LevelElement levelElement in _levelElements)
-        {
-            levelElement.Render(screen);
+            isometric.Render(screen);
         }
     }
     

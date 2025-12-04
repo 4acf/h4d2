@@ -30,6 +30,45 @@ public static class Comparators
             return 1;
         }
     };
+
+    public static readonly Comparison<Isometric> IsometricRendering = (a, b) =>
+    {
+        ReadonlyPosition aPos = a.Position;
+        ReadonlyPosition bPos = b.Position;
+        
+        if (aPos.Y + aPos.X < bPos.Y + bPos.X) return 1;
+        if (aPos.Y + aPos.X > bPos.Y + bPos.X) return -1;
+        if (aPos.Z < bPos.Z) return 1;
+        if (aPos.Z > bPos.Z) return -1;
+        if (aPos.X < bPos.X) return 1;
+        if (aPos.X > bPos.X) return -1;
+        if (aPos.Y < bPos.Y) return 1;
+        if (aPos.Y > bPos.Y) return -1;
+
+        if (a.GetType() == b.GetType())
+        {
+            return a switch
+            {
+                Entity ae when b is Entity be => EntityRendering!(ae, be),
+                Particle ap when b is Particle bp => ParticleRendering!(ap, bp),
+                LevelElement ale when b is LevelElement ble => LevelElementRendering!(ale, ble),
+                _ => 0
+            };
+        }
+        
+        return TypeRank(a).CompareTo(TypeRank(b));
+        
+        int TypeRank(Isometric isometric)
+        {
+            return isometric switch
+            {
+                Particle => 0,
+                Entity => 1,
+                LevelElement => 2,
+                _ => 3
+            };
+        }
+    };
     
     public static readonly Comparison<Entity> EntityRendering = (a, b) =>
     {
@@ -103,7 +142,7 @@ public static class Comparators
         }
     };
     
-    public static readonly Comparison<Particle> Particle = (a, b) =>
+    public static readonly Comparison<Particle> ParticleRendering = (a, b) =>
     {
         int diff = Rank(a.GetType()).CompareTo(Rank(b.GetType()));
         if (diff != 0)
@@ -126,7 +165,7 @@ public static class Comparators
         }
     };
 
-    public static readonly Comparison<LevelElement> LevelElement = (a, b) =>
+    public static readonly Comparison<LevelElement> LevelElementRendering = (a, b) =>
     {
         ReadonlyPosition aPos = a.Position;
         ReadonlyPosition bPos = b.Position;
