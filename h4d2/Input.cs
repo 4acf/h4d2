@@ -55,13 +55,17 @@ public class Input
 
         _mousePositionWindow = Mouse.GetPosition(_window);
         
-        if(Keyboard.IsScancodePressed(Keyboard.Scancode.W))
+        if(Keyboard.IsScancodePressed(Keyboard.Scancode.W) 
+           || Keyboard.IsScancodePressed(Keyboard.Scancode.Up))
             _pressedMovementKeys.Add(MovementKey.W);
-        if(Keyboard.IsScancodePressed(Keyboard.Scancode.A))
+        if(Keyboard.IsScancodePressed(Keyboard.Scancode.A)
+           || Keyboard.IsScancodePressed(Keyboard.Scancode.Left))
             _pressedMovementKeys.Add(MovementKey.A);
-        if(Keyboard.IsScancodePressed(Keyboard.Scancode.S))
+        if(Keyboard.IsScancodePressed(Keyboard.Scancode.S)
+           || Keyboard.IsScancodePressed(Keyboard.Scancode.Down))
             _pressedMovementKeys.Add(MovementKey.S);
-        if(Keyboard.IsScancodePressed(Keyboard.Scancode.D))
+        if(Keyboard.IsScancodePressed(Keyboard.Scancode.D)
+           || Keyboard.IsScancodePressed(Keyboard.Scancode.Right))
             _pressedMovementKeys.Add(MovementKey.D);
     }
 
