@@ -23,14 +23,25 @@ public class Game
         _selectedSpecial = 1;
         _collisionManager = new CollisionManager<CollisionGroup>();
         Collisions.Configure(_collisionManager);
+        Bitmap levelBitmap = H4D2Art.Level1;
         _camera = new Camera();
-        _level = new Level(_collisionManager, _camera);
+        int lowerYBound = H4D2Art.TileCenterOffset - ((levelBitmap.Height / 2) * H4D2Art.TileIsoHeight);
+        int upperYOffset = 
+            (1 * (H4D2Art.TileIsoHeight - 1)) + (H4D2Art.TileIsoHeight * (levelBitmap.Height - 1)) + height;
+        _camera.InitBounds(
+            -(levelBitmap.Width * H4D2Art.TileSize),
+            lowerYBound,
+            width,
+            lowerYBound + upperYOffset
+        );
+        _level = new Level(levelBitmap, _collisionManager, _camera);
         _screen = new Bitmap(width, height, _camera);
         _shadows = new ShadowBitmap(width, height, _camera);
     }
 
     public void Update(Input input, double elapsedTime)
     {
+        Console.WriteLine($"X{_camera.XOffset}, Y{_camera.YOffset}");
         _HandleInputCommands(input, elapsedTime);
         _level.Update(elapsedTime);
         /*

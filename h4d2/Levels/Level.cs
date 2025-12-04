@@ -55,7 +55,7 @@ public class Level
     private readonly List<LevelElement> _levelElements;
     private readonly Tile[] _tiles;
     
-    public Level(CollisionManager<CollisionGroup> collisionManager, Camera camera)
+    public Level(Bitmap levelBitmap, CollisionManager<CollisionGroup> collisionManager, Camera camera)
     {
         _levelResetTimer = new CountdownTimer(_levelResetCooldownSeconds);
         
@@ -63,8 +63,7 @@ public class Level
         _particles = [];
         _levelElements = [];
         CollisionManager = collisionManager;
-
-        Bitmap levelBitmap = H4D2Art.Level1;
+        
         Width = levelBitmap.Width;
         Height = levelBitmap.Height;
         _tiles = new Tile[Width * Height];
@@ -92,8 +91,8 @@ public class Level
                         _tiles[tileIndex] = Tile.SurvivorFloor;
                         // temporary hardcoded values
                         camera.MoveX(-((320 / 2) - (H4D2Art.TileSize / 2)) + ((x + y) * (H4D2Art.TileSize / 2)));
-                        camera.MoveY(-19);
-                        camera.MoveY(((x - y) * 6) - (240 / 2));
+                        camera.MoveY(-H4D2Art.TileCenterOffset);
+                        camera.MoveY(((x - y) * H4D2Art.TileIsoHalfHeight) - (240 / 2));
                         break;
                     default:
                         _tiles[tileIndex] = Tile.Floor;

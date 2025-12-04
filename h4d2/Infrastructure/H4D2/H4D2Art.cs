@@ -7,6 +7,10 @@ public static class H4D2Art
     public const int PickupSize = 8;
     public const int ProjectileSize = 8;
     public const int TileSize = 24;
+    public const int TileIsoWidth = 24;
+    public const int TileIsoHeight = 12;
+    public const int TileIsoHalfHeight = 6;
+    public const int TileCenterOffset = 19; // -24 + 6, -24 since it draws from top to bottom, 6 is half of height
     public const int ShadowColor = 0x0;
     public const double ShadowBlend = 0.9;
     private const string _resourcePrefix = "h4d2.Resources.";
@@ -21,6 +25,7 @@ public static class H4D2Art
     private static readonly Bitmap[][] _bileOverlays = _LoadBileOverlays();
 
     public static readonly Bitmap Level1 = Art.LoadBitmap($"{_resourcePrefix}levels.level1.png");
+    public static readonly Bitmap Level2 = Art.LoadBitmap($"{_resourcePrefix}levels.level2.png");
     private static readonly Bitmap[][] _tiles = _LoadTiles();
     public static Bitmap[] Floors => _tiles[0];
     public static Bitmap[] Walls => _tiles[1];
