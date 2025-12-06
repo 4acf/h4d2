@@ -67,33 +67,31 @@ public abstract class Debris : Particle
             _Move(0, 0, _velocity.Z / steps);
         }
     }
-
-    private bool _IsOutOfLevelBounds(double xPosition, double yPosition, double zPosition)
-    {
-        return
-            xPosition < 0 ||
-            xPosition > _level.Width ||
-            yPosition < 0 ||
-            yPosition > _level.Height ||
-            zPosition < 0;
-    }
     
     private void _Move(double xComponent, double yComponent, double zComponent)
     {
-        double xDest = _position.X + xComponent;
-        double yDest = _position.Y + yComponent;
-        double zDest = _position.Z + zComponent;
+        var destination = new ReadonlyPosition(
+            _position.X + xComponent,
+            _position.Y + yComponent,
+            _position.Z + zComponent
+        );
 
-        if (_IsOutOfLevelBounds(xDest, yDest, zDest))
+        if (destination.Z < 0)
         {
-            if (zDest < 0) _position.Z = 0;
+            _Collide(xComponent, yComponent, zComponent);
+            _position.Z = 0;
+            return;
+        }
+        
+        if (_level.IsBlockedByWall(destination))
+        {
             _Collide(xComponent, yComponent, zComponent);
             return;
         }
         
-        _position.X = xDest;
-        _position.Y = yDest;
-        _position.Z = zDest;
+        _position.X = destination.X;
+        _position.Y = destination.Y;
+        _position.Z = destination.Z;
     }
 
     private void _Collide(double xComponent, double yComponent, double zComponent)

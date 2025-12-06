@@ -33,8 +33,15 @@ public static class Comparators
 
     public static readonly Comparison<Isometric> IsometricRendering = (a, b) =>
     {
+        if (a is Entity ae && b is Entity be)
+            return EntityRendering!(ae, be);
+        
         ReadonlyPosition aPos = a.Position;
         ReadonlyPosition bPos = b.Position;
+        if (a is Entity entity)
+            aPos = entity.FootPosition;
+        if (b is Entity entity2)
+            bPos = entity2.FootPosition;
         
         if (aPos.Y + aPos.X < bPos.Y + bPos.X) return 1;
         if (aPos.Y + aPos.X > bPos.Y + bPos.X) return -1;
@@ -49,7 +56,6 @@ public static class Comparators
         {
             return a switch
             {
-                Entity ae when b is Entity be => EntityRendering!(ae, be),
                 Particle ap when b is Particle bp => ParticleRendering!(ap, bp),
                 LevelElement ale when b is LevelElement ble => LevelElementRendering!(ale, ble),
                 _ => 0

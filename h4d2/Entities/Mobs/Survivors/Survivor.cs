@@ -1,4 +1,5 @@
-﻿using H4D2.Entities.Hazards;
+﻿using System.Security.Cryptography.X509Certificates;
+using H4D2.Entities.Hazards;
 using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Mobs.Zombies.Specials.Pinners;
@@ -276,8 +277,6 @@ public abstract class Survivor : Mob
     
     private void _UpdatePosition(double elapsedTime)
     {
-        return;
-        
         if (IsPinned)
         {
             switch (Pinner)
@@ -352,46 +351,6 @@ public abstract class Survivor : Mob
     private double _CalculateBestDirection()
     {
         double direction = RandomSingleton.Instance.NextDouble() * (2 * Math.PI);
-        direction = _CorrectDirectionToAvoidWalls(direction);
-        return direction;
-    }
-
-    private double _CorrectDirectionToAvoidWalls(double direction)
-    {
-        ReadonlyPosition centerMass = CenterMass;
-        
-        if (centerMass.X < _boundaryTolerance)
-        {
-            if ((Math.PI / 2) < direction && direction < (3 * Math.PI / 2))
-            {
-                direction = Math.Atan2(Math.Sin(direction), Math.Cos(direction) * -1);
-            }
-        }
-        
-        if (centerMass.Y < _boundaryTolerance)
-        {
-            if (direction > Math.PI)
-            {
-                direction = Math.Atan2(Math.Sin(direction) * -1, Math.Cos(direction));
-            }
-        }
-
-        if (_level.Width - centerMass.X < _boundaryTolerance)
-        {
-            if ((3 * Math.PI / 2) < direction || direction < (Math.PI / 2))
-            {
-                direction = Math.Atan2(Math.Sin(direction), Math.Cos(direction) * -1);
-            }
-        }
-
-        if (_level.Height - centerMass.Y < _boundaryTolerance)
-        {
-            if (direction < Math.PI)
-            {
-                direction = Math.Atan2(Math.Sin(direction) * -1, Math.Cos(direction));
-            }
-        }
-
         return direction;
     }
     

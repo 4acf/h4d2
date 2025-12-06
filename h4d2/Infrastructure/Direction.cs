@@ -35,21 +35,20 @@ public static class Direction
         double degrees = MathHelpers.RadiansToDegrees(directionRadians);
         switch (degrees)
         {
-            case >= 315:
-            case < 45:
-                direction = _e4;
-                xFlip = false;
-                break;
-            case < 135:
+            case < 90:
                 direction = _n4;
                 xFlip = false;
                 break;
-            case < 225:
+            case < 180:
                 direction = _w4;
                 xFlip = true;
                 break;
-            default:
+            case < 270:
                 direction = _s4;
+                xFlip = false;
+                break;
+            default:
+                direction = _e4;
                 xFlip = false;
                 break;
         }
@@ -63,37 +62,36 @@ public static class Direction
         double degrees = MathHelpers.RadiansToDegrees(directionRadians);
         switch (degrees)
         {
-            case >= 337.5:
-            case < 22.5:
-                direction = _e8;
-                xFlip = false;
-                break;
-            case < 67.5:
+            case < 45:
                 direction = _ne8;
                 xFlip = false;
                 break;
-            case < 112.5:
+            case < 90:
                 direction = _n8;
                 xFlip = false;
                 break;
-            case < 157.5:
+            case < 135:
                 direction = _nw8;
                 xFlip = true;
                 break;
-            case < 202.5:
+            case < 180:
                 direction = _w8;
                 xFlip = true;
                 break;
-            case < 247.5:
+            case < 225:
                 direction = _sw8;
                 xFlip = true;
                 break;
-            case < 292.5:
+            case < 270:
                 direction = _s8;
                 xFlip = false;
                 break;
-            default:
+            case < 315:
                 direction = _se8;
+                xFlip = false;
+                break;
+            default:
+                direction = _e8;
                 xFlip = false;
                 break;
         }

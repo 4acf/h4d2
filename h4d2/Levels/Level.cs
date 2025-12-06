@@ -147,6 +147,46 @@ public class Level
         _entities.Add(new Coach(this, new Position(150, -152)));
         _entities.Add(new Nick(this, new Position(100, -170)));
     }
+
+    // these functions are pretty bad right now so clean them up please
+    // right now i have to worry about actually fixing bounding boxes
+    public bool IsBlockedByWall(Entity entity, ReadonlyPosition destination)
+    {
+        if (entity is Zombie)
+            return _IsZombieBlockedByWall(destination);
+        int x = (int)Math.Floor(destination.X / _tilePhysicalSize);
+        int y = (int)Math.Floor(-(destination.Y / _tilePhysicalSize));
+        int index = (y * Width) + x;
+        if (index < 0 || index >= _tiles.Length)
+            return true;
+        if (_tiles[index] == Tile.Wall || _tiles[index] == Tile.ZombieWall)
+            return true;
+        return false;
+    }
+
+    public bool IsBlockedByWall(ReadonlyPosition destination)
+    {
+        int x = (int)Math.Floor(destination.X / _tilePhysicalSize);
+        int y = (int)Math.Floor(-(destination.Y / _tilePhysicalSize));
+        int index = (y * Width) + x;
+        if (index < 0 || index >= _tiles.Length)
+            return true;
+        if (_tiles[index] == Tile.Wall || _tiles[index] == Tile.ZombieWall)
+            return true;
+        return false;
+    }
+    
+    private bool _IsZombieBlockedByWall(ReadonlyPosition destination)
+    {
+        int x = (int)Math.Floor(destination.X / _tilePhysicalSize);
+        int y = (int)Math.Floor(-(destination.Y / _tilePhysicalSize));
+        int index = (y * Width) + x;
+        if (index < 0 || index >= _tiles.Length)
+            return true;
+        if (_tiles[index] == Tile.Wall)
+            return true;
+        return false;
+    }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position, Entity? exclude)
     {
@@ -303,6 +343,8 @@ public class Level
             else
             {
                 _entities[i].Update(elapsedTime);
+                if(_entities[i].Removed)
+                    indicesToRemove.Add(i);
             }
         }
 
@@ -326,6 +368,8 @@ public class Level
             else
             {
                 _particles[i].Update(elapsedTime);
+                if(_particles[i].Removed)
+                    indicesToRemove.Add(i);
             }
         }
 
@@ -346,6 +390,8 @@ public class Level
                 int index = (y * Width) + x;
                 int xScreenPos = (y * H4D2Art.TileIsoWidth / 2) + (x * H4D2Art.TileIsoWidth / 2);
                 int yScreenPos = (y * -H4D2Art.TileIsoHalfHeight) + (x * H4D2Art.TileIsoHalfHeight);
+                double xTilePos = x * _tilePhysicalSize;
+                double yTilePos = -y * _tilePhysicalSize;
                 
                 Tile tile = _tiles[index];
                 switch (tile)
@@ -354,28 +400,13 @@ public class Level
                         screen.Draw(H4D2Art.Floors[2], xScreenPos, yScreenPos);
                         break;
                     case Tile.Wall:
-                        _levelElements.Add(
-                            new Wall(
-                                this,
-                                new Position(x * _tilePhysicalSize, -y * _tilePhysicalSize)
-                            )
-                        );
+                        _levelElements.Add(new Wall(this, new Position(xTilePos, yTilePos)));
                         break;
                     case Tile.ZombieWall:
-                        _levelElements.Add(
-                            new ZombieWall(
-                                this,
-                                new Position(x * _tilePhysicalSize, -y * _tilePhysicalSize)
-                            )
-                        );
+                        _levelElements.Add(new ZombieWall(this, new Position(xTilePos, yTilePos)));
                         break;
                     case Tile.EdgeWall:
-                        _levelElements.Add(
-                            new EdgeWall(
-                                this,
-                                new Position(x * _tilePhysicalSize, -y * _tilePhysicalSize)
-                            )
-                        );
+                        _levelElements.Add(new EdgeWall(this, new Position(xTilePos, yTilePos)));
                         break;
                     case Tile.Floor:
                     default:

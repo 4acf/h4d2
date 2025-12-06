@@ -41,30 +41,6 @@ public abstract class Entity : Isometric
             _Move(0, 0, _velocity.Z / steps);
         }
     }
-
-    private bool _IsOutOfLevelBounds(ReadonlyPosition position)
-    {
-        double w = BoundingBox.W(position.X);
-        if (w < -Level.Padding) 
-            return true;
-        
-        double s = BoundingBox.S(position.Y);
-        if(s < -Level.Padding) 
-            return true;
-        
-        double e = BoundingBox.E(position.X);
-        if (e >= _level.Width + Level.Padding) 
-            return true;
-        
-        double n = BoundingBox.N(position.Y);
-        if (n >= _level.Height + Level.Padding) 
-            return true;
-
-        if (position.Z < 0)
-            return true;
-        
-        return false;
-    }
     
     private void _Move(double xComponent, double yComponent, double zComponent)
     {
@@ -74,9 +50,15 @@ public abstract class Entity : Isometric
             _position.Z + zComponent
         );
 
-        if (_IsOutOfLevelBounds(destination))
+        if (destination.Z < 0)
         {
-            if (destination.Z < 0) _position.Z = 0;
+            _Collide(null);
+            _position.Z = 0;
+            return;
+        }
+        
+        if (_level.IsBlockedByWall(this, destination))
+        {
             _Collide(null);
             return;
         }
