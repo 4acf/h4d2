@@ -40,14 +40,64 @@ public class BoundingBox
         _xOffset = dimensions.XOffset;
     }
     
-    public double N(double yPosition) => yPosition - _spriteSize + _yWidth;
-    public double E(double xPosition) => xPosition + _xOffset + _xWidth;
-    public double S(double yPosition) => yPosition - _spriteSize;
-    public double W(double xPosition) => xPosition + _xOffset;
-    public (double, double) SW(double xPosition, double yPosition) => (W(xPosition), S(yPosition));
-    public (double, double) NW(double xPosition, double yPosition) => (W(xPosition), N(yPosition));
-    public (double, double) SE(double xPosition, double yPosition) => (E(xPosition), S(yPosition));
-    public (double, double) NE(double xPosition, double yPosition) => (E(xPosition), N(yPosition));
+    public double N(double xPosition, double yPosition)
+    {
+        (double, double) nw = ScreenNW(xPosition, yPosition);
+        (double, double) ne = ScreenNE(xPosition, yPosition);
+        (double, double) avg = ((nw.Item1 + ne.Item1) / 2, (nw.Item2 + ne.Item2) / 2);
+        return avg.Item2;
+    }
+
+    public double E(double xPosition, double yPosition)
+    {
+        (double, double) ne = ScreenNE(xPosition, yPosition);
+        (double, double) se = ScreenSE(xPosition, yPosition);
+        (double, double) avg = ((ne.Item1 + se.Item1) / 2, (ne.Item2 + se.Item2) / 2);
+        return avg.Item1;
+    }
+
+    public double S(double xPosition, double yPosition)
+    {
+        (double, double) sw = ScreenNW(xPosition, yPosition);
+        (double, double) se = ScreenNE(xPosition, yPosition);
+        (double, double) avg = ((sw.Item1 + se.Item1) / 2, (sw.Item2 + se.Item2) / 2);
+        return avg.Item2;
+    }
+
+    public double W(double xPosition, double yPosition)
+    {
+        (double, double) nw = ScreenNE(xPosition, yPosition);
+        (double, double) sw = ScreenSE(xPosition, yPosition);
+        (double, double) avg = ((nw.Item1 + sw.Item1) / 2, (nw.Item2 + sw.Item2) / 2);
+        return avg.Item1;
+    }
+
+    public (double, double) NW(double xPosition, double yPosition) 
+        => (W(xPosition, yPosition), N(xPosition, yPosition));
+    public (double, double) NE(double xPosition, double yPosition)
+        => (E(xPosition, yPosition), N(xPosition, yPosition));
+    public (double, double) SE(double xPosition, double yPosition)
+        => (E(xPosition, yPosition), S(xPosition, yPosition));
+    public (double, double) SW(double xPosition, double yPosition)
+        => (W(xPosition, yPosition), S(xPosition, yPosition));
+    
+    private static (double, double) _Corner(double xPosition, double yPosition, double xScreenOffs, double yScreenOffs)
+    {
+        (double, double) offsets = Isometric.ScreenSpaceToWorldSpace(xScreenOffs, yScreenOffs);
+        return (xPosition + offsets.Item1, yPosition + offsets.Item2);
+    }
+    public (double, double) ScreenSW(double xPosition, double yPosition)
+        => _Corner(xPosition, yPosition, _xOffset, -_spriteSize);
+
+    public (double, double) ScreenNW(double xPosition, double yPosition)
+        => _Corner(xPosition, yPosition, _xOffset, -_spriteSize + _yWidth);
+
+    public (double, double) ScreenSE(double xPosition, double yPosition)
+        => _Corner(xPosition, yPosition, _xOffset + _xWidth, -_spriteSize);
+
+    public (double, double) ScreenNE(double xPosition, double yPosition)
+        => _Corner(xPosition, yPosition, _xOffset + _xWidth, -_spriteSize + _yWidth);
+    
     public double Top(double zPosition) => zPosition + _zHeight;
     public double Bottom(double zPosition) => zPosition;
     
@@ -61,10 +111,10 @@ public class BoundingBox
         ReadonlyPosition otherPosition = other.Position;
         
         bool isXYPlaneIntersecting =
-            other.BoundingBox.W(otherPosition.X) <= E(position.X) &&
-            other.BoundingBox.E(otherPosition.X) >= W(position.X) &&
-            other.BoundingBox.N(otherPosition.Y) >= S(position.Y) &&
-            other.BoundingBox.S(otherPosition.Y) <= N(position.Y);
+            other.BoundingBox.W(otherPosition.X, otherPosition.Y) <= E(position.X, position.Y) &&
+            other.BoundingBox.E(otherPosition.X, otherPosition.Y) >= W(position.X, position.Y) &&
+            other.BoundingBox.N(otherPosition.X, otherPosition.Y) >= S(position.X, position.Y) &&
+            other.BoundingBox.S(otherPosition.X, otherPosition.Y) <= N(position.X, position.Y);
         
         bool isZIntersecting =
             other.BoundingBox.Bottom(otherPosition.Z) <= Top(position.Z) &&
@@ -76,8 +126,8 @@ public class BoundingBox
     public ReadonlyPosition CenterMass(ReadonlyPosition position)
     {
         return new ReadonlyPosition(
-            (W(position.X) + E(position.X)) / 2,
-            (N(position.Y) + S(position.Y)) / 2,
+            (W(position.X, position.Y) + E(position.X, position.X)) / 2,
+            (N(position.X, position.Y) + S(position.X, position.Y)) / 2,
             (position.Z + _zHeight) / 2.0
         );
     }
@@ -85,8 +135,8 @@ public class BoundingBox
     public ReadonlyPosition FootPosition(ReadonlyPosition position)
     {
         return new ReadonlyPosition(
-            (W(position.X) + E(position.X)) / 2,
-            S(position.Y),
+            (W(position.X, position.Y) + E(position.X, position.Y)) / 2,
+            S(position.X, position.Y),
             position.Z
         );
     }

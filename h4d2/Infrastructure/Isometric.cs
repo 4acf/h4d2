@@ -24,11 +24,10 @@ public abstract class Isometric
 
     public static (double, double) ScreenSpaceToWorldSpace(double xScreenPixels, double yScreenPixels)
     {
-        yScreenPixels = -yScreenPixels;
-        double xResultPlusYResult = yScreenPixels / ScaleY;
-        double xResult = (xScreenPixels + (2 * ScaleX) * xResultPlusYResult) / (4 * ScaleX);
-        double yResult = xResultPlusYResult - xResult;
-        return (xResult, yResult);
+        return (
+            ((xScreenPixels / ScaleX) + (yScreenPixels / ScaleY)) / 2,
+            ((yScreenPixels / ScaleY) - (xScreenPixels / ScaleX)) / 2
+        );
     }
     
     public void Render(Bitmap screen)

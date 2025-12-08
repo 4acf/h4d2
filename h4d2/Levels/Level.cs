@@ -49,8 +49,8 @@ public class Level
     private const int _survivorSpawnColor = 0xff00ff;
 
     private const int _wallRenderOffset = H4D2Art.TileSize - H4D2Art.TileIsoHalfHeight;
-    private static readonly (double, double) _wallPhysicalOffset 
-        = Isometric.ScreenSpaceToWorldSpace(0, -_wallRenderOffset);
+    public static readonly (double, double) WallPhysicalOffset 
+        = Isometric.ScreenSpaceToWorldSpace(0, _wallRenderOffset);
     
     public readonly int Width;
     public readonly int Height;
@@ -147,9 +147,9 @@ public class Level
                 }
             }
         }
-
+        
         _entities.Add(new Coach(this, new Position(48, -48)));
-        //_entities.Add(new Nick(this, new Position(100, -170)));
+        _entities.Add(new Nick(this, new Position(100, -170)));
     }
 
     // these functions are pretty bad right now so clean them up please
@@ -161,26 +161,26 @@ public class Level
         var sw = entity.BoundingBox.SW(destination.X, destination.Y);
         var nw  = entity.BoundingBox.NW(destination.X, destination.Y);
         
-        int x = (int)Math.Floor((ne.Item1 + _wallPhysicalOffset.Item1) / _tilePhysicalSize);
-        int y = (int)Math.Floor(-((ne.Item2 + _wallPhysicalOffset.Item2) / _tilePhysicalSize));
+        int x = (int)Math.Floor((ne.Item1 + WallPhysicalOffset.Item1) / _tilePhysicalSize);
+        int y = (int)Math.Floor(-((ne.Item2 + WallPhysicalOffset.Item2) / _tilePhysicalSize));
         int index = (y * Width) + x;
         if (IsBlocked(index))
             return true;
 
-        x = (int)Math.Floor((se.Item1 + _wallPhysicalOffset.Item1) / _tilePhysicalSize);
-        y = (int)Math.Floor(-((se.Item2 + _wallPhysicalOffset.Item2) / _tilePhysicalSize));
+        x = (int)Math.Floor((se.Item1 + WallPhysicalOffset.Item1) / _tilePhysicalSize);
+        y = (int)Math.Floor(-((se.Item2 + WallPhysicalOffset.Item2) / _tilePhysicalSize));
         index = (y * Width) + x;
         if (IsBlocked(index))
             return true;
         
-        x = (int)Math.Floor((sw.Item1 + _wallPhysicalOffset.Item1) / _tilePhysicalSize);
-        y = (int)Math.Floor(-((sw.Item2 + _wallPhysicalOffset.Item2) / _tilePhysicalSize));
+        x = (int)Math.Floor((sw.Item1 + WallPhysicalOffset.Item1) / _tilePhysicalSize);
+        y = (int)Math.Floor(-((sw.Item2 + WallPhysicalOffset.Item2) / _tilePhysicalSize));
         index = (y * Width) + x;
         if (IsBlocked(index))
             return true;
         
-        x = (int)Math.Floor((nw.Item1 + _wallPhysicalOffset.Item1) / _tilePhysicalSize);
-        y = (int)Math.Floor(-((nw.Item2 + _wallPhysicalOffset.Item2) / _tilePhysicalSize));
+        x = (int)Math.Floor((nw.Item1 + WallPhysicalOffset.Item1) / _tilePhysicalSize);
+        y = (int)Math.Floor(-((nw.Item2 + WallPhysicalOffset.Item2) / _tilePhysicalSize));
         index = (y * Width) + x;
         if (IsBlocked(index))
             return true;
@@ -201,8 +201,8 @@ public class Level
 
     public bool IsBlockedByWall(ReadonlyPosition destination)
     {
-        int x = (int)Math.Floor((destination.X + _wallPhysicalOffset.Item1) / _tilePhysicalSize);
-        int y = (int)Math.Floor(-((destination.Y + _wallPhysicalOffset.Item2) / _tilePhysicalSize));
+        int x = (int)Math.Floor((destination.X + WallPhysicalOffset.Item1) / _tilePhysicalSize);
+        int y = (int)Math.Floor(-((destination.Y + WallPhysicalOffset.Item2) / _tilePhysicalSize));
         int index = (y * Width) + x;
         if (index < 0 || index >= _tiles.Length)
             return true;

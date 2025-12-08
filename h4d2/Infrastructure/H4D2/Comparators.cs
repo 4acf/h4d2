@@ -4,6 +4,7 @@ using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Mobs.Zombies.Specials.Pinners;
 using H4D2.Entities.Projectiles;
+using H4D2.Levels;
 using H4D2.Levels.LevelElements;
 using H4D2.Particles;
 using H4D2.Particles.Clouds.Cloudlets;
@@ -50,7 +51,22 @@ public static class Comparators
             aPos = entity.FootPosition;
         if (b is Entity entity2)
             bPos = entity2.FootPosition;
-        
+        if (a is LevelElement)
+        {
+            aPos = new ReadonlyPosition(
+                aPos.X - Level.WallPhysicalOffset.Item1, 
+                aPos.Y - Level.WallPhysicalOffset.Item2, 
+                aPos.Z
+            );
+        }
+        if (b is LevelElement)
+        {
+            bPos = new ReadonlyPosition(
+                bPos.X - Level.WallPhysicalOffset.Item1, 
+                bPos.Y - Level.WallPhysicalOffset.Item2, 
+                bPos.Z
+            );
+        }
         if (aPos.Y + aPos.X < bPos.Y + bPos.X) return 1;
         if (aPos.Y + aPos.X > bPos.Y + bPos.X) return -1;
         if (aPos.Z < bPos.Z) return 1;

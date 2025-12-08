@@ -72,26 +72,9 @@ public abstract class Survivor : Mob
         _bileOverlayIndex = 0;
         _tongueOffset = null;
     }
-
-    // TEMP 
-    private double _bloodSplatTime = 0;
-    private void _TestBloodSplatter()
-    {
-        var bloodSplatter = new BloodSplatter(_level, CenterMass.MutableCopy());
-        _level.AddParticle(bloodSplatter);
-    }
     
     public override void Update(double elapsedTime)
     {
-        // TEMP
-        _bloodSplatTime += elapsedTime;
-        if (_bloodSplatTime >= 1)
-        {
-            _TestBloodSplatter();
-            _bloodSplatTime = 0;
-        }
-        // end of temp
-        
         _UpdateStatusEffects(elapsedTime);
         if (!IsPinned)
         {
@@ -586,14 +569,6 @@ public abstract class Survivor : Mob
             screen.Draw(lowerBitmap, xCorrected, yCorrected, _xFlip);
             screen.Draw(upperBitmap, xCorrected, yCorrected, _xFlip);
         }
-
-        var nw = BoundingBox.NW(_position.X, _position.Y);
-        var se = BoundingBox.SE(_position.X, _position.Y);
-        var top = BoundingBox.Top(_position.Z);
-        screen.SetPixel(xCorrected, yCorrected, 0xffff00);
-        screen.SetPixel((int)((nw.Item1 - nw.Item2) * ScaleX), (int)((nw.Item1 + nw.Item2) * ScaleY), 0x0000ff);
-        screen.SetPixel((int)((se.Item1 - se.Item2) * ScaleX), (int)((se.Item1 + se.Item2) * ScaleY), 0xff00ff);
-        screen.SetPixel((int)((nw.Item1 - nw.Item2) * ScaleX), (int)((nw.Item1 + nw.Item2) * (ScaleY) + top), 0x00ffff);
     }
 
     private void _RenderHealthBar(Bitmap screen, int xCorrected, int yCorrected)
