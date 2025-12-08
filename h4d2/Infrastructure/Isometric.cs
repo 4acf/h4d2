@@ -21,6 +21,15 @@ public abstract class Isometric
         _velocity = new Velocity();
         Removed = false;
     }
+
+    public static (double, double) ScreenSpaceToWorldSpace(double xScreenPixels, double yScreenPixels)
+    {
+        yScreenPixels = -yScreenPixels;
+        double xResultPlusYResult = yScreenPixels / ScaleY;
+        double xResult = (xScreenPixels + (2 * ScaleX) * xResultPlusYResult) / (4 * ScaleX);
+        double yResult = xResultPlusYResult - xResult;
+        return (xResult, yResult);
+    }
     
     public void Render(Bitmap screen)
     {

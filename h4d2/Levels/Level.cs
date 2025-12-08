@@ -47,6 +47,10 @@ public class Level
     private const int _zombieSpawnColor = 0x00ff00;
     private const int _throwablePickupColor = 0x0000ff;
     private const int _survivorSpawnColor = 0xff00ff;
+
+    private const int _wallRenderOffset = H4D2Art.TileSize - H4D2Art.TileIsoHalfHeight;
+    private static readonly (double, double) _wallPhysicalOffset 
+        = Isometric.ScreenSpaceToWorldSpace(0, -_wallRenderOffset);
     
     public readonly int Width;
     public readonly int Height;
@@ -144,46 +148,65 @@ public class Level
             }
         }
 
-        _entities.Add(new Coach(this, new Position(150, -152)));
-        _entities.Add(new Nick(this, new Position(100, -170)));
+        _entities.Add(new Coach(this, new Position(48, -48)));
+        //_entities.Add(new Nick(this, new Position(100, -170)));
     }
 
     // these functions are pretty bad right now so clean them up please
     // right now i have to worry about actually fixing bounding boxes
     public bool IsBlockedByWall(Entity entity, ReadonlyPosition destination)
     {
-        if (entity is Zombie)
-            return _IsZombieBlockedByWall(destination);
-        int x = (int)Math.Floor(destination.X / _tilePhysicalSize);
-        int y = (int)Math.Floor(-(destination.Y / _tilePhysicalSize));
+        var ne = entity.BoundingBox.NE(destination.X, destination.Y);
+        var se = entity.BoundingBox.SE(destination.X, destination.Y);
+        var sw = entity.BoundingBox.SW(destination.X, destination.Y);
+        var nw  = entity.BoundingBox.NW(destination.X, destination.Y);
+        
+        int x = (int)Math.Floor((ne.Item1 + _wallPhysicalOffset.Item1) / _tilePhysicalSize);
+        int y = (int)Math.Floor(-((ne.Item2 + _wallPhysicalOffset.Item2) / _tilePhysicalSize));
         int index = (y * Width) + x;
-        if (index < 0 || index >= _tiles.Length)
+        if (IsBlocked(index))
             return true;
-        if (_tiles[index] == Tile.Wall || _tiles[index] == Tile.ZombieWall)
+
+        x = (int)Math.Floor((se.Item1 + _wallPhysicalOffset.Item1) / _tilePhysicalSize);
+        y = (int)Math.Floor(-((se.Item2 + _wallPhysicalOffset.Item2) / _tilePhysicalSize));
+        index = (y * Width) + x;
+        if (IsBlocked(index))
             return true;
+        
+        x = (int)Math.Floor((sw.Item1 + _wallPhysicalOffset.Item1) / _tilePhysicalSize);
+        y = (int)Math.Floor(-((sw.Item2 + _wallPhysicalOffset.Item2) / _tilePhysicalSize));
+        index = (y * Width) + x;
+        if (IsBlocked(index))
+            return true;
+        
+        x = (int)Math.Floor((nw.Item1 + _wallPhysicalOffset.Item1) / _tilePhysicalSize);
+        y = (int)Math.Floor(-((nw.Item2 + _wallPhysicalOffset.Item2) / _tilePhysicalSize));
+        index = (y * Width) + x;
+        if (IsBlocked(index))
+            return true;
+        
         return false;
+        
+        bool IsBlocked(int i)
+        {
+            if (index < 0 || index >= _tiles.Length)
+                return true;
+            if (_tiles[i] == Tile.Wall)
+                return true;
+            if (entity is not Zombie && _tiles[i] == Tile.ZombieWall)
+                return true;
+            return false;
+        }
     }
 
     public bool IsBlockedByWall(ReadonlyPosition destination)
     {
-        int x = (int)Math.Floor(destination.X / _tilePhysicalSize);
-        int y = (int)Math.Floor(-(destination.Y / _tilePhysicalSize));
+        int x = (int)Math.Floor((destination.X + _wallPhysicalOffset.Item1) / _tilePhysicalSize);
+        int y = (int)Math.Floor(-((destination.Y + _wallPhysicalOffset.Item2) / _tilePhysicalSize));
         int index = (y * Width) + x;
         if (index < 0 || index >= _tiles.Length)
             return true;
         if (_tiles[index] == Tile.Wall || _tiles[index] == Tile.ZombieWall)
-            return true;
-        return false;
-    }
-    
-    private bool _IsZombieBlockedByWall(ReadonlyPosition destination)
-    {
-        int x = (int)Math.Floor(destination.X / _tilePhysicalSize);
-        int y = (int)Math.Floor(-(destination.Y / _tilePhysicalSize));
-        int index = (y * Width) + x;
-        if (index < 0 || index >= _tiles.Length)
-            return true;
-        if (_tiles[index] == Tile.Wall)
             return true;
         return false;
     }
@@ -410,13 +433,11 @@ public class Level
                         break;
                     case Tile.Floor:
                     default:
-                    {
                         Bitmap floorBitmap = (x + y) % 2 == 0 ? 
                             H4D2Art.Floors[0] :
                             H4D2Art.Floors[1];
                         screen.Draw(floorBitmap, xScreenPos, yScreenPos);
                         break;
-                    }
                 }
             }
         }
