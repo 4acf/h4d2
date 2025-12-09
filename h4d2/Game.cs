@@ -73,10 +73,26 @@ public class Game
 
     private void _HandleMousePressed(Position mousePosition)
     {
-        var position = new Position(
-            mousePosition.X - (H4D2Art.SpriteSize / 2.0),
-            mousePosition.Y + H4D2Art.SpriteSize
+        (double, double) positionOffset = Isometric.ScreenSpaceToWorldSpace(
+            mousePosition.X,
+            mousePosition.Y
         );
+
+        (double, double) cameraOffset = Isometric.ScreenSpaceToWorldSpace(
+            _camera.XOffset,
+            _camera.YOffset
+        );
+
+        (double, double) spriteOffset = Isometric.ScreenSpaceToWorldSpace(
+            H4D2Art.SpriteSize / 2.0,
+            -H4D2Art.SpriteSize
+        );
+        
+        var position = new Position(
+            positionOffset.Item1 - cameraOffset.Item1 - spriteOffset.Item1,
+            positionOffset.Item2 - cameraOffset.Item2 - spriteOffset.Item2
+        );
+        
         Special special = _selectedSpecial switch
         {
             1 => new Hunter(_level, position),

@@ -15,7 +15,6 @@ public class Jockey : Pinner
     private const double _attackDelay = 0.5;
     private const double _jumpSpeedScale = 2.0;
     private const double _jumpZVelocity = 1.0;
-    private const int _boundaryTolerance = 25;
     
     private bool _isJumping;
     private bool _isPinning;
@@ -138,46 +137,6 @@ public class Jockey : Pinner
     private double _CalculateBestDirection()
     {
         double direction = RandomSingleton.Instance.NextDouble() * (2 * Math.PI);
-        direction = _CorrectDirectionToAvoidWalls(direction);
-        return direction;
-    }
-
-    private double _CorrectDirectionToAvoidWalls(double direction)
-    {
-        ReadonlyPosition centerMass = CenterMass;
-        
-        if (centerMass.X < _boundaryTolerance)
-        {
-            if ((Math.PI / 2) < direction && direction < (3 * Math.PI / 2))
-            {
-                direction = Math.Atan2(Math.Sin(direction), Math.Cos(direction) * -1);
-            }
-        }
-        
-        if (centerMass.Y < _boundaryTolerance)
-        {
-            if (direction > Math.PI)
-            {
-                direction = Math.Atan2(Math.Sin(direction) * -1, Math.Cos(direction));
-            }
-        }
-
-        if (_level.Width - centerMass.X < _boundaryTolerance)
-        {
-            if ((3 * Math.PI / 2) < direction || direction < (Math.PI / 2))
-            {
-                direction = Math.Atan2(Math.Sin(direction), Math.Cos(direction) * -1);
-            }
-        }
-
-        if (_level.Height - centerMass.Y < _boundaryTolerance)
-        {
-            if (direction < Math.PI)
-            {
-                direction = Math.Atan2(Math.Sin(direction) * -1, Math.Cos(direction));
-            }
-        }
-
         return direction;
     }
     

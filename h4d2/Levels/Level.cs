@@ -193,7 +193,7 @@ public class Level
                 return true;
             if (_tiles[i] == Tile.Wall)
                 return true;
-            if (entity is not Zombie && _tiles[i] == Tile.ZombieWall)
+            if (entity is not Common && entity is not Uncommon && _tiles[i] == Tile.ZombieWall)
                 return true;
             return false;
         }
