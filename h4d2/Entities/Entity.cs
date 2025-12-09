@@ -1,6 +1,4 @@
-﻿using H4D2.Entities.Mobs.Survivors;
-using H4D2.Entities.Mobs.Zombies.Specials;
-using H4D2.Infrastructure;
+﻿using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
@@ -59,7 +57,7 @@ public abstract class Entity : Isometric
         
         if (_level.IsBlockedByWall(this, destination))
         {
-            _Collide(null);
+            _CollideWall();
             return;
         }
 
@@ -78,6 +76,11 @@ public abstract class Entity : Isometric
     }
     
     protected virtual void _Collide(Entity? entity)
+    {
+        _velocity.Stop();
+    }
+
+    protected virtual void _CollideWall()
     {
         _velocity.Stop();
     }

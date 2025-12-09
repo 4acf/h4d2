@@ -257,15 +257,7 @@ public class Charger : Pinner
             base._Collide(entity);
             return;
         }
-
-        if (entity == null)
-        {
-            _pinTarget?.HitBy(this);
-            _StopCharging(_pinTarget);
-            _Stumble();
-            return;
-        }
-
+        
         if (_pinTarget == null && entity is Survivor survivor)
         {
             _Pin(survivor);
@@ -280,7 +272,14 @@ public class Charger : Pinner
             survivor2.KnockbackHitBy(this);
         }
     }
-    
+
+    protected override void _CollideWall()
+    {
+        _pinTarget?.HitBy(this);
+        _StopCharging(_pinTarget);
+        _Stumble();
+    }
+
     private void _Pin(Survivor survivor)
     {
         _pinTarget = survivor;

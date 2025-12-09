@@ -10,6 +10,7 @@ public abstract class ThrowableProjectile : Projectile
     protected const double _gravity = 2.2;
     protected const double _drag = 0.999;
     protected const double _startingZVelocity = 1.0;
+    protected const double _bounce = 0.6;
     
     protected readonly int _type;
     protected int _spinStep;

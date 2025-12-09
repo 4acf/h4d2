@@ -149,7 +149,7 @@ public class Level
         }
         
         _entities.Add(new Coach(this, new Position(48, -48)));
-        _entities.Add(new Nick(this, new Position(100, -170)));
+        //_entities.Add(new Nick(this, new Position(100, -170)));
     }
 
     // these functions are pretty bad right now so clean them up please

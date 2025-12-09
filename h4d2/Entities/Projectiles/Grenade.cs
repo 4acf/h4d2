@@ -94,4 +94,9 @@ public class Grenade : Projectile
         _level.Explode(this);
         Removed = true;
     }
+    
+    protected override void _CollideWall()
+    {
+        _Collide(null);
+    }
 }

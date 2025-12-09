@@ -73,4 +73,9 @@ public class Bullet : Projectile
         zombie.HitBy(this);
         Removed = true;
     }
+
+    protected override void _CollideWall()
+    {
+        _Collide(null);
+    }
 }

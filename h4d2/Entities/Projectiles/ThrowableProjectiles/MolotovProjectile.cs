@@ -1,15 +1,12 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
-using H4D2.Particles;
-using H4D2.Particles.DebrisParticles;
 using H4D2.Particles.DebrisParticles.Emitters;
 
 namespace H4D2.Entities.Projectiles.ThrowableProjectiles;
 
 public class MolotovProjectile : ThrowableProjectile
 {
-    private const double _bounce = 0.6;
     private const int _fuelParticles = 50;
     
     public MolotovProjectile(Level level, Position position, double directionRadians)
@@ -51,5 +48,11 @@ public class MolotovProjectile : ThrowableProjectile
             base._Collide(entity);
             Removed = true;
         }
+    }
+    
+    protected override void _CollideWall()
+    {
+        _velocity.X *= _bounce * -1;
+        _velocity.Y *= _bounce * -1;
     }
 }

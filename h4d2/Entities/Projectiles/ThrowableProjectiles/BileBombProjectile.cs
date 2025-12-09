@@ -68,4 +68,10 @@ public class BileBombProjectile : ThrowableProjectile
         }
         _collided = true;
     }
+
+    protected override void _CollideWall()
+    {
+        _velocity.X *= _bounce * -1;
+        _velocity.Y *= _bounce * -1;
+    }
 }

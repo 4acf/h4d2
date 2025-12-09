@@ -8,7 +8,6 @@ public class PipeBombProjectile : ThrowableProjectile
 {
     public const double SplashRadius = 50.0;
     private const double _lifetime = 6.0;
-    private const double _bounce = 0.6;
     private const double _groundFriction = 0.6;
     
     private readonly CountdownTimer _explodeTimer;
@@ -85,5 +84,11 @@ public class PipeBombProjectile : ThrowableProjectile
             _velocity.Y *= _bounce * -1;
         }
         _velocity.Z *= _bounce * -1;
+    }
+
+    protected override void _CollideWall()
+    {
+        _velocity.X *= _bounce * -1;
+        _velocity.Y *= _bounce * -1;
     }
 }
