@@ -28,17 +28,20 @@ public class Bullet : Projectile
 
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        double oldYCorrected = _oldPosition.Y + _oldPosition.Z;
-        double yCorrectedDouble = _position.Y + _position.Z;
+        double oldXCorrected = (_oldPosition.X - _oldPosition.Y) * ScaleX;
+        double oldYCorrected = ((_oldPosition.X + _oldPosition.Y) * ScaleY) + _oldPosition.Z;
+
+        double xCorrectedDouble = (_position.X - _position.Y) * ScaleX;
+        double yCorrectedDouble = ((_position.X + _position.Y) * ScaleY) + _position.Z;
         
-        double xDifference = _position.X - _oldPosition.X;
+        double xDifference = xCorrectedDouble - oldXCorrected;
         double yDifference = yCorrectedDouble - oldYCorrected;
         
         int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
         for (int i = 0; i < steps; i++)
         {
             screen.SetPixel(
-                (int)(_position.X + xDifference * i / steps), 
+                (int)(xCorrectedDouble + xDifference * i / steps), 
                 (int)(yCorrectedDouble + yDifference * i / steps),
                 _color
             );
@@ -47,11 +50,14 @@ public class Bullet : Projectile
 
     protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
-        double xCorrectedDouble = _position.X;
-        double yCorrectedDouble = _position.Y;
+        double oldXCorrected = (_oldPosition.X - _oldPosition.Y) * ScaleX;
+        double oldYCorrected = ((_oldPosition.X + _oldPosition.Y) * ScaleY);
         
-        double xDifference = xCorrectedDouble - _oldPosition.X;
-        double yDifference = yCorrectedDouble - _oldPosition.Y;
+        double xCorrectedDouble = (_position.X - _position.Y) * ScaleX;
+        double yCorrectedDouble = ((_position.X + _position.Y) * ScaleY);
+        
+        double xDifference = xCorrectedDouble - oldXCorrected;
+        double yDifference = yCorrectedDouble - oldYCorrected;
         
         int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
         for (int i = 0; i < steps; i++)
