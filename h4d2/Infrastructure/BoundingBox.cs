@@ -66,8 +66,8 @@ public class BoundingBox
 
     public double W(double xPosition, double yPosition)
     {
-        (double, double) nw = ScreenNE(xPosition, yPosition);
-        (double, double) sw = ScreenSE(xPosition, yPosition);
+        (double, double) nw = ScreenNW(xPosition, yPosition);
+        (double, double) sw = ScreenSW(xPosition, yPosition);
         (double, double) avg = ((nw.Item1 + sw.Item1) / 2, (nw.Item2 + sw.Item2) / 2);
         return avg.Item1;
     }

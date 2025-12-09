@@ -23,7 +23,6 @@ public abstract class Survivor : Mob
     public Pinner? Pinner { get; private set; }
     public bool IsPinned { get; protected set; }
     
-    private const int _boundaryTolerance = 25;
     private const int _runSpeed = 300;
     private const int _limpSpeed = 150;
     private const int _walkSpeed = 85;
