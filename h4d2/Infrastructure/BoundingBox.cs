@@ -58,8 +58,8 @@ public class BoundingBox
 
     public double S(double xPosition, double yPosition)
     {
-        (double, double) sw = ScreenNW(xPosition, yPosition);
-        (double, double) se = ScreenNE(xPosition, yPosition);
+        (double, double) sw = ScreenSW(xPosition, yPosition);
+        (double, double) se = ScreenSE(xPosition, yPosition);
         (double, double) avg = ((sw.Item1 + se.Item1) / 2, (sw.Item2 + se.Item2) / 2);
         return avg.Item2;
     }
@@ -109,12 +109,21 @@ public class BoundingBox
     public bool IsIntersecting(Entity other, ReadonlyPosition position)
     {
         ReadonlyPosition otherPosition = other.Position;
+
+        var ow = other.BoundingBox.W(otherPosition.X, otherPosition.Y);
+        var oe = other.BoundingBox.E(otherPosition.X, otherPosition.Y);
+        var on = other.BoundingBox.N(otherPosition.X, otherPosition.Y);
+        var os =  other.BoundingBox.S(otherPosition.X, otherPosition.Y);
+        var w = W(position.X, position.Y);
+        var n = N(position.X, position.Y);
+        var s = S(position.X, position.Y);
+        var e = E(position.X, position.Y);
         
         bool isXYPlaneIntersecting =
-            other.BoundingBox.W(otherPosition.X, otherPosition.Y) <= E(position.X, position.Y) &&
-            other.BoundingBox.E(otherPosition.X, otherPosition.Y) >= W(position.X, position.Y) &&
-            other.BoundingBox.N(otherPosition.X, otherPosition.Y) >= S(position.X, position.Y) &&
-            other.BoundingBox.S(otherPosition.X, otherPosition.Y) <= N(position.X, position.Y);
+            ow <= e &&
+            oe >= w &&
+            on >= s &&
+            os <= n;
         
         bool isZIntersecting =
             other.BoundingBox.Bottom(otherPosition.Z) <= Top(position.Z) &&

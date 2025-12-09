@@ -34,17 +34,6 @@ public static class Comparators
 
     public static readonly Comparison<Isometric> IsometricRendering = (a, b) =>
     {
-        if (a.GetType() == b.GetType())
-        {
-            return a switch
-            {
-                Entity ae when b is Entity be => EntityRendering!(ae, be),
-                Particle ap when b is Particle bp => ParticleRendering!(ap, bp),
-                LevelElement ale when b is LevelElement ble => LevelElementRendering!(ale, ble),
-                _ => 0
-            };
-        }
-        
         ReadonlyPosition aPos = a.Position;
         ReadonlyPosition bPos = b.Position;
         if (a is Entity entity)
@@ -75,6 +64,17 @@ public static class Comparators
         if (aPos.X > bPos.X) return -1;
         if (aPos.Y < bPos.Y) return 1;
         if (aPos.Y > bPos.Y) return -1;
+        
+        if (a.GetType() == b.GetType())
+        {
+            return a switch
+            {
+                Entity ae when b is Entity be => EntityRendering!(ae, be),
+                Particle ap when b is Particle bp => ParticleRendering!(ap, bp),
+                LevelElement ale when b is LevelElement ble => LevelElementRendering!(ale, ble),
+                _ => 0
+            };
+        }
         
         return TypeRank(a).CompareTo(TypeRank(b));
         
