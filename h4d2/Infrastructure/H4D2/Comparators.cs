@@ -56,6 +56,12 @@ public static class Comparators
                 bPos.Z
             );
         }
+
+        if (a is Flame af)
+            aPos = af.FootPosition;
+        if (b is Flame bf)
+            bPos = bf.FootPosition;
+        
         if (aPos.Y + aPos.X < bPos.Y + bPos.X) return 1;
         if (aPos.Y + aPos.X > bPos.Y + bPos.X) return -1;
         if (aPos.Z < bPos.Z) return 1;

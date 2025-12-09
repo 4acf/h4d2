@@ -12,12 +12,22 @@ public class Fuel : Granule
     {
         if (Probability.OneIn(15))
         {
-            var fire = new Fire(_level, _position.CopyAndTranslate(
+            (double, double) offsets = ScreenSpaceToWorldSpace(
                 -H4D2Art.ParticleSize / 2.0,
-                H4D2Art.ParticleSize,
+                H4D2Art.ParticleSize
+            );
+            var fire = new Fire(_level, _position.CopyAndTranslate(
+                offsets.Item1,
+                offsets.Item2,
                 0)
             );
             _level.AddHazard(fire);
         }
+    }
+
+    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
+    {
+        // do nothing
+        // this way only the shadow is rendered which gives it that liquid look
     }
 }
