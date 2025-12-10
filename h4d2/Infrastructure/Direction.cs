@@ -62,31 +62,32 @@ public static class Direction
         double degrees = MathHelpers.RadiansToDegrees(directionRadians);
         switch (degrees)
         {
-            case < 45:
+            case >= 345:
+            case < 15:
                 direction = _ne8;
                 xFlip = false;
                 break;
-            case < 90:
+            case < 60:
                 direction = _n8;
                 xFlip = false;
                 break;
-            case < 135:
+            case < 120:
                 direction = _nw8;
                 xFlip = true;
                 break;
-            case < 180:
+            case < 165:
                 direction = _w8;
                 xFlip = true;
                 break;
-            case < 225:
+            case < 195:
                 direction = _sw8;
                 xFlip = true;
                 break;
-            case < 270:
+            case < 240:
                 direction = _s8;
                 xFlip = false;
                 break;
-            case < 315:
+            case < 300:
                 direction = _se8;
                 xFlip = false;
                 break;
