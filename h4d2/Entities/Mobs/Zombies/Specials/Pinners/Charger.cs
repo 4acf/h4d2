@@ -275,9 +275,12 @@ public class Charger : Pinner
 
     protected override void _CollideWall()
     {
-        _pinTarget?.HitBy(this);
-        _StopCharging(_pinTarget);
-        _Stumble();
+        if (IsCharging)
+        {
+            _pinTarget?.HitBy(this);
+            _StopCharging(_pinTarget);
+            _Stumble();
+        }
     }
 
     private void _Pin(Survivor survivor)

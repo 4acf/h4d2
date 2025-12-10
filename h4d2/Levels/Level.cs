@@ -38,6 +38,8 @@ public class Level
     private const int _maxZombiesAlive = 50;
     private const int _maxParticles = 5000;
     private const double _tilePhysicalSize = 16;
+    private const double _mobSpawnXOffset = 5;
+    private const double _mobSpawnYOffset = -(H4D2Art.TileCenterOffset - H4D2Art.SpriteSize);
     private const double _pickupXOffset = -7;
     private const double _pickupYOffset = -18;
     
@@ -62,6 +64,7 @@ public class Level
     private readonly List<Particle> _particles;
     private readonly List<LevelElement> _levelElements;
     private readonly Tile[] _tiles;
+    private readonly List<int> _zombieSpawnLocations; 
     private readonly List<int> _healthPickupLocations;
     private readonly List<int> _throwablePickupLocations;
     
@@ -77,6 +80,7 @@ public class Level
         Width = levelBitmap.Width + Padding;
         Height = levelBitmap.Height + Padding;
         _tiles = new Tile[Width * Height];
+        _zombieSpawnLocations = [];
         _healthPickupLocations = [];
         _throwablePickupLocations = [];
         for (int y = 0; y < Height; y++)
@@ -101,13 +105,26 @@ public class Level
                         break;
                     case _zombieSpawnColor:
                         _tiles[tileIndex] = Tile.ZombieWall;
+                        _zombieSpawnLocations.Add(tileIndex);
                         break;
                     case _survivorSpawnColor:
-                        _tiles[tileIndex] = Tile.SurvivorFloor;
+                        _tiles[tileIndex] = Tile.Floor;
                         // temporary hardcoded values
                         camera.MoveX(-((320 / 2) - (H4D2Art.TileSize / 2)) + ((x + y) * (H4D2Art.TileSize / 2)));
                         camera.MoveY(-H4D2Art.TileCenterOffset);
                         camera.MoveY(((x - y) * H4D2Art.TileIsoHalfHeight) - (240 / 2));
+                        (double, double) mobSpawnOffset = Isometric.ScreenSpaceToWorldSpace(
+                            _mobSpawnXOffset,
+                            _mobSpawnYOffset
+                        );
+                        Position survivorSpawnPos = new Position(
+                            (x * _tilePhysicalSize) + mobSpawnOffset.Item1,
+                            (-y * _tilePhysicalSize) + mobSpawnOffset.Item2
+                        );
+                        _entities.Add(new Coach(this, survivorSpawnPos.Copy()));
+                        _entities.Add(new Nick(this, survivorSpawnPos.Copy()));
+                        _entities.Add(new Ellis(this, survivorSpawnPos.Copy()));
+                        _entities.Add(new Rochelle(this, survivorSpawnPos.Copy()));
                         break;
                     case _healthPickupColor:
                         _tiles[tileIndex] = Tile.Floor;
@@ -147,13 +164,9 @@ public class Level
                 }
             }
         }
-        
-        _entities.Add(new Coach(this, new Position(48, -48)));
-        //_entities.Add(new Nick(this, new Position(100, -170)));
     }
 
     // these functions are pretty bad right now so clean them up please
-    // right now i have to worry about actually fixing bounding boxes
     public bool IsBlockedByWall(Entity entity, ReadonlyPosition destination)
     {
         var ne = entity.BoundingBox.NE(destination.X, destination.Y);
@@ -376,7 +389,7 @@ public class Level
             _entities.RemoveAt(indicesToRemove[i]);
         }
 
-        //_ReplenishZombies();
+        _ReplenishZombies();
     }
 
     private void _UpdateParticles(double elapsedTime)
@@ -419,9 +432,6 @@ public class Level
                 Tile tile = _tiles[index];
                 switch (tile)
                 {
-                    case Tile.SurvivorFloor:
-                        screen.Draw(H4D2Art.Floors[2], xScreenPos, yScreenPos);
-                        break;
                     case Tile.Wall:
                         _levelElements.Add(new Wall(this, new Position(xTilePos, yTilePos)));
                         break;
@@ -432,6 +442,7 @@ public class Level
                         _levelElements.Add(new EdgeWall(this, new Position(xTilePos, yTilePos)));
                         break;
                     case Tile.Floor:
+                    case Tile.SurvivorFloor:
                     default:
                         Bitmap floorBitmap = (x + y) % 2 == 0 ? 
                             H4D2Art.Floors[0] :
@@ -483,7 +494,6 @@ public class Level
         }
     }
     
-    // these functions are somewhat temporary until i add real levels
     private void _ReplenishZombies()
     {
         List<Zombie> zombies = GetLivingMobs<Zombie>();
@@ -495,26 +505,18 @@ public class Level
 
     private Position _RandomZombieSpawnPosition()
     {
-        double x = 0;
-        double y = 0;
-        if (Probability.OneIn(2))
-        {
-            // NS
-            x = RandomSingleton.Instance.NextDouble() * Width;
-            y = Probability.OneIn(2) ? 
-                Height + Padding - 1 : 
-                0;
-        }
-        else
-        {
-            // WE
-            x = Probability.OneIn(2) ?
-               -Padding + 1 :
-               Width;
-            y = RandomSingleton.Instance.NextDouble() * Height;
-        }
-
-        return new Position(x, y);
+        int randomIndex = RandomSingleton.Instance.Next(_zombieSpawnLocations.Count);
+        int tileIndex = _zombieSpawnLocations[randomIndex];
+        int x = tileIndex % Width;
+        int y = tileIndex / Width;
+        (double, double) mobSpawnOffset = Isometric.ScreenSpaceToWorldSpace(
+            _mobSpawnXOffset,
+            _mobSpawnYOffset
+        );
+        return new Position(
+            (x * _tilePhysicalSize) + mobSpawnOffset.Item1,
+            (-y * _tilePhysicalSize) + mobSpawnOffset.Item2
+        );
     }
     
     private Zombie _CreateRandomLevelZombie(Position position)
