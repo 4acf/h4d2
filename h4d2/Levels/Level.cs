@@ -521,8 +521,7 @@ public class Level
     
     private Zombie _CreateRandomLevelZombie(Position position)
     {
-        int random = RandomSingleton.Instance.Next(20);
-        if (random != 0) 
+        if(Probability.Percent(95))
             return new Common(this, position);
         int randomUncommon = RandomSingleton.Instance.Next(5);
         return randomUncommon switch
