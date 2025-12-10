@@ -62,17 +62,20 @@ public class Tongue : Projectile
 
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        double startYCorrected = _startPosition.Y + _startPosition.Z;
-        double yCorrectedDouble = _position.Y + _position.Z;
+        double startXCorrected = (_startPosition.X - _startPosition.Y) * ScaleX;
+        double startYCorrected = ((_startPosition.X + _startPosition.Y) * ScaleY) + _startPosition.Z;
+
+        double xCorrectedDouble = (_position.X - _position.Y) * ScaleX;
+        double yCorrectedDouble = ((_position.X + _position.Y) * ScaleY) + _position.Z;
         
-        double xDifference = _position.X - _startPosition.X;
+        double xDifference = xCorrectedDouble - startXCorrected;
         double yDifference = yCorrectedDouble - startYCorrected;
         
         int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
         for (int i = 0; i < steps; i++)
         {
             screen.SetPixel(
-                (int)(_startPosition.X + xDifference * i / steps),
+                (int)(startXCorrected + xDifference * i / steps),
                 (int)(startYCorrected + yDifference * i / steps),
                 _color
             );
@@ -81,17 +84,20 @@ public class Tongue : Projectile
 
     protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
-        double xCorrectedDouble = _position.X;
-        double yCorrectedDouble = _position.Y;
+        double startXCorrected = (_startPosition.X - _startPosition.Y) * ScaleX;
+        double startYCorrected = ((_startPosition.X + _startPosition.Y) * ScaleY);
         
-        double xDifference = xCorrectedDouble - _startPosition.X;
-        double yDifference = yCorrectedDouble - _startPosition.Y;
+        double xCorrectedDouble = (_position.X - _position.Y) * ScaleX;
+        double yCorrectedDouble = ((_position.X + _position.Y) * ScaleY);
+        
+        double xDifference = xCorrectedDouble - startXCorrected;
+        double yDifference = yCorrectedDouble - startYCorrected;
         
         int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
         for (int i = 0; i < steps; i++)
         {
-            int x = (int)(_startPosition.X + xDifference * i / steps);
-            int y = (int)(_startPosition.Y + yDifference * i / steps);
+            int x = (int)(startXCorrected + xDifference * i / steps);
+            int y = (int)(startYCorrected + yDifference * i / steps);
             shadows.SetPixel(x, y);
         }
     }
