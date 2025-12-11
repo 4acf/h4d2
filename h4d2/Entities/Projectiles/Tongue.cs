@@ -110,4 +110,9 @@ public class Tongue : Projectile
         _collisionExcludedEntity = _pinTarget;
         _speed = _pullSpeed;
     }
+
+    protected override void _CollideWall()
+    {
+        Remove();
+    }
 }

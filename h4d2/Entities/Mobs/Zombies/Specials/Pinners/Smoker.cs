@@ -93,12 +93,12 @@ public class Smoker : Pinner
 
     private void _UpdatePinState(double elapsedTime)
     {
-        if (_pinTarget == null || _pinTarget.Removed)
+        if (_pinTarget == null || _pinTarget.Removed || _tongue is { Removed: true })
         {
             _StopPinning();
             return;   
         }
-        
+
         if (_isPulling)
         {
             _pullAttackTimer.Update(elapsedTime);
