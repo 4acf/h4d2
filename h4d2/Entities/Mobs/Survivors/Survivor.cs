@@ -22,6 +22,7 @@ public abstract class Survivor : Mob
     public bool IsBiled { get; protected set; }
     public Pinner? Pinner { get; private set; }
     public bool IsPinned { get; protected set; }
+    public double AimDirectionRadians { get; private set; }
     
     private const int _runSpeed = 300;
     private const int _limpSpeed = 150;
@@ -44,7 +45,6 @@ public abstract class Survivor : Mob
     protected Weapon? _weapon;
     private Zombie? _target;
     private bool _isShooting;
-    private double _aimDirectionRadians;
     private bool _isAdrenalineBoosted;
     private CountdownTimer? _adrenalineTimer;
     private readonly CountdownTimer _biledTimer;
@@ -58,13 +58,13 @@ public abstract class Survivor : Mob
         IsBiled = false;
         IsPinned = false;
         Pinner = null;
+        AimDirectionRadians = 0.0;
         
         _character = config.Character;
         _maxHealth = config.Health;
         _target = null;
         _isShooting = false;
         _isAdrenalineBoosted = false;
-        _aimDirectionRadians = 0.0;
         _adrenalineTimer = null;
         _biledTimer = new CountdownTimer(_biledDuration);
         _bileParticleTimer = new CountdownTimer(_bileParticleCooldown);
@@ -114,21 +114,21 @@ public abstract class Survivor : Mob
     public void ThrowMolotov()
     {
         var molotovProjectile
-            = new MolotovProjectile(_level, CenterMass.MutableCopy(), _aimDirectionRadians);
+            = new MolotovProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians);
         _level.AddProjectile(molotovProjectile);
     }
     
     public void ThrowPipeBomb()
     {
         var pipeBombProjectile 
-            = new PipeBombProjectile(_level, CenterMass.MutableCopy(), _aimDirectionRadians);
+            = new PipeBombProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians);
         _level.AddProjectile(pipeBombProjectile);
     }
 
     public void ThrowBileBomb()
     {
         var bileBombProjectile
-            = new BileBombProjectile(_level, CenterMass.MutableCopy(), _aimDirectionRadians);
+            = new BileBombProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians);
         _level.AddProjectile(bileBombProjectile);
     }
 
@@ -216,8 +216,8 @@ public abstract class Survivor : Mob
             _target = _level.GetNearestEntity<Zombie>(Position);
             if (_target == null) return;
             ReadonlyPosition targetPosition = _target.CenterMass;
-            _aimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
-            _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
+            AimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
+            AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
         }
         else
         {
@@ -228,24 +228,25 @@ public abstract class Survivor : Mob
             else
             {
                 ReadonlyPosition targetPosition = _target.CenterMass;
-                _aimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
-                _aimDirectionRadians = MathHelpers.NormalizeRadians(_aimDirectionRadians);
+                AimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
+                AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
             }
         }
     }
     
     private void _UpdateWeapon(double elapsedTime)
     {
-        if (_weapon == null) return;
+        if (_weapon == null) 
+            return;
         _weapon.Update(elapsedTime);
-        if (_weapon.CanShoot() && _target != null)
+        if (_weapon.CanShoot() && _target != null && _HasLineOfSight(_target))
         {
-            _weapon.Shoot(CenterMass.MutableCopy(), _aimDirectionRadians);
+            _weapon.Shoot(CenterMass.MutableCopy(), AimDirectionRadians);
             _isShooting = true;
         }
         else
         {
-            if(_weapon.AmmoLoaded == 0 || _target == null)
+            if(_weapon.AmmoLoaded == 0 || _target == null || !_HasLineOfSight(_target))
                 _isShooting = false;
         }
     }
@@ -431,7 +432,7 @@ public abstract class Survivor : Mob
 
     private void _UpdateSmokedSprite(Smoker smoker)
     {
-        SpriteDirection spriteDirection = Direction.Cardinal(_aimDirectionRadians);
+        SpriteDirection spriteDirection = Direction.Cardinal(AimDirectionRadians);
         _xFlip = spriteDirection.XFlip;
         
         if (smoker.IsTongueConnected)
@@ -479,7 +480,7 @@ public abstract class Survivor : Mob
     
     private void _UpdateShootingSprite()
     {
-        SpriteDirection spriteDirection = Direction.Intercardinal(_aimDirectionRadians);
+        SpriteDirection spriteDirection = Direction.Intercardinal(AimDirectionRadians);
         _xFlip = spriteDirection.XFlip;
         
         while (_frameUpdateTimer.IsFinished)

@@ -30,14 +30,15 @@ public enum Tile
 
 public class Level
 {
-    public const int Padding = 2;
+    public const double TilePhysicalSize = 16;
+   
+    private const int _padding = 2;
     private const double _levelResetCooldownSeconds = 8.0;
     private const int _minZombiesAlive = 20;
     private const int _minSpawnWaveSize = 5;
     private const int _maxSpawnWaveSize = 15;
     private const int _maxZombiesAlive = 50;
     private const int _maxParticles = 5000;
-    private const double _tilePhysicalSize = 16;
     private const double _mobSpawnXOffset = 5;
     private const double _mobSpawnYOffset = -(H4D2Art.TileCenterOffset - H4D2Art.SpriteSize);
     private const double _pickupXOffset = -7;
@@ -50,9 +51,9 @@ public class Level
     private const int _throwablePickupColor = 0x0000ff;
     private const int _survivorSpawnColor = 0xff00ff;
 
-    private const int _wallRenderOffset = H4D2Art.TileSize - H4D2Art.TileIsoHalfHeight;
-    public static readonly (double, double) WallPhysicalOffset 
-        = Isometric.ScreenSpaceToWorldSpace(0, _wallRenderOffset);
+    private const int _tileRenderOffset = H4D2Art.TileSize - H4D2Art.TileIsoHalfHeight;
+    public static readonly (double, double) TilePhysicalOffset 
+        = Isometric.ScreenSpaceToWorldSpace(0, _tileRenderOffset);
     
     public readonly int Width;
     public readonly int Height;
@@ -77,8 +78,8 @@ public class Level
         _levelElements = [];
         CollisionManager = collisionManager;
         
-        Width = levelBitmap.Width + Padding;
-        Height = levelBitmap.Height + Padding;
+        Width = levelBitmap.Width + _padding;
+        Height = levelBitmap.Height + _padding;
         _tiles = new Tile[Width * Height];
         _zombieSpawnLocations = [];
         _healthPickupLocations = [];
@@ -87,8 +88,8 @@ public class Level
         {
             for (int x = 0; x < Width; x++)
             {
-                int paddedX = x - (Padding / 2);
-                int paddedY = y - (Padding / 2);
+                int paddedX = x - (_padding / 2);
+                int paddedY = y - (_padding / 2);
                 
                 if (paddedX < 0 || paddedY < 0 || paddedX >= levelBitmap.Width || paddedY >= levelBitmap.Height)
                 {
@@ -118,8 +119,8 @@ public class Level
                             _mobSpawnYOffset
                         );
                         Position survivorSpawnPos = new Position(
-                            (x * _tilePhysicalSize) + mobSpawnOffset.Item1,
-                            (-y * _tilePhysicalSize) + mobSpawnOffset.Item2
+                            (x * TilePhysicalSize) + mobSpawnOffset.Item1,
+                            (-y * TilePhysicalSize) + mobSpawnOffset.Item2
                         );
                         _entities.Add(new Coach(this, survivorSpawnPos.Copy()));
                         _entities.Add(new Nick(this, survivorSpawnPos.Copy()));
@@ -131,8 +132,8 @@ public class Level
                         _healthPickupLocations.Add(tileIndex);
                         int randomConsumable = RandomSingleton.Instance.Next(3);
                         Position consumablePos = new Position(
-                            (x * _tilePhysicalSize) + _pickupXOffset,
-                            (-y * _tilePhysicalSize) + _pickupYOffset
+                            (x * TilePhysicalSize) + _pickupXOffset,
+                            (-y * TilePhysicalSize) + _pickupYOffset
                         );
                         Consumable consumable = randomConsumable switch
                         {
@@ -147,8 +148,8 @@ public class Level
                         _throwablePickupLocations.Add(tileIndex);
                         int randomThrowable = RandomSingleton.Instance.Next(3);
                         Position throwablePos = new Position(
-                            (x * _tilePhysicalSize) + _pickupXOffset,
-                            (-y * _tilePhysicalSize) + _pickupYOffset
+                            (x * TilePhysicalSize) + _pickupXOffset,
+                            (-y * TilePhysicalSize) + _pickupYOffset
                         );
                         Throwable throwable = randomThrowable switch
                         {
@@ -166,6 +167,15 @@ public class Level
         }
     }
 
+    public bool IsWall(int x, int y)
+    {
+        int index = (y * Width) + x;
+        if (index < 0 || index >= _tiles.Length)
+            return true;
+        Tile tile = _tiles[index];
+        return tile == Tile.Wall || tile ==  Tile.ZombieWall || tile == Tile.EdgeWall;
+    }
+    
     // these functions are pretty bad right now so clean them up please
     public bool IsBlockedByWall(Entity entity, ReadonlyPosition destination)
     {
@@ -174,26 +184,26 @@ public class Level
         var sw = entity.BoundingBox.SW(destination.X, destination.Y);
         var nw  = entity.BoundingBox.NW(destination.X, destination.Y);
         
-        int x = (int)Math.Floor((ne.Item1 + WallPhysicalOffset.Item1) / _tilePhysicalSize);
-        int y = (int)Math.Floor(-((ne.Item2 + WallPhysicalOffset.Item2) / _tilePhysicalSize));
+        int x = (int)Math.Floor((ne.Item1 + TilePhysicalOffset.Item1) / TilePhysicalSize);
+        int y = (int)Math.Floor(-((ne.Item2 + TilePhysicalOffset.Item2) / TilePhysicalSize));
         int index = (y * Width) + x;
         if (IsBlocked(index))
             return true;
 
-        x = (int)Math.Floor((se.Item1 + WallPhysicalOffset.Item1) / _tilePhysicalSize);
-        y = (int)Math.Floor(-((se.Item2 + WallPhysicalOffset.Item2) / _tilePhysicalSize));
+        x = (int)Math.Floor((se.Item1 + TilePhysicalOffset.Item1) / TilePhysicalSize);
+        y = (int)Math.Floor(-((se.Item2 + TilePhysicalOffset.Item2) / TilePhysicalSize));
         index = (y * Width) + x;
         if (IsBlocked(index))
             return true;
         
-        x = (int)Math.Floor((sw.Item1 + WallPhysicalOffset.Item1) / _tilePhysicalSize);
-        y = (int)Math.Floor(-((sw.Item2 + WallPhysicalOffset.Item2) / _tilePhysicalSize));
+        x = (int)Math.Floor((sw.Item1 + TilePhysicalOffset.Item1) / TilePhysicalSize);
+        y = (int)Math.Floor(-((sw.Item2 + TilePhysicalOffset.Item2) / TilePhysicalSize));
         index = (y * Width) + x;
         if (IsBlocked(index))
             return true;
         
-        x = (int)Math.Floor((nw.Item1 + WallPhysicalOffset.Item1) / _tilePhysicalSize);
-        y = (int)Math.Floor(-((nw.Item2 + WallPhysicalOffset.Item2) / _tilePhysicalSize));
+        x = (int)Math.Floor((nw.Item1 + TilePhysicalOffset.Item1) / TilePhysicalSize);
+        y = (int)Math.Floor(-((nw.Item2 + TilePhysicalOffset.Item2) / TilePhysicalSize));
         index = (y * Width) + x;
         if (IsBlocked(index))
             return true;
@@ -214,8 +224,8 @@ public class Level
 
     public bool IsBlockedByWall(ReadonlyPosition destination)
     {
-        int x = (int)Math.Floor((destination.X + WallPhysicalOffset.Item1) / _tilePhysicalSize);
-        int y = (int)Math.Floor(-((destination.Y + WallPhysicalOffset.Item2) / _tilePhysicalSize));
+        int x = (int)Math.Floor((destination.X + TilePhysicalOffset.Item1) / TilePhysicalSize);
+        int y = (int)Math.Floor(-((destination.Y + TilePhysicalOffset.Item2) / TilePhysicalSize));
         int index = (y * Width) + x;
         if (index < 0 || index >= _tiles.Length)
             return true;
@@ -426,8 +436,8 @@ public class Level
                 int index = (y * Width) + x;
                 int xScreenPos = (y * H4D2Art.TileIsoWidth / 2) + (x * H4D2Art.TileIsoWidth / 2);
                 int yScreenPos = (y * -H4D2Art.TileIsoHalfHeight) + (x * H4D2Art.TileIsoHalfHeight);
-                double xTilePos = x * _tilePhysicalSize;
-                double yTilePos = -y * _tilePhysicalSize;
+                double xTilePos = x * TilePhysicalSize;
+                double yTilePos = -y * TilePhysicalSize;
                 
                 Tile tile = _tiles[index];
                 switch (tile)
@@ -514,8 +524,8 @@ public class Level
             _mobSpawnYOffset
         );
         return new Position(
-            (x * _tilePhysicalSize) + mobSpawnOffset.Item1,
-            (-y * _tilePhysicalSize) + mobSpawnOffset.Item2
+            (x * TilePhysicalSize) + mobSpawnOffset.Item1,
+            (-y * TilePhysicalSize) + mobSpawnOffset.Item2
         );
     }
     

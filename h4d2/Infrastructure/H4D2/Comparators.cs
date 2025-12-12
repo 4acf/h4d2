@@ -43,16 +43,16 @@ public static class Comparators
         if (a is LevelElement)
         {
             aPos = new ReadonlyPosition(
-                aPos.X - Level.WallPhysicalOffset.Item1, 
-                aPos.Y - Level.WallPhysicalOffset.Item2, 
+                aPos.X - Level.TilePhysicalOffset.Item1, 
+                aPos.Y - Level.TilePhysicalOffset.Item2, 
                 aPos.Z
             );
         }
         if (b is LevelElement)
         {
             bPos = new ReadonlyPosition(
-                bPos.X - Level.WallPhysicalOffset.Item1, 
-                bPos.Y - Level.WallPhysicalOffset.Item2, 
+                bPos.X - Level.TilePhysicalOffset.Item1, 
+                bPos.Y - Level.TilePhysicalOffset.Item2, 
                 bPos.Z
             );
         }

@@ -113,6 +113,10 @@ public class Tongue : Projectile
 
     protected override void _CollideWall()
     {
-        Remove();
+        if (!IsConnected)
+        {
+            _pinTarget.Cleared();
+            Remove();
+        }
     }
 }

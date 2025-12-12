@@ -65,7 +65,7 @@ public class Boomer : Special
         ReadonlyPosition zombiePosition = CenterMass;
         double distance = ReadonlyPosition.Distance(targetPosition, zombiePosition);
         
-        if (distance > _attackRange)
+        if (distance > _attackRange || !_HasLineOfSight(_target))
             return;
         
         _directionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);

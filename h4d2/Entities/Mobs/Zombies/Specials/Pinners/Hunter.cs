@@ -77,7 +77,7 @@ public class Hunter : Pinner
         _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
         double distance = ReadonlyPosition.Distance(targetPosition, zombiePosition);
         
-        if (distance > _jumpRange)
+        if (distance > _jumpRange || !_HasLineOfSight(_target))
             return;
         
         if (_crouchTimer.IsFinished)

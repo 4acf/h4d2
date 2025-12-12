@@ -82,7 +82,11 @@ public class Smoker : Pinner
         ReadonlyPosition zombiePosition = CenterMass;
         double distance = ReadonlyPosition.Distance(targetPosition, zombiePosition);
         
-        if (distance > _tongueRange || !survivor.IsOnGround || survivor.IsPinned)
+        if (distance > _tongueRange || 
+            !survivor.IsOnGround ||
+            survivor.IsPinned ||
+            !_HasLineOfSight(survivor)
+        )
             return;
         
         _directionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
