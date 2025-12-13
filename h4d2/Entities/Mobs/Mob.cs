@@ -1,6 +1,7 @@
 ﻿using H4D2.Entities.Mobs.Zombies;
 using H4D2.Infrastructure;
 using H4D2.Levels;
+using H4D2.Levels.Pathfinders;
 using H4D2.Particles.DebrisParticles;
 using H4D2.Particles.DebrisParticles.Emitters;
 
@@ -31,6 +32,7 @@ public abstract class Mob : Entity
     protected readonly int _gibColor;
     protected readonly CountdownTimer _frameUpdateTimer;
     protected readonly CountdownTimer _hazardDamageTimer;
+    protected readonly Pathfinder _pathfinder;
     
     protected Mob(Level level, Position position, MobConfig config) 
         : base(level, position, config.BoundingBox)
@@ -45,6 +47,7 @@ public abstract class Mob : Entity
         _gibColor = config.GibColor;
         _frameUpdateTimer = new CountdownTimer(_frameDuration);
         _hazardDamageTimer = new CountdownTimer(_hazardDamageCooldownSeconds);
+        _pathfinder = new Pathfinder(level);
     }
 
     protected Mob(Level level, Position position, MobConfig config, double speed)
@@ -52,7 +55,7 @@ public abstract class Mob : Entity
     {
         _health = config.Health;
         _speed = speed;
-        _directionRadians = 0;
+        _directionRadians = 0.0;
         _xFlip = false;
         _walkStep = 0;
         _lowerFrame = 0;
@@ -60,6 +63,7 @@ public abstract class Mob : Entity
         _gibColor = config.GibColor;
         _frameUpdateTimer = new CountdownTimer(_frameDuration);
         _hazardDamageTimer = new CountdownTimer(_hazardDamageCooldownSeconds);
+        _pathfinder = new Pathfinder(level);
     }
     
     public virtual void HitBy(Zombie zombie)
@@ -118,13 +122,11 @@ public abstract class Mob : Entity
         double yPhysOffs = Level.TilePhysicalOffset.Item2;
         
         ReadonlyPosition myPosition = CenterMass;
-        int myCurrentTileX = (int)Math.Floor((myPosition.X + xPhysOffs) / physSize);
-        int myCurrentTileY = (int)Math.Floor(-((myPosition.Y + yPhysOffs) / physSize));
+        var (myCurrentTileX, myCurrentTileY) = _level.GetTilePosition(myPosition);
         
         ReadonlyPosition targetPosition = entity.CenterMass;
-        int targetTileX = (int)Math.Floor((targetPosition.X + xPhysOffs) / physSize);
-        int targetTileY = (int)Math.Floor(-((targetPosition.Y + yPhysOffs) / physSize));
-        
+        var (targetTileX, targetTileY) = _level.GetTilePosition(targetPosition);
+
         double directionRadians = Math.Atan2(targetPosition.Y - myPosition.Y, targetPosition.X - myPosition.X);
         directionRadians = MathHelpers.NormalizeRadians(directionRadians);
 

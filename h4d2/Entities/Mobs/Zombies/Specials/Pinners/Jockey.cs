@@ -122,7 +122,7 @@ public class Jockey : Pinner
         _velocity.X *= 0.5;
         _velocity.Y *= 0.5;
 
-        double targetDirection = _CalculateBestDirection();
+        double targetDirection = _GetRandomDirection();
         double directionDiff = targetDirection - _directionRadians;
         directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
         _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
@@ -134,9 +134,10 @@ public class Jockey : Pinner
         _AttemptMove();
     }
     
-    private double _CalculateBestDirection()
+    private double _GetRandomDirection()
     {
         double direction = RandomSingleton.Instance.NextDouble() * (2 * Math.PI);
+        direction = _pathfinder.CorrectDirectionToAvoidWalls(CenterMass, direction);
         return direction;
     }
     

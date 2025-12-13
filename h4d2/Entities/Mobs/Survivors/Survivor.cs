@@ -303,7 +303,7 @@ public abstract class Survivor : Mob
             _velocity.X *= 0.5;
             _velocity.Y *= 0.5;
 
-            double targetDirection = _CalculateBestDirection();
+            double targetDirection = _GetRandomDirection();
             double directionDiff = targetDirection - _directionRadians;
             directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
             _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
@@ -350,9 +350,10 @@ public abstract class Survivor : Mob
         _position.Y = tonguePosition.Y - usableTongueOffset.Y;
     }
     
-    private double _CalculateBestDirection()
+    private double _GetRandomDirection()
     {
         double direction = RandomSingleton.Instance.NextDouble() * (2 * Math.PI);
+        direction = _pathfinder.CorrectDirectionToAvoidWalls(CenterMass, direction);
         return direction;
     }
     
