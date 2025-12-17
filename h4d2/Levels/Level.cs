@@ -20,15 +20,6 @@ using H4D2.Particles.Clouds;
 
 namespace H4D2.Levels;
 
-public enum Tile
-{
-    Floor,
-    Wall,
-    ZombieWall,
-    EdgeWall,
-    SurvivorFloor
-}
-
 public class Level
 {
     public const double TilePhysicalSize = 16;
@@ -65,11 +56,11 @@ public class Level
     private readonly List<Entity> _entities;
     private readonly List<Particle> _particles;
     private readonly List<LevelElement> _levelElements;
-    public readonly ImmutableArray<Tile> Tiles;
+    public readonly ImmutableArray<TileType> TileTypes;
+    public readonly CostMap CostMap;
     private readonly List<int> _zombieSpawnLocations; 
     private readonly List<int> _healthPickupLocations;
     private readonly List<int> _throwablePickupLocations;
-    
     public Level(Bitmap levelBitmap, CollisionManager<CollisionGroup> collisionManager, Camera camera)
     {
         _levelResetTimer = new CountdownTimer(_levelResetCooldownSeconds);
@@ -85,7 +76,7 @@ public class Level
         _healthPickupLocations = [];
         _throwablePickupLocations = [];
         
-        var tiles = new Tile[Width * Height];
+        var tileTypes = new TileType[Width * Height];
         for (int y = 0; y < Height; y++)
         {
             for (int x = 0; x < Width; x++)
@@ -95,23 +86,23 @@ public class Level
                 
                 if (paddedX < 0 || paddedY < 0 || paddedX >= levelBitmap.Width || paddedY >= levelBitmap.Height)
                 {
-                    tiles[(y * Width) + x] = Tile.EdgeWall;
+                    tileTypes[(y * Width) + x] = TileType.EdgeWall;
                     continue;
                 }
 
                 int color = levelBitmap.ColorAt(paddedX, paddedY);
-                int tileIndex = (y * Width) + x; 
+                int tileIndex = TileIndex(x, y); 
                 switch (color)
                 {
                     case _wallColor:
-                        tiles[tileIndex] = Tile.Wall;
+                        tileTypes[tileIndex] = TileType.Wall;
                         break;
                     case _zombieSpawnColor:
-                        tiles[tileIndex] = Tile.ZombieWall;
+                        tileTypes[tileIndex] = TileType.ZombieWall;
                         _zombieSpawnLocations.Add(tileIndex);
                         break;
                     case _survivorSpawnColor:
-                        tiles[tileIndex] = Tile.Floor;
+                        tileTypes[tileIndex] = TileType.Floor;
                         // temporary hardcoded values
                         camera.MoveX(-((320 / 2) - (H4D2Art.TileSize / 2)) + ((x + y) * (H4D2Art.TileSize / 2)));
                         camera.MoveY(-H4D2Art.TileCenterOffset);
@@ -130,7 +121,7 @@ public class Level
                         _entities.Add(new Rochelle(this, survivorSpawnPos.Copy()));
                         break;
                     case _healthPickupColor:
-                        tiles[tileIndex] = Tile.Floor;
+                        tileTypes[tileIndex] = TileType.Floor;
                         _healthPickupLocations.Add(tileIndex);
                         int randomConsumable = RandomSingleton.Instance.Next(3);
                         Position consumablePos = new Position(
@@ -146,7 +137,7 @@ public class Level
                         _entities.Add(consumable);
                         break;
                     case _throwablePickupColor:
-                        tiles[tileIndex] = Tile.Floor;
+                        tileTypes[tileIndex] = TileType.Floor;
                         _throwablePickupLocations.Add(tileIndex);
                         int randomThrowable = RandomSingleton.Instance.Next(3);
                         Position throwablePos = new Position(
@@ -162,41 +153,77 @@ public class Level
                         _entities.Add(throwable);
                         break;
                     default:
-                        tiles[tileIndex] = Tile.Floor;
+                        tileTypes[tileIndex] = TileType.Floor;
                         break;
                 }
             }
         }
 
-        var tileBuilder = ImmutableArray.CreateBuilder<Tile>(Width * Height);
-        foreach (var t in tiles)
+        var tileBuilder = ImmutableArray.CreateBuilder<TileType>(Width * Height);
+        foreach (var t in tileTypes)
         {
             tileBuilder.Add(t);
         }
-        Tiles = tileBuilder.MoveToImmutable();
+        TileTypes = tileBuilder.MoveToImmutable();
+        CostMap = new CostMap(this, TileTypes);
     }
 
-    public (int, int) GetTilePosition(ReadonlyPosition position)
+    public int TileIndex(int x, int y)
     {
-        int tileX = (int)Math.Floor((position.X + TilePhysicalOffset.Item1) / TilePhysicalSize);
-        int tileY = (int)Math.Floor(-((position.Y + TilePhysicalOffset.Item2) / TilePhysicalSize));
-        return (tileX, tileY);
+        return (y * Width) + x;
     }
 
-    public (int, int) GetTilePosition((double x, double y) position)
+    public int TileIndex(Tile tile)
+    {
+        return (tile.Y * Width) + tile.X;
+    }
+    
+    public static Tile GetTilePosition(ReadonlyPosition position)
+    {
+        return GetTilePosition((position.X, position.Y));
+    }
+
+    public static Tile GetTilePosition((double x, double y) position)
     {
         int tileX = (int)Math.Floor((position.x + TilePhysicalOffset.Item1) / TilePhysicalSize);
         int tileY = (int)Math.Floor(-((position.y + TilePhysicalOffset.Item2) / TilePhysicalSize));
-        return (tileX, tileY);
+        return new Tile(tileX, tileY);
+    }
+
+    public Tile GetTileFromIndex(int tileIndex)
+    {
+        return new Tile(tileIndex % Width, tileIndex / Width);
+    }
+    
+    public bool IsTileAdjacentToWall(int index)
+    {
+        Tile tile = GetTileFromIndex(index);
+        return IsTileAdjacentToWall(tile);
+    }
+    
+    public bool IsTileAdjacentToWall(int x, int y) => IsTileAdjacentToWall((x, y));
+    public bool IsTileAdjacentToWall(Tile tile) => IsTileAdjacentToWall((tile.X, tile.Y));
+    
+    public bool IsTileAdjacentToWall((int x, int y) tile)
+    {
+        bool wallToN = IsWall(tile.x, tile.y - 1);
+        if (wallToN) return true;
+        bool wallToE = IsWall(tile.x + 1, tile.y);
+        if (wallToE) return true;
+        bool wallToS = IsWall(tile.x, tile.y + 1);
+        if (wallToS) return true;
+        bool wallToW = IsWall(tile.x - 1, tile.y);
+        if (wallToW) return true;
+        return false;
     }
     
     public bool IsWall(int x, int y)
     {
-        int index = (y * Width) + x;
-        if (index < 0 || index >= Tiles.Length)
+        int index = TileIndex(x, y);
+        if (index < 0 || index >= TileTypes.Length)
             return true;
-        Tile tile = Tiles[index];
-        return tile == Tile.Wall || tile ==  Tile.ZombieWall || tile == Tile.EdgeWall;
+        TileType tileType = TileTypes[index];
+        return tileType == TileType.Wall || tileType ==  TileType.ZombieWall || tileType == TileType.EdgeWall;
     }
     
     // these functions are pretty bad right now so clean them up please
@@ -207,23 +234,23 @@ public class Level
         var sw = entity.BoundingBox.SW(destination.X, destination.Y);
         var nw  = entity.BoundingBox.NW(destination.X, destination.Y);
 
-        var (xne, yne) = GetTilePosition(ne);
-        int index = (yne * Width) + xne;
+        Tile neTile = GetTilePosition(ne);
+        int index = (neTile.Y * Width) + neTile.X;
         if (IsBlocked(index))
             return true;
 
-        var (xse, yse) = GetTilePosition(se);
-        index = (yse * Width) + xse;
+        Tile seTile = GetTilePosition(se);
+        index = (seTile.Y * Width) + seTile.X;
         if (IsBlocked(index))
             return true;
         
-        var (xsw, ysw) = GetTilePosition(sw);
-        index = (ysw * Width) + xsw;
+        Tile swTile = GetTilePosition(sw);
+        index = (swTile.Y * Width) + swTile.X;
         if (IsBlocked(index))
             return true;
         
-        var (xnw, ynw) = GetTilePosition(nw);
-        index = (ynw * Width) + xnw;
+        Tile nwTile = GetTilePosition(nw);
+        index = (nwTile.Y * Width) + nwTile.X;
         if (IsBlocked(index))
             return true;
         
@@ -231,11 +258,11 @@ public class Level
         
         bool IsBlocked(int i)
         {
-            if (index < 0 || index >= Tiles.Length)
+            if (index < 0 || index >= TileTypes.Length)
                 return true;
-            if (Tiles[i] == Tile.Wall)
+            if (TileTypes[i] == TileType.Wall || TileTypes[i] == TileType.EdgeWall)
                 return true;
-            if (entity is not Common && entity is not Uncommon && Tiles[i] == Tile.ZombieWall)
+            if (entity is not Common && entity is not Uncommon && TileTypes[i] == TileType.ZombieWall)
                 return true;
             return false;
         }
@@ -246,9 +273,9 @@ public class Level
         int x = (int)Math.Floor((destination.X + TilePhysicalOffset.Item1) / TilePhysicalSize);
         int y = (int)Math.Floor(-((destination.Y + TilePhysicalOffset.Item2) / TilePhysicalSize));
         int index = (y * Width) + x;
-        if (index < 0 || index >= Tiles.Length)
+        if (index < 0 || index >= TileTypes.Length)
             return true;
-        if (Tiles[index] == Tile.Wall || Tiles[index] == Tile.ZombieWall)
+        if (TileTypes[index] == TileType.Wall || TileTypes[index] == TileType.ZombieWall)
             return true;
         return false;
     }
@@ -458,20 +485,20 @@ public class Level
                 double xTilePos = x * TilePhysicalSize;
                 double yTilePos = -y * TilePhysicalSize;
                 
-                Tile tile = Tiles[index];
-                switch (tile)
+                TileType tileType = TileTypes[index];
+                switch (tileType)
                 {
-                    case Tile.Wall:
+                    case TileType.Wall:
                         _levelElements.Add(new Wall(this, new Position(xTilePos, yTilePos)));
                         break;
-                    case Tile.ZombieWall:
+                    case TileType.ZombieWall:
                         _levelElements.Add(new ZombieWall(this, new Position(xTilePos, yTilePos)));
                         break;
-                    case Tile.EdgeWall:
+                    case TileType.EdgeWall:
                         _levelElements.Add(new EdgeWall(this, new Position(xTilePos, yTilePos)));
                         break;
-                    case Tile.Floor:
-                    case Tile.SurvivorFloor:
+                    case TileType.Floor:
+                    case TileType.SurvivorFloor:
                     default:
                         Bitmap floorBitmap = (x + y) % 2 == 0 ? 
                             H4D2Art.Floors[0] :

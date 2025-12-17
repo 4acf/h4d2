@@ -127,10 +127,20 @@ public class Common : Zombie
     {
         _velocity.X *= 0.5;
         _velocity.Y *= 0.5;
-        
-        double targetDirection = _target == null ? 
-            _directionRadians : 
-            Math.Atan2(_target.CenterMass.Y - CenterMass.Y, _target.CenterMass.X - CenterMass.X);
+
+        double targetDirection = 0.0;
+        if (_target != null && _HasLineOfSight(_target))
+        {
+            targetDirection = 
+                Math.Atan2(_target.CenterMass.Y - CenterMass.Y, _target.CenterMass.X - CenterMass.X);
+            _pathfinder.InvalidatePath();
+        }
+        else
+        {
+            targetDirection = _target == null ? 
+                _directionRadians : 
+                _pathfinder.GetNextDirection(CenterMass, _target.CenterMass);
+        }
         double directionDiff = targetDirection - _directionRadians;
         directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
         _directionRadians += directionDiff * (elapsedTime * _turnSpeed);

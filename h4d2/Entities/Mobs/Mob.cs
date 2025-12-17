@@ -122,10 +122,12 @@ public abstract class Mob : Entity
         double yPhysOffs = Level.TilePhysicalOffset.Item2;
         
         ReadonlyPosition myPosition = CenterMass;
-        var (myCurrentTileX, myCurrentTileY) = _level.GetTilePosition(myPosition);
+        Tile myStartingTile = Level.GetTilePosition(myPosition);
+        int currentX = myStartingTile.X;
+        int currentY = myStartingTile.Y;
         
         ReadonlyPosition targetPosition = entity.CenterMass;
-        var (targetTileX, targetTileY) = _level.GetTilePosition(targetPosition);
+        Tile targetTile = Level.GetTilePosition(targetPosition);
 
         double directionRadians = Math.Atan2(targetPosition.Y - myPosition.Y, targetPosition.X - myPosition.X);
         directionRadians = MathHelpers.NormalizeRadians(directionRadians);
@@ -141,35 +143,30 @@ public abstract class Mob : Entity
         double posX = (myPosition.X + xPhysOffs) / physSize;
         double posY = -((myPosition.Y + yPhysOffs) / physSize);
         double sideDistX = stepX == 1 ? 
-            (myCurrentTileX + 1 - posX) * deltaDistX :
-            (posX - myCurrentTileX) * deltaDistX;
+            (currentX + 1 - posX) * deltaDistX :
+            (posX - currentX) * deltaDistX;
         double sideDistY = stepY == 1 ? 
-            (myCurrentTileY + 1 - posY) * deltaDistY :
-            (posY - myCurrentTileY) * deltaDistY;
+            (currentY + 1 - posY) * deltaDistY :
+            (posY - currentY) * deltaDistY;
 
-        int targetIndex = Index(targetTileX, targetTileY);
-        while (Index(myCurrentTileX, myCurrentTileY) != targetIndex)
+        int targetIndex = _level.TileIndex(targetTile);
+        while (_level.TileIndex(currentX, currentY) != targetIndex)
         {
             if (sideDistX < sideDistY)
             {
                 sideDistX += deltaDistX;
-                myCurrentTileX += stepX;
+                currentX += stepX;
             }
             else
             {
                 sideDistY += deltaDistY;
-                myCurrentTileY += stepY;
+                currentY += stepY;
             }
 
-            if (_level.IsWall(myCurrentTileX, myCurrentTileY))
+            if (_level.IsWall(currentX, currentY))
                 return false;
         }
 
         return true;
-        
-        int Index(int x, int y)
-        {
-            return (y * _level.Width) + x;
-        }
     }
 }
