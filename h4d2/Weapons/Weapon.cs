@@ -13,6 +13,7 @@ public abstract class Weapon
     protected readonly int _ammoPerMagazine;
     protected readonly double _spread;
     protected readonly int _pellets;
+    protected readonly int _piercing;
 
     protected bool _isReloading = false;
 
@@ -26,6 +27,7 @@ public abstract class Weapon
         _ammoPerMagazine = config.AmmoPerMagazine;
         _spread = config.Spread;
         _pellets = config.Pellets;
+        _piercing = config.Piercing;
 
         AmmoLoaded = config.AmmoPerMagazine;
         _isReloading = false;
@@ -73,7 +75,7 @@ public abstract class Weapon
             double newXComponent = Math.Cos(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * _spread;
             double newYComponent = Math.Sin(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * _spread;
             double newDirection = MathHelpers.NormalizeRadians(Math.Atan2(newYComponent, newXComponent));
-            var bullet = new Bullet(_level, position.Copy(), _damage, newDirection);
+            var bullet = new Bullet(_level, position.Copy(), _damage, _piercing, newDirection);
             _level.AddProjectile(bullet);
         }
     }

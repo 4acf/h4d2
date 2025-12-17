@@ -8,6 +8,7 @@ public class WeaponConfig
     public required int AmmoPerMagazine { get; init; }
     public required double Spread { get; init; }
     public required int Pellets { get; init; }
+    public required int Piercing { get; init; }
 }
 
 public static class WeaponConfigs
@@ -20,6 +21,7 @@ public static class WeaponConfigs
         AmmoPerMagazine = 10,
         Spread = 0.5,
         Pellets = 11,
+        Piercing = 2
     };
 
     public static readonly WeaponConfig Deagle = new()
@@ -29,7 +31,8 @@ public static class WeaponConfigs
         ShootDelaySeconds = 1 / 3.33,
         AmmoPerMagazine = 8,
         Spread = 0.1,
-        Pellets = 1
+        Pellets = 1,
+        Piercing = 3
     };
 
     public static readonly WeaponConfig GrenadeLauncher = new()
@@ -39,7 +42,8 @@ public static class WeaponConfigs
         ShootDelaySeconds = 3.3,
         AmmoPerMagazine = 2,
         Spread = 0.0,
-        Pellets = 1
+        Pellets = 1,
+        Piercing = 0
     };
 
     public static readonly WeaponConfig HuntingRifle = new()
@@ -49,7 +53,8 @@ public static class WeaponConfigs
         ShootDelaySeconds = 1.0 / 4.0,
         AmmoPerMagazine = 15,
         Spread = 0.0,
-        Pellets = 1
+        Pellets = 1,
+        Piercing = 5
     };
 
     public static readonly WeaponConfig M16 = new()
@@ -59,7 +64,8 @@ public static class WeaponConfigs
         ShootDelaySeconds = 1.0 / 11.43,
         AmmoPerMagazine = 30,
         Spread = 0.25,
-        Pellets = 1
+        Pellets = 1,
+        Piercing = 2
     };
 
     public static readonly WeaponConfig PumpShotgun = new()
@@ -69,7 +75,8 @@ public static class WeaponConfigs
         ShootDelaySeconds = 1 / 1.5,
         AmmoPerMagazine = 8,
         Spread = 0.5,
-        Pellets = 10
+        Pellets = 10,
+        Piercing = 3
     };
 
     public static readonly WeaponConfig Uzi = new()
@@ -79,6 +86,7 @@ public static class WeaponConfigs
         ShootDelaySeconds = 1.0 / 16.0,
         AmmoPerMagazine = 50,
         Spread = 0.4,
-        Pellets = 1
+        Pellets = 1,
+        Piercing = 1
     };
 }

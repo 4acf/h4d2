@@ -18,7 +18,7 @@ public static class Collisions {
         collisionManager.AddOneWayNonBlockingCollision(CollisionGroup.Survivor, CollisionGroup.Hazard);
         collisionManager.AddOneWayBlockingCollision(CollisionGroup.Zombie, CollisionGroup.Survivor);
         collisionManager.AddOneWayNonBlockingCollision(CollisionGroup.Zombie, CollisionGroup.Hazard);
-        collisionManager.AddOneWayBlockingCollision(CollisionGroup.Projectile, CollisionGroup.Zombie);
+        collisionManager.AddOneWayNonBlockingCollision(CollisionGroup.Projectile, CollisionGroup.Zombie);
         collisionManager.AddOneWayBlockingCollision(CollisionGroup.ZombieProjectile, CollisionGroup.Survivor);
     }
 }

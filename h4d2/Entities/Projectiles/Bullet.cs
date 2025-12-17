@@ -10,10 +10,14 @@ public class Bullet : Projectile
     private const int _color = 0xffffff;
 
     private Position _oldPosition;
+    private int _piercing;
+    private readonly HashSet<Zombie> _alreadyHit;
     
-    public Bullet(Level level, Position position, int damage, double directionRadians) 
+    public Bullet(Level level, Position position, int damage, int piercing, double directionRadians) 
         : base(level, position, ProjectileConfig.BulletBoundingBox, damage, directionRadians)
     {
+        _piercing = piercing;
+        _alreadyHit = [];
         _oldPosition = position.Copy();
     }
     
@@ -70,14 +74,24 @@ public class Bullet : Projectile
 
     protected override void _Collide(Entity? entity)
     {
-        base._Collide(entity);
         if (entity == null || entity is not Zombie zombie)
         {
+            base._Collide(entity);
             Removed = true;
             return;
         }
+
+        if (_alreadyHit.Contains(zombie))
+            return;
+        
         zombie.HitBy(this);
-        Removed = true;
+        _alreadyHit.Add(zombie);
+        _piercing--;
+        if (_piercing == 0)
+        {
+            base._Collide(entity);
+            Removed = true;
+        }
     }
 
     protected override void _CollideWall()
