@@ -1,16 +1,14 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using System.Text.Encodings.Web;
-using H4D2.Entities.Hazards;
+﻿using H4D2.Entities.Hazards;
 using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Mobs.Zombies.Specials.Pinners;
 using H4D2.Entities.Pickups;
+using H4D2.Entities.Pickups.Consumables;
 using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
-using H4D2.Particles.Clouds;
-using H4D2.Particles.DebrisParticles.Emitters;
+using H4D2.Particles.Clouds; 
 using H4D2.Particles.DebrisParticles.Granules;
 using H4D2.Weapons;
 
@@ -39,11 +37,13 @@ public abstract class Survivor : Mob
     private const int _smokedFramesOffset = 29;
     private const int _chargedFramesOffset = 32;
     private const int _slamFramesOffset = 37;
+    private const int _unhealthyThreshold = 50;
     
     private readonly int _character;
     private readonly int _maxHealth;
     protected Weapon? _weapon;
-    private Zombie? _target;
+    private Zombie? _aimTarget;
+    private Consumable? _consumableTarget;
     private bool _isShooting;
     private bool _isAdrenalineBoosted;
     private CountdownTimer? _adrenalineTimer;
@@ -62,7 +62,8 @@ public abstract class Survivor : Mob
         
         _character = config.Character;
         _maxHealth = config.Health;
-        _target = null;
+        _aimTarget = null;
+        _consumableTarget = null;
         _isShooting = false;
         _isAdrenalineBoosted = false;
         _adrenalineTimer = null;
@@ -77,7 +78,8 @@ public abstract class Survivor : Mob
         _UpdateStatusEffects(elapsedTime);
         if (!IsPinned)
         {
-            _UpdateTarget();
+            _UpdateAimTarget();
+            _UpdateConsumableTarget();
             _UpdateWeapon(elapsedTime);
             _UpdateSpeed(elapsedTime);
         }
@@ -206,32 +208,41 @@ public abstract class Survivor : Mob
         }
     }
     
-    private void _UpdateTarget()
+    private void _UpdateAimTarget()
     {
         ReadonlyPosition survivorPosition = CenterMass;
-        _target = _level.GetNearestEntity<Zombie>(Position);
+        _aimTarget = _level.GetNearestEntity<Zombie>(Position);
         
-        if (_target == null || !_target.IsAlive)
+        if (_aimTarget == null || !_aimTarget.IsAlive)
         {
-            _target = _level.GetNearestEntity<Zombie>(Position);
-            if (_target == null) return;
-            ReadonlyPosition targetPosition = _target.CenterMass;
+            _aimTarget = _level.GetNearestEntity<Zombie>(Position);
+            if (_aimTarget == null) return;
+            ReadonlyPosition targetPosition = _aimTarget.CenterMass;
             AimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
             AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
         }
         else
         {
-            if (!_target.IsAlive)
+            if (!_aimTarget.IsAlive)
             {
-                _target = null;
+                _aimTarget = null;
             }
             else
             {
-                ReadonlyPosition targetPosition = _target.CenterMass;
+                ReadonlyPosition targetPosition = _aimTarget.CenterMass;
                 AimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
                 AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
             }
         }
+    }
+
+    private void _UpdateConsumableTarget()
+    {
+        if(_consumableTarget != null && _consumableTarget.Removed)
+            _consumableTarget = null;
+        if (_health > _unhealthyThreshold)
+            return;
+        _consumableTarget = _level.GetNearestEntity<Consumable>(Position);
     }
     
     private void _UpdateWeapon(double elapsedTime)
@@ -239,14 +250,14 @@ public abstract class Survivor : Mob
         if (_weapon == null) 
             return;
         _weapon.Update(elapsedTime);
-        if (_weapon.CanShoot() && _target != null && _pathfinder.HasLineOfSight(_target))
+        if (_weapon.CanShoot() && _aimTarget != null && _pathfinder.HasLineOfSight(_aimTarget))
         {
             _weapon.Shoot(CenterMass.MutableCopy(), AimDirectionRadians);
             _isShooting = true;
         }
         else
         {
-            if(_weapon.AmmoLoaded == 0 || _target == null || !_pathfinder.HasLineOfSight(_target))
+            if(_weapon.AmmoLoaded == 0 || _aimTarget == null || !_pathfinder.HasLineOfSight(_aimTarget))
                 _isShooting = false;
         }
     }
@@ -303,7 +314,9 @@ public abstract class Survivor : Mob
             _velocity.X *= 0.5;
             _velocity.Y *= 0.5;
 
-            double targetDirection = _GetRandomDirection();
+            double targetDirection = _consumableTarget == null ? 
+                _GetRandomDirection() :
+                _pathfinder.GetNextDirection(CenterMass,_consumableTarget.CenterMass);
             double directionDiff = targetDirection - _directionRadians;
             directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
             _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
