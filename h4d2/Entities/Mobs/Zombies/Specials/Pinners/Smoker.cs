@@ -85,7 +85,7 @@ public class Smoker : Pinner
         if (distance > _tongueRange || 
             !survivor.IsOnGround ||
             survivor.IsPinned ||
-            !_HasLineOfSight(survivor)
+            !_pathfinder.HasLineOfSight(survivor)
         )
             return;
         

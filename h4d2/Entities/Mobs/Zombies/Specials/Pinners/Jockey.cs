@@ -70,7 +70,7 @@ public class Jockey : Pinner
         ReadonlyPosition zombiePosition = CenterMass;
         double distance = ReadonlyPosition.Distance(targetPosition, zombiePosition);
         
-        if (distance > _jumpRange || !_HasLineOfSight(_target))
+        if (distance > _jumpRange || !_pathfinder.HasLineOfSight(_target))
             return;
         
         if (_jumpTimer.IsFinished)

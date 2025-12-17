@@ -81,7 +81,7 @@ public class Charger : Pinner
         if (distance > _chargeRange || 
             !survivor.IsOnGround ||
             survivor.IsPinned ||
-            !_HasLineOfSight(survivor)
+            !_pathfinder.HasLineOfSight(survivor)
         )
             return;
         
@@ -150,7 +150,7 @@ public class Charger : Pinner
         if (!IsCharging)
         {
             double targetDirection = 0.0;
-            if (_target != null && _HasLineOfSight(_target))
+            if (_target != null && _pathfinder.HasLineOfSight(_target))
             {
                 targetDirection = 
                     Math.Atan2(_target.CenterMass.Y - CenterMass.Y, _target.CenterMass.X - CenterMass.X);

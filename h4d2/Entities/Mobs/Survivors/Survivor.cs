@@ -239,14 +239,14 @@ public abstract class Survivor : Mob
         if (_weapon == null) 
             return;
         _weapon.Update(elapsedTime);
-        if (_weapon.CanShoot() && _target != null && _HasLineOfSight(_target))
+        if (_weapon.CanShoot() && _target != null && _pathfinder.HasLineOfSight(_target))
         {
             _weapon.Shoot(CenterMass.MutableCopy(), AimDirectionRadians);
             _isShooting = true;
         }
         else
         {
-            if(_weapon.AmmoLoaded == 0 || _target == null || !_HasLineOfSight(_target))
+            if(_weapon.AmmoLoaded == 0 || _target == null || !_pathfinder.HasLineOfSight(_target))
                 _isShooting = false;
         }
     }

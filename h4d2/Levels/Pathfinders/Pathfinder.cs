@@ -1,15 +1,18 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Entities;
+using H4D2.Infrastructure;
 
 namespace H4D2.Levels.Pathfinders;
 
 public class Pathfinder
 {
     private readonly Level _level;
+    private readonly Entity _entity;
     private Path? _path;
     
-    public Pathfinder(Level level)
+    public Pathfinder(Level level, Entity entity)
     {
         _level = level;
+        _entity = entity;
         _path = null;
     }
 
@@ -65,6 +68,9 @@ public class Pathfinder
         
         return _path.GetNextDirection(startTile);
     }
+
+    public bool HasLineOfSight(Entity target)
+        => _HasLineOfSight(_entity.CenterMass, target.CenterMass);
     
     private bool _HasLineOfSight(ReadonlyPosition originalTargetPos, ReadonlyPosition currentTargetPos)
     {

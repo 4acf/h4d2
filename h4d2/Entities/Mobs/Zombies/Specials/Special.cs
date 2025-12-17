@@ -38,7 +38,7 @@ public abstract class Special : Zombie
         _velocity.Y *= 0.5;
         
         double targetDirection = 0.0;
-        if (_target != null && _HasLineOfSight(_target))
+        if (_target != null && _pathfinder.HasLineOfSight(_target))
         {
             targetDirection = 
                 Math.Atan2(_target.CenterMass.Y - CenterMass.Y, _target.CenterMass.X - CenterMass.X);
