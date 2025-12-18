@@ -324,12 +324,15 @@ public abstract class Survivor : Mob
             else
             {
                 if (_pathfinder.HasLineOfSight(_consumableTarget))
+                {
                     targetDirection = MathHelpers.NormalizeRadians(
                         Math.Atan2(
-                            _consumableTarget.CenterMass.Y - CenterMass.Y, 
+                            _consumableTarget.CenterMass.Y - CenterMass.Y,
                             _consumableTarget.CenterMass.X - CenterMass.X
                         )
                     );
+                    _pathfinder.InvalidatePath();
+                }
                 else
                     targetDirection = _pathfinder.GetNextDirection(CenterMass, _consumableTarget.CenterMass);
             }
