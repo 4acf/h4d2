@@ -4,6 +4,7 @@ using H4D2.Entities.Mobs.Zombies.Specials;
 using H4D2.Entities.Mobs.Zombies.Specials.Pinners;
 using H4D2.Entities.Pickups;
 using H4D2.Entities.Pickups.Consumables;
+using H4D2.Entities.Pickups.Throwable;
 using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
@@ -44,6 +45,7 @@ public abstract class Survivor : Mob
     protected Weapon? _weapon;
     private Zombie? _aimTarget;
     private Consumable? _consumableTarget;
+    private Throwable? _throwableTarget;
     private bool _isShooting;
     private bool _isAdrenalineBoosted;
     private CountdownTimer? _adrenalineTimer;
@@ -64,6 +66,7 @@ public abstract class Survivor : Mob
         _maxHealth = config.Health;
         _aimTarget = null;
         _consumableTarget = null;
+        _throwableTarget = null;
         _isShooting = false;
         _isAdrenalineBoosted = false;
         _adrenalineTimer = null;
@@ -80,6 +83,7 @@ public abstract class Survivor : Mob
         {
             _UpdateAimTarget();
             _UpdateConsumableTarget();
+            _UpdateThrowableTarget();
             _UpdateWeapon(elapsedTime);
             _UpdateSpeed(elapsedTime);
         }
@@ -244,6 +248,23 @@ public abstract class Survivor : Mob
             return;
         _consumableTarget = _level.GetNearestEntity<Consumable>(Position);
     }
+
+    private void _UpdateThrowableTarget()
+    {
+        if(_throwableTarget != null && _throwableTarget.Removed)
+            _throwableTarget = null;
+        var throwables = _level.GetEntities<Throwable>();
+        double minDistance = double.MaxValue;
+        foreach (var throwable in throwables)
+        {
+            double distance = ReadonlyPosition.Distance(Position, throwable.Position);
+            if (_pathfinder.HasLineOfSight(throwable) && distance < minDistance)
+            {
+                _throwableTarget = throwable;
+                minDistance = distance;
+            }
+        }
+    }
     
     private void _UpdateWeapon(double elapsedTime)
     {
@@ -313,29 +334,8 @@ public abstract class Survivor : Mob
         {
             _velocity.X *= 0.5;
             _velocity.Y *= 0.5;
-
-
-            double targetDirection = 0.0;
-            if (_consumableTarget == null)
-            {
-                targetDirection = _GetRandomDirection();
-                _pathfinder.InvalidatePath();
-            }
-            else
-            {
-                if (_pathfinder.HasLineOfSight(_consumableTarget))
-                {
-                    targetDirection = MathHelpers.NormalizeRadians(
-                        Math.Atan2(
-                            _consumableTarget.CenterMass.Y - CenterMass.Y,
-                            _consumableTarget.CenterMass.X - CenterMass.X
-                        )
-                    );
-                    _pathfinder.InvalidatePath();
-                }
-                else
-                    targetDirection = _pathfinder.GetNextDirection(CenterMass, _consumableTarget.CenterMass);
-            }
+            
+            double targetDirection = _GetTargetDirection();
             double directionDiff = targetDirection - _directionRadians;
             directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
             _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
@@ -351,6 +351,42 @@ public abstract class Survivor : Mob
         }
         
         _AttemptMove();
+    }
+
+    private double _GetTargetDirection()
+    {
+        if (_consumableTarget == null && _throwableTarget == null)
+        {
+            _pathfinder.InvalidatePath();
+            return _GetRandomDirection();
+        }
+
+        if (_consumableTarget != null)
+        {
+            if (_pathfinder.HasLineOfSight(_consumableTarget))
+            {
+                _pathfinder.InvalidatePath();
+                return MathHelpers.NormalizeRadians(
+                    Math.Atan2(
+                        _consumableTarget.CenterMass.Y - CenterMass.Y,
+                        _consumableTarget.CenterMass.X - CenterMass.X
+                    )
+                );
+            }
+            return _pathfinder.GetNextDirection(CenterMass, _consumableTarget.CenterMass);
+        }
+        
+        if (_pathfinder.HasLineOfSight(_throwableTarget!))
+        {
+            _pathfinder.InvalidatePath();
+            return MathHelpers.NormalizeRadians(
+                Math.Atan2(
+                    _throwableTarget!.CenterMass.Y - CenterMass.Y,
+                    _throwableTarget!.CenterMass.X - CenterMass.X
+                )
+            );
+        }
+        return _pathfinder.GetNextDirection(CenterMass, _throwableTarget!.CenterMass);
     }
 
     private void _MatchSpecialPosition(Special special)

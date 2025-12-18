@@ -292,6 +292,14 @@ public class Level
             .ToList();
     }
 
+    public List<T> GetEntities<T>() where T : Entity
+    {
+        return _entities
+            .OfType<T>()
+            .Where(t => !t.Removed)
+            .ToList();
+    }
+    
     public T? GetNearestEntity<T>(ReadonlyPosition position, T? exclude = null) where T : Entity
     {
         T? result = null;
