@@ -314,9 +314,22 @@ public abstract class Survivor : Mob
             _velocity.X *= 0.5;
             _velocity.Y *= 0.5;
 
-            double targetDirection = _consumableTarget == null ? 
-                _GetRandomDirection() :
-                _pathfinder.GetNextDirection(CenterMass,_consumableTarget.CenterMass);
+
+            double targetDirection = 0.0;
+            if (_consumableTarget == null)
+                targetDirection = _GetRandomDirection();
+            else
+            {
+                if (_pathfinder.HasLineOfSight(_consumableTarget))
+                    targetDirection = MathHelpers.NormalizeRadians(
+                        Math.Atan2(
+                            _consumableTarget.CenterMass.Y - CenterMass.Y, 
+                            _consumableTarget.CenterMass.X - CenterMass.X
+                        )
+                    );
+                else
+                    targetDirection = _pathfinder.GetNextDirection(CenterMass, _consumableTarget.CenterMass);
+            }
             double directionDiff = targetDirection - _directionRadians;
             directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
             _directionRadians += directionDiff * (elapsedTime * _turnSpeed);

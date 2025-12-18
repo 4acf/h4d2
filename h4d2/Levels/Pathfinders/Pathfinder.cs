@@ -188,6 +188,9 @@ public class Pathfinder
 
         public double GetNextDirection(Tile currentTile)
         {
+            if (_path.Count == 0)
+                return 0.0;
+            
             Tile nextTile = _path.Peek(); 
             
             while (_path.Count > 0 && nextTile != currentTile)
