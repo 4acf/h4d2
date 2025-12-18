@@ -26,22 +26,22 @@ public class Level
    
     private const int _padding = 2;
     private const double _levelResetCooldownSeconds = 8.0;
+    private const double _throwableSpawnCooldownSeconds = 30.0;
     private const int _minZombiesAlive = 20;
     private const int _minSpawnWaveSize = 5;
     private const int _maxSpawnWaveSize = 15;
     private const int _maxZombiesAlive = 50;
     private const int _maxParticles = 5000;
+    private const int _maxThrowablePickups = 3;
     private const double _mobSpawnXOffset = 5;
     private const double _mobSpawnYOffset = -(H4D2Art.TileCenterOffset - H4D2Art.SpriteSize);
     private const double _pickupXOffset = -7;
     private const double _pickupYOffset = -18;
     
     private const int _wallColor = 0x0;
-    private const int _floorColor = 0xffffff;
     private const int _healthPickupColor = 0xff0000;
     private const int _zombieSpawnColor = 0x00ff00;
-    private const int _throwablePickupColor = 0x0000ff;
-    private const int _survivorSpawnColor = 0xff00ff;
+    private const int _survivorSpawnColor = 0x0000ff;
 
     private const int _tileRenderOffset = H4D2Art.TileSize - H4D2Art.TileIsoHalfHeight;
     public static readonly (double, double) TilePhysicalOffset 
@@ -51,6 +51,7 @@ public class Level
     public readonly int Height;
     public readonly CollisionManager<CollisionGroup> CollisionManager;
     private readonly CountdownTimer _levelResetTimer;
+    private readonly CountdownTimer _throwableSpawnTimer;
     public bool CanReset => _levelResetTimer.IsFinished;
     public bool IsGameOver => GetLivingMobs<Survivor>().Count == 0;
     private readonly List<Entity> _entities;
@@ -60,10 +61,13 @@ public class Level
     public readonly CostMap CostMap;
     private readonly List<int> _zombieSpawnLocations; 
     private readonly List<int> _healthPickupLocations;
-    private readonly List<int> _throwablePickupLocations;
+    private readonly HashSet<int> _throwablePickupLocations;
+    
     public Level(Bitmap levelBitmap, CollisionManager<CollisionGroup> collisionManager, Camera camera)
     {
         _levelResetTimer = new CountdownTimer(_levelResetCooldownSeconds);
+        _throwableSpawnTimer = new CountdownTimer(_throwableSpawnCooldownSeconds);
+        _throwableSpawnTimer.Update(_throwableSpawnCooldownSeconds / 2.0);
         
         _entities = [];
         _particles = [];
@@ -135,22 +139,6 @@ public class Level
                             _ => new Adrenaline(this, consumablePos)
                         };
                         _entities.Add(consumable);
-                        break;
-                    case _throwablePickupColor:
-                        tileTypes[tileIndex] = TileType.Floor;
-                        _throwablePickupLocations.Add(tileIndex);
-                        int randomThrowable = RandomSingleton.Instance.Next(3);
-                        Position throwablePos = new Position(
-                            (x * TilePhysicalSize) + _pickupXOffset,
-                            (-y * TilePhysicalSize) + _pickupYOffset
-                        );
-                        Throwable throwable = randomThrowable switch
-                        {
-                            0 => new Molotov(this, throwablePos),
-                            1 => new PipeBomb(this, throwablePos),
-                            _ => new BileBomb(this, throwablePos)
-                        };
-                        _entities.Add(throwable);
                         break;
                     default:
                         tileTypes[tileIndex] = TileType.Floor;
@@ -424,6 +412,19 @@ public class Level
     
     private void _UpdateEntities(double elapsedTime)
     {
+        _ReplenishZombies();
+
+        int numThrowablePickups = _entities
+            .OfType<Throwable>()
+            .Count(t => !t.Removed);
+        if(numThrowablePickups < _maxThrowablePickups)
+            _throwableSpawnTimer.Update(elapsedTime);
+        if (_throwableSpawnTimer.IsFinished)
+        {
+            _SpawnThrowable();
+            _throwableSpawnTimer.Reset();
+        }
+        
         _entities.Sort(Comparators.EntityUpdating);
         var indicesToRemove = new List<int>();
         for (int i = 0; i < _entities.Count; i++)
@@ -431,6 +432,10 @@ public class Level
             if (_entities[i].Removed)
             {
                 indicesToRemove.Add(i);
+                if (_entities[i] is Throwable)
+                    _throwablePickupLocations.Remove(
+                        TileIndex(GetTilePosition(_entities[i].CenterMass))
+                    );
             }
             else
             {
@@ -444,8 +449,6 @@ public class Level
         {
             _entities.RemoveAt(indicesToRemove[i]);
         }
-
-        _ReplenishZombies();
     }
 
     private void _UpdateParticles(double elapsedTime)
@@ -589,5 +592,48 @@ public class Level
             4 => new Riot(this, position),
             _ => new Common(this, position)
         };
+    }
+
+    private void _SpawnThrowable()
+    {
+        int triesRemaining = 5;
+        bool validLocationFound = false;
+        int tileIndex = 0;
+        
+        while (triesRemaining > 0)
+        {
+            tileIndex = RandomSingleton.Instance.Next(TileTypes.Length);
+            if (
+                TileTypes[tileIndex] != TileType.Wall &&
+                !IsTileAdjacentToWall(tileIndex) &&
+                !_healthPickupLocations.Contains(tileIndex) &&
+                !_throwablePickupLocations.Contains(tileIndex)
+            )
+            {
+                validLocationFound = true;
+                break;
+            }
+            
+            triesRemaining--;
+        }
+
+        if (!validLocationFound)
+            return;
+        
+        Tile tile = GetTileFromIndex(tileIndex);
+        int randomThrowable =
+            RandomSingleton.Instance.Next(3);
+        Position throwablePos = new Position(
+            (tile.X * TilePhysicalSize) + _pickupXOffset,
+            (-tile.Y * TilePhysicalSize) + _pickupYOffset
+        );
+        Throwable throwable = randomThrowable switch
+        {
+            0 => new Molotov(this, throwablePos),
+            1 => new PipeBomb(this, throwablePos),
+            _ => new BileBomb(this, throwablePos)
+        };
+        _entities.Add(throwable);
+        _throwablePickupLocations.Add(tileIndex);
     }
 }
