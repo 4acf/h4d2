@@ -317,7 +317,10 @@ public abstract class Survivor : Mob
 
             double targetDirection = 0.0;
             if (_consumableTarget == null)
+            {
                 targetDirection = _GetRandomDirection();
+                _pathfinder.InvalidatePath();
+            }
             else
             {
                 if (_pathfinder.HasLineOfSight(_consumableTarget))
