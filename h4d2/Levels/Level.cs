@@ -204,6 +204,11 @@ public class Level
         if (wallToW) return true;
         return false;
     }
+
+    public bool IsWall(Tile tile)
+    {
+        return IsWall(tile.X, tile.Y);
+    }
     
     public bool IsWall(int x, int y)
     {

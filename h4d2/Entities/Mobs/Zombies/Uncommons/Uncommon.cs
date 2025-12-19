@@ -125,23 +125,31 @@ public abstract class Uncommon : Zombie
         _velocity.X *= 0.5;
         _velocity.Y *= 0.5;
         
-        double targetDirection = 0.0;
-        if (_target != null && _pathfinder.HasLineOfSight(_target))
+        Tile tile = Level.GetTilePosition(CenterMass);
+        if (_level.IsWall(tile))
         {
-            targetDirection = 
-                Math.Atan2(_target.CenterMass.Y - CenterMass.Y, _target.CenterMass.X - CenterMass.X);
-            _pathfinder.InvalidatePath();
+            const double halfPi = Math.PI / 2;
+            int multiplier = 0;
+            
+            if (!_level.IsWall(tile.X + 1, tile.Y))
+                multiplier = 0;
+            else if (!_level.IsWall(tile.X, tile.Y - 1))
+                multiplier = 1;
+            else if (!_level.IsWall(tile.X - 1, tile.Y))
+                multiplier = 2;
+            else
+                multiplier = 3;
+                
+            _directionRadians = multiplier * halfPi;
         }
         else
         {
-            targetDirection = _target == null ? 
-                _directionRadians : 
-                _pathfinder.GetNextDirection(CenterMass, _target.CenterMass);
+            double targetDirection = _GetTargetDirection();
+            double directionDiff = targetDirection - _directionRadians;
+            directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
+            _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
+            _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
         }
-        double directionDiff = targetDirection - _directionRadians;
-        directionDiff = Math.Atan2(Math.Sin(directionDiff), Math.Cos(directionDiff));
-        _directionRadians += directionDiff * (elapsedTime * _turnSpeed);
-        _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
         
         double moveSpeed = (_speed * _speedFactor) * elapsedTime;
         _velocity.X += Math.Cos(_directionRadians) * moveSpeed;
@@ -160,6 +168,21 @@ public abstract class Uncommon : Zombie
         }
         
         _AttemptMove();
+    }
+    
+    private double _GetTargetDirection()
+    {
+        if (_target != null && _pathfinder.HasLineOfSight(_target))
+        {
+            _pathfinder.InvalidatePath();
+            return Math.Atan2(
+                _target.CenterMass.Y - CenterMass.Y,
+                _target.CenterMass.X - CenterMass.X
+            );
+        }
+        return _target == null ? 
+            _directionRadians : 
+            _pathfinder.GetNextDirection(CenterMass, _target.CenterMass);
     }
     
     private void _UpdateSprite(double elapsedTime)
