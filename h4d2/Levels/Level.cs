@@ -440,9 +440,8 @@ public class Level
             .Count(t => !t.Removed);
         if(numThrowablePickups < _maxThrowablePickups)
             _throwableSpawnTimer.Update(elapsedTime);
-        if (_throwableSpawnTimer.IsFinished)
-        {
-            _SpawnThrowable();
+        if (_throwableSpawnTimer.IsFinished && _SpawnThrowable())
+        { 
             _throwableSpawnTimer.Reset();
         }
         
@@ -622,7 +621,7 @@ public class Level
         };
     }
 
-    private void _SpawnThrowable()
+    private bool _SpawnThrowable()
     {
         int triesRemaining = 5;
         bool validLocationFound = false;
@@ -646,7 +645,7 @@ public class Level
         }
 
         if (!validLocationFound)
-            return;
+            return false;
         
         Tile tile = GetTileFromIndex(tileIndex);
         int randomThrowable =
@@ -663,5 +662,7 @@ public class Level
         };
         _entities.Add(throwable);
         _throwablePickupLocations.Add(tileIndex);
+
+        return true;
     }
 }
