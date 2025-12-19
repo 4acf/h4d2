@@ -27,6 +27,7 @@ public class Level
     private const int _padding = 2;
     private const double _levelResetCooldownSeconds = 8.0;
     private const double _throwableSpawnCooldownSeconds = 30.0;
+    private const double _zombieSpawnCooldownSeconds = 1.0 / 60.0;
     private const int _minZombiesAlive = 20;
     private const int _minSpawnWaveSize = 5;
     private const int _maxSpawnWaveSize = 15;
@@ -52,6 +53,7 @@ public class Level
     public readonly CollisionManager<CollisionGroup> CollisionManager;
     private readonly CountdownTimer _levelResetTimer;
     private readonly CountdownTimer _throwableSpawnTimer;
+    private readonly CountdownTimer _zombieSpawnTimer;
     public bool CanReset => _levelResetTimer.IsFinished;
     public bool IsGameOver => GetLivingMobs<Survivor>().Count == 0;
     private readonly List<Entity> _entities;
@@ -62,11 +64,13 @@ public class Level
     private readonly List<int> _zombieSpawnLocations; 
     private readonly List<int> _healthPickupLocations;
     private readonly HashSet<int> _throwablePickupLocations;
+    private readonly Queue<Zombie> _zombieSpawnQueue;
     
     public Level(Bitmap levelBitmap, CollisionManager<CollisionGroup> collisionManager, Camera camera)
     {
         _levelResetTimer = new CountdownTimer(_levelResetCooldownSeconds);
         _throwableSpawnTimer = new CountdownTimer(_throwableSpawnCooldownSeconds);
+        _zombieSpawnTimer = new CountdownTimer(_zombieSpawnCooldownSeconds);
         _throwableSpawnTimer.Update(_throwableSpawnCooldownSeconds / 2.0);
         
         _entities = [];
@@ -79,6 +83,7 @@ public class Level
         _zombieSpawnLocations = [];
         _healthPickupLocations = [];
         _throwablePickupLocations = [];
+        _zombieSpawnQueue = [];
         
         var tileTypes = new TileType[Width * Height];
         for (int y = 0; y < Height; y++)
@@ -428,7 +433,7 @@ public class Level
     
     private void _UpdateEntities(double elapsedTime)
     {
-        _ReplenishZombies();
+        _ReplenishZombies(elapsedTime);
 
         int numThrowablePickups = _entities
             .OfType<Throwable>()
@@ -565,14 +570,21 @@ public class Level
         for (int i = 0; i < randomNewZombies; i++)
         {
             Zombie zombie = _CreateRandomLevelZombie(_RandomZombieSpawnPosition());
-            _entities.Add(zombie);
+            _zombieSpawnQueue.Enqueue(zombie);
         }
     }
     
-    private void _ReplenishZombies()
+    private void _ReplenishZombies(double elapsedTime)
     {
+        _zombieSpawnTimer.Update(elapsedTime);
+        if (_zombieSpawnQueue.Count > 0 && _zombieSpawnTimer.IsFinished)
+        {
+            _entities.Add(_zombieSpawnQueue.Dequeue());
+            _zombieSpawnTimer.Reset();
+        }
+        
         List<Zombie> zombies = GetLivingMobs<Zombie>();
-        if (zombies.Count < _minZombiesAlive)
+        if (zombies.Count + _zombieSpawnQueue.Count < _minZombiesAlive)
         {
             SpawnZombies();
         }
