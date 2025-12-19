@@ -340,6 +340,9 @@ public class Level
     
     public Survivor? GetNearestUnpinnedSurvivor(ReadonlyPosition position)
         => _GetNearestSurvivor(position, s => !s.IsPinned);
+
+    public Survivor? GetNearestSurvivorInNeedOfHelp(Survivor survivor, ReadonlyPosition position)
+        => _GetNearestSurvivor(position, s => s.NeedsHelp && s != survivor);
     
     public void AddProjectile(Projectile projectile)
     {

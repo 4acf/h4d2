@@ -18,10 +18,14 @@ namespace H4D2.Entities.Mobs.Survivors;
 public abstract class Survivor : Mob
 {
     public bool IsFullHealth => _health == _maxHealth;
-    public bool IsBiled { get; protected set; }
+    public bool IsBiled { get; private set; }
     public Pinner? Pinner { get; private set; }
-    public bool IsPinned { get; protected set; }
+    public bool IsPinned { get; private set; }
     public double AimDirectionRadians { get; private set; }
+
+    public bool NeedsHelp =>
+        IsPinned ||
+        (_health < _unhealthyThreshold);
     
     private const int _runSpeed = 300;
     private const int _limpSpeed = 150;
@@ -46,6 +50,7 @@ public abstract class Survivor : Mob
     private Zombie? _aimTarget;
     private Consumable? _consumableTarget;
     private Throwable? _throwableTarget;
+    private Survivor? _helpTarget;
     private bool _isShooting;
     private bool _isAdrenalineBoosted;
     private CountdownTimer? _adrenalineTimer;
@@ -67,6 +72,7 @@ public abstract class Survivor : Mob
         _aimTarget = null;
         _consumableTarget = null;
         _throwableTarget = null;
+        _helpTarget = null;
         _isShooting = false;
         _isAdrenalineBoosted = false;
         _adrenalineTimer = null;
@@ -84,6 +90,7 @@ public abstract class Survivor : Mob
             _UpdateAimTarget();
             _UpdateConsumableTarget();
             _UpdateThrowableTarget();
+            _UpdateHelpTarget();
             _UpdateWeapon(elapsedTime);
             _UpdateSpeed(elapsedTime);
         }
@@ -265,6 +272,18 @@ public abstract class Survivor : Mob
             }
         }
     }
+
+    private void _UpdateHelpTarget()
+    {
+        if(_helpTarget != null && _helpTarget.Removed)
+            _helpTarget = null;
+        _helpTarget = _level.GetNearestSurvivorInNeedOfHelp(this, Position);
+        if (_helpTarget == null)
+            return;
+        double dist = ReadonlyPosition.Distance(Position, _helpTarget.Position);
+        if (dist < Level.TilePhysicalSize * 2)
+            _helpTarget = null;
+    }
     
     private void _UpdateWeapon(double elapsedTime)
     {
@@ -355,38 +374,34 @@ public abstract class Survivor : Mob
 
     private double _GetTargetDirection()
     {
-        if (_consumableTarget == null && _throwableTarget == null)
+        if (_consumableTarget == null && _throwableTarget == null && _helpTarget == null)
         {
             _pathfinder.InvalidatePath();
             return _GetRandomDirection();
         }
 
         if (_consumableTarget != null)
+            return Direction(_consumableTarget);
+        
+        if (_helpTarget != null)
+            return Direction(_helpTarget);
+        
+        return Direction(_throwableTarget!);
+
+        double Direction(Entity target)
         {
-            if (_pathfinder.HasLineOfSight(_consumableTarget))
+            if (_pathfinder.HasLineOfSight(target))
             {
                 _pathfinder.InvalidatePath();
                 return MathHelpers.NormalizeRadians(
                     Math.Atan2(
-                        _consumableTarget.CenterMass.Y - CenterMass.Y,
-                        _consumableTarget.CenterMass.X - CenterMass.X
+                        target.CenterMass.Y - CenterMass.Y,
+                        target.CenterMass.X - CenterMass.X
                     )
                 );
             }
-            return _pathfinder.GetNextDirection(CenterMass, _consumableTarget.CenterMass);
+            return _pathfinder.GetNextDirection(CenterMass, target.CenterMass);
         }
-        
-        if (_pathfinder.HasLineOfSight(_throwableTarget!))
-        {
-            _pathfinder.InvalidatePath();
-            return MathHelpers.NormalizeRadians(
-                Math.Atan2(
-                    _throwableTarget!.CenterMass.Y - CenterMass.Y,
-                    _throwableTarget!.CenterMass.X - CenterMass.X
-                )
-            );
-        }
-        return _pathfinder.GetNextDirection(CenterMass, _throwableTarget!.CenterMass);
     }
 
     private void _MatchSpecialPosition(Special special)
