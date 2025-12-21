@@ -17,7 +17,7 @@ public class Bullet : Projectile
         : base(level, position, ProjectileConfig.BulletBoundingBox, damage, directionRadians)
     {
         _piercing = piercing;
-        _alreadyHit = [];
+        _alreadyHit = new HashSet<Zombie>(piercing);
         _oldPosition = position.Copy();
     }
     

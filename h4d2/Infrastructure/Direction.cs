@@ -14,88 +14,37 @@ public readonly struct SpriteDirection
 
 public static class Direction
 {
-    private const int _e4 = 1;
-    private const int _n4 = 2;
-    private const int _w4 = 1;
-    private const int _s4 = 0;
+    private static readonly SpriteDirection[] _cardinalDirections =
+    [
+        new (2, false), // N
+        new (1, true),  // W
+        new (0, false), // S
+        new (1, false)  // E
+    ];
 
-    private const int _e8 = 2;
-    private const int _ne8 = 3;
-    private const int _n8 = 4;
-    private const int _nw8 = 3;
-    private const int _w8 = 2;
-    private const int _sw8 = 1;
-    private const int _s8 = 0;
-    private const int _se8 = 1;
-
+    private static readonly SpriteDirection[] _intercardinalDirections =
+    [
+        new (3, false),  // NE
+        new (4, false),  // N
+        new (3, true),   // NW
+        new (2, true),   // W
+        new (1, true),   // SW
+        new (0, false),  // S
+        new (1, false),  // SE
+        new (2, false)   // E
+    ];
+    
     public static SpriteDirection Cardinal(double directionRadians)
     {
-        int direction = 0;
-        bool xFlip = false;
         double degrees = MathHelpers.RadiansToDegrees(directionRadians);
-        switch (degrees)
-        {
-            case < 90:
-                direction = _n4;
-                xFlip = false;
-                break;
-            case < 180:
-                direction = _w4;
-                xFlip = true;
-                break;
-            case < 270:
-                direction = _s4;
-                xFlip = false;
-                break;
-            default:
-                direction = _e4;
-                xFlip = false;
-                break;
-        }
-        return new SpriteDirection(direction, xFlip);
+        int index = (int)(degrees / 90);
+        return _cardinalDirections[index];
     }
 
     public static SpriteDirection Intercardinal(double directionRadians)
     {
-        int direction = 0;
-        bool xFlip = false;
         double degrees = MathHelpers.RadiansToDegrees(directionRadians);
-        switch (degrees)
-        {
-            case >= 345:
-            case < 15:
-                direction = _ne8;
-                xFlip = false;
-                break;
-            case < 60:
-                direction = _n8;
-                xFlip = false;
-                break;
-            case < 120:
-                direction = _nw8;
-                xFlip = true;
-                break;
-            case < 165:
-                direction = _w8;
-                xFlip = true;
-                break;
-            case < 195:
-                direction = _sw8;
-                xFlip = true;
-                break;
-            case < 240:
-                direction = _s8;
-                xFlip = false;
-                break;
-            case < 300:
-                direction = _se8;
-                xFlip = false;
-                break;
-            default:
-                direction = _e8;
-                xFlip = false;
-                break;
-        }
-        return new SpriteDirection(direction, xFlip);
+        int index = (int)((degrees + 22.5) / 45) % 8;
+        return _intercardinalDirections[index];
     }
 }
