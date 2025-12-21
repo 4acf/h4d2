@@ -46,6 +46,11 @@ public abstract class Cloud<T> : Particle where T : Cloudlet
             double dy = Math.Sin(randomDirection) * distance * randomMult;
             double dz = RandomSingleton.Instance.NextDouble() * 2;
             Position translatedPositionCopy = _position.CopyAndTranslate(dx, dy, dz);
+            
+            Tile tile = Level.GetTilePosition((translatedPositionCopy.X, translatedPositionCopy.Y));
+            if (_level.IsWall(tile))
+                continue;
+            
             Cloudlet cloudlet = _factory(_level, translatedPositionCopy);
             _level.AddParticle(cloudlet);
         }
