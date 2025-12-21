@@ -9,6 +9,10 @@ public abstract class Entity : Isometric
     public readonly BoundingBox BoundingBox;
     public ReadonlyPosition CenterMass => BoundingBox.CenterMass(Position); 
     public ReadonlyPosition FootPosition => BoundingBox.FootPosition(Position);
+    public ReadonlyPosition NWPosition => BoundingBox.NWPosition(Position);
+    public ReadonlyPosition NEPosition => BoundingBox.NEPosition(Position);
+    public ReadonlyPosition SWPosition => BoundingBox.SWPosition(Position);
+    public ReadonlyPosition SEPosition => BoundingBox.SEPosition(Position);
     
     protected Entity? _collisionExcludedEntity;
     

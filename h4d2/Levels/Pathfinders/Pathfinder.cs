@@ -70,7 +70,10 @@ public class Pathfinder
     }
 
     public bool HasLineOfSight(Entity target)
-        => _HasLineOfSight(_entity.CenterMass, target.CenterMass);
+        => _HasLineOfSight(_entity.NWPosition, target.NWPosition) && 
+           _HasLineOfSight(_entity.NEPosition, target.NEPosition) && 
+           _HasLineOfSight(_entity.SWPosition, target.SWPosition) && 
+           _HasLineOfSight(_entity.SEPosition, target.SEPosition);
     
     private bool _HasLineOfSight(ReadonlyPosition originalTargetPos, ReadonlyPosition currentTargetPos)
     {

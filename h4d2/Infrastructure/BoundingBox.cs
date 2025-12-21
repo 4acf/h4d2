@@ -149,4 +149,40 @@ public class BoundingBox
             position.Z
         );
     }
+
+    public ReadonlyPosition NWPosition(ReadonlyPosition position)
+    {
+        return new ReadonlyPosition(
+            W(position.X, position.Y),
+            N(position.X, position.Y),
+            position.Z
+        );
+    }
+    
+    public ReadonlyPosition NEPosition(ReadonlyPosition position)
+    {
+        return new ReadonlyPosition(
+            E(position.X, position.Y),
+            N(position.X, position.Y),
+            position.Z
+        );
+    }
+    
+    public ReadonlyPosition SWPosition(ReadonlyPosition position)
+    {
+        return new ReadonlyPosition(
+            W(position.X, position.Y),
+            S(position.X, position.Y),
+            position.Z
+        );
+    }
+    
+    public ReadonlyPosition SEPosition(ReadonlyPosition position)
+    {
+        return new ReadonlyPosition(
+            E(position.X, position.Y),
+            S(position.X, position.Y),
+            position.Z
+        );
+    }
 }
