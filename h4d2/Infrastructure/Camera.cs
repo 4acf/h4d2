@@ -2,6 +2,8 @@
 
 public class Camera
 {
+    public readonly int Width;
+    public readonly int Height;
     public int XOffset { get; private set; }
     public int YOffset { get; private set; }
     
@@ -17,8 +19,10 @@ public class Camera
     private int? _upperXBound;
     private int? _upperYBound;
     
-    public Camera()
+    public Camera(int width, int height)
     {
+        Width = width;
+        Height = height;
         XOffset = 0;
         YOffset = 0;
         _lowerXBound = null;
@@ -27,8 +31,10 @@ public class Camera
         _upperYBound = null;
     }
     
-    public Camera(int xOffset, int yOffset)
+    public Camera(int width, int height, int xOffset, int yOffset)
     {
+        Width = width;
+        Height = height;
         XOffset = xOffset;
         YOffset = yOffset;
         _lowerXBound = null;

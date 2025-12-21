@@ -112,38 +112,12 @@ public class Level
                         break;
                     case _survivorSpawnColor:
                         tileTypes[tileIndex] = TileType.Floor;
-                        // temporary hardcoded values
-                        camera.MoveX(-((320 / 2) - (H4D2Art.TileSize / 2)) + ((x + y) * (H4D2Art.TileSize / 2)));
-                        camera.MoveY(-H4D2Art.TileCenterOffset);
-                        camera.MoveY(((x - y) * H4D2Art.TileIsoHalfHeight) - (240 / 2));
-                        (double, double) mobSpawnOffset = Isometric.ScreenSpaceToWorldSpace(
-                            _mobSpawnXOffset,
-                            _mobSpawnYOffset
-                        );
-                        Position survivorSpawnPos = new Position(
-                            (x * TilePhysicalSize) + mobSpawnOffset.Item1,
-                            (-y * TilePhysicalSize) + mobSpawnOffset.Item2
-                        );
-                        _entities.Add(new Coach(this, survivorSpawnPos.Copy()));
-                        _entities.Add(new Nick(this, survivorSpawnPos.Copy()));
-                        _entities.Add(new Ellis(this, survivorSpawnPos.Copy()));
-                        _entities.Add(new Rochelle(this, survivorSpawnPos.Copy()));
+                        _SpawnSurvivors(camera, x, y);
                         break;
                     case _healthPickupColor:
                         tileTypes[tileIndex] = TileType.Floor;
                         _healthPickupLocations.Add(tileIndex);
-                        int randomConsumable = RandomSingleton.Instance.Next(3);
-                        Position consumablePos = new Position(
-                            (x * TilePhysicalSize) + _pickupXOffset,
-                            (-y * TilePhysicalSize) + _pickupYOffset
-                        );
-                        Consumable consumable = randomConsumable switch
-                        {
-                            0 => new FirstAidKit(this, consumablePos),
-                            1 => new Pills(this, consumablePos),
-                            _ => new Adrenaline(this, consumablePos)
-                        };
-                        _entities.Add(consumable);
+                        _SpawnHealthPickup(x, y);
                         break;
                     default:
                         tileTypes[tileIndex] = TileType.Floor;
@@ -160,7 +134,7 @@ public class Level
         TileTypes = tileBuilder.MoveToImmutable();
         CostMap = new CostMap(this, TileTypes);
     }
-
+    
     public int TileIndex(int x, int y)
     {
         return (y * Width) + x;
@@ -621,6 +595,43 @@ public class Level
         };
     }
 
+    private void _SpawnSurvivors(Camera camera, int x, int y)
+    {
+        camera.MoveX(-((camera.Width / 2) - (H4D2Art.TileSize / 2)) + ((x + y) * (H4D2Art.TileSize / 2)));
+        camera.MoveY(-H4D2Art.TileCenterOffset);
+        camera.MoveY(((x - y) * H4D2Art.TileIsoHalfHeight) - (camera.Height / 2));
+        (double, double) mobSpawnOffset = Isometric.ScreenSpaceToWorldSpace(
+            _mobSpawnXOffset,
+            _mobSpawnYOffset
+        );
+        Position survivorSpawnPos = new Position(
+            (x * TilePhysicalSize) + mobSpawnOffset.Item1,
+            (-y * TilePhysicalSize) + mobSpawnOffset.Item2
+        );
+        _entities.Add(new Coach(this, survivorSpawnPos.Copy()));
+        _entities.Add(new Nick(this, survivorSpawnPos.Copy()));
+        _entities.Add(new Ellis(this, survivorSpawnPos.Copy()));
+        _entities.Add(new Rochelle(this, survivorSpawnPos.Copy()));
+    }
+
+    private void _SpawnHealthPickup(Tile tile) => _SpawnHealthPickup(tile.X, tile.Y);
+    
+    private void _SpawnHealthPickup(int x, int y)
+    {
+        int randomConsumable = RandomSingleton.Instance.Next(3);
+        Position consumablePos = new Position(
+            (x * TilePhysicalSize) + _pickupXOffset,
+            (-y * TilePhysicalSize) + _pickupYOffset
+        );
+        Consumable consumable = randomConsumable switch
+        {
+            0 => new FirstAidKit(this, consumablePos),
+            1 => new Pills(this, consumablePos),
+            _ => new Adrenaline(this, consumablePos)
+        };
+        _entities.Add(consumable);
+    }
+    
     private bool _SpawnThrowable()
     {
         int triesRemaining = 5;
