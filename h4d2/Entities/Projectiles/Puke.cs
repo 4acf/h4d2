@@ -11,6 +11,7 @@ public class Puke : Projectile
     private const double _gravity = 2.2;
     private const double _minSpeed = 75.0;
     private const double _maxSpeed = 125.0;
+    private const double _bounce = 0.6;
     
     private static readonly ReadonlyVelocity _nullVelocity = new();
     private readonly double _speed;
@@ -56,5 +57,11 @@ public class Puke : Projectile
                 break;
         }
         Removed = true;
+    }
+
+    protected override void _CollideWall()
+    {
+        _velocity.X *= _bounce * -1;
+        _velocity.Y *= _bounce * -1;
     }
 }

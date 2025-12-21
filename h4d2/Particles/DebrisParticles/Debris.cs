@@ -78,14 +78,14 @@ public abstract class Debris : Particle
 
         if (destination.Z < 0)
         {
-            _Collide(xComponent, yComponent, zComponent);
+            _CollideFloor();
             _position.Z = 0;
             return;
         }
         
         if (_level.IsBlockedByWall(destination))
         {
-            _Collide(xComponent, yComponent, zComponent);
+            _CollideWall();
             return;
         }
         
@@ -94,10 +94,14 @@ public abstract class Debris : Particle
         _position.Z = destination.Z;
     }
 
-    private void _Collide(double xComponent, double yComponent, double zComponent)
+    private void _CollideFloor()
     {
-        if (xComponent != 0) _velocity.X *= _bounce * -1;
-        if (yComponent != 0) _velocity.Y *= _bounce * -1;
-        if (zComponent != 0) _velocity.Z *= _bounce * -1;
+        _velocity.Z *= _bounce * -1;
+    }
+
+    private void _CollideWall()
+    {
+        _velocity.X *= _bounce * -1;
+        _velocity.Y *= _bounce * -1;
     }
 }

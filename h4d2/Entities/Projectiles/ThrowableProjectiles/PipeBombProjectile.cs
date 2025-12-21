@@ -83,7 +83,10 @@ public class PipeBombProjectile : ThrowableProjectile
             _velocity.X *= _bounce * -1;
             _velocity.Y *= _bounce * -1;
         }
-        _velocity.Z *= _bounce * -1;
+        else
+        {
+            _velocity.Z *= _bounce * -1;
+        }
     }
 
     protected override void _CollideWall()
