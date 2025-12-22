@@ -15,12 +15,11 @@ public class Game
     private readonly ShadowBitmap _shadows;
     private Level _level;
     private readonly CollisionManager<CollisionGroup> _collisionManager;
-    
-    private int _selectedSpecial;
+    private int? _selectedSpecial;
     
     public Game(int width, int height)
     {
-        _selectedSpecial = 1;
+        _selectedSpecial = null;
         _collisionManager = new CollisionManager<CollisionGroup>();
         Collisions.Configure(_collisionManager);
         Bitmap levelBitmap = H4D2Art.Level1;
@@ -62,7 +61,14 @@ public class Game
     private void _HandleInputCommands(Input input, double elapsedTime)
     {
         if (input.IsNumberPressed)
-            _selectedSpecial = input.LastNumberPressed;
+        {
+            if(_selectedSpecial == null)
+                _selectedSpecial = input.LastNumberPressed;
+            else
+                _selectedSpecial = input.LastNumberPressed == _selectedSpecial ?
+                    null :
+                    input.LastNumberPressed;
+        }
 
         if (input.IsMousePressed)
             _HandleMousePressed(input.MousePositionScreen);
@@ -73,6 +79,9 @@ public class Game
 
     private void _HandleMousePressed(Position mousePosition)
     {
+        if (_selectedSpecial == null)
+            return;
+        
         (double, double) positionOffset = Isometric.ScreenSpaceToWorldSpace(
             mousePosition.X,
             mousePosition.Y
@@ -106,6 +115,7 @@ public class Game
             _ => new Tank(_level, position)
         };
         _level.AddSpecial(special);
+        _selectedSpecial = null;
     }
     
     private void _HandleCameraMove(IReadOnlyCollection<MovementKey> keys, double elapsedTime)
