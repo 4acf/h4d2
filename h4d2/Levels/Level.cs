@@ -34,8 +34,8 @@ public class Level
     private const int _maxZombiesAlive = 50;
     private const int _maxParticles = 5000;
     private const int _maxThrowablePickups = 3;
-    private const double _mobSpawnXOffset = 5;
-    private const double _mobSpawnYOffset = -(H4D2Art.TileCenterOffset - H4D2Art.SpriteSize);
+    private const double _mobSpawnXOffset = 5.5;
+    private const double _mobSpawnYOffset = -(H4D2Art.TileCenterOffset - H4D2Art.SpriteSize) + 0.5;
     private const double _pickupXOffset = -7;
     private const double _pickupYOffset = -18;
     
