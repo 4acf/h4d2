@@ -32,7 +32,7 @@ public class Level
     private const int _minSpawnWaveSize = 5;
     private const int _maxSpawnWaveSize = 15;
     private const int _maxZombiesAlive = 50;
-    private const int _maxParticles = 5000;
+    private const int _maxParticles = 10000;
     private const int _maxThrowablePickups = 3;
     private const double _mobSpawnXOffset = 5.5;
     private const double _mobSpawnYOffset = -(H4D2Art.TileCenterOffset - H4D2Art.SpriteSize) + 0.5;
@@ -65,6 +65,7 @@ public class Level
     private readonly List<int> _healthPickupLocations;
     private readonly HashSet<int> _throwablePickupLocations;
     private readonly Queue<Zombie> _zombieSpawnQueue;
+    private readonly EntityCollisionMap _entityCollisionMap;
     
     public Level(Bitmap levelBitmap, CollisionManager<CollisionGroup> collisionManager, Camera camera)
     {
@@ -133,6 +134,7 @@ public class Level
         }
         TileTypes = tileBuilder.MoveToImmutable();
         CostMap = new CostMap(this, TileTypes);
+        _entityCollisionMap = new EntityCollisionMap(this);
     }
     
     public int TileIndex(int x, int y)
@@ -254,7 +256,9 @@ public class Level
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position, Entity? exclude)
     {
-        foreach (Entity e2 in _entities)
+        Tile tile = GetTilePosition(e1.BoundingBox.CenterMass(position));
+        var entitiesInTile = _entityCollisionMap.GetTileEntities(tile);
+        foreach (Entity e2 in entitiesInTile)
         {
             if (e2 == exclude)
                 continue;
@@ -262,7 +266,7 @@ public class Level
             if (e2 != e1 &&
                 e1.BoundingBox.CanCollideWith(CollisionManager, e2.BoundingBox) &&
                 e1.IsIntersecting(e2, position)
-            )
+               )
                 return e2;
         }
         return null;
@@ -394,6 +398,7 @@ public class Level
     {
         if (IsGameOver)
             _levelResetTimer.Update(elapsedTime);
+        _UpdateCollisionMap();
         _UpdateEntities(elapsedTime);
         _UpdateParticles(elapsedTime);
     }
@@ -403,6 +408,15 @@ public class Level
         _RenderBackground(screen);
         _RenderShadows(screen, shadows);
         _RenderIsometrics(screen);
+    }
+
+    private void _UpdateCollisionMap()
+    {
+        _entityCollisionMap.Clear();
+        foreach (Entity entity in _entities)
+        {
+            _entityCollisionMap.AddEntityToTile(entity, GetTilePosition(entity.CenterMass));
+        }
     }
     
     private void _UpdateEntities(double elapsedTime)
