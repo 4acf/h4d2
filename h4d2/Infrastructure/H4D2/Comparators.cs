@@ -71,7 +71,12 @@ public static class Comparators
         if (aPos.Y < bPos.Y) return 1;
         if (aPos.Y > bPos.Y) return -1;
         
-        if (a.GetType() == b.GetType())
+        // .GetType() does not apply here because of inheritance
+        if (
+            (a is Entity && b is Entity) || 
+            (a is Particle && b is Particle) ||
+            (a is LevelElement && b is LevelElement)
+        )
         {
             return a switch
             {

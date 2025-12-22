@@ -17,9 +17,9 @@ public static class SpecialConfigs
     private static readonly BoundingBoxDimensions _smokerDimensions
         = new(2, 2, 12, H4D2Art.SpriteSize, 7);
     private static readonly BoundingBoxDimensions _chargerDimensions
-        = new(7, 7, 12, H4D2Art.SpriteSize, 4);
+        = new(6, 2, 12, H4D2Art.SpriteSize, 5);
     private static readonly BoundingBoxDimensions _jockeyDimensions
-        = new(4, 4, 6, H4D2Art.SpriteSize, 6);
+        = new(4, 2, 6, H4D2Art.SpriteSize, 6);
     private static readonly BoundingBoxDimensions _spitterDimensions
         = new(2, 2, 12, H4D2Art.SpriteSize, 7);
     private static readonly BoundingBoxDimensions _tankDimensions
