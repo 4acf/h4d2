@@ -26,23 +26,20 @@ public static class H4D2Art
 
     // to be moved soon
     public static readonly Bitmap Level1 = Art.LoadBitmap($"{_resourcePrefix}levels.level1.png");
+    public static readonly Bitmap Level2 = Art.LoadBitmap($"{_resourcePrefix}levels.level2.png");
     public static readonly Bitmap Level3 = Art.LoadBitmap($"{_resourcePrefix}levels.level3.png");
     public static readonly Bitmap Level4 = Art.LoadBitmap($"{_resourcePrefix}levels.level4.png");
+    public static readonly Bitmap Level5 = Art.LoadBitmap($"{_resourcePrefix}levels.level5.png");
+    public static readonly Bitmap Level6 = Art.LoadBitmap($"{_resourcePrefix}levels.level6.png");
     public static readonly Bitmap Level7 = Art.LoadBitmap($"{_resourcePrefix}levels.level7.png");
+    public static readonly Bitmap Level8 = Art.LoadBitmap($"{_resourcePrefix}levels.level8.png");
     public static readonly Bitmap Level9 = Art.LoadBitmap($"{_resourcePrefix}levels.level9.png");
+    public static readonly Bitmap Level10 = Art.LoadBitmap($"{_resourcePrefix}levels.level10.png");
     public static readonly Bitmap Level11 = Art.LoadBitmap($"{_resourcePrefix}levels.level11.png");
     public static readonly Bitmap Level12 = Art.LoadBitmap($"{_resourcePrefix}levels.level12.png");
     public static readonly Bitmap Level13 = Art.LoadBitmap($"{_resourcePrefix}levels.level13.png");
     public static readonly Bitmap Level14 = Art.LoadBitmap($"{_resourcePrefix}levels.level14.png");
     public static readonly Bitmap Level15 = Art.LoadBitmap($"{_resourcePrefix}levels.level15.png");
-    
-    /*
-    public static readonly Bitmap Level2 = Art.LoadBitmap($"{_resourcePrefix}levels.level2.png");
-    public static readonly Bitmap Level5 = Art.LoadBitmap($"{_resourcePrefix}levels.level5.png");
-    public static readonly Bitmap Level6 = Art.LoadBitmap($"{_resourcePrefix}levels.level6.png");
-    public static readonly Bitmap Level8 = Art.LoadBitmap($"{_resourcePrefix}levels.level8.png");
-    public static readonly Bitmap Level10 = Art.LoadBitmap($"{_resourcePrefix}levels.level10.png");
-    */
     
     private static readonly Bitmap[][] _tiles = _LoadTiles();
     public static Bitmap[] Floors => _tiles[0];

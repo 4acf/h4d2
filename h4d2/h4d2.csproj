@@ -59,6 +59,18 @@
       <EmbeddedResource Include="Resources\levels\level15.png" />
       <None Remove="Resources\levels\level4.png" />
       <EmbeddedResource Include="Resources\levels\level4.png" />
+      <None Remove="Resources\levels\level8.png" />
+      <EmbeddedResource Include="Resources\levels\level8.png" />
+      <None Remove="Resources\levels\level5.png" />
+      <EmbeddedResource Include="Resources\levels\level5.png" />
+      <None Remove="Resources\levels\level6.png" />
+      <EmbeddedResource Include="Resources\levels\level6.png" />
+      <None Remove="Resources\levels\level10.png" />
+      <EmbeddedResource Include="Resources\levels\level10.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\levels\level2.png" />
     </ItemGroup>
 
 </Project>
