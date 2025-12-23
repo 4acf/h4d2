@@ -1,7 +1,7 @@
 ﻿using H4D2.Entities;
 using H4D2.Infrastructure;
 
-namespace H4D2.Levels.Pathfinders;
+namespace H4D2.Levels;
 
 public class Pathfinder
 {

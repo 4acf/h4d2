@@ -190,6 +190,11 @@ public class Level
     {
         return IsWall(tile.X, tile.Y);
     }
+
+    public bool IsTileOutOfBounds(Tile tile)
+    {
+        return tile.X < 0 || tile.Y < 0 || tile.X >= Width || tile.Y >= Height;
+    }
     
     public bool IsWall(int x, int y)
     {
@@ -252,6 +257,24 @@ public class Level
         if (TileTypes[index] == TileType.Wall || TileTypes[index] == TileType.ZombieWall)
             return true;
         return false;
+    }
+
+    public bool IsValidSpecialSpawnPosition(Special special)
+    {
+        Tile tile = GetTilePosition(special.CenterMass);
+        
+        if (IsTileOutOfBounds(tile) || 
+            IsWall(tile) ||
+            IsTileAdjacentToWall(tile))
+            return false;
+        
+        IEnumerable<Survivor> survivors = _entities.OfType<Survivor>();
+        foreach (Survivor survivor in survivors)
+        {
+            if (special.HasLineOfSight(survivor))
+                return false;
+        }
+        return true;
     }
     
     public Entity? GetFirstCollidingEntity(Entity e1, ReadonlyPosition position, Entity? exclude)

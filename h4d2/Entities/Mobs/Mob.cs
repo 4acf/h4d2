@@ -1,7 +1,6 @@
 ﻿using H4D2.Entities.Mobs.Zombies;
 using H4D2.Infrastructure;
 using H4D2.Levels;
-using H4D2.Levels.Pathfinders;
 using H4D2.Particles.DebrisParticles;
 using H4D2.Particles.DebrisParticles.Emitters;
 
@@ -65,6 +64,8 @@ public abstract class Mob : Entity
         _hazardDamageTimer = new CountdownTimer(_hazardDamageCooldownSeconds);
         _pathfinder = new Pathfinder(level, this);
     }
+
+    public bool HasLineOfSight(Entity entity) => _pathfinder.HasLineOfSight(entity);
     
     public virtual void HitBy(Zombie zombie)
     {

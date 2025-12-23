@@ -81,27 +81,8 @@ public class Game
     {
         if (_selectedSpecial == null)
             return;
-        
-        (double, double) positionOffset = Isometric.ScreenSpaceToWorldSpace(
-            mousePosition.X,
-            mousePosition.Y
-        );
 
-        (double, double) cameraOffset = Isometric.ScreenSpaceToWorldSpace(
-            _camera.XOffset,
-            _camera.YOffset
-        );
-
-        (double, double) spriteOffset = Isometric.ScreenSpaceToWorldSpace(
-            H4D2Art.SpriteSize / 2.0,
-            -H4D2Art.SpriteSize
-        );
-        
-        var position = new Position(
-            positionOffset.Item1 - cameraOffset.Item1 - spriteOffset.Item1,
-            positionOffset.Item2 - cameraOffset.Item2 - spriteOffset.Item2
-        );
-        
+        Position position = _GetMouseLevelPosition(mousePosition);
         Special special = _selectedSpecial switch
         {
             1 => new Hunter(_level, position),
@@ -114,6 +95,11 @@ public class Game
             8 => new Witch(_level, position),
             _ => new Tank(_level, position)
         };
+        
+        // not ideal to check against an allocated object but specials are at most a couple hundred bytes
+        if (!_level.IsValidSpecialSpawnPosition(special))
+            return;
+        
         _level.AddSpecial(special);
         _selectedSpecial = null;
     }
@@ -139,5 +125,28 @@ public class Game
                     break;
             }
         }  
+    }
+
+    private Position _GetMouseLevelPosition(Position mousePosition)
+    {
+        (double, double) positionOffset = Isometric.ScreenSpaceToWorldSpace(
+            mousePosition.X,
+            mousePosition.Y
+        );
+
+        (double, double) cameraOffset = Isometric.ScreenSpaceToWorldSpace(
+            _camera.XOffset,
+            _camera.YOffset
+        );
+
+        (double, double) spriteOffset = Isometric.ScreenSpaceToWorldSpace(
+            H4D2Art.SpriteSize / 2.0,
+            -H4D2Art.SpriteSize
+        );
+        
+        return new Position(
+            positionOffset.Item1 - cameraOffset.Item1 - spriteOffset.Item1,
+            positionOffset.Item2 - cameraOffset.Item2 - spriteOffset.Item2
+        );
     }
 }
