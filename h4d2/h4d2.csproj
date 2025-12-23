@@ -41,7 +41,24 @@
       <None Remove="Resources\levels\tiles.png" />
       <EmbeddedResource Include="Resources\levels\tiles.png" />
       <None Remove="Resources\levels\level2.png" />
-      <EmbeddedResource Include="Resources\levels\level2.png" />
+      <None Remove="Resources\levels\level3.png" />
+      <EmbeddedResource Include="Resources\levels\level3.png" />
+      <None Remove="Resources\levels\level13.png" />
+      <EmbeddedResource Include="Resources\levels\level13.png" />
+      <None Remove="Resources\levels\level12.png" />
+      <EmbeddedResource Include="Resources\levels\level12.png" />
+      <None Remove="Resources\levels\level11.png" />
+      <EmbeddedResource Include="Resources\levels\level11.png" />
+      <None Remove="Resources\levels\level9.png" />
+      <EmbeddedResource Include="Resources\levels\level9.png" />
+      <None Remove="Resources\levels\level7.png" />
+      <EmbeddedResource Include="Resources\levels\level7.png" />
+      <None Remove="Resources\levels\level14.png" />
+      <EmbeddedResource Include="Resources\levels\level14.png" />
+      <None Remove="Resources\levels\level15.png" />
+      <EmbeddedResource Include="Resources\levels\level15.png" />
+      <None Remove="Resources\levels\level4.png" />
+      <EmbeddedResource Include="Resources\levels\level4.png" />
     </ItemGroup>
 
 </Project>
