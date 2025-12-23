@@ -16,6 +16,7 @@ public class Game
     private Level _level;
     private readonly CollisionManager<CollisionGroup> _collisionManager;
     private int? _selectedSpecial;
+    private readonly Position _spawnAdjustedMousePosition;
     
     public Game(int width, int height)
     {
@@ -36,6 +37,7 @@ public class Game
         _level = new Level(levelBitmap, _collisionManager, _camera);
         _screen = new Bitmap(width, height, _camera);
         _shadows = new ShadowBitmap(width, height, _camera);
+        _spawnAdjustedMousePosition = new Position(0, 0);
     }
 
     public void Update(Input input, double elapsedTime)
@@ -60,6 +62,8 @@ public class Game
 
     private void _HandleInputCommands(Input input, double elapsedTime)
     {
+        _UpdateSpawnAdjustedMousePosition(input.MousePositionScreen);
+        
         if (input.IsNumberPressed)
         {
             if(_selectedSpecial == null)
@@ -71,18 +75,39 @@ public class Game
         }
 
         if (input.IsMousePressed)
-            _HandleMousePressed(input.MousePositionScreen);
+            _HandleMousePressed();
 
         if (input.PressedMovementKeys.Count > 0)
              _HandleCameraMove(input.PressedMovementKeys, elapsedTime);
     }
 
-    private void _HandleMousePressed(Position mousePosition)
+    private void _UpdateSpawnAdjustedMousePosition(Position mousePosition)
+    {
+        (double, double) positionOffset = Isometric.ScreenSpaceToWorldSpace(
+            mousePosition.X,
+            mousePosition.Y
+        );
+
+        (double, double) cameraOffset = Isometric.ScreenSpaceToWorldSpace(
+            _camera.XOffset,
+            _camera.YOffset
+        );
+
+        (double, double) spriteOffset = Isometric.ScreenSpaceToWorldSpace(
+            H4D2Art.SpriteSize / 2.0,
+            -H4D2Art.SpriteSize
+        );
+        
+        _spawnAdjustedMousePosition.X = positionOffset.Item1 - cameraOffset.Item1 - spriteOffset.Item1;
+        _spawnAdjustedMousePosition.Y = positionOffset.Item2 - cameraOffset.Item2 - spriteOffset.Item2;
+    }
+    
+    private void _HandleMousePressed()
     {
         if (_selectedSpecial == null)
             return;
 
-        Position position = _GetMouseLevelPosition(mousePosition);
+        Position position = _spawnAdjustedMousePosition.Copy();
         Special special = _selectedSpecial switch
         {
             1 => new Hunter(_level, position),
@@ -125,28 +150,5 @@ public class Game
                     break;
             }
         }  
-    }
-
-    private Position _GetMouseLevelPosition(Position mousePosition)
-    {
-        (double, double) positionOffset = Isometric.ScreenSpaceToWorldSpace(
-            mousePosition.X,
-            mousePosition.Y
-        );
-
-        (double, double) cameraOffset = Isometric.ScreenSpaceToWorldSpace(
-            _camera.XOffset,
-            _camera.YOffset
-        );
-
-        (double, double) spriteOffset = Isometric.ScreenSpaceToWorldSpace(
-            H4D2Art.SpriteSize / 2.0,
-            -H4D2Art.SpriteSize
-        );
-        
-        return new Position(
-            positionOffset.Item1 - cameraOffset.Item1 - spriteOffset.Item1,
-            positionOffset.Item2 - cameraOffset.Item2 - spriteOffset.Item2
-        );
     }
 }
