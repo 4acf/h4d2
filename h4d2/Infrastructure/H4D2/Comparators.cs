@@ -61,15 +61,28 @@ public static class Comparators
             aPos = af.FootPosition;
         if (b is Flame bf)
             bPos = bf.FootPosition;
-        
-        if (aPos.Y + aPos.X < bPos.Y + bPos.X) return 1;
-        if (aPos.Y + aPos.X > bPos.Y + bPos.X) return -1;
-        if (aPos.Z < bPos.Z) return 1;
-        if (aPos.Z > bPos.Z) return -1;
-        if (aPos.X < bPos.X) return 1;
-        if (aPos.X > bPos.X) return -1;
-        if (aPos.Y < bPos.Y) return 1;
-        if (aPos.Y > bPos.Y) return -1;
+
+        const double epsilon = 0.0001;
+        if (Math.Abs((aPos.X + aPos.Y) - (bPos.X + bPos.Y)) > epsilon)
+        {
+            if (aPos.Y + aPos.X < bPos.Y + bPos.X) return 1;
+            if (aPos.Y + aPos.X > bPos.Y + bPos.X) return -1;
+        }
+        if (Math.Abs(aPos.Z - bPos.Z) > epsilon)
+        {
+            if (aPos.Z < bPos.Z) return 1;
+            if (aPos.Z > bPos.Z) return -1;
+        }
+        if (Math.Abs(aPos.X - bPos.X) > epsilon)
+        {
+            if (aPos.X < bPos.X) return 1;
+            if (aPos.X > bPos.X) return -1;
+        }
+        if (Math.Abs(aPos.Y - bPos.Y) > epsilon)
+        {
+            if (aPos.Y < bPos.Y) return 1;
+            if (aPos.Y > bPos.Y) return -1;
+        }
         
         // .GetType() does not apply here because of inheritance
         if (
@@ -149,9 +162,9 @@ public static class Comparators
             if (charger.IsCharging || charger.IsStumbling)
             {
                 double degrees = MathHelpers.RadiansToDegrees(charger.DirectionRadians);
-                bool facingWest = 157.5 <= degrees && degrees < 202.5;
-                bool facingEast = 337.5 <= degrees || degrees < 22.5;
-                drawSurvivorAfterCharger = 202.5 <= degrees && degrees < 337.5;
+                bool facingWest = 112.5 <= degrees && degrees < 157.5;
+                bool facingEast = 292.5 <= degrees && degrees < 337.5;
+                drawSurvivorAfterCharger = 157.5 <= degrees && degrees < 292.5;
                 if(charger.IsStumbling && !facingWest && !facingEast)
                     drawSurvivorAfterCharger = !drawSurvivorAfterCharger;
             }
