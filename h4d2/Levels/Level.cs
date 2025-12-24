@@ -26,6 +26,7 @@ public class Level
     public const double TilePhysicalSize = 16;
    
     private const int _padding = 2;
+    private const double _consumableSpawnCooldownSeconds = 30.0;
     private const double _throwableSpawnCooldownSeconds = 30.0;
     private const double _zombieSpawnCooldownSeconds = 1.0 / 60.0;
     private const int _minZombiesAlive = 20;
@@ -33,7 +34,8 @@ public class Level
     private const int _maxSpawnWaveSize = 15;
     private const int _maxZombiesAlive = 50;
     private const int _maxParticles = 10000;
-    private const int _maxThrowablePickups = 3;
+    private const int _maxConsumables = 3;
+    private const int _maxThrowables = 3;
     private const int _commonKillCredit = 1;
     private const int _uncommonKillCredit = 3;
     private const double _mobSpawnXOffset = 5.5;
@@ -53,6 +55,7 @@ public class Level
     public readonly int Width;
     public readonly int Height;
     public readonly CollisionManager<CollisionGroup> CollisionManager;
+    private readonly CountdownTimer _consumableSpawnTimer;
     private readonly CountdownTimer _throwableSpawnTimer;
     private readonly CountdownTimer _zombieSpawnTimer;
     private readonly Stopwatch _stopwatch;
@@ -66,13 +69,15 @@ public class Level
     public readonly ImmutableArray<TileType> TileTypes;
     public readonly CostMap CostMap;
     private readonly List<int> _zombieSpawnLocations; 
-    private readonly List<int> _healthPickupLocations;
-    private readonly HashSet<int> _throwablePickupLocations;
+    private readonly List<int> _consumableSpawnLocations;
+    private readonly HashSet<int> _activeConsumableLocations;
+    private readonly HashSet<int> _activeThrowableLocations;
     private readonly Queue<Zombie> _zombieSpawnQueue;
     private readonly EntityCollisionMap _entityCollisionMap;
     
     public Level(Bitmap levelBitmap, CollisionManager<CollisionGroup> collisionManager, Camera camera)
     {
+        _consumableSpawnTimer = new CountdownTimer(_consumableSpawnCooldownSeconds);
         _throwableSpawnTimer = new CountdownTimer(_throwableSpawnCooldownSeconds);
         _throwableSpawnTimer.Update(_throwableSpawnCooldownSeconds / 2.0);
         _zombieSpawnTimer = new CountdownTimer(_zombieSpawnCooldownSeconds);
@@ -87,8 +92,9 @@ public class Level
         Width = levelBitmap.Width + _padding;
         Height = levelBitmap.Height + _padding;
         _zombieSpawnLocations = [];
-        _healthPickupLocations = [];
-        _throwablePickupLocations = [];
+        _consumableSpawnLocations = [];
+        _activeConsumableLocations = [];
+        _activeThrowableLocations = [];
         _zombieSpawnQueue = [];
         
         var tileTypes = new TileType[Width * Height];
@@ -122,8 +128,7 @@ public class Level
                         break;
                     case _healthPickupColor:
                         tileTypes[tileIndex] = TileType.Floor;
-                        _healthPickupLocations.Add(tileIndex);
-                        _SpawnHealthPickup(x, y);
+                        _consumableSpawnLocations.Add(tileIndex);
                         break;
                     default:
                         tileTypes[tileIndex] = TileType.Floor;
@@ -142,6 +147,11 @@ public class Level
         _entityCollisionMap = new EntityCollisionMap(this);
         Credits = 0;
         CreditsSpent = 0;
+
+        while (_activeConsumableLocations.Count < _maxConsumables)
+        {
+            _SpawnRandomConsumable();
+        }
     }
     
     public int TileIndex(int x, int y)
@@ -456,14 +466,25 @@ public class Level
     {
         _ReplenishZombies(elapsedTime);
 
-        int numThrowablePickups = _entities
+        int numThrowables = _entities
             .OfType<Throwable>()
             .Count(t => !t.Removed);
-        if(numThrowablePickups < _maxThrowablePickups)
+        if(numThrowables < _maxThrowables)
             _throwableSpawnTimer.Update(elapsedTime);
         if (_throwableSpawnTimer.IsFinished && _SpawnThrowable())
         { 
             _throwableSpawnTimer.Reset();
+        }
+        
+        int numConsumables = _entities
+            .OfType<Consumable>()
+            .Count(c => !c.Removed);
+        if(numConsumables < _maxConsumables)
+            _consumableSpawnTimer.Update(elapsedTime);
+        if (_consumableSpawnTimer.IsFinished)
+        {
+            _SpawnRandomConsumable();
+            _consumableSpawnTimer.Reset();
         }
         
         _entities.Sort(Comparators.EntityUpdating);
@@ -474,7 +495,11 @@ public class Level
             {
                 indicesToRemove.Add(i);
                 if (_entities[i] is Throwable)
-                    _throwablePickupLocations.Remove(
+                    _activeThrowableLocations.Remove(
+                        TileIndex(GetTilePosition(_entities[i].CenterMass))
+                    );
+                if (_entities[i] is Consumable)
+                    _activeConsumableLocations.Remove(
                         TileIndex(GetTilePosition(_entities[i].CenterMass))
                     );
                 if (_entities[i] is Common)
@@ -665,14 +690,20 @@ public class Level
         _entities.Add(new Rochelle(this, survivorSpawnPos.Copy()));
     }
 
-    private void _SpawnHealthPickup(Tile tile) => _SpawnHealthPickup(tile.X, tile.Y);
+    private void _SpawnRandomConsumable()
+    {
+        int randomLocation = RandomSingleton.Instance.Next(_consumableSpawnLocations.Count);
+        int index = _consumableSpawnLocations[randomLocation];
+        _SpawnConsumable(index);
+    }
     
-    private void _SpawnHealthPickup(int x, int y)
+    private void _SpawnConsumable(int index)
     {
         int randomConsumable = RandomSingleton.Instance.Next(3);
+        Tile tile = GetTileFromIndex(index);
         Position consumablePos = new Position(
-            (x * TilePhysicalSize) + _pickupXOffset,
-            (-y * TilePhysicalSize) + _pickupYOffset
+            (tile.X * TilePhysicalSize) + _pickupXOffset,
+            (-tile.Y * TilePhysicalSize) + _pickupYOffset
         );
         Consumable consumable = randomConsumable switch
         {
@@ -681,6 +712,7 @@ public class Level
             _ => new Adrenaline(this, consumablePos)
         };
         _entities.Add(consumable);
+        _activeConsumableLocations.Add(index);
     }
     
     private bool _SpawnThrowable()
@@ -695,8 +727,8 @@ public class Level
             if (
                 TileTypes[tileIndex] != TileType.Wall &&
                 !IsTileAdjacentToWall(tileIndex) &&
-                !_healthPickupLocations.Contains(tileIndex) &&
-                !_throwablePickupLocations.Contains(tileIndex)
+                !_consumableSpawnLocations.Contains(tileIndex) &&
+                !_activeThrowableLocations.Contains(tileIndex)
             )
             {
                 validLocationFound = true;
@@ -723,7 +755,7 @@ public class Level
             _ => new BileBomb(this, throwablePos)
         };
         _entities.Add(throwable);
-        _throwablePickupLocations.Add(tileIndex);
+        _activeThrowableLocations.Add(tileIndex);
 
         return true;
     }
