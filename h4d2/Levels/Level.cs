@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using H4D2.Entities;
 using H4D2.Entities.Hazards;
 using H4D2.Entities.Mobs;
@@ -25,7 +26,6 @@ public class Level
     public const double TilePhysicalSize = 16;
    
     private const int _padding = 2;
-    private const double _levelResetCooldownSeconds = 8.0;
     private const double _throwableSpawnCooldownSeconds = 30.0;
     private const double _zombieSpawnCooldownSeconds = 1.0 / 60.0;
     private const int _minZombiesAlive = 20;
@@ -34,6 +34,8 @@ public class Level
     private const int _maxZombiesAlive = 50;
     private const int _maxParticles = 10000;
     private const int _maxThrowablePickups = 3;
+    private const int _commonKillCredit = 1;
+    private const int _uncommonKillCredit = 3;
     private const double _mobSpawnXOffset = 5.5;
     private const double _mobSpawnYOffset = -(H4D2Art.TileCenterOffset - H4D2Art.SpriteSize) + 0.5;
     private const double _pickupXOffset = -7;
@@ -51,11 +53,13 @@ public class Level
     public readonly int Width;
     public readonly int Height;
     public readonly CollisionManager<CollisionGroup> CollisionManager;
-    private readonly CountdownTimer _levelResetTimer;
     private readonly CountdownTimer _throwableSpawnTimer;
     private readonly CountdownTimer _zombieSpawnTimer;
-    public bool CanReset => _levelResetTimer.IsFinished;
+    private readonly Stopwatch _stopwatch;
+    
     public bool IsGameOver => GetLivingMobs<Survivor>().Count == 0;
+    public int Credits { get; private set; }
+    public int CreditsSpent { get; private set; }
     private readonly List<Entity> _entities;
     private readonly List<Particle> _particles;
     private readonly List<LevelElement> _levelElements;
@@ -69,10 +73,11 @@ public class Level
     
     public Level(Bitmap levelBitmap, CollisionManager<CollisionGroup> collisionManager, Camera camera)
     {
-        _levelResetTimer = new CountdownTimer(_levelResetCooldownSeconds);
         _throwableSpawnTimer = new CountdownTimer(_throwableSpawnCooldownSeconds);
-        _zombieSpawnTimer = new CountdownTimer(_zombieSpawnCooldownSeconds);
         _throwableSpawnTimer.Update(_throwableSpawnCooldownSeconds / 2.0);
+        _zombieSpawnTimer = new CountdownTimer(_zombieSpawnCooldownSeconds);
+        _stopwatch = new Stopwatch();
+        _stopwatch.Start();
         
         _entities = [];
         _particles = [];
@@ -135,6 +140,8 @@ public class Level
         TileTypes = tileBuilder.MoveToImmutable();
         CostMap = new CostMap(this, TileTypes);
         _entityCollisionMap = new EntityCollisionMap(this);
+        Credits = 0;
+        CreditsSpent = 0;
     }
     
     public int TileIndex(int x, int y)
@@ -420,7 +427,10 @@ public class Level
     public void Update(double elapsedTime)
     {
         if (IsGameOver)
-            _levelResetTimer.Update(elapsedTime);
+        {
+            _stopwatch.Stop();
+            double totalElapsedTime = _stopwatch.Elapsed.TotalSeconds;
+        }
         _UpdateCollisionMap();
         _UpdateEntities(elapsedTime);
         _UpdateParticles(elapsedTime);
@@ -467,6 +477,10 @@ public class Level
                     _throwablePickupLocations.Remove(
                         TileIndex(GetTilePosition(_entities[i].CenterMass))
                     );
+                if (_entities[i] is Common)
+                    Credits += _commonKillCredit;
+                if (_entities[i] is Uncommon)
+                    Credits += _uncommonKillCredit;
             }
             else
             {
