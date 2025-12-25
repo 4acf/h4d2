@@ -148,9 +148,9 @@ public class Level
         Credits = 0;
         CreditsSpent = 0;
 
-        while (_activeConsumableLocations.Count < _maxConsumables)
+        while (_activeConsumableLocations.Count < Math.Min(_maxConsumables, _consumableSpawnLocations.Count))
         {
-            _SpawnRandomConsumable();
+            _SpawnConsumable();
         }
     }
     
@@ -479,11 +479,10 @@ public class Level
         int numConsumables = _entities
             .OfType<Consumable>()
             .Count(c => !c.Removed);
-        if(numConsumables < _maxConsumables)
+        if(numConsumables < Math.Min(_maxConsumables, _consumableSpawnLocations.Count))
             _consumableSpawnTimer.Update(elapsedTime);
-        if (_consumableSpawnTimer.IsFinished)
+        if (_consumableSpawnTimer.IsFinished && _SpawnConsumable())
         {
-            _SpawnRandomConsumable();
             _consumableSpawnTimer.Reset();
         }
         
@@ -690,17 +689,29 @@ public class Level
         _entities.Add(new Rochelle(this, survivorSpawnPos.Copy()));
     }
 
-    private void _SpawnRandomConsumable()
+    private bool _SpawnConsumable()
     {
-        int randomLocation = RandomSingleton.Instance.Next(_consumableSpawnLocations.Count);
-        int index = _consumableSpawnLocations[randomLocation];
-        _SpawnConsumable(index);
-    }
-    
-    private void _SpawnConsumable(int index)
-    {
+        int triesRemaining = 5;
+        bool validLocationFound = false;
+        int tileIndex = 0;
+        
+        while (triesRemaining > 0)
+        {
+            int randomLocation = RandomSingleton.Instance.Next(_consumableSpawnLocations.Count);
+            tileIndex = _consumableSpawnLocations[randomLocation];
+            if (!_activeConsumableLocations.Contains(tileIndex))
+            {
+                validLocationFound = true;
+                break;
+            }
+            triesRemaining--;
+        }
+
+        if (!validLocationFound)
+            return false;
+        
         int randomConsumable = RandomSingleton.Instance.Next(3);
-        Tile tile = GetTileFromIndex(index);
+        Tile tile = GetTileFromIndex(tileIndex);
         Position consumablePos = new Position(
             (tile.X * TilePhysicalSize) + _pickupXOffset,
             (-tile.Y * TilePhysicalSize) + _pickupYOffset
@@ -712,7 +723,8 @@ public class Level
             _ => new Adrenaline(this, consumablePos)
         };
         _entities.Add(consumable);
-        _activeConsumableLocations.Add(index);
+        _activeConsumableLocations.Add(tileIndex);
+        return true;
     }
     
     private bool _SpawnThrowable()
@@ -756,7 +768,6 @@ public class Level
         };
         _entities.Add(throwable);
         _activeThrowableLocations.Add(tileIndex);
-
         return true;
     }
 }
