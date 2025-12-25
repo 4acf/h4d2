@@ -1,8 +1,7 @@
-﻿using H4D2.Entities.Mobs.Zombies.Specials;
-using H4D2.Entities.Mobs.Zombies.Specials.Pinners;
-using H4D2.Infrastructure;
+﻿using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
+using H4D2.Spawners;
 
 namespace H4D2;
 
@@ -15,12 +14,10 @@ public class Game
     private readonly ShadowBitmap _shadows;
     private Level _level;
     private readonly CollisionManager<CollisionGroup> _collisionManager;
-    private int? _selectedSpecial;
-    private readonly Position _spawnAdjustedMousePosition;
+    private SpecialSpawner _specialSpawner;
     
     public Game(int width, int height)
     {
-        _selectedSpecial = null;
         _collisionManager = new CollisionManager<CollisionGroup>();
         Collisions.Configure(_collisionManager);
         Bitmap levelBitmap = H4D2Art.Level1;
@@ -37,7 +34,7 @@ public class Game
         _level = new Level(levelBitmap, _collisionManager, _camera);
         _screen = new Bitmap(width, height, _camera);
         _shadows = new ShadowBitmap(width, height, _camera);
-        _spawnAdjustedMousePosition = new Position(0, 0);
+        _specialSpawner = new SpecialSpawner(_level);
     }
 
     public void Update(Input input, double elapsedTime)
@@ -57,76 +54,24 @@ public class Game
         _screen.Clear();
         _shadows.Clear();
         _level.Render(_screen, _shadows);
+        _specialSpawner.Render(_screen);
         return _screen.Data;
     }
 
     private void _HandleInputCommands(Input input, double elapsedTime)
     {
-        _UpdateSpawnAdjustedMousePosition(input.MousePositionScreen);
+        _specialSpawner.UpdatePosition(input.MousePositionScreen, _camera);
         
         if (input.IsNumberPressed)
         {
-            if(_selectedSpecial == null)
-                _selectedSpecial = input.LastNumberPressed;
-            else
-                _selectedSpecial = input.LastNumberPressed == _selectedSpecial ?
-                    null :
-                    input.LastNumberPressed;
+            _specialSpawner.SelectSpecial(input.LastNumberPressed);
         }
 
         if (input.IsMousePressed)
-            _HandleMousePressed();
+            _specialSpawner.Spawn();
 
         if (input.PressedMovementKeys.Count > 0)
              _HandleCameraMove(input.PressedMovementKeys, elapsedTime);
-    }
-
-    private void _UpdateSpawnAdjustedMousePosition(Position mousePosition)
-    {
-        (double, double) positionOffset = Isometric.ScreenSpaceToWorldSpace(
-            mousePosition.X,
-            mousePosition.Y
-        );
-
-        (double, double) cameraOffset = Isometric.ScreenSpaceToWorldSpace(
-            _camera.XOffset,
-            _camera.YOffset
-        );
-
-        (double, double) spriteOffset = Isometric.ScreenSpaceToWorldSpace(
-            H4D2Art.SpriteSize / 2.0,
-            -H4D2Art.SpriteSize
-        );
-        
-        _spawnAdjustedMousePosition.X = positionOffset.Item1 - cameraOffset.Item1 - spriteOffset.Item1;
-        _spawnAdjustedMousePosition.Y = positionOffset.Item2 - cameraOffset.Item2 - spriteOffset.Item2;
-    }
-    
-    private void _HandleMousePressed()
-    {
-        if (_selectedSpecial == null)
-            return;
-
-        Position position = _spawnAdjustedMousePosition.Copy();
-        Special special = _selectedSpecial switch
-        {
-            1 => new Hunter(_level, position),
-            2 => new Boomer(_level, position),
-            3 => new Smoker(_level, position),
-            4 => new Charger(_level, position),
-            5 => new Jockey(_level, position),
-            6 => new Spitter(_level, position),
-            7 => new Tank(_level, position),
-            8 => new Witch(_level, position),
-            _ => new Tank(_level, position)
-        };
-        
-        // not ideal to check against an allocated object but specials are at most a couple hundred bytes
-        if (!_level.IsValidSpecialSpawnPosition(special))
-            return;
-        
-        _level.AddSpecial(special);
-        _selectedSpecial = null;
     }
     
     private void _HandleCameraMove(IReadOnlyCollection<MovementKey> keys, double elapsedTime)

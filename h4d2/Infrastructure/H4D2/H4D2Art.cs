@@ -43,15 +43,16 @@ public static class H4D2Art
     public static readonly Bitmap Level15 = Art.LoadBitmap($"{_resourcePrefix}levels.level15.png");
     
     private static readonly Bitmap[][] _tiles = _LoadTiles();
-    public static Bitmap[] Floors => _tiles[0];
-    public static Bitmap[] Walls => _tiles[1];
+    public static readonly Bitmap[] Floors = _tiles[0];
+    public static readonly Bitmap[] Walls = _tiles[1];
     
-    public static TextBitmap[] Text => _LoadPixufFont();
-    public static Bitmap[] Explosion => _particles[0];
-    public static Bitmap[] HealParticle => _particles[1];
-    public static Bitmap[] Fire => _particles[2];
-    public static Bitmap[] NullParticle => _particles[3];
-    public static Bitmap[] BileOverlays => _bileOverlays.SelectMany(x => x).ToArray();
+    public static readonly TextBitmap[] Text = _LoadPixufFont();
+    public static readonly Bitmap[] Explosion = _particles[0];
+    public static readonly Bitmap[] HealParticle = _particles[1];
+    public static readonly Bitmap[] Fire = _particles[2];
+    public static readonly Bitmap[] NullParticle = _particles[3];
+    public static readonly Bitmap[] BileOverlays = _bileOverlays.SelectMany(x => x).ToArray();
+    public static readonly Bitmap[] SpecialProfiles = Specials[8];
     
     private static Bitmap[][] _LoadSurvivors() => 
         Art.LoadBitmaps($"{_resourcePrefix}survivor.png", SpriteSize, 8, 53);
@@ -60,7 +61,7 @@ public static class H4D2Art
     private static Bitmap[][] _LoadUncommons() => 
         Art.LoadBitmaps($"{_resourcePrefix}uncommon.png", SpriteSize, 5, 23);
     private static Bitmap[][] _LoadSpecials() => 
-        Art.LoadBitmaps($"{_resourcePrefix}special.png", SpriteSize, 8, 39);
+        Art.LoadBitmaps($"{_resourcePrefix}special.png", SpriteSize, 9, 39);
     private static Bitmap[][] _LoadPickups() => 
         Art.LoadBitmaps($"{_resourcePrefix}pickup.png", PickupSize, 2, 3);
     private static Bitmap[][] _LoadProjectiles() => 

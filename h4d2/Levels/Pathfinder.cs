@@ -57,7 +57,7 @@ public class Pathfinder
         bool targetMovedTiles = Level.GetTilePosition(_path.End) != Level.GetTilePosition(end);
         if (targetMovedTiles)
         {
-            bool targetMovedTooFar = _HasLineOfSight(_path.End, end);
+            bool targetMovedTooFar = _level.HasLineOfSight(_path.End, end);
             if(targetMovedTooFar)
                 _path = new Path(_level, start, end);
         }
@@ -70,63 +70,10 @@ public class Pathfinder
     }
 
     public bool HasLineOfSight(Entity target)
-        => _HasLineOfSight(_entity.NWPosition, target.NWPosition) && 
-           _HasLineOfSight(_entity.NEPosition, target.NEPosition) && 
-           _HasLineOfSight(_entity.SWPosition, target.SWPosition) && 
-           _HasLineOfSight(_entity.SEPosition, target.SEPosition);
-    
-    private bool _HasLineOfSight(ReadonlyPosition originalTargetPos, ReadonlyPosition currentTargetPos)
-    {
-        const double physSize = Level.TilePhysicalSize;
-        double xPhysOffs = Level.TilePhysicalOffset.Item1;
-        double yPhysOffs = Level.TilePhysicalOffset.Item2;
-        
-        Tile originalTile = Level.GetTilePosition(originalTargetPos);
-        int currentX = originalTile.X;
-        int currentY = originalTile.Y;
-        
-        Tile targetTile = Level.GetTilePosition(currentTargetPos);
-
-        double directionRadians = Math.Atan2(currentTargetPos.Y - originalTargetPos.Y, currentTargetPos.X - originalTargetPos.X);
-        directionRadians = MathHelpers.NormalizeRadians(directionRadians);
-
-        double xDir = Math.Cos(directionRadians);
-        double yDir = Math.Sin(directionRadians);
-        int stepX = xDir > 0 ? 1 : -1;
-        int stepY = yDir > 0 ? -1 : 1;
-        
-        double deltaDistX = (xDir == 0) ? double.MaxValue : Math.Abs(1 / xDir);
-        double deltaDistY = (yDir == 0) ? double.MaxValue : Math.Abs(1 / yDir);
-        
-        double posX = (originalTargetPos.X + xPhysOffs) / physSize;
-        double posY = -((originalTargetPos.Y + yPhysOffs) / physSize);
-        double sideDistX = stepX == 1 ? 
-            (currentX + 1 - posX) * deltaDistX :
-            (posX - currentX) * deltaDistX;
-        double sideDistY = stepY == 1 ? 
-            (currentY + 1 - posY) * deltaDistY :
-            (posY - currentY) * deltaDistY;
-
-        int targetIndex = _level.TileIndex(targetTile);
-        while (_level.TileIndex(currentX, currentY) != targetIndex)
-        {
-            if (sideDistX < sideDistY)
-            {
-                sideDistX += deltaDistX;
-                currentX += stepX;
-            }
-            else
-            {
-                sideDistY += deltaDistY;
-                currentY += stepY;
-            }
-
-            if (_level.IsWall(currentX, currentY))
-                return false;
-        }
-
-        return true;
-    }
+        => _level.HasLineOfSight(_entity.NWPosition, target.NWPosition) && 
+           _level.HasLineOfSight(_entity.NEPosition, target.NEPosition) && 
+           _level.HasLineOfSight(_entity.SWPosition, target.SWPosition) && 
+           _level.HasLineOfSight(_entity.SEPosition, target.SEPosition);
 
     private class Path
     {

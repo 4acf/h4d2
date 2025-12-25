@@ -9,6 +9,9 @@ public static class CommonConfigs
 {
     private static readonly BoundingBoxDimensions _boundingBoxDimensions
         = new(2, 2, 10, H4D2Art.SpriteSize, 7);
+
+    private static readonly BoundingBox _boundingBox
+        = new(CollisionGroup.Zombie, _boundingBoxDimensions);
     
     public static readonly CommonConfig Common = new()
     {
@@ -16,6 +19,6 @@ public static class CommonConfigs
         RunSpeed = 250,
         Damage = 2,
         GibColor = 0x847b71,
-        BoundingBox = new BoundingBox(CollisionGroup.Zombie, _boundingBoxDimensions)
+        BoundingBox = _boundingBox
     };
 }

@@ -7,7 +7,6 @@ using H4D2.Entities.Mobs.Zombies.Commons;
 using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Mobs.Zombies;
 using H4D2.Entities.Mobs.Zombies.Specials;
-using H4D2.Entities.Mobs.Zombies.Specials.Pinners;
 using H4D2.Entities.Mobs.Zombies.Uncommons;
 using H4D2.Entities.Pickups.Consumables;
 using H4D2.Entities.Pickups.Throwable;
@@ -18,6 +17,7 @@ using H4D2.Infrastructure.H4D2;
 using H4D2.Levels.LevelElements;
 using H4D2.Particles;
 using H4D2.Particles.Clouds;
+using H4D2.Spawners;
 
 namespace H4D2.Levels;
 
@@ -276,10 +276,13 @@ public class Level
         return false;
     }
 
-    public bool IsValidSpecialSpawnPosition(Special special)
+    public bool IsValidSpecialSpawnPosition(SpecialSpawner spawner)
     {
-        Tile tile = GetTilePosition(special.CenterMass);
+        ReadonlyPosition? spawnerCenterMass = spawner.CenterMass;
+        if (spawnerCenterMass == null)
+            return false;
         
+        Tile tile = GetTilePosition(spawnerCenterMass.Value);
         if (IsTileOutOfBounds(tile) || 
             IsWall(tile) ||
             IsTileAdjacentToWall(tile))
@@ -288,9 +291,61 @@ public class Level
         IEnumerable<Survivor> survivors = _entities.OfType<Survivor>();
         foreach (Survivor survivor in survivors)
         {
-            if (special.HasLineOfSight(survivor))
+            if (spawner.HasLineOfSight(survivor))
                 return false;
         }
+        return true;
+    }
+    
+    public bool HasLineOfSight(ReadonlyPosition originalTargetPos, ReadonlyPosition currentTargetPos)
+    {
+        double xPhysOffs = TilePhysicalOffset.Item1;
+        double yPhysOffs = TilePhysicalOffset.Item2;
+        
+        Tile originalTile = GetTilePosition(originalTargetPos);
+        int currentX = originalTile.X;
+        int currentY = originalTile.Y;
+        
+        Tile targetTile = GetTilePosition(currentTargetPos);
+
+        double directionRadians = Math.Atan2(currentTargetPos.Y - originalTargetPos.Y, currentTargetPos.X - originalTargetPos.X);
+        directionRadians = MathHelpers.NormalizeRadians(directionRadians);
+
+        double xDir = Math.Cos(directionRadians);
+        double yDir = Math.Sin(directionRadians);
+        int stepX = xDir > 0 ? 1 : -1;
+        int stepY = yDir > 0 ? -1 : 1;
+        
+        double deltaDistX = (xDir == 0) ? double.MaxValue : Math.Abs(1 / xDir);
+        double deltaDistY = (yDir == 0) ? double.MaxValue : Math.Abs(1 / yDir);
+        
+        double posX = (originalTargetPos.X + xPhysOffs) / TilePhysicalSize;
+        double posY = -((originalTargetPos.Y + yPhysOffs) / TilePhysicalSize);
+        double sideDistX = stepX == 1 ? 
+            (currentX + 1 - posX) * deltaDistX :
+            (posX - currentX) * deltaDistX;
+        double sideDistY = stepY == 1 ? 
+            (currentY + 1 - posY) * deltaDistY :
+            (posY - currentY) * deltaDistY;
+
+        int targetIndex = TileIndex(targetTile);
+        while (TileIndex(currentX, currentY) != targetIndex)
+        {
+            if (sideDistX < sideDistY)
+            {
+                sideDistX += deltaDistX;
+                currentX += stepX;
+            }
+            else
+            {
+                sideDistY += deltaDistY;
+                currentY += stepY;
+            }
+
+            if (IsWall(currentX, currentY))
+                return false;
+        }
+
         return true;
     }
     
