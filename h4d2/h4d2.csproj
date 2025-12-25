@@ -67,6 +67,8 @@
       <EmbeddedResource Include="Resources\levels\level6.png" />
       <None Remove="Resources\levels\level10.png" />
       <EmbeddedResource Include="Resources\levels\level10.png" />
+      <None Remove="Resources\ui\button.png" />
+      <EmbeddedResource Include="Resources\ui\button.png" />
     </ItemGroup>
 
     <ItemGroup>

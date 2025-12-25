@@ -179,6 +179,42 @@ public class Bitmap
             }
         }
     }
+
+    public void DrawInvalidSpecial(Bitmap specialBitmap, int x, int y)
+    {
+        const double blend = 0.5;
+        
+        if (_camera != null)
+        {
+            x += _camera.XOffset;
+            y += _camera.YOffset;
+        }
+        
+        for (int i = 0; i < specialBitmap.Height; i++)
+        {
+            for (int j = 0; j < specialBitmap.Width; j++)
+            {
+                int parentIndex = _GetBytespaceIndex(Width, x + j, y - i - 1);
+                int specialIndex = _GetBytespaceIndex(specialBitmap.Width, j, i);
+                
+                if (IsOutOfBounds(parentIndex) || specialBitmap.IsOutOfBounds(specialIndex)) continue;
+                if (specialBitmap.Data[specialIndex + 3] == 0) continue;
+
+                int expectedY = y - i - 1;
+                int actualY = parentIndex / (Width * 4);
+                if (expectedY != actualY) continue;
+                
+                byte r = BlendModes.HardLight(specialBitmap.Data[specialIndex], 0xaa);
+                byte g = BlendModes.HardLight(specialBitmap.Data[specialIndex + 1], 0x00);
+                byte b = BlendModes.HardLight(specialBitmap.Data[specialIndex + 2], 0x00);
+
+                Data[parentIndex] = MathHelpers.ByteLerp(specialBitmap.Data[specialIndex], r, blend);
+                Data[parentIndex + 1] = MathHelpers.ByteLerp(specialBitmap.Data[specialIndex + 1], g, blend);
+                Data[parentIndex + 2] = MathHelpers.ByteLerp(specialBitmap.Data[specialIndex + 2], b, blend);
+                Data[parentIndex + 3] = specialBitmap.Data[specialIndex + 3];
+            }
+        }
+    }
     
     public void DrawBiledCharacter(Bitmap characterBitmap, Bitmap bileBitmap, int x, int y, bool flip = false)
     {
