@@ -137,12 +137,6 @@ public class Bitmap
 
     public void DrawLineOfText(TextBitmap[] textBitmaps, string text, int x, int y, int color = 0x0)
     {
-        if (_camera != null)
-        {
-            x += _camera.XOffset;
-            y += _camera.YOffset;
-        }
-        
         int startingX = x;
         for (int i = 0; i < text.Length; i++)
         {
@@ -152,6 +146,17 @@ public class Bitmap
         }
     }
 
+    public void DrawTextHeader(TextBitmap[] textBitmaps, string text, int x, int y, int color = 0x0)
+    {
+        int startingX = x;
+        for (int i = 0; i < text.Length; i++)
+        {
+            TextBitmap letterBitmap = textBitmaps[text[i] - ' '];
+            _DrawDoubleSizeLetter(letterBitmap, startingX, y, color);
+            startingX += letterBitmap.Width * 2;
+        }
+    }
+    
     private void _DrawLetter(TextBitmap letterBitmap, int x, int y, int color)
     {
         byte r = (byte)(color >> 16 & 0xff);
@@ -176,6 +181,40 @@ public class Bitmap
                 Data[parentIndex + 1] = g;
                 Data[parentIndex + 2] = b;
                 Data[parentIndex + 3] = 0xff;
+            }
+        }
+    }
+
+    private void _DrawDoubleSizeLetter(TextBitmap letterBitmap, int x, int y, int color)
+    {
+        byte r = (byte)(color >> 16 & 0xff);
+        byte g = (byte)(color >> 8 & 0xff);
+        byte b = (byte)(color & 0xff);
+        
+        for (int i = 0; i < letterBitmap.Height; i++)
+        {
+            for (int j = 0; j < letterBitmap.Width; j++)
+            {
+                for (int k = 0; k < 4; k++)
+                {
+                    int xOffs = k % 2;
+                    int yOffs = -(k / 2);
+                    
+                    int parentIndex = _GetBytespaceIndex(Width, x + (j * 2) + xOffs, y - (i * 2) - 1 + yOffs);
+                    int childIndex = letterBitmap.GetBytespaceIndex(j, i);
+                
+                    if (IsOutOfBounds(parentIndex) || letterBitmap.IsOutOfBounds(childIndex)) continue;
+                    if (!letterBitmap.Data[childIndex]) continue;
+
+                    int expectedY = y - (i * 2) - 1 + yOffs;
+                    int actualY = parentIndex / (Width * 4);
+                    if (expectedY != actualY) continue;
+                
+                    Data[parentIndex] = r;
+                    Data[parentIndex + 1] = g;
+                    Data[parentIndex + 2] = b;
+                    Data[parentIndex + 3] = 0xff;   
+                }
             }
         }
     }

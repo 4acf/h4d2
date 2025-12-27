@@ -15,12 +15,13 @@ public class Game
     private Level _level;
     private readonly CollisionManager<CollisionGroup> _collisionManager;
     private SpecialSpawner _specialSpawner;
+    private bool _isInGame;
     
     public Game(int width, int height)
     {
         _collisionManager = new CollisionManager<CollisionGroup>();
         Collisions.Configure(_collisionManager);
-        Bitmap levelBitmap = H4D2Art.Level1;
+        Bitmap levelBitmap = H4D2Art.Level11;
         _camera = new Camera(width, height);
         int lowerYBound = H4D2Art.TileCenterOffset - ((levelBitmap.Height / 2) * H4D2Art.TileIsoHeight);
         int upperYOffset = 
@@ -35,6 +36,7 @@ public class Game
         _screen = new Bitmap(width, height, _camera);
         _shadows = new ShadowBitmap(width, height, _camera);
         _specialSpawner = new SpecialSpawner(_level);
+        _isInGame = false;
     }
 
     public void Update(Input input, double elapsedTime)
@@ -60,18 +62,21 @@ public class Game
 
     private void _HandleInputCommands(Input input, double elapsedTime)
     {
-        _specialSpawner.UpdatePosition(input.MousePositionScreen, _camera);
-        
-        if (input.IsNumberPressed)
+        if (_isInGame)
         {
-            _specialSpawner.SelectSpecial(input.LastNumberPressed);
+            _specialSpawner.UpdatePosition(input.MousePositionScreen, _camera);
+        
+            if (input.IsNumberPressed)
+            {
+                _specialSpawner.SelectSpecial(input.LastNumberPressed);
+            }
+
+            if (input.IsMousePressed)
+                _specialSpawner.Spawn();
+
+            if (input.PressedMovementKeys.Count > 0)
+                _HandleCameraMove(input.PressedMovementKeys, elapsedTime);
         }
-
-        if (input.IsMousePressed)
-            _specialSpawner.Spawn();
-
-        if (input.PressedMovementKeys.Count > 0)
-             _HandleCameraMove(input.PressedMovementKeys, elapsedTime);
     }
     
     private void _HandleCameraMove(IReadOnlyCollection<MovementKey> keys, double elapsedTime)
