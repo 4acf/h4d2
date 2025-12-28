@@ -18,6 +18,8 @@ public enum ButtonType
 
 public class Button
 {
+    public event EventHandler? Clicked;
+    
     private readonly ButtonType _type;
     private readonly int _x;
     private readonly int _y;
@@ -56,7 +58,7 @@ public class Button
         _UpdateMouseOverState(input.MousePositionScreen);
         if (_isMouseOver && input.IsMousePressed)
         {
-            
+            Clicked?.Invoke(this, EventArgs.Empty);
         }
     }
     

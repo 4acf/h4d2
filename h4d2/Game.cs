@@ -8,6 +8,8 @@ namespace H4D2;
 
 public class Game
 {
+    public event EventHandler? ExitGame;
+    
     private const double _cameraMoveSpeed = 100; 
     
     private readonly UIManager _uiManager;
@@ -22,6 +24,8 @@ public class Game
     public Game(int width, int height)
     {
         _uiManager = new UIManager(width, height);
+        _uiManager.ExitRequested += _OnExitRequested;
+        
         _collisionManager = new CollisionManager<CollisionGroup>();
         Collisions.Configure(_collisionManager);
         Bitmap levelBitmap = H4D2Art.Level11;
@@ -104,4 +108,8 @@ public class Game
             }
         }  
     }
+    
+    private void _OnExitRequested(object? sender, EventArgs e) =>
+        ExitGame?.Invoke(this, EventArgs.Empty);
+        
 }

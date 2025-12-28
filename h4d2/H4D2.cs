@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Runtime.InteropServices.ComTypes;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -43,6 +42,11 @@ public static class H4D2
         };
         
         var game = new Game((int)ScreenWidth, (int)ScreenHeight);
+        game.ExitGame += (_, _) =>
+        {
+            window.Close();
+        };
+        
         var scale = new Vector2f(ScreenScale, ScreenScale);
         var stopwatch = new Stopwatch();
 
