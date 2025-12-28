@@ -10,7 +10,11 @@ public class Game
 {
     public event EventHandler? ExitGame;
     
-    private const double _cameraMoveSpeed = 100; 
+    private const double _cameraMoveSpeed = 100;
+    private const double _defaultVolume = 1.0;
+    
+    private double _musicVolume;
+    private double _sfxVolume;
     
     private readonly UIManager _uiManager;
     private readonly Camera _camera;
@@ -25,6 +29,9 @@ public class Game
     {
         _uiManager = new UIManager(width, height);
         _uiManager.ExitRequested += _OnExitRequested;
+
+        _musicVolume = _defaultVolume;
+        _sfxVolume = _defaultVolume;
         
         _collisionManager = new CollisionManager<CollisionGroup>();
         Collisions.Configure(_collisionManager);
@@ -111,5 +118,4 @@ public class Game
     
     private void _OnExitRequested(object? sender, EventArgs e) =>
         ExitGame?.Invoke(this, EventArgs.Empty);
-        
 }

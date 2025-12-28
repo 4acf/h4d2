@@ -186,6 +186,20 @@ public class Bitmap
             startingX += letterBitmap.Width * 2;
         }
     }
+
+    public void DrawCenteredTextHeader(TextBitmap[] textBitmaps, string text, int y, int color = 0x0)
+    {
+        int width = 0;
+        for (int i = 0; i < text.Length; i++)
+        {
+            TextBitmap letterBitmap = textBitmaps[text[i] - ' '];
+            width += letterBitmap.Width * 2;
+        }
+
+        width += 2;
+        int x = (Width / 2) - (width / 2);
+        DrawTextHeader(textBitmaps, text, x, y, color);
+    }
     
     private void _DrawLetter(TextBitmap letterBitmap, int x, int y, int color)
     {
@@ -347,22 +361,14 @@ public class Bitmap
             Data[i + 3] = 0xff;
         }
     }
-    
-    public void Fill(int x0, int y0, int x1, int y1, int color)
+
+    public void FillAbsolute(int x0, int y0, int x1, int y1, int color)
     {
-        FillBlend(x0, y0, x1, y1, color, 0);
+        FillBlendAbsolute(x0, y0, x1, y1, color, 0);
     }
-    
-    public void FillBlend(int x0, int y0, int x1, int y1, int color, double blend)
+
+    public void FillBlendAbsolute(int x0, int y0, int x1, int y1, int color, double blend)
     {
-        if (_camera != null)
-        {
-            x0 += _camera.XOffset;
-            x1 += _camera.XOffset;
-            y0 += _camera.YOffset;
-            y1 += _camera.YOffset;
-        }
-        
         byte r = (byte)(color >> 16 & 0xff);
         byte g = (byte)(color >> 8 & 0xff);
         byte b = (byte)(color & 0xff);
@@ -384,6 +390,24 @@ public class Bitmap
                 Data[index + 3] = 0xff;
             }
         }
+    }
+    
+    public void Fill(int x0, int y0, int x1, int y1, int color)
+    {
+        FillBlend(x0, y0, x1, y1, color, 0);
+    }
+    
+    public void FillBlend(int x0, int y0, int x1, int y1, int color, double blend)
+    {
+        if (_camera != null)
+        {
+            x0 += _camera.XOffset;
+            x1 += _camera.XOffset;
+            y0 += _camera.YOffset;
+            y1 += _camera.YOffset;
+        }
+        
+        FillBlendAbsolute(x0, y0, x1, y1, color, blend);
     }
     
     public void SetPixel(int x, int y, int color)

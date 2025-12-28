@@ -5,9 +5,12 @@ namespace H4D2.UI.Menus;
 
 public abstract class Menu
 {
+    protected const int _textColor = 0xffffff;
+    
     public event EventHandler? LevelsSelected;
     public event EventHandler? SettingsSelected;
     public event EventHandler? ExitSelected;
+    public event EventHandler? MainMenuSelected;
     
     protected readonly int _width;
     protected readonly int _height;
@@ -30,4 +33,6 @@ public abstract class Menu
         SettingsSelected?.Invoke(this, EventArgs.Empty);
     protected void _RaiseExitSelected() =>
         ExitSelected?.Invoke(this, EventArgs.Empty);
+    protected void _RaiseMainMenuSelected() =>
+        MainMenuSelected?.Invoke(this, EventArgs.Empty);
 }

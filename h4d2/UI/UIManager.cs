@@ -16,7 +16,8 @@ public class UIManager
         _width = width;
         _height = height;
         _menu = new MainMenu(width, height);
-        _menu.ExitSelected += OnExitSelected;
+        _menu.SettingsSelected += _OnSettingsSelected;
+        _menu.ExitSelected += _OnExitSelected;
     }
     
     public void Update(Input input)
@@ -28,7 +29,24 @@ public class UIManager
     {
         _menu.Render(screen);
     }
+
+    private void _NavigateToMainMenu()
+    {
+        _menu = new MainMenu(_width, _height);
+        _menu.SettingsSelected += _OnSettingsSelected;
+        _menu.ExitSelected += _OnExitSelected;
+    }
     
-    private void OnExitSelected(object? sender, EventArgs e) =>
+    private void _NavigateToSettings()
+    {
+        _menu = new SettingsMenu(_width, _height);
+        _menu.MainMenuSelected += OnMainMenuSelected;
+    }
+    
+    private void _OnSettingsSelected(object? sender, EventArgs e) =>
+        _NavigateToSettings();
+    private void _OnExitSelected(object? sender, EventArgs e) =>
         ExitRequested?.Invoke(this, EventArgs.Empty);
+    private void OnMainMenuSelected(object? sender, EventArgs e) =>
+        _NavigateToMainMenu();
 }

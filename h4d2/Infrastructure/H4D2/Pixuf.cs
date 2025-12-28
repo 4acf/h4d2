@@ -3,6 +3,18 @@
 public static class Pixuf
 {
     public static int Characters => Widths.Length;
+
+    public static int GetTextWidth(string text)
+    {
+        int result = 0;
+        TextBitmap[] textBitmaps = H4D2Art.Text;
+        for (int i = 0; i < text.Length; i++)
+        {
+            TextBitmap letterBitmap = textBitmaps[text[i] - ' '];
+            result += letterBitmap.Width;
+        }
+        return result;
+    }
     
     public static readonly int[] Widths =
     [
