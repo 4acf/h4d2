@@ -64,6 +64,31 @@ public class Bitmap
         Width = spriteSize;
         Height = spriteSize;
     }
+    
+    public Bitmap(SKBitmap bitmap, int spriteWidth, int spriteHeight, int row, int col)
+    {
+        int numBytes = spriteWidth * spriteHeight * 4;
+        Data = new byte[numBytes];
+
+        for (int i = 0; i < spriteHeight; i++)
+        {
+            for (int j = 0; j < spriteWidth; j++)
+            {
+                int x = (col * spriteWidth) + j;
+                int y = (row * spriteHeight) + i;
+                SKColor color = bitmap.GetPixel(x, y);
+
+                int index = (i * spriteWidth * 4) + (j * 4);
+                Data[index] = color.Red;
+                Data[index + 1] = color.Green;
+                Data[index + 2] = color.Blue;
+                Data[index + 3] = color.Alpha;
+            }
+        }
+        
+        Width = spriteWidth;
+        Height = spriteHeight;
+    }
 
     public int ColorAt(int x, int y)
     {
@@ -98,15 +123,9 @@ public class Bitmap
             Data[i + 2] = b;
         }
     }
-    
-    public void Draw(Bitmap bitmap, int x, int y, bool flip = false)
+
+    public void DrawAbsolute(Bitmap bitmap, int x, int y, bool flip = false)
     {
-        if (_camera != null)
-        {
-            x += _camera.XOffset;
-            y += _camera.YOffset;
-        }
-        
         for (int i = 0; i < bitmap.Height; i++)
         {
             for (int j = 0; j < bitmap.Width; j++)
@@ -133,6 +152,17 @@ public class Bitmap
                 Data[parentIndex + 3] = bitmap.Data[childIndex + 3];
             }
         }
+    }
+    
+    public void Draw(Bitmap bitmap, int x, int y, bool flip = false)
+    {
+        if (_camera != null)
+        {
+            x += _camera.XOffset;
+            y += _camera.YOffset;
+        }
+        
+        DrawAbsolute(bitmap, x, y, flip);
     }
 
     public void DrawLineOfText(TextBitmap[] textBitmaps, string text, int x, int y, int color = 0x0)

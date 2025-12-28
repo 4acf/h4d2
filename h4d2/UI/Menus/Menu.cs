@@ -1,0 +1,21 @@
+﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
+
+namespace H4D2.UI.Menus;
+
+public abstract class Menu
+{
+    protected readonly int _width;
+    protected readonly int _height;
+    protected readonly int _centeredLargeButtonX;
+    
+    protected Menu(int width, int height)
+    {
+        _width = width;
+        _height = height;
+        _centeredLargeButtonX = (width / 2) - (H4D2Art.LargeButtonWidth / 2);
+    }
+
+    public abstract void Update(Input input);
+    public abstract void Render(Bitmap screen);
+}

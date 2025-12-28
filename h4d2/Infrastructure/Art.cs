@@ -46,6 +46,32 @@ public static class Art
         
         return result;
     }
+    
+    public static Bitmap[][] LoadBitmaps(string resourceName, int spriteWidth, int spriteHeight, int rows, int columns)
+    {
+        var result = new Bitmap[rows][];
+        for (int i = 0; i < rows; i++)
+        {
+            result[i] = new Bitmap[columns];
+        }
+
+        SKBitmap fullResourceBitmap = ResourceLoader.LoadEmbeddedResource(resourceName);
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                result[i][j] = new Bitmap(
+                    fullResourceBitmap,
+                    spriteWidth,
+                    spriteHeight,
+                    i,
+                    j
+                );
+            }
+        }
+        
+        return result;
+    }
 
     public static TextBitmap[] LoadFontBitmaps(string resourceName, int characters, int[] widths, int height)
     {

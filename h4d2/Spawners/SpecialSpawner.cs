@@ -33,7 +33,7 @@ public class SpecialSpawner
         _spawnAdjustedMousePosition = new Position(0, 0);
     }
 
-    public void UpdatePosition(Position mousePosition, Camera camera)
+    public void UpdatePosition(ReadonlyPosition mousePosition, Camera camera)
     {
         (double, double) positionOffset = Isometric.ScreenSpaceToWorldSpace(
             mousePosition.X,

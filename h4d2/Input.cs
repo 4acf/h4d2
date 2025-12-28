@@ -18,7 +18,7 @@ public class Input
     private readonly RenderWindow _window;
 
     private Vector2i _mousePositionWindow;
-    public Position MousePositionScreen => 
+    public ReadonlyPosition MousePositionScreen => 
         new (
             (double)_mousePositionWindow.X / H4D2.ScreenScale, 
             H4D2.ScreenHeight - ((double)_mousePositionWindow.Y / H4D2.ScreenScale)

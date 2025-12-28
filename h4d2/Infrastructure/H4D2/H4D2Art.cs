@@ -11,7 +11,9 @@ public static class H4D2Art
     public const int TileIsoHeight = 12;
     public const int TileIsoHalfHeight = 6;
     public const int TileCenterOffset = 19;
-    public const int SpecialButtonSize = 24;
+    public const int SmallButtonSize = 24;
+    public const int LargeButtonWidth = 72;
+    public const int LargeButtonHeight = 24;
     public const int ShadowColor = 0x0;
     public const double ShadowBlend = 0.9;
     private const string _resourcePrefix = "h4d2.Resources.";
@@ -45,6 +47,8 @@ public static class H4D2Art
     private static readonly Bitmap[][] _tiles = _LoadTiles();
     public static readonly Bitmap[] Floors = _tiles[0];
     public static readonly Bitmap[] Walls = _tiles[1];
+
+    public static readonly Bitmap Title = Art.LoadBitmap($"{_resourcePrefix}ui.title.png");
     
     public static readonly TextBitmap[] Text = _LoadPixufFont();
     public static readonly Bitmap[] Explosion = _particles[0];
@@ -53,6 +57,20 @@ public static class H4D2Art
     public static readonly Bitmap[] NullParticle = _particles[3];
     public static readonly Bitmap[] BileOverlays = _bileOverlays.SelectMany(x => x).ToArray();
     public static readonly Bitmap[] SpecialProfiles = Specials[8];
+
+    public static class Buttons
+    {
+        private static readonly Bitmap[][] _smallButtons = _LoadSmallButtons();
+        private static readonly Bitmap[][] _largeButtons = _LoadLargeButtons();
+        public static readonly Bitmap[] Play = _largeButtons[0];
+        public static readonly Bitmap[] Settings = _largeButtons[1];
+        public static readonly Bitmap[] Exit = _largeButtons[2];
+        public static readonly Bitmap[] MainMenu = _largeButtons[3];
+        public static readonly Bitmap[] Resume = _largeButtons[4];
+        public static readonly Bitmap[] Levels = _largeButtons[5];
+        public static readonly Bitmap[] Navigation = _smallButtons[0];
+        public static readonly Bitmap[] Spawner = _smallButtons[1];
+    }
     
     private static Bitmap[][] _LoadSurvivors() => 
         Art.LoadBitmaps($"{_resourcePrefix}survivor.png", SpriteSize, 8, 53);
@@ -74,6 +92,8 @@ public static class H4D2Art
         Art.LoadBitmaps($"{_resourcePrefix}levels.tiles.png", TileSize, 2, 3);
     private static TextBitmap[] _LoadPixufFont() =>
         Art.LoadFontBitmaps($"{_resourcePrefix}pixuf.png", Pixuf.Characters, Pixuf.Widths, 7);
-    private static Bitmap[][] _LoadSpecialButtons() =>
-        Art.LoadBitmaps($"{_resourcePrefix}ui.button.png", SpecialButtonSize, 1, 2);
+    private static Bitmap[][] _LoadSmallButtons() =>
+        Art.LoadBitmaps($"{_resourcePrefix}ui.smallbuttons.png", SmallButtonSize, 2, 2);
+    private static Bitmap[][] _LoadLargeButtons() =>
+        Art.LoadBitmaps($"{_resourcePrefix}ui.largebuttons.png", LargeButtonWidth, LargeButtonHeight, 6, 2);
 }

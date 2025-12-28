@@ -14,7 +14,6 @@
 
     <ItemGroup>
       <Folder Include="Resources\" />
-      <Folder Include="UI\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -73,6 +72,8 @@
       <EmbeddedResource Include="Resources\ui\largebuttons.png" />
       <None Remove="Resources\ui\smallbuttons.png" />
       <EmbeddedResource Include="Resources\ui\smallbuttons.png" />
+      <None Remove="Resources\ui\title.png" />
+      <EmbeddedResource Include="Resources\ui\title.png" />
     </ItemGroup>
 
     <ItemGroup>

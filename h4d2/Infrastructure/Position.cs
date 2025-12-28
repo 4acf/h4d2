@@ -44,6 +44,13 @@ public readonly struct ReadonlyPosition
         Y = y;
         Z = z;
     }
+
+    public ReadonlyPosition(double x, double y)
+    {
+        X = x;
+        Y = y;
+        Z = 0;
+    }
     
     public ReadonlyPosition(Position position)
     {
