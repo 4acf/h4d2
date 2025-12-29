@@ -56,7 +56,6 @@
       <None Remove="Resources\levels\level14.png" />
       <EmbeddedResource Include="Resources\levels\level14.png" />
       <None Remove="Resources\levels\level15.png" />
-      <EmbeddedResource Include="Resources\levels\level15.png" />
       <None Remove="Resources\levels\level4.png" />
       <EmbeddedResource Include="Resources\levels\level4.png" />
       <None Remove="Resources\levels\level8.png" />
@@ -74,6 +73,8 @@
       <EmbeddedResource Include="Resources\ui\smallbuttons.png" />
       <None Remove="Resources\ui\title.png" />
       <EmbeddedResource Include="Resources\ui\title.png" />
+      <None Remove="Resources\levels\level0.png" />
+      <EmbeddedResource Include="Resources\levels\level0.png" />
     </ItemGroup>
 
     <ItemGroup>

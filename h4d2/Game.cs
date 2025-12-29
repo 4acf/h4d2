@@ -35,7 +35,7 @@ public class Game
         
         _collisionManager = new CollisionManager<CollisionGroup>();
         Collisions.Configure(_collisionManager);
-        Bitmap levelBitmap = H4D2Art.Level11;
+        Bitmap levelBitmap = H4D2Art.Level10;
         
         _camera = new Camera(width, height);
         int lowerYBound = H4D2Art.TileCenterOffset - ((levelBitmap.Height / 2) * H4D2Art.TileIsoHeight);

@@ -28,6 +28,7 @@ public static class H4D2Art
     private static readonly Bitmap[][] _bileOverlays = _LoadBileOverlays();
 
     // to be moved soon
+    public static readonly Bitmap Level0 = Art.LoadBitmap($"{_resourcePrefix}levels.level0.png");
     public static readonly Bitmap Level1 = Art.LoadBitmap($"{_resourcePrefix}levels.level1.png");
     public static readonly Bitmap Level2 = Art.LoadBitmap($"{_resourcePrefix}levels.level2.png");
     public static readonly Bitmap Level3 = Art.LoadBitmap($"{_resourcePrefix}levels.level3.png");
@@ -42,7 +43,6 @@ public static class H4D2Art
     public static readonly Bitmap Level12 = Art.LoadBitmap($"{_resourcePrefix}levels.level12.png");
     public static readonly Bitmap Level13 = Art.LoadBitmap($"{_resourcePrefix}levels.level13.png");
     public static readonly Bitmap Level14 = Art.LoadBitmap($"{_resourcePrefix}levels.level14.png");
-    public static readonly Bitmap Level15 = Art.LoadBitmap($"{_resourcePrefix}levels.level15.png");
     
     private static readonly Bitmap[][] _tiles = _LoadTiles();
     public static readonly Bitmap[] Floors = _tiles[0];

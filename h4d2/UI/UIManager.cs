@@ -16,7 +16,8 @@ public class UIManager
         _width = width;
         _height = height;
         _menu = new MainMenu(width, height);
-        _menu.SettingsSelected += _OnSettingsSelected;
+        _menu.LevelsSelected += _NavigateToLevels;
+        _menu.SettingsSelected += _NavigateToSettings;
         _menu.ExitSelected += _OnExitSelected;
     }
     
@@ -30,23 +31,26 @@ public class UIManager
         _menu.Render(screen);
     }
 
-    private void _NavigateToMainMenu()
+    private void _NavigateToLevels(object? sender, EventArgs e)
+    {
+        _menu = new LevelsMenu(_width, _height);
+        _menu.MainMenuSelected += _NavigateToMainMenu;
+    }
+    
+    private void _NavigateToMainMenu(object? sender, EventArgs e)
     {
         _menu = new MainMenu(_width, _height);
-        _menu.SettingsSelected += _OnSettingsSelected;
+        _menu.LevelsSelected += _NavigateToLevels;
+        _menu.SettingsSelected += _NavigateToSettings;
         _menu.ExitSelected += _OnExitSelected;
     }
     
-    private void _NavigateToSettings()
+    private void _NavigateToSettings(object? sender, EventArgs e)
     {
         _menu = new SettingsMenu(_width, _height);
-        _menu.MainMenuSelected += OnMainMenuSelected;
+        _menu.MainMenuSelected += _NavigateToMainMenu;
     }
     
-    private void _OnSettingsSelected(object? sender, EventArgs e) =>
-        _NavigateToSettings();
     private void _OnExitSelected(object? sender, EventArgs e) =>
         ExitRequested?.Invoke(this, EventArgs.Empty);
-    private void OnMainMenuSelected(object? sender, EventArgs e) =>
-        _NavigateToMainMenu();
 }
