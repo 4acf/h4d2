@@ -15,12 +15,14 @@ public abstract class Menu
     protected readonly int _width;
     protected readonly int _height;
     protected readonly int _centeredLargeButtonX;
+    protected readonly int _centeredSmallButtonY;
     
     protected Menu(int width, int height)
     {
         _width = width;
         _height = height;
         _centeredLargeButtonX = (width / 2) - (H4D2Art.LargeButtonWidth / 2);
+        _centeredSmallButtonY = (height / 2) + (H4D2Art.SmallButtonSize / 2);
     }
 
     public abstract void Update(Input input);

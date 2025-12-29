@@ -7,7 +7,7 @@ public class CenteredHeader
 {
     private const int _shadowColor = 0x333333;
     
-    private readonly string _text;
+    private string _text;
     private readonly int _y;
     private readonly int _color;
     
@@ -18,6 +18,11 @@ public class CenteredHeader
         _color = color;
     }
 
+    public void UpdateText(string text)
+    {
+        _text = text;
+    }
+    
     public void Render(Bitmap screen)
     {
         screen.DrawCenteredTextHeader(H4D2Art.Text, _text, _y - 2, _shadowColor);

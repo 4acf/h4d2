@@ -1,4 +1,6 @@
-﻿namespace H4D2.Infrastructure.H4D2;
+﻿using H4D2.Levels;
+
+namespace H4D2.Infrastructure.H4D2;
 
 public static class H4D2Art
 {
