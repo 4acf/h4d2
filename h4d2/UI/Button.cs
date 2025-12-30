@@ -36,20 +36,21 @@ public class Button
         _xFlip = type == ButtonType.Backward;
         _isMouseOver = false;
 
-        if
-        (
-            type == ButtonType.Forward ||
-            type == ButtonType.Backward ||
-            type == ButtonType.Spawner
-        )
+        switch (type)
         {
-            _width = H4D2Art.SmallButtonSize;
-            _height = H4D2Art.SmallButtonSize;
-        }
-        else
-        {
-            _width = H4D2Art.LargeButtonWidth;
-            _height = H4D2Art.LargeButtonHeight;
+            case ButtonType.Forward:
+            case ButtonType.Backward:
+                _width = H4D2Art.SmallButtonWidth;
+                _height = H4D2Art.SmallButtonHeight;
+                break;
+            case ButtonType.Spawner:
+                _width = H4D2Art.SpawnerButtonWidth;
+                _height = H4D2Art.SmallButtonHeight;
+                break;
+            default:
+                _width = H4D2Art.LargeButtonWidth;
+                _height = H4D2Art.LargeButtonHeight;
+                break;
         }
     }
 

@@ -32,7 +32,7 @@ public class LevelsMenu : Menu
             _RefreshLevelDetails();
         };
         
-        int forwardButtonX = width - _xEdgePadding - H4D2Art.SmallButtonSize;
+        int forwardButtonX = width - _xEdgePadding - H4D2Art.SmallButtonWidth;
         _forwardNavigationButton = new Button(ButtonType.Forward, forwardButtonX, _centeredSmallButtonY);
         _forwardNavigationButton.Clicked += (_, _) =>
         {

@@ -7,6 +7,18 @@ using H4D2.Levels;
 
 namespace H4D2.Spawners;
 
+public enum SpecialDescriptor
+{
+    Hunter,
+    Boomer,
+    Smoker,
+    Charger,
+    Jockey,
+    Spitter,
+    Tank,
+    Witch
+}
+
 public class SpecialSpawner
 {
     public ReadonlyPosition? CenterMass =>

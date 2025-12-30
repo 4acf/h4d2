@@ -24,7 +24,7 @@ public abstract class Menu
         _width = width;
         _height = height;
         _centeredLargeButtonX = (width / 2) - (H4D2Art.LargeButtonWidth / 2);
-        _centeredSmallButtonY = (height / 2) + (H4D2Art.SmallButtonSize / 2);
+        _centeredSmallButtonY = (height / 2) + (H4D2Art.SmallButtonHeight / 2);
     }
 
     public abstract void Update(Input input);

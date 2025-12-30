@@ -33,8 +33,9 @@ public class Game
         
         _collisionManager = new CollisionManager<CollisionGroup>();
         Collisions.Configure(_collisionManager);
-        Bitmap levelBitmap = H4D2Art.Level10;
-        
+
+        LevelConfig mainMenuLevel = LevelCollection.Levels[10];
+        Bitmap levelBitmap = mainMenuLevel.Layout;
         _camera = new Camera(width, height);
         int lowerYBound = H4D2Art.TileCenterOffset - ((levelBitmap.Height / 2) * H4D2Art.TileIsoHeight);
         int upperYOffset = 
@@ -48,13 +49,13 @@ public class Game
             lowerYBound + upperYOffset
         );
         
-        _level = new Level(levelBitmap, _collisionManager, _camera);
+        _level = new Level(mainMenuLevel, _collisionManager, _camera);
         _screen = new Bitmap(width, height, _camera);
         _shadows = new ShadowBitmap(width, height, _camera);
         _specialSpawner = null;
         _isInGame = false;
     }
-
+    
     public void Update(Input input, double elapsedTime)
     {
         //_HandleInputCommands(input, elapsedTime);

@@ -15,9 +15,9 @@ public class LevelConfig
     public required int MaxThrowables { get; init; }
     public required ImmutableArray<SurvivorDescriptor> Survivors { get; init; }
     public required ImmutableDictionary<SpecialDescriptor, int> BuyableSpecials { get; init; }
-    public required ImmutableHashSet<ConsumableDescriptor> Consumables { get; init; }
-    public required ImmutableHashSet<ThrowableDescriptor> Throwables { get; init; }
-    public required ImmutableHashSet<UncommonDescriptor> Uncommons { get; init; }
+    public required ImmutableArray<ConsumableDescriptor> Consumables { get; init; }
+    public required ImmutableArray<ThrowableDescriptor> Throwables { get; init; }
+    public required ImmutableArray<UncommonDescriptor> Uncommons { get; init; }
 }
 
 public static class StandardLevelConfig
@@ -38,8 +38,8 @@ public static class StandardLevelConfig
         SurvivorDescriptor.Zoey
     ];
 
-    public static readonly int MaxConsumables = 3;
-    public static readonly int MaxThrowables = 3;
+    public const int MaxConsumables = 3;
+    public const int MaxThrowables = 3;
 
     public static readonly ImmutableDictionary<SpecialDescriptor, int> BuyableSpecials = 
     new Dictionary<SpecialDescriptor, int>
@@ -54,21 +54,21 @@ public static class StandardLevelConfig
         {SpecialDescriptor.Witch, 1250}
     }.ToImmutableDictionary();
 
-    public static readonly ImmutableHashSet<ConsumableDescriptor> Consumables =
+    public static readonly ImmutableArray<ConsumableDescriptor> Consumables =
     [
         ConsumableDescriptor.FirstAidKit,
         ConsumableDescriptor.Pills,
         ConsumableDescriptor.Adrenaline
     ];
 
-    public static readonly ImmutableHashSet<ThrowableDescriptor> Throwables =
+    public static readonly ImmutableArray<ThrowableDescriptor> Throwables =
     [
         ThrowableDescriptor.Molotov,
         ThrowableDescriptor.PipeBomb,
         ThrowableDescriptor.BileBomb
     ];
 
-    public static readonly ImmutableHashSet<UncommonDescriptor> AllUncommons =
+    public static readonly ImmutableArray<UncommonDescriptor> Uncommons =
     [
         UncommonDescriptor.Hazmat,
         UncommonDescriptor.Clown,
@@ -222,7 +222,7 @@ public static class LevelCollection
                 }.ToImmutableDictionary(),
             Consumables = StandardLevelConfig.Consumables,
             Throwables = StandardLevelConfig.Throwables,
-            Uncommons = []
+            Uncommons = [UncommonDescriptor.Clown]
         },
         new()
         {
@@ -235,7 +235,7 @@ public static class LevelCollection
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
             Consumables = StandardLevelConfig.Consumables,
             Throwables = StandardLevelConfig.Throwables,
-            Uncommons = StandardLevelConfig.AllUncommons
+            Uncommons = StandardLevelConfig.Uncommons
         },
         new()
         {
@@ -261,7 +261,7 @@ public static class LevelCollection
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
             Consumables = StandardLevelConfig.Consumables,
             Throwables = StandardLevelConfig.Throwables,
-            Uncommons = StandardLevelConfig.AllUncommons
+            Uncommons = StandardLevelConfig.Uncommons
         },
         new()
         {
@@ -291,7 +291,7 @@ public static class LevelCollection
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
             Consumables = StandardLevelConfig.Consumables,
             Throwables = StandardLevelConfig.Throwables,
-            Uncommons = StandardLevelConfig.AllUncommons
+            Uncommons = StandardLevelConfig.Uncommons
         }
     ];
     

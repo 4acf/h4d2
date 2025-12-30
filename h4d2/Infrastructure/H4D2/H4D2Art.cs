@@ -1,6 +1,4 @@
-﻿using H4D2.Levels;
-
-namespace H4D2.Infrastructure.H4D2;
+﻿namespace H4D2.Infrastructure.H4D2;
 
 public static class H4D2Art
 {
@@ -13,7 +11,9 @@ public static class H4D2Art
     public const int TileIsoHeight = 12;
     public const int TileIsoHalfHeight = 6;
     public const int TileCenterOffset = 19;
-    public const int SmallButtonSize = 24;
+    public const int SmallButtonWidth = 24;
+    public const int SmallButtonHeight = 24;
+    public const int SpawnerButtonWidth = 21;
     public const int LargeButtonWidth = 72;
     public const int LargeButtonHeight = 24;
     public const int ShadowColor = 0x0;
@@ -95,7 +95,7 @@ public static class H4D2Art
     private static TextBitmap[] _LoadPixufFont() =>
         Art.LoadFontBitmaps($"{_resourcePrefix}pixuf.png", Pixuf.Characters, Pixuf.Widths, 7);
     private static Bitmap[][] _LoadSmallButtons() =>
-        Art.LoadBitmaps($"{_resourcePrefix}ui.smallbuttons.png", SmallButtonSize, 2, 2);
+        Art.LoadBitmaps($"{_resourcePrefix}ui.smallbuttons.png", SmallButtonWidth, 2, 2);
     private static Bitmap[][] _LoadLargeButtons() =>
         Art.LoadBitmaps($"{_resourcePrefix}ui.largebuttons.png", LargeButtonWidth, LargeButtonHeight, 6, 2);
 }

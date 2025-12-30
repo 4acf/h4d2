@@ -34,8 +34,6 @@ public class Level
     private const int _maxSpawnWaveSize = 15;
     private const int _maxZombiesAlive = 50;
     private const int _maxParticles = 10000;
-    private const int _maxConsumables = 3;
-    private const int _maxThrowables = 3;
     private const int _commonKillCredit = 1;
     private const int _uncommonKillCredit = 3;
     private const double _mobSpawnXOffset = 5.5;
@@ -55,6 +53,7 @@ public class Level
     public readonly int Width;
     public readonly int Height;
     public readonly CollisionManager<CollisionGroup> CollisionManager;
+    private readonly LevelConfig _config;
     private readonly CountdownTimer _consumableSpawnTimer;
     private readonly CountdownTimer _throwableSpawnTimer;
     private readonly CountdownTimer _zombieSpawnTimer;
@@ -62,7 +61,6 @@ public class Level
     
     public bool IsGameOver => GetLivingMobs<Survivor>().Count == 0;
     public int Credits { get; private set; }
-    public int CreditsSpent { get; private set; }
     private readonly List<Entity> _entities;
     private readonly List<Particle> _particles;
     private readonly List<LevelElement> _levelElements;
@@ -75,8 +73,9 @@ public class Level
     private readonly Queue<Zombie> _zombieSpawnQueue;
     private readonly EntityCollisionMap _entityCollisionMap;
     
-    public Level(Bitmap levelBitmap, CollisionManager<CollisionGroup> collisionManager, Camera camera)
+    public Level(LevelConfig config, CollisionManager<CollisionGroup> collisionManager, Camera camera)
     {
+        _config = config;
         _consumableSpawnTimer = new CountdownTimer(_consumableSpawnCooldownSeconds);
         _throwableSpawnTimer = new CountdownTimer(_throwableSpawnCooldownSeconds);
         _throwableSpawnTimer.Update(_throwableSpawnCooldownSeconds / 2.0);
@@ -89,8 +88,8 @@ public class Level
         _levelElements = [];
         CollisionManager = collisionManager;
         
-        Width = levelBitmap.Width + _padding;
-        Height = levelBitmap.Height + _padding;
+        Width = config.Layout.Width + _padding;
+        Height = config.Layout.Height + _padding;
         _zombieSpawnLocations = [];
         _consumableSpawnLocations = [];
         _activeConsumableLocations = [];
@@ -105,13 +104,13 @@ public class Level
                 int paddedX = x - (_padding / 2);
                 int paddedY = y - (_padding / 2);
                 
-                if (paddedX < 0 || paddedY < 0 || paddedX >= levelBitmap.Width || paddedY >= levelBitmap.Height)
+                if (paddedX < 0 || paddedY < 0 || paddedX >= config.Layout.Width || paddedY >= config.Layout.Height)
                 {
                     tileTypes[(y * Width) + x] = TileType.EdgeWall;
                     continue;
                 }
 
-                int color = levelBitmap.ColorAt(paddedX, paddedY);
+                int color = config.Layout.ColorAt(paddedX, paddedY);
                 int tileIndex = TileIndex(x, y); 
                 switch (color)
                 {
@@ -146,9 +145,8 @@ public class Level
         CostMap = new CostMap(this, TileTypes);
         _entityCollisionMap = new EntityCollisionMap(this);
         Credits = 0;
-        CreditsSpent = 0;
 
-        while (_activeConsumableLocations.Count < Math.Min(_maxConsumables, _consumableSpawnLocations.Count))
+        while (_activeConsumableLocations.Count < Math.Min(config.MaxConsumables, _consumableSpawnLocations.Count))
         {
             _SpawnConsumable();
         }
@@ -524,7 +522,7 @@ public class Level
         int numThrowables = _entities
             .OfType<Throwable>()
             .Count(t => !t.Removed);
-        if(numThrowables < _maxThrowables)
+        if(numThrowables < _config.MaxThrowables)
             _throwableSpawnTimer.Update(elapsedTime);
         if (_throwableSpawnTimer.IsFinished && _SpawnThrowable())
         { 
@@ -534,7 +532,7 @@ public class Level
         int numConsumables = _entities
             .OfType<Consumable>()
             .Count(c => !c.Removed);
-        if(numConsumables < Math.Min(_maxConsumables, _consumableSpawnLocations.Count))
+        if(numConsumables < Math.Min(_config.MaxConsumables, _consumableSpawnLocations.Count))
             _consumableSpawnTimer.Update(elapsedTime);
         if (_consumableSpawnTimer.IsFinished && _SpawnConsumable())
         {
@@ -713,16 +711,9 @@ public class Level
     {
         if(Probability.Percent(95))
             return new Common(this, position);
-        int randomUncommon = RandomSingleton.Instance.Next(5);
-        return randomUncommon switch
-        {
-            0 => new Hazmat(this, position),
-            1 => new Clown(this, position),
-            2 => new Mudman(this, position),
-            3 => new Worker(this, position),
-            4 => new Riot(this, position),
-            _ => new Common(this, position)
-        };
+        int randomUncommonIndex = RandomSingleton.Instance.Next(_config.Uncommons.Length);
+        UncommonDescriptor uncommon = _config.Uncommons[randomUncommonIndex];
+        return UncommonSpawner.Spawn(uncommon, this, position);
     }
 
     private void _SpawnSurvivors(Camera camera, int x, int y)
@@ -738,10 +729,10 @@ public class Level
             (x * TilePhysicalSize) + mobSpawnOffset.Item1,
             (-y * TilePhysicalSize) + mobSpawnOffset.Item2
         );
-        _entities.Add(new Coach(this, survivorSpawnPos.Copy()));
-        _entities.Add(new Nick(this, survivorSpawnPos.Copy()));
-        _entities.Add(new Ellis(this, survivorSpawnPos.Copy()));
-        _entities.Add(new Rochelle(this, survivorSpawnPos.Copy()));
+        foreach (SurvivorDescriptor survivor in _config.Survivors)
+        {
+            _entities.Add(SurvivorSpawner.Spawn(survivor, this, survivorSpawnPos.Copy()));            
+        }
     }
 
     private bool _SpawnConsumable()
@@ -765,19 +756,14 @@ public class Level
         if (!validLocationFound)
             return false;
         
-        int randomConsumable = RandomSingleton.Instance.Next(3);
+        int randomConsumable = RandomSingleton.Instance.Next(_config.Consumables.Length);
         Tile tile = GetTileFromIndex(tileIndex);
         Position consumablePos = new Position(
             (tile.X * TilePhysicalSize) + _pickupXOffset,
             (-tile.Y * TilePhysicalSize) + _pickupYOffset
         );
-        Consumable consumable = randomConsumable switch
-        {
-            0 => new FirstAidKit(this, consumablePos),
-            1 => new Pills(this, consumablePos),
-            _ => new Adrenaline(this, consumablePos)
-        };
-        _entities.Add(consumable);
+        ConsumableDescriptor consumable = _config.Consumables[randomConsumable];
+        _entities.Add(ConsumableSpawner.Spawn(consumable, this, consumablePos));
         _activeConsumableLocations.Add(tileIndex);
         return true;
     }
@@ -810,18 +796,13 @@ public class Level
         
         Tile tile = GetTileFromIndex(tileIndex);
         int randomThrowable =
-            RandomSingleton.Instance.Next(3);
+            RandomSingleton.Instance.Next(_config.Throwables.Length);
         Position throwablePos = new Position(
             (tile.X * TilePhysicalSize) + _pickupXOffset,
             (-tile.Y * TilePhysicalSize) + _pickupYOffset
         );
-        Throwable throwable = randomThrowable switch
-        {
-            0 => new Molotov(this, throwablePos),
-            1 => new PipeBomb(this, throwablePos),
-            _ => new BileBomb(this, throwablePos)
-        };
-        _entities.Add(throwable);
+        ThrowableDescriptor throwable = _config.Throwables[randomThrowable];
+        _entities.Add(ThrowableSpawner.Spawn(throwable, this, throwablePos));
         _activeThrowableLocations.Add(tileIndex);
         return true;
     }
