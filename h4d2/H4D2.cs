@@ -43,8 +43,9 @@ public static class H4D2
         };
 
         var saveManager = new SaveManager();
+        var audioManager = new AudioManager(saveManager.GetMusicVolume(), saveManager.GetSFXVolume());
         
-        var game = new Game((int)ScreenWidth, (int)ScreenHeight);
+        var game = new Game((int)ScreenWidth, (int)ScreenHeight, saveManager, audioManager);
         game.ExitGame += (_, _) =>
         {
             window.Close();

@@ -4,6 +4,8 @@ namespace H4D2.UI;
 
 public class VolumeSelector
 {
+    public event EventHandler? ValueUpdated; 
+    
     private const int _sections = 10;
     private const int _sectionWidth = 6;
     private const int _sectionHeight = 9;
@@ -16,14 +18,19 @@ public class VolumeSelector
     private bool _isMouseOver;
     private int _numSelected;
     
-    public VolumeSelector(int x, int y)
+    public VolumeSelector(int x, int y, double initialVolume)
     {
         _x = x;
         _y = y;
         _isMouseOver = false;
-        _numSelected = 10;
+        _numSelected = (int)(initialVolume * _sections);
     }
 
+    public double GetVolume()
+    {
+        return (double)_numSelected / _sections;
+    }
+    
     public void Update(Input input)
     {
         _UpdateMouseOverState(input.MousePositionScreen);
@@ -35,6 +42,7 @@ public class VolumeSelector
                 _numSelected = 0;
             else
                 _numSelected = (int)Math.Ceiling(percentage * _sections);
+            ValueUpdated?.Invoke(this, EventArgs.Empty);
         }
     }
 

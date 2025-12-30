@@ -11,11 +11,8 @@ public class Game
     public event EventHandler? ExitGame;
     
     private const double _cameraMoveSpeed = 100;
-    private const double _defaultVolume = 1.0;
-    
-    private double _musicVolume;
-    private double _sfxVolume;
-    
+    private readonly SaveManager _saveManager;
+    private readonly AudioManager _audioManager;
     private readonly UIManager _uiManager;
     private readonly Camera _camera;
     private readonly Bitmap _screen;
@@ -25,13 +22,14 @@ public class Game
     private SpecialSpawner? _specialSpawner;
     private bool _isInGame;
     
-    public Game(int width, int height)
+    public Game(int width, int height, SaveManager saveManager, AudioManager audioManager)
     {
-        _uiManager = new UIManager(width, height);
+        _saveManager = saveManager;
+        _audioManager = audioManager;
+        _uiManager = new UIManager(saveManager, width, height);
+        _uiManager.MusicVolumeChangeRequested += _OnMusicVolumeChangeRequested;
+        _uiManager.SFXVolumeChangeRequested += _OnSFXVolumeChangeRequested;
         _uiManager.ExitRequested += _OnExitRequested;
-
-        _musicVolume = _defaultVolume;
-        _sfxVolume = _defaultVolume;
         
         _collisionManager = new CollisionManager<CollisionGroup>();
         Collisions.Configure(_collisionManager);
@@ -115,7 +113,19 @@ public class Game
             }
         }  
     }
-    
+
+    private void _OnMusicVolumeChangeRequested(object? sender, MusicVolumeChangedEventArgs e)
+    {
+        _audioManager.UpdateMusicVolume(e.MusicVolume);
+        _saveManager.SaveNewMusicVolume(e.MusicVolume);
+    }
+
+    private void _OnSFXVolumeChangeRequested(object? sender, SFXVolumeChangedEventArgs e)
+    {
+        _audioManager.UpdateSFXVolume(e.SFXVolume);
+        _saveManager.SaveNewSFXVolume(e.SFXVolume);
+    }
+
     private void _OnExitRequested(object? sender, EventArgs e) =>
         ExitGame?.Invoke(this, EventArgs.Empty);
 }

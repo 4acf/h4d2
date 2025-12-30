@@ -1,18 +1,41 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.UI.Menus;
 
 namespace H4D2.UI;
 
+public class MusicVolumeChangedEventArgs : EventArgs
+{
+    public readonly double MusicVolume;
+    public MusicVolumeChangedEventArgs(double musicVolume)
+    {
+        MusicVolume = musicVolume;
+    }
+}
+
+public class SFXVolumeChangedEventArgs : EventArgs
+{
+    public readonly double SFXVolume;
+    public SFXVolumeChangedEventArgs(double sfxVolume)
+    {
+        SFXVolume = sfxVolume;
+    }
+}
+
 public class UIManager
 {
+    public event EventHandler<MusicVolumeChangedEventArgs>? MusicVolumeChangeRequested;
+    public event EventHandler<SFXVolumeChangedEventArgs>? SFXVolumeChangeRequested;
     public event EventHandler? ExitRequested;
-    
+
+    private readonly SaveManager _saveManager;
     private readonly int _width;
     private readonly int _height;
     private Menu _menu;
     
-    public UIManager(int width, int height)
+    public UIManager(SaveManager saveManager, int width, int height)
     {
+        _saveManager = saveManager;
         _width = width;
         _height = height;
         _menu = new MainMenu(width, height);
@@ -47,9 +70,22 @@ public class UIManager
     
     private void _NavigateToSettings(object? sender, EventArgs e)
     {
-        _menu = new SettingsMenu(_width, _height);
+        _menu = new SettingsMenu(
+            _width,
+            _height,
+            _saveManager.GetMusicVolume(),
+            _saveManager.GetSFXVolume()
+        );
         _menu.MainMenuSelected += _NavigateToMainMenu;
+        _menu.MusicVolumeChanged += _OnMusicVolumeChanged;
+        _menu.SFXVolumeChanged += _OnSFXVolumeChanged;
     }
+
+    private void _OnMusicVolumeChanged(object? sender, MusicVolumeChangedEventArgs e) =>
+        MusicVolumeChangeRequested?.Invoke(this, e);
+    
+    private void _OnSFXVolumeChanged(object? sender, SFXVolumeChangedEventArgs e) =>
+        SFXVolumeChangeRequested?.Invoke(this, e);
     
     private void _OnExitSelected(object? sender, EventArgs e) =>
         ExitRequested?.Invoke(this, EventArgs.Empty);

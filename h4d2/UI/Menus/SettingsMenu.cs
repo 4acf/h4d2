@@ -15,7 +15,7 @@ public class SettingsMenu : Menu
     private readonly VolumeSelector _sfxVolumeSelector;
     private readonly Button _mainMenuButton;
     
-    public SettingsMenu(int width, int height) : base(width, height)
+    public SettingsMenu(int width, int height, double musicVolume, double sfxVolume) : base(width, height)
     {
         int headerY = _height - (_height / 3);
         _header = new CenteredHeader("Settings", headerY, _textColor);
@@ -33,8 +33,10 @@ public class SettingsMenu : Menu
         _sfxVolumeSubheader = new Subheader("SFX Volume", subheaderX, sfxVolumeY, _textColor);
 
         int volumeSelectorX = subheaderX + _paddingBetweenX + musicVolumeSubheaderWidth;
-        _musicVolumeSelector = new VolumeSelector(volumeSelectorX, musicVolumeY + 1);
-        _sfxVolumeSelector = new VolumeSelector(volumeSelectorX, sfxVolumeY + 1);
+        _musicVolumeSelector = new VolumeSelector(volumeSelectorX, musicVolumeY + 1, musicVolume);
+        _musicVolumeSelector.ValueUpdated += _OnMusicVolumeSelectorUpdated;
+        _sfxVolumeSelector = new VolumeSelector(volumeSelectorX, sfxVolumeY + 1, sfxVolume);
+        _sfxVolumeSelector.ValueUpdated += _OnSFXVolumeSelectorUpdated;
         
         int mainMenuButtonY = (height / 3) - _paddingBetweenY;
         _mainMenuButton = new Button(ButtonType.MainMenu, _centeredLargeButtonX, mainMenuButtonY);
@@ -58,6 +60,12 @@ public class SettingsMenu : Menu
         _mainMenuButton.Render(screen);
     }
 
+    private void _OnMusicVolumeSelectorUpdated(object? sender, EventArgs e) =>
+        _RaiseMusicVolumeChanged(_musicVolumeSelector.GetVolume());
+
+    private void _OnSFXVolumeSelectorUpdated(object? sender, EventArgs e) =>
+        _RaiseSFXVolumeChanged(_sfxVolumeSelector.GetVolume());
+    
     private void _OnMainMenuButtonClicked(object? sender, EventArgs e) =>
         _RaiseMainMenuSelected();
 }

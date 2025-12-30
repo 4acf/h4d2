@@ -32,23 +32,23 @@ public class SaveManager
     public double GetSFXVolume() => _savedSettings.SFXVolume;
     public double? GetLevelRecord(int id) => _levelRecords.TryGetValue(id, out double value) ? value : null;
     
-    public void UpdateMusicVolume(double volume)
+    public void SaveNewMusicVolume(double volume)
     {
-        if (volume < 0.0 || volume > 1.0)
+        if (volume < AudioManager.MinVolume || volume > AudioManager.MaxVolume)
             return;
         _savedSettings.MusicVolume = volume;
         _WriteToFile(_settingsFilePath, _savedSettings);
     }
-
-    public void UpdateSFXVolume(double volume)
+    
+    public void SaveNewSFXVolume(double volume)
     {
-        if (volume < 0.0 || volume > 1.0)
+        if (volume < AudioManager.MinVolume || volume > AudioManager.MaxVolume)
             return;
         _savedSettings.SFXVolume = volume;
         _WriteToFile(_settingsFilePath, _savedSettings);
     }
 
-    public void UpdateLevelRecord(int id, double time)
+    public void SaveNewLevelRecord(int id, double time)
     {
         if(!_levelRecords.TryGetValue(id, out double value) || value > time)
             _levelRecords[id] = time;

@@ -11,6 +11,8 @@ public abstract class Menu
     public event EventHandler? SettingsSelected;
     public event EventHandler? ExitSelected;
     public event EventHandler? MainMenuSelected;
+    public event EventHandler<MusicVolumeChangedEventArgs>? MusicVolumeChanged;
+    public event EventHandler<SFXVolumeChangedEventArgs>? SFXVolumeChanged;
     
     protected readonly int _width;
     protected readonly int _height;
@@ -37,4 +39,8 @@ public abstract class Menu
         ExitSelected?.Invoke(this, EventArgs.Empty);
     protected void _RaiseMainMenuSelected() =>
         MainMenuSelected?.Invoke(this, EventArgs.Empty);
+    protected void _RaiseMusicVolumeChanged(double volume) =>
+        MusicVolumeChanged?.Invoke(this, new MusicVolumeChangedEventArgs(volume));
+    protected void _RaiseSFXVolumeChanged(double volume) =>
+        SFXVolumeChanged?.Invoke(this, new SFXVolumeChangedEventArgs(volume));
 }
