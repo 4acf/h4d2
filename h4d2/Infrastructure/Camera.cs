@@ -2,6 +2,8 @@
 
 public class Camera
 {
+    private const double _cameraMoveSpeed = 100;
+
     public readonly int Width;
     public readonly int Height;
     public int XOffset { get; private set; }
@@ -43,6 +45,29 @@ public class Camera
         _upperYBound = null;
     }
 
+    public void Update(IReadOnlyCollection<MovementKey> keys, double elapsedTime)
+    {
+        foreach (MovementKey key in keys)
+        {
+            switch (key)
+            {
+                case MovementKey.W:
+                    MoveY((int)(_cameraMoveSpeed * elapsedTime) + 1);
+                    break;
+                case MovementKey.A:
+                    MoveX((int)(-_cameraMoveSpeed * elapsedTime) - 1);
+                    break;
+                case MovementKey.S:
+                    MoveY((int)(-_cameraMoveSpeed * elapsedTime) - 1);
+                    break;
+                case MovementKey.D:
+                default:
+                    MoveX((int)(_cameraMoveSpeed * elapsedTime) + 1);
+                    break;
+            }
+        }  
+    }
+    
     public void ResetOffsets()
     {
         XOffset = 0;

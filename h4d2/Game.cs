@@ -12,7 +12,6 @@ public class Game
     public event EventHandler? ExitGame;
 
     private const int _mainMenuLevelIndex = 10;
-    private const double _cameraMoveSpeed = 100;
     private readonly int _screenWidth;
     private readonly int _screenHeight;
     private readonly SaveManager _saveManager;
@@ -81,7 +80,8 @@ public class Game
     
     public void Update(Input input, double elapsedTime)
     {
-        _HandleInputCommands(input, elapsedTime);
+        if(_isInGame)
+            _camera.Update(input.PressedMovementKeys, elapsedTime);
         _level.Update(elapsedTime);
         _guiManager.Update(input);
     }
@@ -109,33 +109,7 @@ public class Game
 
             if (input.IsMousePressed)
                 _specialSpawner.Spawn();
-
-            if (input.PressedMovementKeys.Count > 0)
-                _HandleCameraMove(input.PressedMovementKeys, elapsedTime);
         }
-    }
-    
-    private void _HandleCameraMove(IReadOnlyCollection<MovementKey> keys, double elapsedTime)
-    {
-        foreach (MovementKey key in keys)
-        {
-            switch (key)
-            {
-                case MovementKey.W:
-                    _camera.MoveY((int)(_cameraMoveSpeed * elapsedTime) + 1);
-                    break;
-                case MovementKey.A:
-                    _camera.MoveX((int)(-_cameraMoveSpeed * elapsedTime) - 1);
-                    break;
-                case MovementKey.S:
-                    _camera.MoveY((int)(-_cameraMoveSpeed * elapsedTime) - 1);
-                    break;
-                case MovementKey.D:
-                default:
-                    _camera.MoveX((int)(_cameraMoveSpeed * elapsedTime) + 1);
-                    break;
-            }
-        }  
     }
 
     private void _OnMusicVolumeChangeRequested(object? sender, MusicVolumeChangedEventArgs e)
