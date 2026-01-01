@@ -9,51 +9,73 @@ namespace H4D2;
 public class Game
 {
     public event EventHandler? ExitGame;
-    
+
+    private const int _mainMenuLevelIndex = 10;
     private const double _cameraMoveSpeed = 100;
+    private readonly int _screenWidth;
+    private readonly int _screenHeight;
     private readonly SaveManager _saveManager;
     private readonly AudioManager _audioManager;
     private readonly UIManager _uiManager;
     private readonly Camera _camera;
-    private readonly Bitmap _screen;
-    private readonly ShadowBitmap _shadows;
-    private Level _level;
+    private Bitmap _screen = null!;
+    private ShadowBitmap _shadows = null!;
+    private Level _level = null!;
     private readonly CollisionManager<CollisionGroup> _collisionManager;
     private SpecialSpawner? _specialSpawner;
     private bool _isInGame;
     
     public Game(int width, int height, SaveManager saveManager, AudioManager audioManager)
     {
+        _screenWidth = width;
+        _screenHeight = height;
         _saveManager = saveManager;
         _audioManager = audioManager;
         _uiManager = new UIManager(saveManager, width, height);
+        _uiManager.LevelChangeRequested += _InitializeGameLevel;
         _uiManager.MusicVolumeChangeRequested += _OnMusicVolumeChangeRequested;
         _uiManager.SFXVolumeChangeRequested += _OnSFXVolumeChangeRequested;
         _uiManager.ExitRequested += _OnExitRequested;
-        
         _collisionManager = new CollisionManager<CollisionGroup>();
         Collisions.Configure(_collisionManager);
-
-        LevelConfig mainMenuLevel = LevelCollection.Levels[10];
-        Bitmap levelBitmap = mainMenuLevel.Layout;
         _camera = new Camera(width, height);
+        _InitializeLevel(_mainMenuLevelIndex, false);
+    }
+
+    private void _InitializeLevel(int level, bool isInGame)
+    {
+        LevelConfig config = LevelCollection.Levels[level];
+        Bitmap levelBitmap = config.Layout;
+        _InitializeCamera(levelBitmap);
+        _level = new Level(config, _collisionManager, _camera);
+        _screen = new Bitmap(_screenWidth, _screenHeight, _camera);
+        _shadows = new ShadowBitmap(_screenWidth, _screenHeight, _camera);
+        _isInGame = isInGame;
+        _specialSpawner = isInGame ? 
+            new SpecialSpawner(_level, config) :
+            null;
+    }
+    
+    private SpecialSpawner _InitializeGameLevel(int level)
+    {   
+        _InitializeLevel(level, true);
+        return _specialSpawner!;
+    }
+
+    private void _InitializeCamera(Bitmap levelBitmap)
+    {
+        _camera.ResetOffsets();
         int lowerYBound = H4D2Art.TileCenterOffset - ((levelBitmap.Height / 2) * H4D2Art.TileIsoHeight);
         int upperYOffset = 
             ((H4D2Art.TileIsoHeight - 1)) + 
             (H4D2Art.TileIsoHeight * (levelBitmap.Height - 1)) + 
-            height;
-        _camera.InitBounds(
+            _screenHeight;
+        _camera.EditBounds(
             -(levelBitmap.Width * H4D2Art.TileSize),
             lowerYBound,
-            width,
+            _screenWidth,
             lowerYBound + upperYOffset
         );
-        
-        _level = new Level(mainMenuLevel, _collisionManager, _camera);
-        _screen = new Bitmap(width, height, _camera);
-        _shadows = new ShadowBitmap(width, height, _camera);
-        _specialSpawner = null;
-        _isInGame = false;
     }
     
     public void Update(Input input, double elapsedTime)

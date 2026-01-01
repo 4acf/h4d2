@@ -43,7 +43,13 @@ public class Camera
         _upperYBound = null;
     }
 
-    public void InitBounds(int x0, int y0, int x1, int y1)
+    public void ResetOffsets()
+    {
+        XOffset = 0;
+        YOffset = 0;
+    }
+    
+    public void EditBounds(int x0, int y0, int x1, int y1)
     {
         _lowerXBound = x0;
         _lowerYBound = y0;

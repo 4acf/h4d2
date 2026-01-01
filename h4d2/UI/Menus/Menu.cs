@@ -6,7 +6,8 @@ namespace H4D2.UI.Menus;
 public abstract class Menu
 {
     protected const int _textColor = 0xffffff;
-    
+
+    public event EventHandler<LevelSelectedEventArgs>? LevelSelected;
     public event EventHandler? LevelsSelected;
     public event EventHandler? SettingsSelected;
     public event EventHandler? ExitSelected;
@@ -30,7 +31,8 @@ public abstract class Menu
     public abstract void Update(Input input);
     public abstract void Render(Bitmap screen);
 
-    
+    protected void _RaiseLevelSelected(int page) =>
+        LevelSelected?.Invoke(this, new LevelSelectedEventArgs(page));
     protected void _RaiseLevelsSelected() =>
         LevelsSelected?.Invoke(this, EventArgs.Empty);
     protected void _RaiseSettingsSelected() =>

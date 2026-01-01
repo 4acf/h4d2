@@ -1,8 +1,18 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
+using H4D2.Spawners;
 using H4D2.UI.Menus;
 
 namespace H4D2.UI;
+
+public class LevelSelectedEventArgs : EventArgs
+{
+    public readonly int Level;
+    public LevelSelectedEventArgs(int level)
+    {
+        Level = level;
+    }
+}
 
 public class MusicVolumeChangedEventArgs : EventArgs
 {
@@ -24,6 +34,7 @@ public class SFXVolumeChangedEventArgs : EventArgs
 
 public class UIManager
 {
+    public event Func<int, SpecialSpawner>? LevelChangeRequested;
     public event EventHandler<MusicVolumeChangedEventArgs>? MusicVolumeChangeRequested;
     public event EventHandler<SFXVolumeChangedEventArgs>? SFXVolumeChangeRequested;
     public event EventHandler? ExitRequested;
@@ -58,6 +69,7 @@ public class UIManager
     {
         _menu = new LevelsMenu(_width, _height);
         _menu.MainMenuSelected += _NavigateToMainMenu;
+        _menu.LevelSelected += _OnLevelSelected;
     }
     
     private void _NavigateToMainMenu(object? sender, EventArgs e)
@@ -81,6 +93,19 @@ public class UIManager
         _menu.SFXVolumeChanged += _OnSFXVolumeChanged;
     }
 
+    private void _NavigateToHUD(SpecialSpawner spawner)
+    {
+        _menu = new HUD(spawner, _width, _height);
+    }
+    
+    private void _OnLevelSelected(object? sender, LevelSelectedEventArgs e)
+    {
+        SpecialSpawner? spawner = LevelChangeRequested?.Invoke(e.Level);
+        if (spawner == null)
+            return;
+        _NavigateToHUD(spawner);
+    }
+    
     private void _OnMusicVolumeChanged(object? sender, MusicVolumeChangedEventArgs e) =>
         MusicVolumeChangeRequested?.Invoke(this, e);
     

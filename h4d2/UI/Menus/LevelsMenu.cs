@@ -46,6 +46,7 @@ public class LevelsMenu : Menu
         
         int playButtonY = mainMenuButtonY + H4D2Art.LargeButtonHeight + _paddingBetweenButtonsY;
         _playButton = new Button(ButtonType.Play, _centeredLargeButtonX, playButtonY);
+        _playButton.Clicked += _OnPlayButtonClicked;
     }
 
     public override void Update(Input input)
@@ -77,6 +78,9 @@ public class LevelsMenu : Menu
     {
         _levelNameHeader.UpdateText(LevelCollection.Levels[_page].Name);
     }
+
+    private void _OnPlayButtonClicked(object? sender, EventArgs e)
+        => _RaiseLevelSelected(_page);
     
     private void _OnMainMenuButtonClicked(object? sender, EventArgs e) =>
         _RaiseMainMenuSelected();
