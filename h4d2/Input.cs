@@ -35,7 +35,7 @@ public class Input
     public Input(RenderWindow window)
     {
         _window = window;
-        _pressedMovementKeys = [];
+        _pressedMovementKeys = new HashSet<MovementKey>(8);
         Reset();
     }
 
