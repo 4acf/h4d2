@@ -50,7 +50,7 @@ public static class H4D2Art
     public static readonly Bitmap[] Floors = _tiles[0];
     public static readonly Bitmap[] Walls = _tiles[1];
 
-    public static readonly Bitmap Title = Art.LoadBitmap($"{_resourcePrefix}ui.title.png");
+    public static readonly Bitmap Title = Art.LoadBitmap($"{_resourcePrefix}gui.title.png");
     
     public static readonly TextBitmap[] Text = _LoadPixufFont();
     public static readonly Bitmap[] Explosion = _particles[0];
@@ -95,7 +95,7 @@ public static class H4D2Art
     private static TextBitmap[] _LoadPixufFont() =>
         Art.LoadFontBitmaps($"{_resourcePrefix}pixuf.png", Pixuf.Characters, Pixuf.Widths, 7);
     private static Bitmap[][] _LoadSmallButtons() =>
-        Art.LoadBitmaps($"{_resourcePrefix}ui.smallbuttons.png", SmallButtonWidth, 2, 2);
+        Art.LoadBitmaps($"{_resourcePrefix}gui.smallbuttons.png", SmallButtonWidth, 2, 2);
     private static Bitmap[][] _LoadLargeButtons() =>
-        Art.LoadBitmaps($"{_resourcePrefix}ui.largebuttons.png", LargeButtonWidth, LargeButtonHeight, 6, 2);
+        Art.LoadBitmaps($"{_resourcePrefix}gui.largebuttons.png", LargeButtonWidth, LargeButtonHeight, 6, 2);
 }

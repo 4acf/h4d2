@@ -1,8 +1,9 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.GUI;
+using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 using H4D2.Spawners;
-using H4D2.UI;
+using H4D2.GUI;
 
 namespace H4D2;
 
@@ -16,7 +17,7 @@ public class Game
     private readonly int _screenHeight;
     private readonly SaveManager _saveManager;
     private readonly AudioManager _audioManager;
-    private readonly UIManager _uiManager;
+    private readonly GUIManager _guiManager;
     private readonly Camera _camera;
     private Bitmap _screen = null!;
     private ShadowBitmap _shadows = null!;
@@ -31,11 +32,11 @@ public class Game
         _screenHeight = height;
         _saveManager = saveManager;
         _audioManager = audioManager;
-        _uiManager = new UIManager(saveManager, width, height);
-        _uiManager.LevelChangeRequested += _InitializeGameLevel;
-        _uiManager.MusicVolumeChangeRequested += _OnMusicVolumeChangeRequested;
-        _uiManager.SFXVolumeChangeRequested += _OnSFXVolumeChangeRequested;
-        _uiManager.ExitRequested += _OnExitRequested;
+        _guiManager = new GUIManager(saveManager, width, height);
+        _guiManager.LevelChangeRequested += _InitializeGameLevel;
+        _guiManager.MusicVolumeChangeRequested += _OnMusicVolumeChangeRequested;
+        _guiManager.SFXVolumeChangeRequested += _OnSFXVolumeChangeRequested;
+        _guiManager.ExitRequested += _OnExitRequested;
         _collisionManager = new CollisionManager<CollisionGroup>();
         Collisions.Configure(_collisionManager);
         _camera = new Camera(width, height);
@@ -80,9 +81,9 @@ public class Game
     
     public void Update(Input input, double elapsedTime)
     {
-        //_HandleInputCommands(input, elapsedTime);
+        _HandleInputCommands(input, elapsedTime);
         _level.Update(elapsedTime);
-        _uiManager.Update(input);
+        _guiManager.Update(input);
     }
     
     public byte[] Render()
@@ -91,7 +92,7 @@ public class Game
         _shadows.Clear();
         _level.Render(_screen, _shadows);
         _specialSpawner?.Render(_screen);
-        _uiManager.Render(_screen);
+        _guiManager.Render(_screen);
         return _screen.Data;
     }
 

@@ -1,7 +1,7 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Spawners;
 
-namespace H4D2.UI.Menus;
+namespace H4D2.GUI.Menus;
 
 public class HUD : Menu
 {

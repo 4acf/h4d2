@@ -1,6 +1,6 @@
 ﻿using H4D2.Infrastructure;
 
-namespace H4D2.UI;
+namespace H4D2.GUI;
 
 public class VolumeSelector
 {

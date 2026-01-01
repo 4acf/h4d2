@@ -2,7 +2,7 @@
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
-namespace H4D2.UI.Menus;
+namespace H4D2.GUI.Menus;
 
 public class LevelsMenu : Menu
 {

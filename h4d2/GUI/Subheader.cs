@@ -1,7 +1,7 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 
-namespace H4D2.UI;
+namespace H4D2.GUI;
 
 public class Subheader
 {

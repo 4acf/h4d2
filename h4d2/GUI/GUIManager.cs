@@ -1,9 +1,9 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Spawners;
-using H4D2.UI.Menus;
+using H4D2.GUI.Menus;
 
-namespace H4D2.UI;
+namespace H4D2.GUI;
 
 public class LevelSelectedEventArgs : EventArgs
 {
@@ -32,7 +32,7 @@ public class SFXVolumeChangedEventArgs : EventArgs
     }
 }
 
-public class UIManager
+public class GUIManager
 {
     public event Func<int, SpecialSpawner>? LevelChangeRequested;
     public event EventHandler<MusicVolumeChangedEventArgs>? MusicVolumeChangeRequested;
@@ -44,7 +44,7 @@ public class UIManager
     private readonly int _height;
     private Menu _menu;
     
-    public UIManager(SaveManager saveManager, int width, int height)
+    public GUIManager(SaveManager saveManager, int width, int height)
     {
         _saveManager = saveManager;
         _width = width;

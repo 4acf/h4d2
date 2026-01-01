@@ -1,7 +1,7 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 
-namespace H4D2.UI.Menus;
+namespace H4D2.GUI.Menus;
 
 public abstract class Menu
 {
