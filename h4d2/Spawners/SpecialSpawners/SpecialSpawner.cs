@@ -41,17 +41,6 @@ public class SpecialSpawner : ISpecialSpawnerView
     private readonly SpecialSelection[] _specialSelections;
     private readonly Camera _camera;
     
-    public ReadonlyPosition? CenterMass =>
-        _selected?.BoundingBox.CenterMass(_spawnAdjustedMousePosition.ReadonlyCopy());
-    public ReadonlyPosition? NWPosition => 
-        _selected?.BoundingBox.NWPosition(_spawnAdjustedMousePosition.ReadonlyCopy());
-    public ReadonlyPosition? NEPosition => 
-        _selected?.BoundingBox.NEPosition(_spawnAdjustedMousePosition.ReadonlyCopy());
-    public ReadonlyPosition? SWPosition => 
-        _selected?.BoundingBox.SWPosition(_spawnAdjustedMousePosition.ReadonlyCopy());
-    public ReadonlyPosition? SEPosition => 
-        _selected?.BoundingBox.SEPosition(_spawnAdjustedMousePosition.ReadonlyCopy());
-    
     public SpecialSpawner(Level level, LevelConfig config, Camera camera)
     {
         _level = level;
@@ -62,7 +51,7 @@ public class SpecialSpawner : ISpecialSpawnerView
         int i = 0;
         foreach (KeyValuePair<SpecialDescriptor, BuyInfo> special in config.BuyableSpecials)
         {
-            _specialSelections[i] = new SpecialSelection(special.Key, special.Value);
+            _specialSelections[i] = new SpecialSelection(special.Key, special.Value, _spawnAdjustedMousePosition);
             i++;
         }
         Array.Sort(_specialSelections, (a, b) => a.Cost.CompareTo(b.Cost));
@@ -119,34 +108,8 @@ public class SpecialSpawner : ISpecialSpawnerView
     {
         if (_selected == null)
             return;
-        if (!_level.IsValidSpecialSpawnPosition(this))
-            return;
-        Position position = _spawnAdjustedMousePosition.Copy();
-        Special special = _selected.SpecialIndex switch
-        {
-            SpecialIndices.Hunter => new Hunter(_level, position),
-            SpecialIndices.Boomer => new Boomer(_level, position),
-            SpecialIndices.Smoker => new Smoker(_level, position),
-            SpecialIndices.Charger => new Charger(_level, position),
-            SpecialIndices.Jockey => new Jockey(_level, position),
-            SpecialIndices.Spitter => new Spitter(_level, position),
-            SpecialIndices.Tank => new Tank(_level, position),
-            SpecialIndices.Witch => new Witch(_level, position),
-            _ => new Tank(_level, position)
-        };
-        _level.AddSpecial(special);
-        _selected = null;
-    }
-
-    public bool HasLineOfSight(Entity target)
-    {
-        if (NWPosition == null || NEPosition == null || SWPosition == null || SEPosition == null)
-            return true;
-        return 
-            _level.HasLineOfSight(NWPosition.Value, target.NWPosition) && 
-            _level.HasLineOfSight(NEPosition.Value, target.NEPosition) && 
-            _level.HasLineOfSight(SWPosition.Value, target.SWPosition) && 
-            _level.HasLineOfSight(SEPosition.Value, target.SEPosition);
+        if(_selected.Spawn(_level))
+            _selected = null;
     }
 
     public void Render(Bitmap screen)
@@ -156,7 +119,7 @@ public class SpecialSpawner : ISpecialSpawnerView
         Bitmap specialBitmap = H4D2Art.SpecialProfiles[_selected.SpecialIndex];
         int x = (int)Math.Floor((_spawnAdjustedMousePosition.X - _spawnAdjustedMousePosition.Y) * Isometric.ScaleX);
         int y = (int)Math.Floor((_spawnAdjustedMousePosition.X + _spawnAdjustedMousePosition.Y) * Isometric.ScaleY);
-        if (!_level.IsValidSpecialSpawnPosition(this))
+        if (!_level.IsValidSpecialSpawnPosition(_selected))
             screen.DrawInvalidSpecial(specialBitmap, x, y);
         else
             screen.Draw(specialBitmap, x, y);

@@ -275,13 +275,11 @@ public class Level
         return false;
     }
 
-    public bool IsValidSpecialSpawnPosition(SpecialSpawner spawner)
+    public bool IsValidSpecialSpawnPosition(SpecialSelection selection)
     {
-        ReadonlyPosition? spawnerCenterMass = spawner.CenterMass;
-        if (spawnerCenterMass == null)
-            return false;
+        ReadonlyPosition selectionCenterMass = selection.CenterMass;
         
-        Tile tile = GetTilePosition(spawnerCenterMass.Value);
+        Tile tile = GetTilePosition(selectionCenterMass);
         if (IsTileOutOfBounds(tile) || 
             IsWall(tile) ||
             IsTileAdjacentToWall(tile))
@@ -290,7 +288,7 @@ public class Level
         IEnumerable<Survivor> survivors = _entities.OfType<Survivor>();
         foreach (Survivor survivor in survivors)
         {
-            if (spawner.HasLineOfSight(survivor))
+            if (selection.HasLineOfSight(this, survivor))
                 return false;
         }
         return true;

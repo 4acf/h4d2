@@ -1,6 +1,9 @@
-﻿using H4D2.Entities.Mobs.Zombies.Specials;
+﻿using H4D2.Entities;
+using H4D2.Entities.Mobs.Zombies.Specials;
+using H4D2.Entities.Mobs.Zombies.Specials.Pinners;
 using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
+using H4D2.Levels;
 
 namespace H4D2.Spawners.SpecialSpawners;
 
@@ -13,12 +16,15 @@ public class SpecialSelection : ISpecialSelectionView
     public readonly int SpecialIndex;
     public readonly SpecialDescriptor Descriptor;
     public readonly BoundingBox BoundingBox;
+    public ReadonlyPosition CenterMass => BoundingBox.CenterMass(_mousePosition.ReadonlyCopy());
     private readonly CountdownTimer _cooldownTimer;
+    private readonly Position _mousePosition;
     
-    public SpecialSelection(SpecialDescriptor descriptor, BuyInfo buyInfo)
+    public SpecialSelection(SpecialDescriptor descriptor, BuyInfo buyInfo, Position mousePosition)
     {
         Descriptor = descriptor;
-        Cost = buyInfo.Cost; 
+        Cost = buyInfo.Cost;
+        _mousePosition = mousePosition;
         _cooldownTimer = new CountdownTimer(buyInfo.CooldownSeconds);
         _cooldownTimer.Update(buyInfo.CooldownSeconds);
 
@@ -53,9 +59,40 @@ public class SpecialSelection : ISpecialSelectionView
             return;
         _cooldownTimer.Update(elapsedTime);
     }
-
+    
     public bool IsBuyable(int balance)
     {
         return balance >= Cost && _cooldownTimer.IsFinished;
+    }
+    
+    public bool HasLineOfSight(Level level, Entity target)
+    {
+        ReadonlyPosition readonlyMousePosition = _mousePosition.ReadonlyCopy();
+        return 
+            level.HasLineOfSight(BoundingBox.NWPosition(readonlyMousePosition), target.NWPosition) && 
+            level.HasLineOfSight(BoundingBox.NEPosition(readonlyMousePosition), target.NEPosition) && 
+            level.HasLineOfSight(BoundingBox.SWPosition(readonlyMousePosition), target.SWPosition) && 
+            level.HasLineOfSight(BoundingBox.SEPosition(readonlyMousePosition), target.SEPosition);
+    }
+
+    public bool Spawn(Level level)
+    {
+        if (!level.IsValidSpecialSpawnPosition(this))
+            return false;
+        Position position = _mousePosition.Copy();
+        Special special = SpecialIndex switch
+        {
+            SpecialIndices.Hunter => new Hunter(level, position),
+            SpecialIndices.Boomer => new Boomer(level, position),
+            SpecialIndices.Smoker => new Smoker(level, position),
+            SpecialIndices.Charger => new Charger(level, position),
+            SpecialIndices.Jockey => new Jockey(level, position),
+            SpecialIndices.Spitter => new Spitter(level, position),
+            SpecialIndices.Tank => new Tank(level, position),
+            SpecialIndices.Witch => new Witch(level, position),
+            _ => new Tank(level, position)
+        };
+        level.AddSpecial(special);
+        return true;
     }
 }
