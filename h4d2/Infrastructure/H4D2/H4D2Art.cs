@@ -13,7 +13,7 @@ public static class H4D2Art
     public const int TileCenterOffset = 19;
     public const int SmallButtonWidth = 24;
     public const int SmallButtonHeight = 24;
-    public const int SpawnerButtonWidth = 21;
+    public const int SpawnerButtonWidth = 20;
     public const int LargeButtonWidth = 72;
     public const int LargeButtonHeight = 24;
     public const int ShadowColor = 0x0;
@@ -53,6 +53,7 @@ public static class H4D2Art
     public static readonly Bitmap Title = Art.LoadBitmap($"{_resourcePrefix}gui.title.png");
     
     public static readonly TextBitmap[] Text = _LoadPixufFont();
+    public static readonly int TextHeight = Text.Length > 0 ? Text[0].Height : 0;
     public static readonly Bitmap[] Explosion = _particles[0];
     public static readonly Bitmap[] HealParticle = _particles[1];
     public static readonly Bitmap[] Fire = _particles[2];

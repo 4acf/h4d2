@@ -13,7 +13,6 @@ public enum ButtonType
     Levels,
     Forward,
     Backward,
-    Spawner
 }
 
 public class Button
@@ -41,10 +40,6 @@ public class Button
             case ButtonType.Forward:
             case ButtonType.Backward:
                 _width = H4D2Art.SmallButtonWidth;
-                _height = H4D2Art.SmallButtonHeight;
-                break;
-            case ButtonType.Spawner:
-                _width = H4D2Art.SpawnerButtonWidth;
                 _height = H4D2Art.SmallButtonHeight;
                 break;
             default:
@@ -95,7 +90,6 @@ public class Button
             ButtonType.Resume => H4D2Art.Buttons.Resume[hoverState],
             ButtonType.Levels => H4D2Art.Buttons.Levels[hoverState],
             ButtonType.Forward or ButtonType.Backward => H4D2Art.Buttons.Navigation[hoverState],
-            ButtonType.Spawner => H4D2Art.Buttons.Spawner[hoverState],
             _ => throw new ArgumentOutOfRangeException()
         };
     }

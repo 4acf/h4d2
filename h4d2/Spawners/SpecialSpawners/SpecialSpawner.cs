@@ -1,7 +1,4 @@
-﻿using H4D2.Entities;
-using H4D2.Entities.Mobs.Zombies.Specials;
-using H4D2.Entities.Mobs.Zombies.Specials.Pinners;
-using H4D2.Infrastructure;
+﻿using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
@@ -34,6 +31,7 @@ public readonly record struct BuyInfo
 public class SpecialSpawner : ISpecialSpawnerView
 {
     public int Credits => _level.Credits;
+    public IReadOnlyList<ISpecialSelectionView> SpecialSelections => _specialSelections;
     
     private readonly Level _level;
     private SpecialSelection? _selected;
@@ -51,7 +49,7 @@ public class SpecialSpawner : ISpecialSpawnerView
         int i = 0;
         foreach (KeyValuePair<SpecialDescriptor, BuyInfo> special in config.BuyableSpecials)
         {
-            _specialSelections[i] = new SpecialSelection(special.Key, special.Value, _spawnAdjustedMousePosition);
+            _specialSelections[i] = new SpecialSelection(i, special.Key, special.Value, _spawnAdjustedMousePosition);
             i++;
         }
         Array.Sort(_specialSelections, (a, b) => a.Cost.CompareTo(b.Cost));

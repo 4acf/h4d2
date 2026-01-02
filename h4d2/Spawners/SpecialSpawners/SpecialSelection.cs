@@ -9,20 +9,20 @@ namespace H4D2.Spawners.SpecialSpawners;
 
 public class SpecialSelection : ISpecialSelectionView
 {
+    public int IndexInArray { get; }
     public Bitmap Bitmap => H4D2Art.SpecialProfiles[SpecialIndex];
     public int Cost { get; }
     public double PercentageRemaining => _cooldownTimer.Percentage;
     
     public readonly int SpecialIndex;
-    public readonly SpecialDescriptor Descriptor;
     public readonly BoundingBox BoundingBox;
     public ReadonlyPosition CenterMass => BoundingBox.CenterMass(_mousePosition.ReadonlyCopy());
     private readonly CountdownTimer _cooldownTimer;
     private readonly Position _mousePosition;
     
-    public SpecialSelection(SpecialDescriptor descriptor, BuyInfo buyInfo, Position mousePosition)
+    public SpecialSelection(int i, SpecialDescriptor descriptor, BuyInfo buyInfo, Position mousePosition)
     {
-        Descriptor = descriptor;
+        IndexInArray = i;
         Cost = buyInfo.Cost;
         _mousePosition = mousePosition;
         _cooldownTimer = new CountdownTimer(buyInfo.CooldownSeconds);
