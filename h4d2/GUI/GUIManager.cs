@@ -1,7 +1,7 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
-using H4D2.Spawners;
 using H4D2.GUI.Menus;
+using H4D2.Spawners.SpecialSpawners;
 
 namespace H4D2.GUI;
 
@@ -93,17 +93,17 @@ public class GUIManager
         _menu.SFXVolumeChanged += _OnSFXVolumeChanged;
     }
 
-    private void _NavigateToHUD(SpecialSpawner spawner)
+    private void _NavigateToHUD(ISpecialSpawnerView spawnerView)
     {
-        _menu = new HUD(spawner, _width, _height);
+        _menu = new HUD(spawnerView, _width, _height);
     }
     
     private void _OnLevelSelected(object? sender, LevelSelectedEventArgs e)
     {
-        SpecialSpawner? spawner = LevelChangeRequested?.Invoke(e.Level);
-        if (spawner == null)
+        ISpecialSpawnerView? spawnerView = LevelChangeRequested?.Invoke(e.Level);
+        if (spawnerView == null)
             return;
-        _NavigateToHUD(spawner);
+        _NavigateToHUD(spawnerView);
     }
     
     private void _OnMusicVolumeChanged(object? sender, MusicVolumeChangedEventArgs e) =>

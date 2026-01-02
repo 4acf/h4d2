@@ -18,6 +18,7 @@ using H4D2.Levels.LevelElements;
 using H4D2.Particles;
 using H4D2.Particles.Clouds;
 using H4D2.Spawners;
+using H4D2.Spawners.SpecialSpawners;
 
 namespace H4D2.Levels;
 

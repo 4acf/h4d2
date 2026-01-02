@@ -5,7 +5,7 @@ using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
-namespace H4D2.Spawners;
+namespace H4D2.Spawners.SpecialSpawners;
 
 public enum SpecialDescriptor
 {
@@ -19,33 +19,70 @@ public enum SpecialDescriptor
     Witch
 }
 
-public class SpecialSpawner
+public readonly record struct BuyInfo
 {
-    public ReadonlyPosition? CenterMass =>
-        _selectedBoundingBox?.CenterMass(_spawnAdjustedMousePosition.ReadonlyCopy());
+    public readonly int Cost;
+    public readonly double CooldownSeconds;
+
+    public BuyInfo(int cost, double cooldownSeconds)
+    {
+        Cost = cost;
+        CooldownSeconds = cooldownSeconds;
+    }
+}
+
+public class SpecialSpawner : ISpecialSpawnerView
+{
+    public int Credits => _level.Credits;
+    
     private readonly Level _level;
-    private BoundingBox? _selectedBoundingBox;
-    private int? _selectedIndex;
+    private SpecialSelection? _selected;
     private readonly Position _spawnAdjustedMousePosition;
+    private readonly SpecialSelection[] _specialSelections;
+    private readonly Camera _camera;
     
+    public ReadonlyPosition? CenterMass =>
+        _selected?.BoundingBox.CenterMass(_spawnAdjustedMousePosition.ReadonlyCopy());
     public ReadonlyPosition? NWPosition => 
-        _selectedBoundingBox?.NWPosition(_spawnAdjustedMousePosition.ReadonlyCopy());
+        _selected?.BoundingBox.NWPosition(_spawnAdjustedMousePosition.ReadonlyCopy());
     public ReadonlyPosition? NEPosition => 
-        _selectedBoundingBox?.NEPosition(_spawnAdjustedMousePosition.ReadonlyCopy());
+        _selected?.BoundingBox.NEPosition(_spawnAdjustedMousePosition.ReadonlyCopy());
     public ReadonlyPosition? SWPosition => 
-        _selectedBoundingBox?.SWPosition(_spawnAdjustedMousePosition.ReadonlyCopy());
+        _selected?.BoundingBox.SWPosition(_spawnAdjustedMousePosition.ReadonlyCopy());
     public ReadonlyPosition? SEPosition => 
-        _selectedBoundingBox?.SEPosition(_spawnAdjustedMousePosition.ReadonlyCopy());
+        _selected?.BoundingBox.SEPosition(_spawnAdjustedMousePosition.ReadonlyCopy());
     
-    public SpecialSpawner(Level level)
+    public SpecialSpawner(Level level, LevelConfig config, Camera camera)
     {
         _level = level;
-        _selectedBoundingBox = null;
-        _selectedIndex = null;
+        _camera = camera;
         _spawnAdjustedMousePosition = new Position(0, 0);
+        _selected = null;
+        _specialSelections = new SpecialSelection[config.BuyableSpecials.Count];
+        int i = 0;
+        foreach (KeyValuePair<SpecialDescriptor, BuyInfo> special in config.BuyableSpecials)
+        {
+            _specialSelections[i] = new SpecialSelection(special.Key, special.Value);
+            i++;
+        }
+        Array.Sort(_specialSelections, (a, b) => a.Cost.CompareTo(b.Cost));
     }
 
-    public void UpdatePosition(ReadonlyPosition mousePosition, Camera camera)
+    public void Update(Input input, double elapsedTime)
+    {
+        foreach(SpecialSelection special in _specialSelections)
+            special.UpdateCooldown(elapsedTime);
+        _UpdatePosition(input.MousePositionScreen);
+        if (input.IsNumberPressed)
+        {
+            _SelectSpecial(input.LastNumberPressed);
+        }
+
+        if (input.IsMousePressed)
+            _Spawn();
+    }
+    
+    private void _UpdatePosition(ReadonlyPosition mousePosition)
     {
         (double, double) positionOffset = Isometric.ScreenSpaceToWorldSpace(
             mousePosition.X,
@@ -53,8 +90,8 @@ public class SpecialSpawner
         );
 
         (double, double) cameraOffset = Isometric.ScreenSpaceToWorldSpace(
-            camera.XOffset,
-            camera.YOffset
+            _camera.XOffset,
+            _camera.YOffset
         );
 
         (double, double) spriteOffset = Isometric.ScreenSpaceToWorldSpace(
@@ -66,42 +103,26 @@ public class SpecialSpawner
         _spawnAdjustedMousePosition.Y = positionOffset.Item2 - cameraOffset.Item2 - spriteOffset.Item2;
     }
     
-    public void SelectSpecial(int selection)
+    private void _SelectSpecial(int selection)
     {
-        // the conversion from button -> special is hardcoded for now but in the future
-        // i'll need to inject a conversion function so that different levels can have
-        // different arrangements of specials and costs
-        
-        BoundingBox? newBoundingBox = selection switch
-        {
-            1 => SpecialBoundingBoxes.Hunter,
-            2 => SpecialBoundingBoxes.Boomer,
-            3 => SpecialBoundingBoxes.Smoker,
-            4 => SpecialBoundingBoxes.Charger,
-            5 => SpecialBoundingBoxes.Jockey,
-            6 => SpecialBoundingBoxes.Spitter,
-            7 => SpecialBoundingBoxes.Tank,
-            8 => SpecialBoundingBoxes.Witch,
-            _ => null
-        };
-
-        _selectedBoundingBox = newBoundingBox == _selectedBoundingBox ?
-            null :
-            newBoundingBox;
-        
-        _selectedIndex = _selectedBoundingBox != null ?
-            selection - 1 : 
+        if (selection > _specialSelections.Length)
+            return;
+        SpecialSelection newSelection = _specialSelections[selection - 1];
+        if (!newSelection.IsBuyable(_level.Credits))
+            return;
+        _selected = _selected != newSelection ?
+            newSelection :
             null;
     }
 
-    public void Spawn()
+    private void _Spawn()
     {
-        if (_selectedIndex == null)
+        if (_selected == null)
             return;
         if (!_level.IsValidSpecialSpawnPosition(this))
             return;
         Position position = _spawnAdjustedMousePosition.Copy();
-        Special special = _selectedIndex switch
+        Special special = _selected.SpecialIndex switch
         {
             SpecialIndices.Hunter => new Hunter(_level, position),
             SpecialIndices.Boomer => new Boomer(_level, position),
@@ -114,8 +135,7 @@ public class SpecialSpawner
             _ => new Tank(_level, position)
         };
         _level.AddSpecial(special);
-        _selectedBoundingBox = null;
-        _selectedIndex = null;
+        _selected = null;
     }
 
     public bool HasLineOfSight(Entity target)
@@ -131,9 +151,9 @@ public class SpecialSpawner
 
     public void Render(Bitmap screen)
     {
-        if (_selectedIndex == null)
+        if (_selected == null)
             return;
-        Bitmap specialBitmap = H4D2Art.SpecialProfiles[_selectedIndex.Value];
+        Bitmap specialBitmap = H4D2Art.SpecialProfiles[_selected.SpecialIndex];
         int x = (int)Math.Floor((_spawnAdjustedMousePosition.X - _spawnAdjustedMousePosition.Y) * Isometric.ScaleX);
         int y = (int)Math.Floor((_spawnAdjustedMousePosition.X + _spawnAdjustedMousePosition.Y) * Isometric.ScaleY);
         if (!_level.IsValidSpecialSpawnPosition(this))

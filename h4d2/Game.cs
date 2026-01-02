@@ -2,8 +2,7 @@
 using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
-using H4D2.Spawners;
-using H4D2.GUI;
+using H4D2.Spawners.SpecialSpawners;
 
 namespace H4D2;
 
@@ -52,7 +51,7 @@ public class Game
         _shadows = new ShadowBitmap(_screenWidth, _screenHeight, _camera);
         _isInGame = isInGame;
         _specialSpawner = isInGame ? 
-            new SpecialSpawner(_level, config) :
+            new SpecialSpawner(_level, config, _camera) :
             null;
     }
     
@@ -80,8 +79,11 @@ public class Game
     
     public void Update(Input input, double elapsedTime)
     {
-        if(_isInGame)
+        if (_isInGame && _specialSpawner != null)
+        {
+            _specialSpawner.Update(input, elapsedTime);
             _camera.Update(input.PressedMovementKeys, elapsedTime);
+        }
         _level.Update(elapsedTime);
         _guiManager.Update(input);
     }
@@ -91,25 +93,8 @@ public class Game
         _screen.Clear();
         _shadows.Clear();
         _level.Render(_screen, _shadows);
-        _specialSpawner?.Render(_screen);
         _guiManager.Render(_screen);
         return _screen.Data;
-    }
-
-    private void _HandleInputCommands(Input input, double elapsedTime)
-    {
-        if (_isInGame && _specialSpawner != null)
-        {
-            _specialSpawner.UpdatePosition(input.MousePositionScreen, _camera);
-        
-            if (input.IsNumberPressed)
-            {
-                _specialSpawner.SelectSpecial(input.LastNumberPressed);
-            }
-
-            if (input.IsMousePressed)
-                _specialSpawner.Spawn();
-        }
     }
 
     private void _OnMusicVolumeChangeRequested(object? sender, MusicVolumeChangedEventArgs e)

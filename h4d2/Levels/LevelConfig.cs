@@ -1,8 +1,8 @@
 ﻿using System.Collections.Immutable;
-using H4D2.Entities.Mobs.Survivors;
 using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Spawners;
+using H4D2.Spawners.SpecialSpawners;
 
 namespace H4D2.Levels;
 
@@ -14,7 +14,7 @@ public class LevelConfig
     public required int MaxConsumables { get; init; }
     public required int MaxThrowables { get; init; }
     public required ImmutableArray<SurvivorDescriptor> Survivors { get; init; }
-    public required ImmutableDictionary<SpecialDescriptor, int> BuyableSpecials { get; init; }
+    public required ImmutableDictionary<SpecialDescriptor, BuyInfo> BuyableSpecials { get; init; }
     public required ImmutableArray<ConsumableDescriptor> Consumables { get; init; }
     public required ImmutableArray<ThrowableDescriptor> Throwables { get; init; }
     public required ImmutableArray<UncommonDescriptor> Uncommons { get; init; }
@@ -41,17 +41,17 @@ public static class StandardLevelConfig
     public const int MaxConsumables = 3;
     public const int MaxThrowables = 3;
 
-    public static readonly ImmutableDictionary<SpecialDescriptor, int> BuyableSpecials = 
-    new Dictionary<SpecialDescriptor, int>
+    public static readonly ImmutableDictionary<SpecialDescriptor, BuyInfo> BuyableSpecials = 
+    new Dictionary<SpecialDescriptor, BuyInfo>
     {
-        {SpecialDescriptor.Spitter, 30},
-        {SpecialDescriptor.Boomer, 50},
-        {SpecialDescriptor.Hunter, 100},
-        {SpecialDescriptor.Jockey, 125},
-        {SpecialDescriptor.Charger, 150},
-        {SpecialDescriptor.Smoker, 250},
-        {SpecialDescriptor.Tank, 1000},
-        {SpecialDescriptor.Witch, 1250}
+        {SpecialDescriptor.Spitter, new BuyInfo(30, 15.0)},
+        {SpecialDescriptor.Boomer, new BuyInfo(50, 30.0)},
+        {SpecialDescriptor.Hunter, new BuyInfo(100, 30.0)},
+        {SpecialDescriptor.Jockey, new BuyInfo(125, 20.0)},
+        {SpecialDescriptor.Charger, new BuyInfo(150, 10.0)},
+        {SpecialDescriptor.Smoker, new BuyInfo(250, 30.0)},
+        {SpecialDescriptor.Tank, new BuyInfo(1000, 15.0)},
+        {SpecialDescriptor.Witch, new BuyInfo(1250, 30.0)}
     }.ToImmutableDictionary();
 
     public static readonly ImmutableArray<ConsumableDescriptor> Consumables =
@@ -156,13 +156,13 @@ public static class LevelCollection
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = StandardLevelConfig.L4D1Survivors,
             BuyableSpecials = 
-                new Dictionary<SpecialDescriptor, int>
+                new Dictionary<SpecialDescriptor, BuyInfo>
                 {
-                    {SpecialDescriptor.Boomer, 25},
-                    {SpecialDescriptor.Hunter, 50},
-                    {SpecialDescriptor.Smoker, 125},
-                    {SpecialDescriptor.Tank, 1000},
-                    {SpecialDescriptor.Witch, 1250}
+                    {SpecialDescriptor.Boomer, new BuyInfo(25, 30.0)},
+                    {SpecialDescriptor.Hunter, new BuyInfo(50, 20.0)},
+                    {SpecialDescriptor.Smoker, new BuyInfo(125, 30.0)},
+                    {SpecialDescriptor.Tank, new BuyInfo(1000, 15.0)},
+                    {SpecialDescriptor.Witch, new BuyInfo(1250, 30.0)}
                 }.ToImmutableDictionary(),
             Consumables = StandardLevelConfig.Consumables,
             Throwables = StandardLevelConfig.Throwables,
@@ -216,9 +216,9 @@ public static class LevelCollection
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = [..Enumerable.Repeat(SurvivorDescriptor.Francis, 8)],
             BuyableSpecials = 
-                new Dictionary<SpecialDescriptor, int>
+                new Dictionary<SpecialDescriptor, BuyInfo>
                 {
-                    {SpecialDescriptor.Charger, 50}
+                    {SpecialDescriptor.Charger, new BuyInfo(50, 2.0)}
                 }.ToImmutableDictionary(),
             Consumables = StandardLevelConfig.Consumables,
             Throwables = StandardLevelConfig.Throwables,
