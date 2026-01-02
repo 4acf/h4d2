@@ -26,6 +26,7 @@ public class HUD : Menu
         for (int i = 0; i < numSelections; i++)
         {
             _spawnerButtons[i] = new SpawnerButton(
+                _spawnerView.SpecialSelections[i].Bitmap,
                  i * (SpawnerButton.Width + _padding) + _padding,
                 (_padding * 2) + H4D2Art.TextHeight + SpawnerButton.Height
             );
