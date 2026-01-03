@@ -30,6 +30,7 @@ public readonly record struct BuyInfo
 
 public class SpecialSpawner : ISpecialSpawnerView
 {
+    public int? SelectedIndex => _selected?.IndexInArray;
     public int Credits => _level.Credits;
     public IReadOnlyList<ISpecialSelectionView> SpecialSelections => _specialSelections;
     
@@ -45,12 +46,16 @@ public class SpecialSpawner : ISpecialSpawnerView
         _camera = camera;
         _spawnAdjustedMousePosition = new Position(0, 0);
         _selected = null;
+        
         _specialSelections = new SpecialSelection[config.BuyableSpecials.Count];
-        int i = 0;
-        foreach (KeyValuePair<SpecialDescriptor, BuyInfo> special in config.BuyableSpecials)
+        KeyValuePair<SpecialDescriptor, BuyInfo>[] sortedBuyableSpecials = config.BuyableSpecials
+            .OrderBy(s => s.Value.Cost)
+            .ToArray();
+        
+        for(int i = 0; i < sortedBuyableSpecials.Length; i++)
         {
+            KeyValuePair<SpecialDescriptor, BuyInfo> special = sortedBuyableSpecials[i];
             _specialSelections[i] = new SpecialSelection(i, special.Key, special.Value, _spawnAdjustedMousePosition);
-            i++;
         }
         Array.Sort(_specialSelections, (a, b) => a.Cost.CompareTo(b.Cost));
     }

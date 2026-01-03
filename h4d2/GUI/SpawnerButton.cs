@@ -28,12 +28,13 @@ public class SpawnerButton
         _isMouseOver = false;
     }
     
-    public void Update(Input input)
+    public void Update(bool isSelected, Input input)
     {
+        _isSelected = isSelected;
+        
         _UpdateMouseOverState(input.MousePositionScreen);
         if (_isMouseOver && input.IsMousePressed)
         {
-            _isSelected = !_isSelected;
             Clicked?.Invoke(this, EventArgs.Empty);
         }
     }

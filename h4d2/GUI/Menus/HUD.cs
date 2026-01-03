@@ -60,9 +60,10 @@ public class HUD : Menu
             .Append(_spawnerView.Credits);
         _credits.UpdateText(_creditsStringBuilder.ToString());
 
-        foreach (SpawnerButton sb in _spawnerButtons)
+        for (int i = 0; i < _spawnerButtons.Length; i++)
         {
-            sb.Update(input);
+            bool isSelected = _spawnerView.SelectedIndex != null && _spawnerView.SelectedIndex == i;
+            _spawnerButtons[i].Update(isSelected, input);
         }
     }
 
