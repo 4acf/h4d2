@@ -66,10 +66,10 @@ public class SpecialSpawner : ISpecialSpawnerView
         _UpdatePosition(input.MousePositionScreen);
         if (input.IsNumberPressed)
         {
-            _SelectSpecial(input.LastNumberPressed);
+            SelectSpecial(input.LastNumberPressed);
         }
 
-        if (input.IsMousePressed)
+        if (input.IsMousePressed && !input.ClickProcessed)
             _Spawn();
     }
     
@@ -94,7 +94,7 @@ public class SpecialSpawner : ISpecialSpawnerView
         _spawnAdjustedMousePosition.Y = positionOffset.Item2 - cameraOffset.Item2 - spriteOffset.Item2;
     }
     
-    private void _SelectSpecial(int selection)
+    public void SelectSpecial(int selection)
     {
         if (selection > _specialSelections.Length)
             return;

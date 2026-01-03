@@ -79,13 +79,13 @@ public class Game
     
     public void Update(Input input, double elapsedTime)
     {
+        _level.Update(elapsedTime);
+        _guiManager.Update(input);
         if (_isInGame && _specialSpawner != null)
         {
             _specialSpawner.Update(input, elapsedTime);
             _camera.Update(input.PressedMovementKeys, elapsedTime);
         }
-        _level.Update(elapsedTime);
-        _guiManager.Update(input);
     }
     
     public byte[] Render()

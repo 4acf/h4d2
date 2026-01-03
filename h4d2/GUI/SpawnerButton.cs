@@ -51,7 +51,8 @@ public class SpawnerButton
         _UpdateMouseOverState(input.MousePositionScreen);
         if (_isMouseOver && input.IsMousePressed)
         {
-            Clicked?.Invoke(this, EventArgs.Empty);
+            input.SetClickProcessed();
+            spawnerView.SelectSpecial(_indexInArray + 1);
         }
     }
     

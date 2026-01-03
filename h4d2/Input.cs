@@ -31,6 +31,7 @@ public class Input
     public bool IsEscPressed { get; private set; } 
     public bool IsNumberPressed { get; private set; }
     public int LastNumberPressed { get; private set; }
+    public bool ClickProcessed { get; private set; }
 
     public Input(RenderWindow window)
     {
@@ -46,6 +47,7 @@ public class Input
         IsEscPressed = false;
         IsNumberPressed = false;
         LastNumberPressed = 0;
+        ClickProcessed = false;
     }
     
     public void CaptureRealtimeInputs()
@@ -89,4 +91,6 @@ public class Input
                 break;
         }
     }
+
+    public void SetClickProcessed() => ClickProcessed = true;
 }
