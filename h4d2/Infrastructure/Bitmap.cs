@@ -263,6 +263,37 @@ public class Bitmap
         }
     }
 
+    public void DrawSpawnerButtonOverlay(Bitmap buttonBitmap, int x, int y, double percentageRemaining)
+    {
+        const int overlayColor = 0x0;
+        
+        for (int i = 0; i < buttonBitmap.Height; i++)
+        {
+            for (int j = 0; j < buttonBitmap.Width; j++)
+            {
+                double blend = 0.5;
+                
+                int parentIndex = _GetBytespaceIndex(Width, x + j, y - i - 1);
+                int childIndex = _GetBytespaceIndex(buttonBitmap.Width, j, i);
+                
+                if (IsOutOfBounds(parentIndex) || buttonBitmap.IsOutOfBounds(childIndex)) continue;
+                if (buttonBitmap.Data[childIndex + 3] == 0) continue;
+
+                int expectedY = y - i - 1;
+                int actualY = parentIndex / (Width * 4);
+                if (expectedY != actualY) continue;
+
+                if (((double)i / buttonBitmap.Height) < percentageRemaining)
+                    blend = 0.25;
+                
+                Data[parentIndex] = MathHelpers.ByteLerp(Data[parentIndex], overlayColor, blend);
+                Data[parentIndex + 1] = MathHelpers.ByteLerp(Data[parentIndex + 1], overlayColor, blend);
+                Data[parentIndex + 2] = MathHelpers.ByteLerp(Data[parentIndex + 2], overlayColor, blend);
+                Data[parentIndex + 3] = 0xff;
+            }
+        }
+    }
+    
     public void DrawInvalidSpecial(Bitmap specialBitmap, int x, int y)
     {
         const double blend = 0.5;

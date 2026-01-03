@@ -93,6 +93,8 @@ public class SpecialSelection : ISpecialSelectionView
             _ => new Tank(level, position)
         };
         level.AddSpecial(special);
+        level.SpendCredits(Cost);
+        _cooldownTimer.Reset();
         return true;
     }
 }

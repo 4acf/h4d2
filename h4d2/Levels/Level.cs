@@ -485,6 +485,14 @@ public class Level
             }
         }
     }
+
+    public void SpendCredits(int credits)
+    {
+        int posCredits = Math.Abs(credits);
+        if (posCredits > Credits)
+            return;
+        Credits -= posCredits;
+    }
     
     public void Update(double elapsedTime)
     {
