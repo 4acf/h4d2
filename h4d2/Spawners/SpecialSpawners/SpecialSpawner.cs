@@ -57,7 +57,6 @@ public class SpecialSpawner : ISpecialSpawnerView
             KeyValuePair<SpecialDescriptor, BuyInfo> special = sortedBuyableSpecials[i];
             _specialSelections[i] = new SpecialSelection(i, special.Key, special.Value, _spawnAdjustedMousePosition);
         }
-        Array.Sort(_specialSelections, (a, b) => a.Cost.CompareTo(b.Cost));
     }
 
     public void Update(Input input, double elapsedTime)
