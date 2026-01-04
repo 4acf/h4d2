@@ -23,6 +23,7 @@ public class Game
     private readonly CollisionManager<CollisionGroup> _collisionManager;
     private SpecialSpawner? _specialSpawner;
     private bool _isInGame;
+    private bool _isPaused;
     
     public Game(int width, int height, SaveManager saveManager, AudioManager audioManager)
     {
@@ -34,6 +35,9 @@ public class Game
         _guiManager.LevelChangeRequested += _InitializeGameLevel;
         _guiManager.MusicVolumeChangeRequested += _OnMusicVolumeChangeRequested;
         _guiManager.SFXVolumeChangeRequested += _OnSFXVolumeChangeRequested;
+        _guiManager.PauseRequested += _OnPauseToggleRequested;
+        _guiManager.UnpauseRequested += _OnPauseToggleRequested;
+        _guiManager.ReloadMainMenuRequested += _OnReloadMainMenuRequested;
         _guiManager.ExitRequested += _OnExitRequested;
         _collisionManager = new CollisionManager<CollisionGroup>();
         Collisions.Configure(_collisionManager);
@@ -50,6 +54,7 @@ public class Game
         _screen = new Bitmap(_screenWidth, _screenHeight, _camera);
         _shadows = new ShadowBitmap(_screenWidth, _screenHeight, _camera);
         _isInGame = isInGame;
+        _isPaused = false;
         _specialSpawner = isInGame ? 
             new SpecialSpawner(_level, config, _camera) :
             null;
@@ -79,9 +84,12 @@ public class Game
     
     public void Update(Input input, double elapsedTime)
     {
-        _level.Update(elapsedTime);
+        if(!_isInGame || !_isPaused)
+            _level.Update(elapsedTime);
+        
         _guiManager.Update(input);
-        if (_isInGame && _specialSpawner != null)
+        
+        if (_isInGame && !_isPaused && _specialSpawner != null)
         {
             _specialSpawner.Update(input, elapsedTime);
             _camera.Update(input.PressedMovementKeys, elapsedTime);
@@ -97,6 +105,13 @@ public class Game
         return _screen.Data;
     }
 
+    private void _OnPauseToggleRequested(object? sender, EventArgs e)
+    {
+        if (!_isInGame)
+            return;
+        _isPaused = !_isPaused;
+    }
+    
     private void _OnMusicVolumeChangeRequested(object? sender, MusicVolumeChangedEventArgs e)
     {
         _audioManager.UpdateMusicVolume(e.MusicVolume);
@@ -108,6 +123,9 @@ public class Game
         _audioManager.UpdateSFXVolume(e.SFXVolume);
         _saveManager.SaveNewSFXVolume(e.SFXVolume);
     }
+
+    private void _OnReloadMainMenuRequested(object? sender, EventArgs e) =>
+        _InitializeLevel(_mainMenuLevelIndex, false);
 
     private void _OnExitRequested(object? sender, EventArgs e) =>
         ExitGame?.Invoke(this, EventArgs.Empty);

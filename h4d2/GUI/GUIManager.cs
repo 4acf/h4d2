@@ -5,38 +5,14 @@ using H4D2.Spawners.SpecialSpawners;
 
 namespace H4D2.GUI;
 
-public class LevelSelectedEventArgs : EventArgs
-{
-    public readonly int Level;
-    public LevelSelectedEventArgs(int level)
-    {
-        Level = level;
-    }
-}
-
-public class MusicVolumeChangedEventArgs : EventArgs
-{
-    public readonly double MusicVolume;
-    public MusicVolumeChangedEventArgs(double musicVolume)
-    {
-        MusicVolume = musicVolume;
-    }
-}
-
-public class SFXVolumeChangedEventArgs : EventArgs
-{
-    public readonly double SFXVolume;
-    public SFXVolumeChangedEventArgs(double sfxVolume)
-    {
-        SFXVolume = sfxVolume;
-    }
-}
-
 public class GUIManager
 {
     public event Func<int, SpecialSpawner>? LevelChangeRequested;
     public event EventHandler<MusicVolumeChangedEventArgs>? MusicVolumeChangeRequested;
     public event EventHandler<SFXVolumeChangedEventArgs>? SFXVolumeChangeRequested;
+    public event EventHandler? PauseRequested;
+    public event EventHandler? UnpauseRequested;
+    public event EventHandler? ReloadMainMenuRequested;
     public event EventHandler? ExitRequested;
 
     private readonly SaveManager _saveManager;
@@ -96,6 +72,14 @@ public class GUIManager
     private void _NavigateToHUD(ISpecialSpawnerView spawnerView)
     {
         _menu = new HUD(spawnerView, _width, _height);
+        _menu.PauseSelected += _OnPauseSelected;
+    }
+
+    private void _NavigateToPauseMenu(ISpecialSpawnerView spawnerView)
+    {
+        _menu = new PauseMenu(spawnerView, _width, _height);
+        _menu.UnpauseSelected += _OnUnpauseSelected;
+        _menu.MainMenuSelected += _OnMainMenuSelected;
     }
     
     private void _OnLevelSelected(object? sender, LevelSelectedEventArgs e)
@@ -104,6 +88,24 @@ public class GUIManager
         if (spawnerView == null)
             return;
         _NavigateToHUD(spawnerView);
+    }
+
+    private void _OnPauseSelected(object? sender, PauseToggleEventArgs e)
+    {
+        _NavigateToPauseMenu(e.SpawnerView);
+        PauseRequested?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void _OnUnpauseSelected(object? sender, PauseToggleEventArgs e)
+    {
+        _NavigateToHUD(e.SpawnerView);
+        UnpauseRequested?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void _OnMainMenuSelected(object? sender, EventArgs e)
+    {
+        ReloadMainMenuRequested?.Invoke(this, EventArgs.Empty);
+        _NavigateToMainMenu(sender, e);
     }
     
     private void _OnMusicVolumeChanged(object? sender, MusicVolumeChangedEventArgs e) =>

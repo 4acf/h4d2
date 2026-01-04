@@ -41,7 +41,7 @@ public class HUD : Menu
             );
         }
         
-        _creditsStringBuilder = new StringBuilder("$0");
+        _creditsStringBuilder = new StringBuilder($"${_spawnerView.Credits}");
         _credits = new Header(
             _creditsStringBuilder.ToString(),
             0,
@@ -55,6 +55,12 @@ public class HUD : Menu
 
     public override void Update(Input input)
     {
+        if (input.IsEscPressed)
+        {
+            _RaisePauseSelected(_spawnerView);
+            return;
+        }
+        
         _creditsStringBuilder
             .Clear()
             .Append('$')
