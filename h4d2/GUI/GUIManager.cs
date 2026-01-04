@@ -41,6 +41,12 @@ public class GUIManager
         _menu.Render(screen);
     }
 
+    public void ForceNavigateToLevelCompleteMenu(int levelID, double totalElapsedTime)
+    {
+        _menu = new LevelCompleteMenu(levelID, totalElapsedTime, _width, _height);
+        
+    }
+    
     private void _NavigateToLevels(object? sender, EventArgs e)
     {
         _menu = new LevelsMenu(_width, _height);

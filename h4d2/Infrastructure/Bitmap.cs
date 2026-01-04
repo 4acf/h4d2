@@ -176,6 +176,20 @@ public class Bitmap
         }
     }
 
+    public void DrawCenteredLineOfText(TextBitmap[] textBitmaps, string text, int y, int color = 0x0)
+    {
+        int width = 0;
+        for (int i = 0; i < text.Length; i++)
+        {
+            TextBitmap letterBitmap = textBitmaps[text[i] - ' '];
+            width += letterBitmap.Width;
+        }
+
+        width += 1;
+        int x = (Width / 2) - (width / 2);
+        DrawLineOfText(textBitmaps, text, x, y, color);
+    }
+
     public void DrawTextHeader(TextBitmap[] textBitmaps, string text, int x, int y, int color = 0x0)
     {
         int startingX = x;

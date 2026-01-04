@@ -22,8 +22,19 @@ using H4D2.Spawners.SpecialSpawners;
 
 namespace H4D2.Levels;
 
+public class GameOverEventArgs : EventArgs
+{
+    public readonly double TotalElapsedTime;
+    public GameOverEventArgs(double totalElapsedTime)
+    {
+        TotalElapsedTime = totalElapsedTime;
+    }
+}
+
 public class Level
 {
+    public event EventHandler<GameOverEventArgs>? GameOver;
+    
     public const double TilePhysicalSize = 16;
    
     private const int _padding = 2;
@@ -51,6 +62,7 @@ public class Level
     public static readonly (double, double) TilePhysicalOffset 
         = Isometric.ScreenSpaceToWorldSpace(0, _tileRenderOffset);
     
+    public readonly int ID;
     public readonly int Width;
     public readonly int Height;
     public readonly CollisionManager<CollisionGroup> CollisionManager;
@@ -59,7 +71,7 @@ public class Level
     private readonly CountdownTimer _throwableSpawnTimer;
     private readonly CountdownTimer _zombieSpawnTimer;
     private readonly Stopwatch _stopwatch;
-    
+
     public bool IsGameOver => GetLivingMobs<Survivor>().Count == 0;
     public int Credits { get; private set; }
     private readonly List<Entity> _entities;
@@ -73,6 +85,7 @@ public class Level
     private readonly HashSet<int> _activeThrowableLocations;
     private readonly Queue<Zombie> _zombieSpawnQueue;
     private readonly EntityCollisionMap _entityCollisionMap;
+    private bool _gameOverEventPublished;
     
     public Level(LevelConfig config, CollisionManager<CollisionGroup> collisionManager, Camera camera)
     {
@@ -88,7 +101,9 @@ public class Level
         _particles = [];
         _levelElements = [];
         CollisionManager = collisionManager;
-        
+        _gameOverEventPublished = false;
+
+        ID = config.ID;
         Width = config.Layout.Width + _padding;
         Height = config.Layout.Height + _padding;
         _zombieSpawnLocations = [];
@@ -498,12 +513,20 @@ public class Level
     {
         if (IsGameOver)
         {
+            if (_gameOverEventPublished)
+                return;
+            _UpdateEntities(elapsedTime);
             _stopwatch.Stop();
             double totalElapsedTime = _stopwatch.Elapsed.TotalSeconds;
+            GameOver?.Invoke(this, new GameOverEventArgs(totalElapsedTime));
+            _gameOverEventPublished = true;
         }
-        _UpdateCollisionMap();
-        _UpdateEntities(elapsedTime);
-        _UpdateParticles(elapsedTime);
+        else
+        {
+            _UpdateCollisionMap();
+            _UpdateEntities(elapsedTime);
+            _UpdateParticles(elapsedTime);
+        }
     }
     
     public void Render(Bitmap screen, ShadowBitmap shadows)

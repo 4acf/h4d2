@@ -51,6 +51,9 @@ public class Game
         Bitmap levelBitmap = config.Layout;
         _InitializeCamera(levelBitmap);
         _level = new Level(config, _collisionManager, _camera);
+        _level.GameOver += isInGame ? 
+            _OnGameOver :
+            _OnMainMenuGameOver;
         _screen = new Bitmap(_screenWidth, _screenHeight, _camera);
         _shadows = new ShadowBitmap(_screenWidth, _screenHeight, _camera);
         _isInGame = isInGame;
@@ -89,7 +92,7 @@ public class Game
         
         _guiManager.Update(input);
         
-        if (_isInGame && !_isPaused && _specialSpawner != null)
+        if (_isInGame && !_isPaused && !_level.IsGameOver && _specialSpawner != null)
         {
             _specialSpawner.Update(input, elapsedTime);
             _camera.Update(input.PressedMovementKeys, elapsedTime);
@@ -129,4 +132,14 @@ public class Game
 
     private void _OnExitRequested(object? sender, EventArgs e) =>
         ExitGame?.Invoke(this, EventArgs.Empty);
+    
+    private void _OnGameOver(object? sender, GameOverEventArgs e) 
+    {
+        _saveManager.SaveNewLevelRecord(_level.ID, e.TotalElapsedTime);
+        _guiManager.ForceNavigateToLevelCompleteMenu(_level.ID, e.TotalElapsedTime);
+    }
+
+    private void _OnMainMenuGameOver(object? sender, GameOverEventArgs e) =>
+        _InitializeLevel(_mainMenuLevelIndex, false);
+
 }
