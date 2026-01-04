@@ -49,7 +49,7 @@ public class GUIManager
     
     private void _NavigateToLevels(object? sender, EventArgs e)
     {
-        _menu = new LevelsMenu(_width, _height);
+        _menu = new LevelsMenu(_saveManager, _width, _height);
         _menu.MainMenuSelected += _NavigateToMainMenu;
         _menu.LevelSelected += _OnLevelSelected;
     }

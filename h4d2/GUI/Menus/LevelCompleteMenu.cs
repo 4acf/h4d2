@@ -23,7 +23,7 @@ public class LevelCompleteMenu : Menu
         int headerY = _height - (_height / 3);
         _centeredHeader = new CenteredHeader("Level Complete", headerY, _textColor);
         
-        string time = _FormatTime(_totalElapsedTime);
+        string time = TimeFormatter.Format(_totalElapsedTime);
         int elapsedTimeY = headerY - (H4D2Art.TextHeight * 2) - _paddingY;
         _centeredElapsedTime = new CenteredSubheader($"Time taken: {time}", elapsedTimeY, _textColor);
         
@@ -41,12 +41,5 @@ public class LevelCompleteMenu : Menu
         _centeredHeader.Render(screen);
         _centeredElapsedTime.Render(screen);
         _levelsButton.Render(screen);
-    }
-
-    private string _FormatTime(double totalElapsedTime)
-    {
-        int minutes = (int)totalElapsedTime / 60;
-        double seconds = totalElapsedTime % 60;
-        return $"{minutes:00}:{seconds:00.00}";
     }
 }

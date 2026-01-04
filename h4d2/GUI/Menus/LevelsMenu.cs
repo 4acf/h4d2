@@ -8,22 +8,31 @@ public class LevelsMenu : Menu
 {
     private const int _xEdgePadding = 5;
     private const int _paddingBetweenButtonsY = 2;
+    private const int _paddingBetweenHeadersY = 20;
     private const int _mainMenuButtonYOffset = 20;
+    private readonly SaveManager _saveManager;
     private readonly CenteredHeader _levelNameHeader;
+    private readonly CenteredSubheader _recordSubheader;
     private readonly Button _backwardNavigationButton;
     private readonly Button _forwardNavigationButton;
     private readonly Button _playButton;
     private readonly Button _mainMenuButton;
     private int _page;
     
-    public LevelsMenu(int width, int height, int page = 0) : base(width, height)
+    public LevelsMenu(SaveManager saveManager, int width, int height, int page = 0) : base(width, height)
     {
+        _saveManager = saveManager;
+        
         if (page < 0 || page >= LevelCollection.NumLevels)
             page = 0;
         _page = page;
 
         int headerY = _height - (_height / 3);
         _levelNameHeader = new CenteredHeader(LevelCollection.Levels[_page].Name, headerY, _textColor);
+
+        int recordY = headerY - (H4D2Art.TextHeight * 2) - _paddingBetweenHeadersY;
+        string record = _GetRecordText(_page);
+        _recordSubheader = new CenteredSubheader(record, recordY, _textColor);
         
         _backwardNavigationButton = new Button(ButtonType.Backward, _xEdgePadding, _centeredSmallButtonY);
         _backwardNavigationButton.Clicked += (_, _) =>
@@ -70,6 +79,7 @@ public class LevelsMenu : Menu
             _forwardNavigationButton.Render(screen);
      
         _levelNameHeader.Render(screen);
+        _recordSubheader.Render(screen);
         _playButton.Render(screen);
         _mainMenuButton.Render(screen);
     }
@@ -77,8 +87,18 @@ public class LevelsMenu : Menu
     private void _RefreshLevelDetails()
     {
         _levelNameHeader.UpdateText(LevelCollection.Levels[_page].Name);
+        _recordSubheader.UpdateText(_GetRecordText(_page));
     }
 
+    private string _GetRecordText(int page)
+    {
+        double? record = _saveManager.GetLevelRecord(page);
+        if (record == null)
+            return "LEVEL NOT COMPLETED";
+        string formatted = TimeFormatter.Format(record.Value);
+        return $"Best Time: {formatted}";
+    }
+    
     private void _OnPlayButtonClicked(object? sender, EventArgs e)
         => _RaiseLevelSelected(_page);
     
