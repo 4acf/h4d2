@@ -26,7 +26,7 @@ public class GUIManager
         _width = width;
         _height = height;
         _menu = new MainMenu(width, height);
-        _menu.LevelsSelected += _NavigateToLevels;
+        _menu.LevelsSelected += _OnLevelsSelected;
         _menu.SettingsSelected += _NavigateToSettings;
         _menu.ExitSelected += _OnExitSelected;
     }
@@ -44,12 +44,12 @@ public class GUIManager
     public void ForceNavigateToLevelCompleteMenu(int levelID, double totalElapsedTime)
     {
         _menu = new LevelCompleteMenu(levelID, totalElapsedTime, _width, _height);
-        
+        _menu.LevelsSelected += _OnLevelsSelected;
     }
     
-    private void _NavigateToLevels(object? sender, EventArgs e)
+    private void _NavigateToLevels(int page)
     {
-        _menu = new LevelsMenu(_saveManager, _width, _height);
+        _menu = new LevelsMenu(_saveManager, _width, _height, page);
         _menu.MainMenuSelected += _NavigateToMainMenu;
         _menu.LevelSelected += _OnLevelSelected;
     }
@@ -57,7 +57,7 @@ public class GUIManager
     private void _NavigateToMainMenu(object? sender, EventArgs e)
     {
         _menu = new MainMenu(_width, _height);
-        _menu.LevelsSelected += _NavigateToLevels;
+        _menu.LevelsSelected += _OnLevelsSelected;
         _menu.SettingsSelected += _NavigateToSettings;
         _menu.ExitSelected += _OnExitSelected;
     }
@@ -96,6 +96,13 @@ public class GUIManager
         _NavigateToHUD(spawnerView);
     }
 
+    private void _OnLevelsSelected(object? sender, LevelsSelectedEventArgs e)
+    {
+        if(e.FromLevelComplete)
+            ReloadMainMenuRequested?.Invoke(this, EventArgs.Empty);
+        _NavigateToLevels(e.Page);
+    }
+    
     private void _OnPauseSelected(object? sender, PauseToggleEventArgs e)
     {
         _NavigateToPauseMenu(e.SpawnerView);

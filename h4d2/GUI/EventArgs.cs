@@ -11,6 +11,17 @@ public class LevelSelectedEventArgs : EventArgs
     }
 }
 
+public class LevelsSelectedEventArgs : EventArgs
+{
+    public readonly int Page;
+    public readonly bool FromLevelComplete;
+    public LevelsSelectedEventArgs(int page, bool fromLevelComplete)
+    {
+        Page = page;
+        FromLevelComplete = fromLevelComplete;
+    }
+}
+
 public class PauseToggleEventArgs : EventArgs
 {
     public readonly ISpecialSpawnerView SpawnerView;

@@ -9,7 +9,7 @@ public abstract class Menu
     protected const int _textColor = 0xffffff;
 
     public event EventHandler<LevelSelectedEventArgs>? LevelSelected;
-    public event EventHandler? LevelsSelected;
+    public event EventHandler<LevelsSelectedEventArgs>? LevelsSelected;
     public event EventHandler? SettingsSelected;
     public event EventHandler? ExitSelected;
     public event EventHandler? MainMenuSelected;
@@ -36,8 +36,10 @@ public abstract class Menu
 
     protected void _RaiseLevelSelected(int page) =>
         LevelSelected?.Invoke(this, new LevelSelectedEventArgs(page));
-    protected void _RaiseLevelsSelected() =>
-        LevelsSelected?.Invoke(this, EventArgs.Empty);
+    protected void _RaiseLevelsSelected(int page = 0) =>
+        LevelsSelected?.Invoke(this, new LevelsSelectedEventArgs(page, false));
+    protected void _RaiseLevelsSelectedFromLevelComplete(int page = 0) =>
+        LevelsSelected?.Invoke(this, new LevelsSelectedEventArgs(page, true));
     protected void _RaiseSettingsSelected() =>
         SettingsSelected?.Invoke(this, EventArgs.Empty);
     protected void _RaiseExitSelected() =>

@@ -8,7 +8,6 @@ public class LevelCompleteMenu : Menu
     private const int _paddingY = 10;
     
     private readonly int _levelID;
-    private readonly double _totalElapsedTime;
 
     private readonly CenteredHeader _centeredHeader;
     private readonly CenteredSubheader _centeredElapsedTime;
@@ -18,17 +17,17 @@ public class LevelCompleteMenu : Menu
         : base(width, height)
     {
         _levelID = levelID;
-        _totalElapsedTime = totalElapsedTime;
         
         int headerY = _height - (_height / 3);
         _centeredHeader = new CenteredHeader("Level Complete", headerY, _textColor);
         
-        string time = TimeFormatter.Format(_totalElapsedTime);
+        string time = TimeFormatter.Format(totalElapsedTime);
         int elapsedTimeY = headerY - (H4D2Art.TextHeight * 2) - _paddingY;
         _centeredElapsedTime = new CenteredSubheader($"Time taken: {time}", elapsedTimeY, _textColor);
         
         int levelsButtonY = (_height - (_height / 2)) - H4D2Art.LargeButtonHeight;
         _levelsButton = new Button(ButtonType.Levels, _centeredLargeButtonX, levelsButtonY);
+        _levelsButton.Clicked += _OnLevelsButtonClicked;
     }
 
     public override void Update(Input input)
@@ -42,4 +41,7 @@ public class LevelCompleteMenu : Menu
         _centeredElapsedTime.Render(screen);
         _levelsButton.Render(screen);
     }
+    
+    private void _OnLevelsButtonClicked(object? sender, EventArgs e) =>
+        _RaiseLevelsSelectedFromLevelComplete(_levelID);
 }
