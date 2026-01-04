@@ -17,6 +17,7 @@ public class LevelsMenu : Menu
     private readonly Button _forwardNavigationButton;
     private readonly Button _playButton;
     private readonly Button _mainMenuButton;
+    private readonly PageViewer _pageViewer;
     private int _page;
     
     public LevelsMenu(SaveManager saveManager, int width, int height, int page = 0) : base(width, height)
@@ -38,7 +39,7 @@ public class LevelsMenu : Menu
         _backwardNavigationButton.Clicked += (_, _) =>
         {
             _page--;
-            _RefreshLevelDetails();
+            _RefreshPageDetails();
         };
         
         int forwardButtonX = width - _xEdgePadding - H4D2Art.SmallButtonWidth;
@@ -46,7 +47,7 @@ public class LevelsMenu : Menu
         _forwardNavigationButton.Clicked += (_, _) =>
         {
             _page++;
-            _RefreshLevelDetails();
+            _RefreshPageDetails();
         };
         
         int mainMenuButtonY = (height / 3) - _mainMenuButtonYOffset;
@@ -56,6 +57,13 @@ public class LevelsMenu : Menu
         int playButtonY = mainMenuButtonY + H4D2Art.LargeButtonHeight + _paddingBetweenButtonsY;
         _playButton = new Button(ButtonType.Play, _centeredLargeButtonX, playButtonY);
         _playButton.Clicked += _OnPlayButtonClicked;
+
+        _pageViewer = new PageViewer(
+            LevelCollection.NumLevels,
+            _height - PageViewer.Scale * 2,
+            width,
+            page
+        );
     }
 
     public override void Update(Input input)
@@ -82,12 +90,14 @@ public class LevelsMenu : Menu
         _recordSubheader.Render(screen);
         _playButton.Render(screen);
         _mainMenuButton.Render(screen);
+        _pageViewer.Render(screen);
     }
 
-    private void _RefreshLevelDetails()
+    private void _RefreshPageDetails()
     {
         _levelNameHeader.UpdateText(LevelCollection.Levels[_page].Name);
         _recordSubheader.UpdateText(_GetRecordText(_page));
+        _pageViewer.Update(_page);
     }
 
     private string _GetRecordText(int page)

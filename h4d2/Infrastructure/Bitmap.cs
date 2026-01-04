@@ -460,9 +460,19 @@ public class Bitmap
         SetPixelBlend(x, y, color, 0);
     }
 
+    public void SetPixelAbsolute(int x, int y, int color)
+    {
+        SetPixelBlendAbsolute(x, y, color, 0);
+    }
+    
     public void SetPixelBlend(int x, int y, int color, double blend)
     {
         FillBlend(x, y, x, y, color, blend);
+    }
+
+    public void SetPixelBlendAbsolute(int x, int y, int color, double blend)
+    {
+        FillBlendAbsolute(x, y, x, y, color, blend);
     }
     
     public bool IsOutOfBounds(int index)
