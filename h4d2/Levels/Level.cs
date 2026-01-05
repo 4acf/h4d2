@@ -309,18 +309,18 @@ public class Level
         return true;
     }
     
-    public bool HasLineOfSight(ReadonlyPosition originalTargetPos, ReadonlyPosition currentTargetPos)
+    public bool HasLineOfSight(ReadonlyPosition startPos, ReadonlyPosition targetPos)
     {
         double xPhysOffs = TilePhysicalOffset.Item1;
         double yPhysOffs = TilePhysicalOffset.Item2;
         
-        Tile originalTile = GetTilePosition(originalTargetPos);
+        Tile originalTile = GetTilePosition(startPos);
         int currentX = originalTile.X;
         int currentY = originalTile.Y;
         
-        Tile targetTile = GetTilePosition(currentTargetPos);
+        Tile targetTile = GetTilePosition(targetPos);
 
-        double directionRadians = Math.Atan2(currentTargetPos.Y - originalTargetPos.Y, currentTargetPos.X - originalTargetPos.X);
+        double directionRadians = Math.Atan2(targetPos.Y - startPos.Y, targetPos.X - startPos.X);
         directionRadians = MathHelpers.NormalizeRadians(directionRadians);
 
         double xDir = Math.Cos(directionRadians);
@@ -331,8 +331,8 @@ public class Level
         double deltaDistX = (xDir == 0) ? double.MaxValue : Math.Abs(1 / xDir);
         double deltaDistY = (yDir == 0) ? double.MaxValue : Math.Abs(1 / yDir);
         
-        double posX = (originalTargetPos.X + xPhysOffs) / TilePhysicalSize;
-        double posY = -((originalTargetPos.Y + yPhysOffs) / TilePhysicalSize);
+        double posX = (startPos.X + xPhysOffs) / TilePhysicalSize;
+        double posY = -((startPos.Y + yPhysOffs) / TilePhysicalSize);
         double sideDistX = stepX == 1 ? 
             (currentX + 1 - posX) * deltaDistX :
             (posX - currentX) * deltaDistX;

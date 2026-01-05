@@ -48,7 +48,10 @@ public abstract class Cloud<T> : Particle where T : Cloudlet
             Position translatedPositionCopy = _position.CopyAndTranslate(dx, dy, dz);
             
             Tile tile = Level.GetTilePosition((translatedPositionCopy.X, translatedPositionCopy.Y));
-            if (_level.IsWall(tile))
+            if  (
+                _level.IsWall(tile) || 
+                !_level.HasLineOfSight(_position.ReadonlyCopy(), translatedPositionCopy.ReadonlyCopy())
+                )
                 continue;
             
             Cloudlet cloudlet = _factory(_level, translatedPositionCopy);
