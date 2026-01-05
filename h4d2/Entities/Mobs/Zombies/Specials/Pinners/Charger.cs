@@ -272,7 +272,7 @@ public class Charger : Pinner
             return;
         }
         
-        if (_pinTarget == null && entity is Survivor survivor)
+        if (_pinTarget == null && entity is Survivor survivor && !survivor.IsPinned)
         {
             _Pin(survivor);
             return;
