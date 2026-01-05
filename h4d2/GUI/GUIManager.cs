@@ -31,9 +31,9 @@ public class GUIManager
         _menu.ExitSelected += _OnExitSelected;
     }
     
-    public void Update(Input input)
+    public void Update(Input input, double elapsedTime)
     {
-        _menu.Update(input);
+        _menu.Update(input, elapsedTime);
     }
 
     public void Render(Bitmap screen)

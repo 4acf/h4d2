@@ -66,7 +66,7 @@ public class LevelsMenu : Menu
         );
     }
 
-    public override void Update(Input input)
+    public override void Update(Input input, double elapsedTime)
     {
         if(_page > 0)
             _backwardNavigationButton.Update(input);

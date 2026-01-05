@@ -29,7 +29,7 @@ public class PauseMenu : Menu
         _mainMenuButton.Clicked += _OnMainMenuButtonClicked;
     }
 
-    public override void Update(Input input)
+    public override void Update(Input input, double elapsedTime)
     {
         if (input.IsEscPressed)
         {

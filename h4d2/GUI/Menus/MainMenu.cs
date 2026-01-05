@@ -26,7 +26,7 @@ public class MainMenu : Menu
         _exitButton.Clicked += _OnExitButtonClicked;
     }
 
-    public override void Update(Input input)
+    public override void Update(Input input, double elapsedTime)
     {
         _playButton.Update(input);
         _settingsButton.Update(input);

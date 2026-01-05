@@ -43,7 +43,7 @@ public class SettingsMenu : Menu
         _mainMenuButton.Clicked += _OnMainMenuButtonClicked;
     }
 
-    public override void Update(Input input)
+    public override void Update(Input input, double elapsedTime)
     {
         _musicVolumeSelector.Update(input);
         _sfxVolumeSelector.Update(input);

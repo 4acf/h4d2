@@ -31,7 +31,7 @@ public abstract class Menu
         _centeredSmallButtonY = (height / 2) + (H4D2Art.SmallButtonHeight / 2);
     }
 
-    public abstract void Update(Input input);
+    public abstract void Update(Input input, double elapsedTime);
     public abstract void Render(Bitmap screen);
 
     protected void _RaiseLevelSelected(int page) =>

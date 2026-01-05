@@ -90,7 +90,7 @@ public class Game
         if(!_isInGame || !_isPaused)
             _level.Update(elapsedTime);
         
-        _guiManager.Update(input);
+        _guiManager.Update(input, elapsedTime);
         
         if (_isInGame && !_isPaused && !_level.IsGameOver && _specialSpawner != null)
         {

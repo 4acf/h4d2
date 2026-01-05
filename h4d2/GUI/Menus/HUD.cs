@@ -53,7 +53,7 @@ public class HUD : Menu
         );
     }
 
-    public override void Update(Input input)
+    public override void Update(Input input, double elapsedTime)
     {
         if (input.IsEscPressed)
         {
