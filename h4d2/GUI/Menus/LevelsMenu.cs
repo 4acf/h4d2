@@ -38,7 +38,7 @@ public class LevelsMenu : Menu
         _backwardNavigationButton = new Button(ButtonType.Backward, _xEdgePadding, _centeredSmallButtonY);
         _backwardNavigationButton.Clicked += (_, _) =>
         {
-            _page--;
+            _page = (LevelCollection.NumLevels + (_page - 1)) % LevelCollection.NumLevels;
             _RefreshPageDetails();
         };
         
@@ -46,7 +46,7 @@ public class LevelsMenu : Menu
         _forwardNavigationButton = new Button(ButtonType.Forward, forwardButtonX, _centeredSmallButtonY);
         _forwardNavigationButton.Clicked += (_, _) =>
         {
-            _page++;
+            _page = (_page + 1) % LevelCollection.NumLevels;
             _RefreshPageDetails();
         };
         
@@ -68,24 +68,16 @@ public class LevelsMenu : Menu
 
     public override void Update(Input input, double elapsedTime)
     {
-        if(_page > 0)
-            _backwardNavigationButton.Update(input);
-        
-        if(_page < LevelCollection.NumLevels - 1)
-            _forwardNavigationButton.Update(input);
-        
+        _backwardNavigationButton.Update(input);
+        _forwardNavigationButton.Update(input);
         _playButton.Update(input);
         _mainMenuButton.Update(input);
     }
 
     public override void Render(Bitmap screen)
     {
-        if(_page > 0)
-            _backwardNavigationButton.Render(screen);
-        
-        if(_page < LevelCollection.NumLevels - 1)
-            _forwardNavigationButton.Render(screen);
-     
+        _backwardNavigationButton.Render(screen);
+        _forwardNavigationButton.Render(screen);
         _levelNameHeader.Render(screen);
         _recordSubheader.Render(screen);
         _playButton.Render(screen);
