@@ -68,18 +68,25 @@ public class Hunter : Pinner
         
         _crouchTimer.Update(elapsedTime);
         
-        if (_target == null || _target.Removed)
+        if (_target == null || _target.Removed || _target is Survivor { IsPinned: true })
+        {
+            _isCrouching = false;
+            _crouchTimer.Reset();
             return;
+        }
         
         ReadonlyPosition targetPosition = _target.CenterMass;
         ReadonlyPosition zombiePosition = CenterMass;
         _directionRadians = Math.Atan2(targetPosition.Y - zombiePosition.Y, targetPosition.X - zombiePosition.X);
         _directionRadians = MathHelpers.NormalizeRadians(_directionRadians);
         double distance = ReadonlyPosition.Distance(targetPosition, zombiePosition);
-        
+
         if (distance > _jumpRange || !_pathfinder.HasLineOfSight(_target))
+        {
+            _isCrouching = false;
+            _crouchTimer.Reset();
             return;
-        
+        }
         if (_crouchTimer.IsFinished)
         {
             _Jump();
@@ -96,7 +103,7 @@ public class Hunter : Pinner
         ReadonlyPosition zombiePosition = CenterMass;
         double distance = ReadonlyPosition.Distance(targetPosition, zombiePosition);
 
-        if (distance > _crouchRange)
+        if (distance > _crouchRange || !_pathfinder.HasLineOfSight(_target))
             return;
 
         _isCrouching = true;
