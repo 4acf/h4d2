@@ -45,7 +45,7 @@ public class Camera
         _upperYBound = null;
     }
 
-    public void Update(IReadOnlyCollection<MovementKey> keys, double elapsedTime)
+    public void Update(IEnumerable<MovementKey> keys, double elapsedTime)
     {
         foreach (MovementKey key in keys)
         {

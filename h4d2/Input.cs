@@ -25,7 +25,7 @@ public class Input
         );
     
     private readonly HashSet<MovementKey> _pressedMovementKeys;
-    public IReadOnlyCollection<MovementKey> PressedMovementKeys => _pressedMovementKeys;
+    public IEnumerable<MovementKey> PressedMovementKeys => _pressedMovementKeys;
     
     public bool IsMousePressed { get; private set; }
     public bool IsEscPressed { get; private set; } 
