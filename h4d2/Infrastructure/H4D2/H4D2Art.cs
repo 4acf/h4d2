@@ -1,4 +1,6 @@
-﻿namespace H4D2.Infrastructure.H4D2;
+﻿using H4D2.Levels;
+
+namespace H4D2.Infrastructure.H4D2;
 
 public static class H4D2Art
 {
@@ -19,31 +21,15 @@ public static class H4D2Art
     public const int ShadowColor = 0x0;
     public const double ShadowBlend = 0.9;
     private const string _resourcePrefix = "h4d2.Resources.";
-    
+
     public static readonly Bitmap[][] Survivors = _LoadSurvivors();
     public static readonly Bitmap[][] Commons = _LoadCommons();
     public static readonly Bitmap[][] Uncommons = _LoadUncommons();
     public static readonly Bitmap[][] Specials = _LoadSpecials();
     public static readonly Bitmap[][] Pickups = _LoadPickups();
     public static readonly Bitmap[][] Projectiles = _LoadProjectiles();
-
-    // to be moved soon
-    public static readonly Bitmap Level0 = Art.LoadBitmap($"{_resourcePrefix}levels.level0.png");
-    public static readonly Bitmap Level1 = Art.LoadBitmap($"{_resourcePrefix}levels.level1.png");
-    public static readonly Bitmap Level2 = Art.LoadBitmap($"{_resourcePrefix}levels.level2.png");
-    public static readonly Bitmap Level3 = Art.LoadBitmap($"{_resourcePrefix}levels.level3.png");
-    public static readonly Bitmap Level4 = Art.LoadBitmap($"{_resourcePrefix}levels.level4.png");
-    public static readonly Bitmap Level5 = Art.LoadBitmap($"{_resourcePrefix}levels.level5.png");
-    public static readonly Bitmap Level6 = Art.LoadBitmap($"{_resourcePrefix}levels.level6.png");
-    public static readonly Bitmap Level7 = Art.LoadBitmap($"{_resourcePrefix}levels.level7.png");
-    public static readonly Bitmap Level8 = Art.LoadBitmap($"{_resourcePrefix}levels.level8.png");
-    public static readonly Bitmap Level9 = Art.LoadBitmap($"{_resourcePrefix}levels.level9.png");
-    public static readonly Bitmap Level10 = Art.LoadBitmap($"{_resourcePrefix}levels.level10.png");
-    public static readonly Bitmap Level11 = Art.LoadBitmap($"{_resourcePrefix}levels.level11.png");
-    public static readonly Bitmap Level12 = Art.LoadBitmap($"{_resourcePrefix}levels.level12.png");
-    public static readonly Bitmap Level13 = Art.LoadBitmap($"{_resourcePrefix}levels.level13.png");
-    public static readonly Bitmap Level14 = Art.LoadBitmap($"{_resourcePrefix}levels.level14.png");
-
+    public static readonly Bitmap[] LevelLayouts = _LoadLevels();
+    
     public static class Overlays
     {
         private static readonly Bitmap[][] _bileOverlays = _LoadBileOverlays();
@@ -111,4 +97,14 @@ public static class H4D2Art
         Art.LoadBitmaps($"{_resourcePrefix}gui.smallbuttons.png", SmallButtonWidth, 2, 2);
     private static Bitmap[][] _LoadLargeButtons() =>
         Art.LoadBitmaps($"{_resourcePrefix}gui.largebuttons.png", LargeButtonWidth, LargeButtonHeight, 6, 2);
+
+    private static Bitmap[] _LoadLevels()
+    {
+        var levels = new Bitmap[LevelCollection.NumLevels];
+        for (int i = 0; i < LevelCollection.NumLevels; i++)
+        {
+            levels[i] = Art.LoadBitmap($"{_resourcePrefix}levels.level{i}.png"); 
+        }
+        return levels;
+    }
 }

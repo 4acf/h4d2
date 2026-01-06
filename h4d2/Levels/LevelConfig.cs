@@ -80,13 +80,15 @@ public static class StandardLevelConfig
 
 public static class LevelCollection
 {
+    public const int NumLevels = 15;
+    
     public static readonly ImmutableArray<LevelConfig> Levels =
     [
         new()
         {
             ID = 0,
             Name = "Pilot",
-            Layout = H4D2Art.Level0,
+            Layout = H4D2Art.LevelLayouts[0],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = StandardLevelConfig.L4D2Survivors,
@@ -99,7 +101,7 @@ public static class LevelCollection
         {
           ID = 1,
           Name = "Pilot 2",
-          Layout = H4D2Art.Level1,
+          Layout = H4D2Art.LevelLayouts[1],
           MaxConsumables = StandardLevelConfig.MaxConsumables,
           MaxThrowables = StandardLevelConfig.MaxThrowables,
           Survivors = StandardLevelConfig.L4D2Survivors,
@@ -112,7 +114,7 @@ public static class LevelCollection
         {
             ID = 2,
             Name = "Holdout",
-            Layout = H4D2Art.Level2,
+            Layout = H4D2Art.LevelLayouts[2],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = StandardLevelConfig.L4D2Survivors,
@@ -125,7 +127,7 @@ public static class LevelCollection
         {
             ID = 3,
             Name = "Taco Bucket Supreme",
-            Layout = H4D2Art.Level3,
+            Layout = H4D2Art.LevelLayouts[3],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = StandardLevelConfig.L4D2Survivors,
@@ -138,7 +140,7 @@ public static class LevelCollection
         {
             ID = 4,
             Name = "My Buddy Keith",
-            Layout = H4D2Art.Level4,
+            Layout = H4D2Art.LevelLayouts[4],
             MaxConsumables = StandardLevelConfig.MaxConsumables * 2,
             MaxThrowables = StandardLevelConfig.MaxThrowables * 2,
             Survivors = [..Enumerable.Repeat(SurvivorDescriptor.Ellis, 8)],
@@ -151,7 +153,7 @@ public static class LevelCollection
         {
             ID = 5,
             Name = "H4D1",
-            Layout = H4D2Art.Level5,
+            Layout = H4D2Art.LevelLayouts[5],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = StandardLevelConfig.L4D1Survivors,
@@ -172,7 +174,7 @@ public static class LevelCollection
         {
             ID = 6,
             Name = "Party Room",
-            Layout = H4D2Art.Level6,
+            Layout = H4D2Art.LevelLayouts[6],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = StandardLevelConfig.L4D1Survivors,
@@ -185,7 +187,7 @@ public static class LevelCollection
         {
             ID = 7,
             Name = "Mercy Hospital",
-            Layout = H4D2Art.Level7,
+            Layout = H4D2Art.LevelLayouts[7],
             MaxConsumables = StandardLevelConfig.MaxConsumables * 2,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = StandardLevelConfig.L4D1Survivors,
@@ -198,7 +200,7 @@ public static class LevelCollection
         {
             ID = 8,
             Name = "Last Stand",
-            Layout = H4D2Art.Level8,
+            Layout = H4D2Art.LevelLayouts[8],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = StandardLevelConfig.L4D1Survivors,
@@ -211,7 +213,7 @@ public static class LevelCollection
         {
             ID = 9,
             Name = "I Hate Bowling",
-            Layout = H4D2Art.Level9,
+            Layout = H4D2Art.LevelLayouts[9],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = [..Enumerable.Repeat(SurvivorDescriptor.Francis, 8)],
@@ -228,7 +230,7 @@ public static class LevelCollection
         {
             ID = 10,
             Name = "Main Menu",
-            Layout = H4D2Art.Level10,
+            Layout = H4D2Art.LevelLayouts[10],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = StandardLevelConfig.L4D2Survivors,
@@ -241,7 +243,7 @@ public static class LevelCollection
         {
             ID = 11,
             Name = "Ghosts",
-            Layout = H4D2Art.Level11,
+            Layout = H4D2Art.LevelLayouts[11],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = StandardLevelConfig.L4D2Survivors,
@@ -254,7 +256,7 @@ public static class LevelCollection
         {
             ID = 12,
             Name = "Kill Everybody",
-            Layout = H4D2Art.Level12,
+            Layout = H4D2Art.LevelLayouts[12],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = [..StandardLevelConfig.L4D1Survivors, ..StandardLevelConfig.L4D2Survivors],
@@ -267,7 +269,7 @@ public static class LevelCollection
         {
             ID = 13,
             Name = "Ants",
-            Layout = H4D2Art.Level13,
+            Layout = H4D2Art.LevelLayouts[13],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = [..StandardLevelConfig.L4D1Survivors, ..StandardLevelConfig.L4D2Survivors],
@@ -284,7 +286,7 @@ public static class LevelCollection
         {
             ID = 14,
             Name = "One Man Cheeseburger Apocalypse",
-            Layout = H4D2Art.Level14,
+            Layout = H4D2Art.LevelLayouts[14],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
             Survivors = [SurvivorDescriptor.Coach],
@@ -294,6 +296,4 @@ public static class LevelCollection
             Uncommons = StandardLevelConfig.Uncommons
         }
     ];
-    
-    public static readonly int NumLevels = Levels.Length;
 }
