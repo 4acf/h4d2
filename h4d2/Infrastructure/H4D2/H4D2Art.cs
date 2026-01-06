@@ -26,8 +26,6 @@ public static class H4D2Art
     public static readonly Bitmap[][] Specials = _LoadSpecials();
     public static readonly Bitmap[][] Pickups = _LoadPickups();
     public static readonly Bitmap[][] Projectiles = _LoadProjectiles();
-    private static readonly Bitmap[][] _particles = _LoadParticles();
-    private static readonly Bitmap[][] _bileOverlays = _LoadBileOverlays();
 
     // to be moved soon
     public static readonly Bitmap Level0 = Art.LoadBitmap($"{_resourcePrefix}levels.level0.png");
@@ -45,34 +43,48 @@ public static class H4D2Art
     public static readonly Bitmap Level12 = Art.LoadBitmap($"{_resourcePrefix}levels.level12.png");
     public static readonly Bitmap Level13 = Art.LoadBitmap($"{_resourcePrefix}levels.level13.png");
     public static readonly Bitmap Level14 = Art.LoadBitmap($"{_resourcePrefix}levels.level14.png");
-    
-    private static readonly Bitmap[][] _tiles = _LoadTiles();
-    public static readonly Bitmap[] Floors = _tiles[0];
-    public static readonly Bitmap[] Walls = _tiles[1];
 
-    public static readonly Bitmap Title = Art.LoadBitmap($"{_resourcePrefix}gui.title.png");
-    
-    public static readonly TextBitmap[] Text = _LoadPixufFont();
-    public static readonly int TextHeight = Text.Length > 0 ? Text[0].Height : 0;
-    public static readonly Bitmap[] Explosion = _particles[0];
-    public static readonly Bitmap[] HealParticle = _particles[1];
-    public static readonly Bitmap[] Fire = _particles[2];
-    public static readonly Bitmap[] NullParticle = _particles[3];
-    public static readonly Bitmap[] BileOverlays = _bileOverlays.SelectMany(x => x).ToArray();
-    public static readonly Bitmap[] SpecialProfiles = Specials[8];
-
-    public static class Buttons
+    public static class Overlays
     {
-        private static readonly Bitmap[][] _smallButtons = _LoadSmallButtons();
-        private static readonly Bitmap[][] _largeButtons = _LoadLargeButtons();
-        public static readonly Bitmap[] Play = _largeButtons[0];
-        public static readonly Bitmap[] Settings = _largeButtons[1];
-        public static readonly Bitmap[] Exit = _largeButtons[2];
-        public static readonly Bitmap[] MainMenu = _largeButtons[3];
-        public static readonly Bitmap[] Resume = _largeButtons[4];
-        public static readonly Bitmap[] Levels = _largeButtons[5];
-        public static readonly Bitmap[] Navigation = _smallButtons[0];
-        public static readonly Bitmap[] Spawner = _smallButtons[1];
+        private static readonly Bitmap[][] _bileOverlays = _LoadBileOverlays();
+        public static readonly Bitmap[] BileOverlays = _bileOverlays.SelectMany(x => x).ToArray();
+    }
+    
+    public static class Tiles
+    {
+        private static readonly Bitmap[][] _tiles = _LoadTiles();
+        public static readonly Bitmap[] Floors = _tiles[0];
+        public static readonly Bitmap[] Walls = _tiles[1];
+    }
+    
+    public static class Particles
+    {
+        private static readonly Bitmap[][] _particles = _LoadParticles();
+        public static readonly Bitmap[] Explosion = _particles[0];
+        public static readonly Bitmap[] HealParticle = _particles[1];
+        public static readonly Bitmap[] Fire = _particles[2];
+        public static readonly Bitmap[] NullParticle = _particles[3];
+    }
+
+    public static class GUI
+    {
+        public static readonly Bitmap Title = Art.LoadBitmap($"{_resourcePrefix}gui.title.png");
+        public static readonly TextBitmap[] Text = _LoadPixufFont();
+        public static readonly int TextHeight = Text.Length > 0 ? Text[0].Height : 0;
+        public static readonly Bitmap[] SpecialProfiles = Specials[8];
+        public static class Buttons
+        {
+            private static readonly Bitmap[][] _smallButtons = _LoadSmallButtons();
+            private static readonly Bitmap[][] _largeButtons = _LoadLargeButtons();
+            public static readonly Bitmap[] Play = _largeButtons[0];
+            public static readonly Bitmap[] Settings = _largeButtons[1];
+            public static readonly Bitmap[] Exit = _largeButtons[2];
+            public static readonly Bitmap[] MainMenu = _largeButtons[3];
+            public static readonly Bitmap[] Resume = _largeButtons[4];
+            public static readonly Bitmap[] Levels = _largeButtons[5];
+            public static readonly Bitmap[] Navigation = _smallButtons[0];
+            public static readonly Bitmap[] Spawner = _smallButtons[1];
+        }
     }
     
     private static Bitmap[][] _LoadSurvivors() => 

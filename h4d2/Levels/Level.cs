@@ -656,8 +656,8 @@ public class Level
                     case TileType.SurvivorFloor:
                     default:
                         Bitmap floorBitmap = (x + y) % 2 == 0 ? 
-                            H4D2Art.Floors[0] :
-                            H4D2Art.Floors[1];
+                            H4D2Art.Tiles.Floors[0] :
+                            H4D2Art.Tiles.Floors[1];
                         screen.Draw(floorBitmap, xScreenPos, yScreenPos);
                         break;
                 }

@@ -15,6 +15,6 @@ public abstract class LevelElement : Isometric
 
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        screen.Draw(H4D2Art.Walls[_type], xCorrected, yCorrected);
+        screen.Draw(H4D2Art.Tiles.Walls[_type], xCorrected, yCorrected);
     }
 }

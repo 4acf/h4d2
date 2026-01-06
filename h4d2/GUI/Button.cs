@@ -83,13 +83,13 @@ public class Button
         int hoverState = _isMouseOver ? 1 : 0;
         return _type switch
         {
-            ButtonType.Play => H4D2Art.Buttons.Play[hoverState],
-            ButtonType.Settings => H4D2Art.Buttons.Settings[hoverState],
-            ButtonType.Exit => H4D2Art.Buttons.Exit[hoverState],
-            ButtonType.MainMenu => H4D2Art.Buttons.MainMenu[hoverState],
-            ButtonType.Resume => H4D2Art.Buttons.Resume[hoverState],
-            ButtonType.Levels => H4D2Art.Buttons.Levels[hoverState],
-            ButtonType.Forward or ButtonType.Backward => H4D2Art.Buttons.Navigation[hoverState],
+            ButtonType.Play => H4D2Art.GUI.Buttons.Play[hoverState],
+            ButtonType.Settings => H4D2Art.GUI.Buttons.Settings[hoverState],
+            ButtonType.Exit => H4D2Art.GUI.Buttons.Exit[hoverState],
+            ButtonType.MainMenu => H4D2Art.GUI.Buttons.MainMenu[hoverState],
+            ButtonType.Resume => H4D2Art.GUI.Buttons.Resume[hoverState],
+            ButtonType.Levels => H4D2Art.GUI.Buttons.Levels[hoverState],
+            ButtonType.Forward or ButtonType.Backward => H4D2Art.GUI.Buttons.Navigation[hoverState],
             _ => throw new ArgumentOutOfRangeException()
         };
     }

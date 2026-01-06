@@ -7,7 +7,7 @@ public static class Pixuf
     public static int GetTextWidth(string text)
     {
         int result = 0;
-        TextBitmap[] textBitmaps = H4D2Art.Text;
+        TextBitmap[] textBitmaps = H4D2Art.GUI.Text;
         for (int i = 0; i < text.Length; i++)
         {
             TextBitmap letterBitmap = textBitmaps[text[i] - ' '];

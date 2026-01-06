@@ -29,14 +29,14 @@ public class HUD : Menu
                 _spawnerView.SpecialSelections[i].Bitmap,
                 i,
                  i * (SpawnerButton.Width + _padding) + _padding,
-                (_padding * 2) + H4D2Art.TextHeight + SpawnerButton.Height
+                (_padding * 2) + H4D2Art.GUI.TextHeight + SpawnerButton.Height
             );
 
             int cost = _spawnerView.SpecialSelections[i].Cost;
             _costs[i] = new Subheader(
                 $"${cost}",
                 i * (SpawnerButton.Width + _padding) + _padding,
-                _padding + H4D2Art.TextHeight,
+                _padding + H4D2Art.GUI.TextHeight,
                 _textColor
             );
         }
@@ -45,9 +45,9 @@ public class HUD : Menu
         _credits = new Header(
             _creditsStringBuilder.ToString(),
             0,
-            (_padding + H4D2Art.TextHeight) + 
+            (_padding + H4D2Art.GUI.TextHeight) + 
             (_padding + SpawnerButton.Height) +
-            ((_padding + H4D2Art.TextHeight) * 2) +
+            ((_padding + H4D2Art.GUI.TextHeight) * 2) +
             _padding * 2,
             _creditsColor
         );

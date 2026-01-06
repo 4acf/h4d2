@@ -59,7 +59,7 @@ public class SpawnerButton
     public void Render(Bitmap screen)
     {
         int selectedState = _isSelected ? 1 : 0;
-        Bitmap buttonBitmap = H4D2Art.Buttons.Spawner[selectedState];
+        Bitmap buttonBitmap = H4D2Art.GUI.Buttons.Spawner[selectedState];
         int selectedYOffs = selectedState == 1 ? _selectedYOffs : 0;
         
         screen.DrawAbsolute(buttonBitmap, _x, _y);

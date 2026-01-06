@@ -10,7 +10,7 @@ namespace H4D2.Spawners.SpecialSpawners;
 public class SpecialSelection : ISpecialSelectionView
 {
     public int IndexInArray { get; }
-    public Bitmap Bitmap => H4D2Art.SpecialProfiles[SpecialIndex];
+    public Bitmap Bitmap => H4D2Art.GUI.SpecialProfiles[SpecialIndex];
     public int Cost { get; }
     public double PercentageRemaining => _cooldownTimer.Percentage;
     

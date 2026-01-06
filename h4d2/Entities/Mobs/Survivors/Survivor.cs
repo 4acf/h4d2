@@ -152,7 +152,7 @@ public abstract class Survivor : Mob
             IsBiled = true;
             _biledTimer.Reset();
             _level.SpawnZombies();
-            _bileOverlayIndex = RandomSingleton.Instance.Next(H4D2Art.BileOverlays.Length);
+            _bileOverlayIndex = RandomSingleton.Instance.Next(H4D2Art.Overlays.BileOverlays.Length);
         }
     }
 
@@ -644,7 +644,7 @@ public abstract class Survivor : Mob
 
         if (IsBiled)
         {
-            Bitmap bileOverlay = H4D2Art.BileOverlays[_bileOverlayIndex];
+            Bitmap bileOverlay = H4D2Art.Overlays.BileOverlays[_bileOverlayIndex];
             screen.DrawBiledCharacter(lowerBitmap, bileOverlay, xCorrected, yCorrected, _xFlip);
             screen.DrawBiledCharacter(upperBitmap, bileOverlay, xCorrected, yCorrected, _xFlip);
         }

@@ -118,7 +118,7 @@ public class SpecialSpawner : ISpecialSpawnerView
     {
         if (_selected == null)
             return;
-        Bitmap specialBitmap = H4D2Art.SpecialProfiles[_selected.SpecialIndex];
+        Bitmap specialBitmap = H4D2Art.GUI.SpecialProfiles[_selected.SpecialIndex];
         int x = (int)Math.Floor((_spawnAdjustedMousePosition.X - _spawnAdjustedMousePosition.Y) * Isometric.ScaleX);
         int y = (int)Math.Floor((_spawnAdjustedMousePosition.X + _spawnAdjustedMousePosition.Y) * Isometric.ScaleY);
         if (!_level.IsValidSpecialSpawnPosition(_selected))

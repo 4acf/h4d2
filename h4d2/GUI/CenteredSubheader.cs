@@ -25,7 +25,7 @@ public class CenteredSubheader
     
     public void Render(Bitmap screen)
     {
-        screen.DrawCenteredLineOfText(H4D2Art.Text, _text, _y - 1, _shadowColor);
-        screen.DrawCenteredLineOfText(H4D2Art.Text, _text, _y, _color);
+        screen.DrawCenteredLineOfText(H4D2Art.GUI.Text, _text, _y - 1, _shadowColor);
+        screen.DrawCenteredLineOfText(H4D2Art.GUI.Text, _text, _y, _color);
     }
 }

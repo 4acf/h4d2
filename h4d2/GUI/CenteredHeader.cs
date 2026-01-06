@@ -25,7 +25,7 @@ public class CenteredHeader
     
     public void Render(Bitmap screen)
     {
-        screen.DrawCenteredTextHeader(H4D2Art.Text, _text, _y - 2, _shadowColor);
-        screen.DrawCenteredTextHeader(H4D2Art.Text, _text, _y, _color);
+        screen.DrawCenteredTextHeader(H4D2Art.GUI.Text, _text, _y - 2, _shadowColor);
+        screen.DrawCenteredTextHeader(H4D2Art.GUI.Text, _text, _y, _color);
     }
 }

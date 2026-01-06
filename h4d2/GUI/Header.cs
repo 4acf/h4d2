@@ -27,7 +27,7 @@ public class Header
     
     public void Render(Bitmap screen)
     {
-        screen.DrawTextHeader(H4D2Art.Text, _text, _x, _y - 2, _shadowColor);
-        screen.DrawTextHeader(H4D2Art.Text, _text, _x, _y, _color);
+        screen.DrawTextHeader(H4D2Art.GUI.Text, _text, _x, _y - 2, _shadowColor);
+        screen.DrawTextHeader(H4D2Art.GUI.Text, _text, _x, _y, _color);
     }
 }

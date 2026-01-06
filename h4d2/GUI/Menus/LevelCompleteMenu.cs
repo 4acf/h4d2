@@ -25,7 +25,7 @@ public class LevelCompleteMenu : Menu
         _centeredHeader = new CenteredHeader("Level Complete", headerY, _textColor);
         
         string time = TimeFormatter.Format(totalElapsedTime);
-        int elapsedTimeY = headerY - (H4D2Art.TextHeight * 2) - _paddingY;
+        int elapsedTimeY = headerY - (H4D2Art.GUI.TextHeight * 2) - _paddingY;
         _centeredElapsedTime = new CenteredSubheader($"Time taken: {time}", elapsedTimeY, _textColor);
         
         int levelsButtonY = (_height - (_height / 2)) - H4D2Art.LargeButtonHeight;

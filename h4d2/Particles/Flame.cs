@@ -54,7 +54,7 @@ public class Flame : Particle
 
     protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
     {
-        Bitmap bitmap = H4D2Art.Fire[_frame];
+        Bitmap bitmap = H4D2Art.Particles.Fire[_frame];
         screen.Draw(bitmap, xCorrected, yCorrected);
     }
 }

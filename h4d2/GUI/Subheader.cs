@@ -22,7 +22,7 @@ public class Subheader
     
     public void Render(Bitmap screen)
     {
-        screen.DrawLineOfText(H4D2Art.Text, _text, _x, _y - 1, _shadowColor);
-        screen.DrawLineOfText(H4D2Art.Text, _text, _x, _y, _color);
+        screen.DrawLineOfText(H4D2Art.GUI.Text, _text, _x, _y - 1, _shadowColor);
+        screen.DrawLineOfText(H4D2Art.GUI.Text, _text, _x, _y, _color);
     }
 }

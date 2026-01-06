@@ -14,19 +14,19 @@ public static class CloudletConfigs
     public static readonly CloudletConfig ExplosionFlame = new()
     {
         FrameDuration = 1.0 / 16.0,
-        Bitmaps = H4D2Art.Explosion
+        Bitmaps = H4D2Art.Particles.Explosion
     };
     
     public static readonly CloudletConfig Heal = new()
     {
         FrameDuration = 1.0 / 16.0,
-        Bitmaps = H4D2Art.HealParticle
+        Bitmaps = H4D2Art.Particles.HealParticle
     };
 
     public static readonly CloudletConfig SmokerSmoke = new()
     {
         FrameDuration = 0.0,
-        Bitmaps = H4D2Art.NullParticle
+        Bitmaps = H4D2Art.Particles.NullParticle
     };
 }
 

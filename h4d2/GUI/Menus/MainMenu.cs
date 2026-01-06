@@ -14,7 +14,7 @@ public class MainMenu : Menu
 
     public MainMenu(int width, int height) : base(width, height)
     {
-        int playButtonY = height - H4D2Art.Title.Height - _padding;
+        int playButtonY = height - H4D2Art.GUI.Title.Height - _padding;
         int settingsButtonY = playButtonY - H4D2Art.LargeButtonHeight - _buttonPaddingBetween;
         int exitButtonY = settingsButtonY - H4D2Art.LargeButtonHeight - _buttonPaddingBetween;
 
@@ -35,7 +35,7 @@ public class MainMenu : Menu
 
     public override void Render(Bitmap screen)
     {
-        Bitmap titleBitmap = H4D2Art.Title;
+        Bitmap titleBitmap = H4D2Art.GUI.Title;
         int titleCenteredX = (_width / 2) - (titleBitmap.Width / 2);
         screen.DrawAbsolute(titleBitmap, titleCenteredX, _height - _padding);
 

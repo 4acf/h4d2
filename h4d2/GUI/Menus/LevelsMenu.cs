@@ -31,7 +31,7 @@ public class LevelsMenu : Menu
         int headerY = _height - (_height / 3);
         _levelNameHeader = new CenteredHeader(LevelCollection.Levels[_page].Name, headerY, _textColor);
 
-        int recordY = headerY - (H4D2Art.TextHeight * 2) - _paddingBetweenHeadersY;
+        int recordY = headerY - (H4D2Art.GUI.TextHeight * 2) - _paddingBetweenHeadersY;
         string record = _GetRecordText(_page);
         _recordSubheader = new CenteredSubheader(record, recordY, _textColor);
         
