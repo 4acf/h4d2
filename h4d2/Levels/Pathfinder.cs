@@ -172,6 +172,9 @@ public class Pathfinder
 
             public void Enqueue(Tile tile, double cost)
             {
+                if(_currentlyInQueue.Count != _pq.Count)
+                    Console.WriteLine("fuck fuck fuck");
+                
                 if (!_currentlyInQueue.ContainsKey(tile))
                 {
                     _pq.Enqueue(tile, cost);
@@ -196,8 +199,8 @@ public class Pathfinder
                     double currentCost = _currentlyInQueue[_pq.Peek()];
                     q.Enqueue((_pq.Dequeue(), currentCost));
                 }
-
-                _pq.Dequeue();
+                
+                q.Enqueue((_pq.Dequeue(), cost));
                 _currentlyInQueue[tile] = cost;
 
                 while (q.Count > 0)
