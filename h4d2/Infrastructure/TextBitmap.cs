@@ -4,15 +4,16 @@ namespace H4D2.Infrastructure;
 
 public class TextBitmap
 {
-    public readonly bool[] Data;
     public readonly int Width;
     public readonly int Height;
 
+    private readonly bool[] _data;
+    
     public TextBitmap(SKBitmap bitmap, int character, int[] widths, int height)
     {
         int width = widths[character];
         int numBytes = width * height;
-        Data = new bool[numBytes];
+        _data = new bool[numBytes];
         
         int xOffset = 0;
         for (int i = 0; i < character; i++)
@@ -29,7 +30,7 @@ public class TextBitmap
                 SKColor color = bitmap.GetPixel(x, y);
 
                 int index = i * width + j;
-                Data[index] = color.Alpha != 0;
+                _data[index] = color.Alpha != 0;
             }
         }
         
@@ -39,9 +40,16 @@ public class TextBitmap
 
     public bool IsOutOfBounds(int index)
     {
-        return index < 0 || index >= Data.Length;
+        return index < 0 || index >= _data.Length;
     }
 
+    public bool IsSet(int index)
+    {
+        if (IsOutOfBounds(index))
+            throw new IndexOutOfRangeException();
+        return _data[index];
+    }
+    
     public int GetBytespaceIndex(int x, int y)
     {
         return ((y * Width) + x);

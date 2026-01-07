@@ -2,6 +2,8 @@
 
 public class H4D2BitmapCanvas : Bitmap
 {
+    public byte[] Data => _data;
+    
     public H4D2BitmapCanvas(int width, int height, Camera camera)
         : base(width, height, camera)
     {
@@ -17,11 +19,11 @@ public class H4D2BitmapCanvas : Bitmap
             rgb = new RGB(color.Value);
         }
         
-        for (int i = 0; i < Data.Length; i += 4)
+        for (int i = 0; i < _data.Length; i += 4)
         {
-            Data[i] = rgb.Red;
-            Data[i + 1] = rgb.Green;
-            Data[i + 2] = rgb.Blue;
+            _data[i] = rgb.Red;
+            _data[i + 1] = rgb.Green;
+            _data[i + 2] = rgb.Blue;
         }
     }
 
@@ -41,15 +43,15 @@ public class H4D2BitmapCanvas : Bitmap
                 int childIndex = _GetBytespaceIndex(bitmap.Width, k, i);
                 
                 if (IsOutOfBounds(parentIndex) || bitmap.IsOutOfBounds(childIndex)) continue;
-                if (bitmap.Data[childIndex + 3] == 0) continue;
+                if (bitmap.ByteAt(childIndex + 3) == 0) continue;
 
                 int expectedY = y - i - 1;
                 int actualY = parentIndex / (Width * 4);
                 if (expectedY != actualY) continue;
                 
-                Data[parentIndex] = bitmap.Data[childIndex];
-                Data[parentIndex + 1] = bitmap.Data[childIndex + 1];
-                Data[parentIndex + 2] = bitmap.Data[childIndex + 2];
+                _data[parentIndex] = bitmap.ByteAt(childIndex);
+                _data[parentIndex + 1] = bitmap.ByteAt(childIndex + 1);
+                _data[parentIndex + 2] = bitmap.ByteAt(childIndex + 2);
             }
         }
     }
@@ -127,15 +129,15 @@ public class H4D2BitmapCanvas : Bitmap
                 int childIndex = letterBitmap.GetBytespaceIndex(j, i);
                 
                 if (IsOutOfBounds(parentIndex) || letterBitmap.IsOutOfBounds(childIndex)) continue;
-                if (!letterBitmap.Data[childIndex]) continue;
+                if (!letterBitmap.IsSet(childIndex)) continue;
 
                 int expectedY = y - i - 1;
                 int actualY = parentIndex / (Width * 4);
                 if (expectedY != actualY) continue;
                 
-                Data[parentIndex] = rgb.Red;
-                Data[parentIndex + 1] = rgb.Green;
-                Data[parentIndex + 2] = rgb.Blue;
+                _data[parentIndex] = rgb.Red;
+                _data[parentIndex + 1] = rgb.Green;
+                _data[parentIndex + 2] = rgb.Blue;
             }
         }
     }
@@ -157,15 +159,15 @@ public class H4D2BitmapCanvas : Bitmap
                     int childIndex = letterBitmap.GetBytespaceIndex(j, i);
                 
                     if (IsOutOfBounds(parentIndex) || letterBitmap.IsOutOfBounds(childIndex)) continue;
-                    if (!letterBitmap.Data[childIndex]) continue;
+                    if (!letterBitmap.IsSet(childIndex)) continue;
 
                     int expectedY = y - (i * 2) - 1 + yOffs;
                     int actualY = parentIndex / (Width * 4);
                     if (expectedY != actualY) continue;
                 
-                    Data[parentIndex] = rgb.Red;
-                    Data[parentIndex + 1] = rgb.Green;
-                    Data[parentIndex + 2] = rgb.Blue;
+                    _data[parentIndex] = rgb.Red;
+                    _data[parentIndex + 1] = rgb.Green;
+                    _data[parentIndex + 2] = rgb.Blue;
                 }
             }
         }
@@ -185,7 +187,7 @@ public class H4D2BitmapCanvas : Bitmap
                 int childIndex = _GetBytespaceIndex(buttonBitmap.Width, j, i);
                 
                 if (IsOutOfBounds(parentIndex) || buttonBitmap.IsOutOfBounds(childIndex)) continue;
-                if (buttonBitmap.Data[childIndex + 3] == 0) continue;
+                if (buttonBitmap.ByteAt(childIndex + 3) == 0) continue;
 
                 int expectedY = y - i - 1;
                 int actualY = parentIndex / (Width * 4);
@@ -194,9 +196,9 @@ public class H4D2BitmapCanvas : Bitmap
                 if (((double)i / buttonBitmap.Height) < percentageRemaining)
                     blend = 0.25;
                 
-                Data[parentIndex] = MathHelpers.ByteLerp(Data[parentIndex], overlayColor, blend);
-                Data[parentIndex + 1] = MathHelpers.ByteLerp(Data[parentIndex + 1], overlayColor, blend);
-                Data[parentIndex + 2] = MathHelpers.ByteLerp(Data[parentIndex + 2], overlayColor, blend);
+                _data[parentIndex] = MathHelpers.ByteLerp(_data[parentIndex], overlayColor, blend);
+                _data[parentIndex + 1] = MathHelpers.ByteLerp(_data[parentIndex + 1], overlayColor, blend);
+                _data[parentIndex + 2] = MathHelpers.ByteLerp(_data[parentIndex + 2], overlayColor, blend);
             }
         }
     }
@@ -219,19 +221,19 @@ public class H4D2BitmapCanvas : Bitmap
                 int specialIndex = _GetBytespaceIndex(specialBitmap.Width, j, i);
                 
                 if (IsOutOfBounds(parentIndex) || specialBitmap.IsOutOfBounds(specialIndex)) continue;
-                if (specialBitmap.Data[specialIndex + 3] == 0) continue;
+                if (specialBitmap.ByteAt(specialIndex + 3) == 0) continue;
 
                 int expectedY = y - i - 1;
                 int actualY = parentIndex / (Width * 4);
                 if (expectedY != actualY) continue;
                 
-                byte r = BlendModes.HardLight(specialBitmap.Data[specialIndex], 0xaa);
-                byte g = BlendModes.HardLight(specialBitmap.Data[specialIndex + 1], 0x00);
-                byte b = BlendModes.HardLight(specialBitmap.Data[specialIndex + 2], 0x00);
+                byte r = BlendModes.HardLight(specialBitmap.ByteAt(specialIndex), 0xaa);
+                byte g = BlendModes.HardLight(specialBitmap.ByteAt(specialIndex + 1), 0x00);
+                byte b = BlendModes.HardLight(specialBitmap.ByteAt(specialIndex + 2), 0x00);
 
-                Data[parentIndex] = MathHelpers.ByteLerp(specialBitmap.Data[specialIndex], r, blend);
-                Data[parentIndex + 1] = MathHelpers.ByteLerp(specialBitmap.Data[specialIndex + 1], g, blend);
-                Data[parentIndex + 2] = MathHelpers.ByteLerp(specialBitmap.Data[specialIndex + 2], b, blend);
+                _data[parentIndex] = MathHelpers.ByteLerp(specialBitmap.ByteAt(specialIndex), r, blend);
+                _data[parentIndex + 1] = MathHelpers.ByteLerp(specialBitmap.ByteAt(specialIndex + 1), g, blend);
+                _data[parentIndex + 2] = MathHelpers.ByteLerp(specialBitmap.ByteAt(specialIndex + 2), b, blend);
             }
         }
     }
@@ -264,19 +266,19 @@ public class H4D2BitmapCanvas : Bitmap
                 int bileIndex = _GetBytespaceIndex(bileBitmap.Width, k, i);
                 
                 if (IsOutOfBounds(parentIndex) || characterBitmap.IsOutOfBounds(characterIndex)) continue;
-                if (characterBitmap.Data[characterIndex + 3] == 0) continue;
+                if (characterBitmap.ByteAt(characterIndex + 3) == 0) continue;
 
                 int expectedY = y - i - 1;
                 int actualY = parentIndex / (Width * 4);
                 if (expectedY != actualY) continue;
                 
-                byte r = BlendModes.HardLight(characterBitmap.Data[characterIndex], bileBitmap.Data[bileIndex]);
-                byte g = BlendModes.HardLight(characterBitmap.Data[characterIndex + 1], bileBitmap.Data[bileIndex + 1]);
-                byte b = BlendModes.HardLight(characterBitmap.Data[characterIndex + 2], bileBitmap.Data[bileIndex + 2]);
+                byte r = BlendModes.HardLight(characterBitmap.ByteAt(characterIndex), bileBitmap.ByteAt(bileIndex));
+                byte g = BlendModes.HardLight(characterBitmap.ByteAt(characterIndex + 1), bileBitmap.ByteAt(bileIndex + 1));
+                byte b = BlendModes.HardLight(characterBitmap.ByteAt(characterIndex + 2), bileBitmap.ByteAt(bileIndex + 2));
 
-                Data[parentIndex] = MathHelpers.ByteLerp(characterBitmap.Data[characterIndex], r, blend);
-                Data[parentIndex + 1] = MathHelpers.ByteLerp(characterBitmap.Data[characterIndex + 1], g, blend);
-                Data[parentIndex + 2] = MathHelpers.ByteLerp(characterBitmap.Data[characterIndex + 2], b, blend);
+                _data[parentIndex] = MathHelpers.ByteLerp(characterBitmap.ByteAt(characterIndex), r, blend);
+                _data[parentIndex + 1] = MathHelpers.ByteLerp(characterBitmap.ByteAt(characterIndex + 1), g, blend);
+                _data[parentIndex + 2] = MathHelpers.ByteLerp(characterBitmap.ByteAt(characterIndex + 2), b, blend);
             }
         }
     }
@@ -286,14 +288,14 @@ public class H4D2BitmapCanvas : Bitmap
         if (Width != shadows.Width || Height != shadows.Height)
             throw new ArgumentException("Shadow bitmap dimensions do not match base bitmap dimensions.");
 
-        for (int i = 0; i < Data.Length; i += 4)
+        for (int i = 0; i < _data.Length; i += 4)
         {
             int j = i / 4;
-            bool set = shadows.Data[j];
+            bool set = shadows.IsSet(j);
             if (!set) continue;
-            Data[i] = MathHelpers.ByteLerp(Data[i], shadowColor, shadowBlend);
-            Data[i + 1] = MathHelpers.ByteLerp(Data[i + 1], shadowColor, shadowBlend);
-            Data[i + 2] = MathHelpers.ByteLerp(Data[i + 2], shadowColor, shadowBlend);
+            _data[i] = MathHelpers.ByteLerp(_data[i], shadowColor, shadowBlend);
+            _data[i + 1] = MathHelpers.ByteLerp(_data[i + 1], shadowColor, shadowBlend);
+            _data[i + 2] = MathHelpers.ByteLerp(_data[i + 2], shadowColor, shadowBlend);
         }
     }
 
@@ -317,9 +319,9 @@ public class H4D2BitmapCanvas : Bitmap
                 int actualY = index / (Width * 4);
                 if (expectedY != actualY) continue;
                 
-                Data[index] = MathHelpers.ByteLerp(Data[index], rgb.Red, blend);
-                Data[index + 1] = MathHelpers.ByteLerp(Data[index + 1], rgb.Green, blend);
-                Data[index + 2] = MathHelpers.ByteLerp(Data[index + 2], rgb.Blue, blend);
+                _data[index] = MathHelpers.ByteLerp(_data[index], rgb.Red, blend);
+                _data[index + 1] = MathHelpers.ByteLerp(_data[index + 1], rgb.Green, blend);
+                _data[index + 2] = MathHelpers.ByteLerp(_data[index + 2], rgb.Blue, blend);
             }
         }
     }

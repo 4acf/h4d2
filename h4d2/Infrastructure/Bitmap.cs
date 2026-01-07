@@ -4,16 +4,16 @@ namespace H4D2.Infrastructure;
 
 public class Bitmap
 {
-    public readonly byte[] Data;
     public readonly int Width;
     public readonly int Height;
 
     protected readonly Camera? _camera;
+    protected readonly byte[] _data;
     
     protected Bitmap(int width, int height, Camera camera)
     {
         int numBytes = width * height * 4;
-        Data = new byte[numBytes];
+        _data = new byte[numBytes];
         Width = width;
         Height = height;
         _camera = camera;
@@ -37,7 +37,7 @@ public class Bitmap
         Width = spriteWidth;
         Height = spriteHeight;
         int numBytes = spriteWidth * spriteHeight * 4;
-        Data = new byte[numBytes];
+        _data = new byte[numBytes];
 
         for (int i = 0; i < spriteHeight; i++)
         {
@@ -48,10 +48,10 @@ public class Bitmap
                 SKColor color = bitmap.GetPixel(x, y);
 
                 int index = (i * spriteWidth * 4) + (j * 4);
-                Data[index] = color.Red;
-                Data[index + 1] = color.Green;
-                Data[index + 2] = color.Blue;
-                Data[index + 3] = color.Alpha;
+                _data[index] = color.Red;
+                _data[index + 1] = color.Green;
+                _data[index + 2] = color.Blue;
+                _data[index + 3] = color.Alpha;
             }
         }
     }
@@ -61,12 +61,19 @@ public class Bitmap
         int index = _GetBytespaceIndex(Width, x, y);
         if (IsOutOfBounds(index))
             return 0x0;
-        return RGB.ToInt(Data[index],  Data[index + 1], Data[index + 2]);
+        return RGB.ToInt(_data[index],  _data[index + 1], _data[index + 2]);
+    }
+
+    public byte ByteAt(int index)
+    {
+        if (IsOutOfBounds(index))
+            throw new IndexOutOfRangeException();
+        return _data[index];
     }
     
     public bool IsOutOfBounds(int index)
     {
-        return index < 0 || index >= Data.Length;
+        return index < 0 || index >= _data.Length;
     }
     
     protected static int _GetBytespaceIndex(int width, int x, int y)

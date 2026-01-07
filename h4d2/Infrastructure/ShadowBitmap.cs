@@ -2,16 +2,17 @@
 
 public class ShadowBitmap
 {
-    public readonly bool[] Data;
     public readonly int Width;
     public readonly int Height;
 
     private readonly Camera? _camera;
+    private readonly bool[] _data;
+
     
     public ShadowBitmap(int width, int height, Camera? camera = null)
     {
         int numBytes = width * height;
-        Data = new bool[numBytes];
+        _data = new bool[numBytes];
         Width = width;
         Height = height;
         _camera = camera;
@@ -19,9 +20,9 @@ public class ShadowBitmap
 
     public void Clear()
     {
-        for (int i = 0; i < Data.Length; i++)
+        for (int i = 0; i < _data.Length; i++)
         {
-            Data[i] = false;
+            _data[i] = false;
         }
     }
 
@@ -46,7 +47,7 @@ public class ShadowBitmap
                 int actualY = index / Width;
                 if (expectedY != actualY) continue;
 
-                Data[index] = true;
+                _data[index] = true;
             }
         }
     }
@@ -58,7 +59,14 @@ public class ShadowBitmap
     
     private bool _IsOutOfBounds(int index)
     {
-        return index < 0 || index >= Data.Length;
+        return index < 0 || index >= _data.Length;
+    }
+    
+    public bool IsSet(int index)
+    {
+        if (_IsOutOfBounds(index))
+            throw new IndexOutOfRangeException();
+        return _data[index];
     }
     
     private static int _GetBytespaceIndex(int width, int x, int y)
