@@ -22,7 +22,7 @@ public static class ThrowableProjectileConfigs
         = new(3, 3, 3, H4D2Art.ProjectileSize, 2);
     
     private static readonly BoundingBoxDimensions _spitDimensions
-        = new(4, 4, 4, H4D2Art.ParticleSize, 2);
+        = new(1, 1, 1, H4D2Art.ParticleSize, 4);
     
     private static readonly BoundingBox _molotovBoundingBox 
         = new(CollisionGroup.Projectile, _molotovDimensions);

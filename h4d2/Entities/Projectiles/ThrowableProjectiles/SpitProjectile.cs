@@ -16,6 +16,9 @@ public class SpitProjectile : ThrowableProjectile
     public SpitProjectile(Level level, Position position, double directionRadians)
         : base(level, position, ThrowableProjectileConfigs.Spit, directionRadians)
     {
+        if (_level.IsWall(Level.GetTilePosition(CenterMass)))
+            Removed = true;
+        
         _velocity.X *= _speedMultiplier;
         _velocity.Y *= _speedMultiplier;
         _velocity.Z *= _gravityMultiplier;
@@ -30,12 +33,13 @@ public class SpitProjectile : ThrowableProjectile
 
     private void _UpdateParticles()
     {
+        ReadonlyPosition centerMass = FootPosition;
         for (int i = 0; i < _numSpitParticles; i++)
         {
             int randomDx = RandomSingleton.Instance.Next(2);
             int randomDy = RandomSingleton.Instance.Next(2);
             int randomDz = RandomSingleton.Instance.Next(4);
-            var position = new Position(CenterMass.X + randomDx, CenterMass.Y + randomDy, CenterMass.Z + randomDz);
+            var position = new Position(centerMass.X + randomDx, centerMass.Y + randomDy, centerMass.Z + randomDz);
             var spit = new InvolatileSpit(_level, position, _velocity.ReadonlyCopy());
             _level.AddParticle(spit);
         }
