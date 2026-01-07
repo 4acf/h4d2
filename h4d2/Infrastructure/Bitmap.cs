@@ -19,26 +19,10 @@ public class Bitmap
         _camera = camera;
     }
 
-    public Bitmap(SKBitmap bitmap)
+    public Bitmap(SKBitmap bitmap) 
+        : this(bitmap, bitmap.Width, bitmap.Height, 0, 0)
     {
-        _camera = null;
-        Width = bitmap.Width;
-        Height = bitmap.Height;
-        int numBytes = Width * Height * 4;
-        Data = new byte[numBytes];
 
-        for (int y = 0; y < Height; y++)
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                SKColor color = bitmap.GetPixel(x, y);
-                int index = (y * Width * 4) + (x * 4);
-                Data[index] = color.Red;
-                Data[index + 1] = color.Green;
-                Data[index + 2] = color.Blue;
-                Data[index + 3] = color.Alpha;
-            }
-        }
     }
     
     public Bitmap(SKBitmap bitmap, int spriteSize, int row, int col)
