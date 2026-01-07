@@ -41,28 +41,9 @@ public class Bitmap
     }
     
     public Bitmap(SKBitmap bitmap, int spriteSize, int row, int col)
+    : this(bitmap, spriteSize, spriteSize, row, col)
     {
-        int numBytes = spriteSize * spriteSize * 4;
-        Data = new byte[numBytes];
-
-        for (int i = 0; i < spriteSize; i++)
-        {
-            for (int j = 0; j < spriteSize; j++)
-            {
-                int x = (col * spriteSize) + j;
-                int y = (row * spriteSize) + i;
-                SKColor color = bitmap.GetPixel(x, y);
-
-                int index = (i * spriteSize * 4) + (j * 4);
-                Data[index] = color.Red;
-                Data[index + 1] = color.Green;
-                Data[index + 2] = color.Blue;
-                Data[index + 3] = color.Alpha;
-            }
-        }
-        
-        Width = spriteSize;
-        Height = spriteSize;
+       
     }
     
     public Bitmap(SKBitmap bitmap, int spriteWidth, int spriteHeight, int row, int col)
@@ -92,35 +73,26 @@ public class Bitmap
 
     public int ColorAt(int x, int y)
     {
-        int result = 0x0;
         int index = _GetBytespaceIndex(Width, x, y);
         if (IsOutOfBounds(index))
-            return result;
-        byte r = Data[index];
-        byte g = Data[index + 1];
-        byte b = Data[index + 2];
-        result = r;
-        result = (result << 8) | g;
-        result = (result << 8) | b;
-        return result;
+            return 0x0;
+        return RGB.ToInt(Data[index],  Data[index + 1], Data[index + 2]);
     }
     
     public void Clear(int? color = 0x0)
     {
-        byte r = 0, g = 0, b = 0;
+        RGB rgb = new RGB();
         
         if (color != null)
         {
-            r = (byte)(color >> 16 & 0xff);
-            g = (byte)(color >> 8 & 0xff);
-            b = (byte)(color & 0xff);
+            rgb = new RGB(color.Value);
         }
         
         for (int i = 0; i < Data.Length; i += 4)
         {
-            Data[i] = r;
-            Data[i + 1] = g;
-            Data[i + 2] = b;
+            Data[i] = rgb.Red;
+            Data[i + 1] = rgb.Green;
+            Data[i + 2] = rgb.Blue;
         }
     }
 
@@ -149,7 +121,6 @@ public class Bitmap
                 Data[parentIndex] = bitmap.Data[childIndex];
                 Data[parentIndex + 1] = bitmap.Data[childIndex + 1];
                 Data[parentIndex + 2] = bitmap.Data[childIndex + 2];
-                Data[parentIndex + 3] = bitmap.Data[childIndex + 3];
             }
         }
     }
@@ -217,9 +188,7 @@ public class Bitmap
     
     private void _DrawLetter(TextBitmap letterBitmap, int x, int y, int color)
     {
-        byte r = (byte)(color >> 16 & 0xff);
-        byte g = (byte)(color >> 8 & 0xff);
-        byte b = (byte)(color & 0xff);
+        RGB rgb = new RGB(color);
         
         for (int i = 0; i < letterBitmap.Height; i++)
         {
@@ -235,19 +204,16 @@ public class Bitmap
                 int actualY = parentIndex / (Width * 4);
                 if (expectedY != actualY) continue;
                 
-                Data[parentIndex] = r;
-                Data[parentIndex + 1] = g;
-                Data[parentIndex + 2] = b;
-                Data[parentIndex + 3] = 0xff;
+                Data[parentIndex] = rgb.Red;
+                Data[parentIndex + 1] = rgb.Green;
+                Data[parentIndex + 2] = rgb.Blue;
             }
         }
     }
 
     private void _DrawDoubleSizeLetter(TextBitmap letterBitmap, int x, int y, int color)
     {
-        byte r = (byte)(color >> 16 & 0xff);
-        byte g = (byte)(color >> 8 & 0xff);
-        byte b = (byte)(color & 0xff);
+        RGB rgb = new RGB(color);
         
         for (int i = 0; i < letterBitmap.Height; i++)
         {
@@ -268,10 +234,9 @@ public class Bitmap
                     int actualY = parentIndex / (Width * 4);
                     if (expectedY != actualY) continue;
                 
-                    Data[parentIndex] = r;
-                    Data[parentIndex + 1] = g;
-                    Data[parentIndex + 2] = b;
-                    Data[parentIndex + 3] = 0xff;   
+                    Data[parentIndex] = rgb.Red;
+                    Data[parentIndex + 1] = rgb.Green;
+                    Data[parentIndex + 2] = rgb.Blue;
                 }
             }
         }
@@ -303,7 +268,6 @@ public class Bitmap
                 Data[parentIndex] = MathHelpers.ByteLerp(Data[parentIndex], overlayColor, blend);
                 Data[parentIndex + 1] = MathHelpers.ByteLerp(Data[parentIndex + 1], overlayColor, blend);
                 Data[parentIndex + 2] = MathHelpers.ByteLerp(Data[parentIndex + 2], overlayColor, blend);
-                Data[parentIndex + 3] = 0xff;
             }
         }
     }
@@ -339,7 +303,6 @@ public class Bitmap
                 Data[parentIndex] = MathHelpers.ByteLerp(specialBitmap.Data[specialIndex], r, blend);
                 Data[parentIndex + 1] = MathHelpers.ByteLerp(specialBitmap.Data[specialIndex + 1], g, blend);
                 Data[parentIndex + 2] = MathHelpers.ByteLerp(specialBitmap.Data[specialIndex + 2], b, blend);
-                Data[parentIndex + 3] = specialBitmap.Data[specialIndex + 3];
             }
         }
     }
@@ -385,7 +348,6 @@ public class Bitmap
                 Data[parentIndex] = MathHelpers.ByteLerp(characterBitmap.Data[characterIndex], r, blend);
                 Data[parentIndex + 1] = MathHelpers.ByteLerp(characterBitmap.Data[characterIndex + 1], g, blend);
                 Data[parentIndex + 2] = MathHelpers.ByteLerp(characterBitmap.Data[characterIndex + 2], b, blend);
-                Data[parentIndex + 3] = characterBitmap.Data[characterIndex + 3];
             }
         }
     }
@@ -403,7 +365,6 @@ public class Bitmap
             Data[i] = MathHelpers.ByteLerp(Data[i], shadowColor, shadowBlend);
             Data[i + 1] = MathHelpers.ByteLerp(Data[i + 1], shadowColor, shadowBlend);
             Data[i + 2] = MathHelpers.ByteLerp(Data[i + 2], shadowColor, shadowBlend);
-            Data[i + 3] = 0xff;
         }
     }
 
@@ -414,9 +375,7 @@ public class Bitmap
 
     public void FillBlendAbsolute(int x0, int y0, int x1, int y1, int color, double blend)
     {
-        byte r = (byte)(color >> 16 & 0xff);
-        byte g = (byte)(color >> 8 & 0xff);
-        byte b = (byte)(color & 0xff);
+        RGB rgb = new RGB(color);
 
         for (int i = y0; i <= y1; i++)
         {
@@ -429,10 +388,9 @@ public class Bitmap
                 int actualY = index / (Width * 4);
                 if (expectedY != actualY) continue;
                 
-                Data[index] = MathHelpers.ByteLerp(Data[index], r, blend);
-                Data[index + 1] = MathHelpers.ByteLerp(Data[index + 1], g, blend);
-                Data[index + 2] = MathHelpers.ByteLerp(Data[index + 2], b, blend);
-                Data[index + 3] = 0xff;
+                Data[index] = MathHelpers.ByteLerp(Data[index], rgb.Red, blend);
+                Data[index + 1] = MathHelpers.ByteLerp(Data[index + 1], rgb.Green, blend);
+                Data[index + 2] = MathHelpers.ByteLerp(Data[index + 2], rgb.Blue, blend);
             }
         }
     }
@@ -484,5 +442,4 @@ public class Bitmap
     {
         return ((y * width) + x) * 4;
     }
-    
 }
