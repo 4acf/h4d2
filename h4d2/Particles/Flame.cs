@@ -52,7 +52,7 @@ public class Flame : Particle
         }
     }
 
-    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         Bitmap bitmap = H4D2Art.Particles.Fire[_frame];
         screen.Draw(bitmap, xCorrected, yCorrected);

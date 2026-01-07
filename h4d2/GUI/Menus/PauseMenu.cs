@@ -41,7 +41,7 @@ public class PauseMenu : Menu
         _mainMenuButton.Update(input);
     }
 
-    public override void Render(Bitmap screen)
+    public override void Render(H4D2BitmapCanvas screen)
     {
         _centeredHeader.Render(screen);
         _resumeButton.Render(screen);

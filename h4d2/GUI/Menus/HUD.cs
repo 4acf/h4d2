@@ -73,7 +73,7 @@ public class HUD : Menu
         }
     }
 
-    public override void Render(Bitmap screen)
+    public override void Render(H4D2BitmapCanvas screen)
     {
         _spawnerView.Render(screen);
         _credits.Render(screen);

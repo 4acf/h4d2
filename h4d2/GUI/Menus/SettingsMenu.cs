@@ -50,7 +50,7 @@ public class SettingsMenu : Menu
         _mainMenuButton.Update(input);
     }
 
-    public override void Render(Bitmap screen)
+    public override void Render(H4D2BitmapCanvas screen)
     {
         _header.Render(screen);
         _musicVolumeSubheader.Render(screen);

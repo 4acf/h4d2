@@ -153,7 +153,7 @@ public class Tank : Special
         }
     }
 
-    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         Bitmap lowerBitmap = H4D2Art.Specials[_type][_lowerFrame];
         Bitmap upperBitmap = H4D2Art.Specials[_type][_upperFrame];

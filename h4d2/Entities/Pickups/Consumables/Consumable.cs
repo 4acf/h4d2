@@ -14,7 +14,7 @@ public abstract class Consumable : Pickup
         _consumableType = config.ConsumableType;
     }
     
-    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         Bitmap bitmap = H4D2Art.Pickups[_pickupType][_consumableType];
         screen.Draw(bitmap, xCorrected, yCorrected);

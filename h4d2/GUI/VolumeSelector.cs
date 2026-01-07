@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.GUI;
 
@@ -46,7 +47,7 @@ public class VolumeSelector
         }
     }
 
-    public void Render(Bitmap screen)
+    public void Render(H4D2BitmapCanvas screen)
     {
         for (int i = 0; i < _sections; i++)
         {

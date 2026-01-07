@@ -114,7 +114,7 @@ public class SpecialSpawner : ISpecialSpawnerView
             _selected = null;
     }
 
-    public void Render(Bitmap screen)
+    public void Render(H4D2BitmapCanvas screen)
     {
         if (_selected == null)
             return;

@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities.Mobs.Survivors;
 using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 using H4D2.Particles.DebrisParticles.Granules;
 
@@ -31,7 +32,7 @@ public class Puke : Projectile
         _AttemptMove();
     }
 
-    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         screen.SetPixel(xCorrected, yCorrected, _color);
     }

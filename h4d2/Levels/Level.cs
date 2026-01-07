@@ -529,7 +529,7 @@ public class Level
         }
     }
     
-    public void Render(Bitmap screen, ShadowBitmap shadows)
+    public void Render(H4D2BitmapCanvas screen, ShadowBitmap shadows)
     {
         _RenderBackground(screen);
         _RenderShadows(screen, shadows);
@@ -626,7 +626,7 @@ public class Level
         }
     }
     
-    private void _RenderBackground(Bitmap screen)
+    private void _RenderBackground(H4D2BitmapCanvas screen)
     {
         screen.Clear(0x2b2b2b);
         _levelElements.Clear();
@@ -665,7 +665,7 @@ public class Level
         }
     }
     
-    private void _RenderShadows(Bitmap screen, ShadowBitmap shadows)
+    private void _RenderShadows(H4D2BitmapCanvas screen, ShadowBitmap shadows)
     {
         foreach (Entity entity in _entities)
         {
@@ -680,7 +680,7 @@ public class Level
         screen.DrawShadows(shadows, H4D2Art.ShadowColor, H4D2Art.ShadowBlend);
     }
 
-    private void _RenderIsometrics(Bitmap screen)
+    private void _RenderIsometrics(H4D2BitmapCanvas screen)
     {
         var isometrics = new List<Isometric>();
         isometrics.AddRange(_entities);

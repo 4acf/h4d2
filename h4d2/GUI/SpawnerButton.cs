@@ -56,7 +56,7 @@ public class SpawnerButton
         }
     }
     
-    public void Render(Bitmap screen)
+    public void Render(H4D2BitmapCanvas screen)
     {
         int selectedState = _isSelected ? 1 : 0;
         Bitmap buttonBitmap = H4D2Art.GUI.Buttons.Spawner[selectedState];

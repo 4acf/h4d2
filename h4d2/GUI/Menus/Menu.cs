@@ -32,7 +32,7 @@ public abstract class Menu
     }
 
     public abstract void Update(Input input, double elapsedTime);
-    public abstract void Render(Bitmap screen);
+    public abstract void Render(H4D2BitmapCanvas screen);
 
     protected void _RaiseLevelSelected(int page) =>
         LevelSelected?.Invoke(this, new LevelSelectedEventArgs(page));

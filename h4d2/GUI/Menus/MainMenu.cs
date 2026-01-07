@@ -33,7 +33,7 @@ public class MainMenu : Menu
         _exitButton.Update(input);
     }
 
-    public override void Render(Bitmap screen)
+    public override void Render(H4D2BitmapCanvas screen)
     {
         Bitmap titleBitmap = H4D2Art.GUI.Title;
         int titleCenteredX = (_width / 2) - (titleBitmap.Width / 2);

@@ -1,5 +1,4 @@
-﻿using H4D2.Infrastructure;
-using H4D2.Infrastructure.H4D2;
+﻿using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.GUI;
 
@@ -23,7 +22,7 @@ public class CenteredSubheader
         _text = text;
     }
     
-    public void Render(Bitmap screen)
+    public void Render(H4D2BitmapCanvas screen)
     {
         screen.DrawCenteredLineOfText(H4D2Art.GUI.Text, _text, _y - 1, _shadowColor);
         screen.DrawCenteredLineOfText(H4D2Art.GUI.Text, _text, _y, _color);

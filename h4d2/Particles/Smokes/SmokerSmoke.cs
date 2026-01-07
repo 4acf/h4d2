@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Particles.Smokes;
@@ -68,7 +69,7 @@ public class SmokerSmoke : Particle
         _position.Z += zComponent;
     }
     
-    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         screen.SetPixelBlend(xCorrected + _randomDx, (yCorrected + _randomDy) + _randomDz, _color, _blend);
     }

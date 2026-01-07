@@ -1,5 +1,4 @@
-﻿using H4D2.Infrastructure;
-using H4D2.Infrastructure.H4D2;
+﻿using H4D2.Infrastructure.H4D2;
 using H4D2.GUI.Menus;
 using H4D2.Spawners.SpecialSpawners;
 
@@ -36,7 +35,7 @@ public class GUIManager
         _menu.Update(input, elapsedTime);
     }
 
-    public void Render(Bitmap screen)
+    public void Render(H4D2BitmapCanvas screen)
     {
         _menu.Render(screen);
     }

@@ -58,7 +58,7 @@ public class Button
         }
     }
     
-    public void Render(Bitmap screen)
+    public void Render(H4D2BitmapCanvas screen)
     {
         Bitmap bitmap = _ResolveBitmap();
         screen.DrawAbsolute(bitmap, _x, _y, _xFlip);

@@ -17,7 +17,7 @@ public class Game
     private readonly AudioManager _audioManager;
     private readonly GUIManager _guiManager;
     private readonly Camera _camera;
-    private Bitmap _screen = null!;
+    private H4D2BitmapCanvas _screen = null!;
     private ShadowBitmap _shadows = null!;
     private Level _level = null!;
     private readonly CollisionManager<CollisionGroup> _collisionManager;
@@ -54,7 +54,7 @@ public class Game
         _level.GameOver += isInGame ? 
             _OnGameOver :
             _OnMainMenuGameOver;
-        _screen = new Bitmap(_screenWidth, _screenHeight, _camera);
+        _screen = new H4D2BitmapCanvas(_screenWidth, _screenHeight, _camera);
         _shadows = new ShadowBitmap(_screenWidth, _screenHeight, _camera);
         _isInGame = isInGame;
         _isPaused = false;

@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities.Mobs.Survivors;
 using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Projectiles;
@@ -60,7 +61,7 @@ public class Tongue : Projectile
         _AttemptMove();
     }
 
-    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         double startXCorrected = (_startPosition.X - _startPosition.Y) * ScaleX;
         double startYCorrected = ((_startPosition.X + _startPosition.Y) * ScaleY) + _startPosition.Z;

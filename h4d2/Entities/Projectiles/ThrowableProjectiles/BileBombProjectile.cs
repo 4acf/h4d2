@@ -32,7 +32,7 @@ public class BileBombProjectile : ThrowableProjectile
         _UpdateSprite(elapsedTime);
     }
     
-    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         if (_collided)
             return;

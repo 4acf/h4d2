@@ -1,5 +1,4 @@
-﻿using H4D2.Infrastructure;
-using H4D2.Infrastructure.H4D2;
+﻿using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.GUI;
 
@@ -25,7 +24,7 @@ public class Header
         _text = text;
     }
     
-    public void Render(Bitmap screen)
+    public void Render(H4D2BitmapCanvas screen)
     {
         screen.DrawTextHeader(H4D2Art.GUI.Text, _text, _x, _y - 2, _shadowColor);
         screen.DrawTextHeader(H4D2Art.GUI.Text, _text, _x, _y, _color);

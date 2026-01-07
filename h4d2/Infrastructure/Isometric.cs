@@ -1,4 +1,5 @@
-﻿using H4D2.Levels;
+﻿using H4D2.Infrastructure.H4D2;
+using H4D2.Levels;
 
 namespace H4D2.Infrastructure;
 
@@ -30,14 +31,14 @@ public abstract class Isometric
         );
     }
     
-    public void Render(Bitmap screen)
+    public void Render(H4D2BitmapCanvas screen)
     {
         int xCorrected = (int)(Math.Floor(_position.X - _position.Y) * ScaleX);
         int yCorrected = (int)(Math.Floor(_position.Y + _position.X) * ScaleY + _position.Z);
         Render(screen, xCorrected, yCorrected);
     }
 
-    protected virtual void Render(Bitmap screen, int xCorrected, int yCorrected)
+    protected virtual void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         
     }

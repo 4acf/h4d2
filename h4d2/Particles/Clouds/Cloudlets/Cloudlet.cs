@@ -33,7 +33,7 @@ public abstract class Cloudlet : Particle
         }
     }
     
-    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         Bitmap bitmap = _bitmaps[_frame];
         const int radius = H4D2Art.ParticleSize / 2;

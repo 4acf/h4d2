@@ -1,4 +1,4 @@
-﻿using H4D2.Infrastructure;
+﻿using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.GUI;
 
@@ -30,7 +30,7 @@ public class PageViewer
         _page = page;
     }
 
-    public void Render(Bitmap screen)
+    public void Render(H4D2BitmapCanvas screen)
     {
         int x = _x;
         for (int i = 0; i < _numPages; i++)

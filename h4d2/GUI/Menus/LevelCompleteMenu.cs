@@ -48,7 +48,7 @@ public class LevelCompleteMenu : Menu
         _levelsButton.Update(input);
     }
 
-    public override void Render(Bitmap screen)
+    public override void Render(H4D2BitmapCanvas screen)
     {
         _centeredHeader.Render(screen);
         _centeredElapsedTime.Render(screen);

@@ -1,5 +1,4 @@
-﻿using H4D2.Infrastructure;
-using H4D2.Infrastructure.H4D2;
+﻿using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.GUI;
 
@@ -20,7 +19,7 @@ public class Subheader
         _color = color;
     }
     
-    public void Render(Bitmap screen)
+    public void Render(H4D2BitmapCanvas screen)
     {
         screen.DrawLineOfText(H4D2Art.GUI.Text, _text, _x, _y - 1, _shadowColor);
         screen.DrawLineOfText(H4D2Art.GUI.Text, _text, _x, _y, _color);

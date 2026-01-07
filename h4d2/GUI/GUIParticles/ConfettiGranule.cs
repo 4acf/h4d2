@@ -1,4 +1,5 @@
 ﻿using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 
 namespace H4D2.GUI.GUIParticles;
 
@@ -51,7 +52,7 @@ public class ConfettiGranule
         _y += _yVelocity * elapsedTime;
     }
 
-    public void Render(Bitmap screen)
+    public void Render(H4D2BitmapCanvas screen)
     {
         screen.SetPixelAbsolute((int)_x, (int)_y, _color);
     }

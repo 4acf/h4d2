@@ -13,7 +13,7 @@ public abstract class LevelElement : Isometric
         _type = config.Type;
     }
 
-    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         screen.Draw(H4D2Art.Tiles.Walls[_type], xCorrected, yCorrected);
     }

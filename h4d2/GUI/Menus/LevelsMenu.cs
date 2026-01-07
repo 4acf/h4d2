@@ -74,7 +74,7 @@ public class LevelsMenu : Menu
         _mainMenuButton.Update(input);
     }
 
-    public override void Render(Bitmap screen)
+    public override void Render(H4D2BitmapCanvas screen)
     {
         _backwardNavigationButton.Render(screen);
         _forwardNavigationButton.Render(screen);

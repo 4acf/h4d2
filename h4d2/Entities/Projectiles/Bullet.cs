@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities.Mobs.Zombies;
 using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Projectiles;
@@ -30,7 +31,7 @@ public class Bullet : Projectile
         _AttemptMove();
     }
 
-    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         double oldXCorrected = (_oldPosition.X - _oldPosition.Y) * ScaleX;
         double oldYCorrected = ((_oldPosition.X + _oldPosition.Y) * ScaleY) + _oldPosition.Z;

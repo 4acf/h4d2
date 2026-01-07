@@ -635,7 +635,7 @@ public abstract class Survivor : Mob
         }
     }
     
-    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         _RenderHealthBar(screen, xCorrected, yCorrected);
         
@@ -655,7 +655,7 @@ public abstract class Survivor : Mob
         }
     }
 
-    private void _RenderHealthBar(Bitmap screen, int xCorrected, int yCorrected)
+    private void _RenderHealthBar(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         double percentage = _health / (double)_maxHealth;
         int greenPixels = (int)Math.Ceiling(percentage * 10);

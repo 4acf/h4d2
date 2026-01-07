@@ -57,7 +57,7 @@ public abstract class ThrowableProjectile : Projectile
         }
     }
     
-    protected override void Render(Bitmap screen, int xCorrected, int yCorrected)
+    protected override void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         Bitmap bitmap = H4D2Art.Projectiles[_type][_spinStep];
         screen.Draw(bitmap, xCorrected, yCorrected, _xFlip);
