@@ -172,9 +172,6 @@ public class Pathfinder
 
             public void Enqueue(Tile tile, double cost)
             {
-                if(_currentlyInQueue.Count != _pq.Count)
-                    Console.WriteLine("fuck fuck fuck");
-                
                 if (!_currentlyInQueue.ContainsKey(tile))
                 {
                     _pq.Enqueue(tile, cost);
