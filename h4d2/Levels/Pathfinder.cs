@@ -166,45 +166,34 @@ public class Pathfinder
         
         private class UpdatingPQ
         {
-            public int Count => _pq.Count;
+            public int Count => _currentlyInQueue.Count;
             private readonly PriorityQueue<Tile, double> _pq = new();
             private readonly Dictionary<Tile, double> _currentlyInQueue = [];
 
             public void Enqueue(Tile tile, double cost)
             {
-                if (!_currentlyInQueue.ContainsKey(tile))
+                if (!_currentlyInQueue.TryGetValue(tile, out double value) || cost < value)
                 {
                     _pq.Enqueue(tile, cost);
                     _currentlyInQueue[tile] = cost;
-                    return;
                 }
-                _Update(tile, cost);
             }
 
             public Tile Dequeue()
             {
-                Tile front = _pq.Dequeue();
-                _currentlyInQueue.Remove(front);
-                return front;
-            }
-
-            private void _Update(Tile tile, double cost)
-            {
-                var q = new Queue<(Tile, double)>();
-                while (_pq.Peek() != tile)
+                const double tolerance = 0.00001;
+                while (_pq.TryDequeue(out Tile tile, out double cost))
                 {
-                    double currentCost = _currentlyInQueue[_pq.Peek()];
-                    q.Enqueue((_pq.Dequeue(), currentCost));
+                    if (!_currentlyInQueue.ContainsKey(tile))
+                        continue;
+                    
+                    if (Math.Abs(_currentlyInQueue[tile] - cost) <= tolerance)
+                    {
+                        _currentlyInQueue.Remove(tile);
+                        return tile;
+                    }
                 }
-                
-                q.Enqueue((_pq.Dequeue(), cost));
-                _currentlyInQueue[tile] = cost;
-
-                while (q.Count > 0)
-                {
-                    var (savedTile, savedCost) = q.Dequeue();
-                    _pq.Enqueue(savedTile, savedCost);
-                }
+                throw new InvalidOperationException("UpdatingPQ is empty.");
             }
         }
     }
