@@ -14,7 +14,6 @@ public class Game
     private readonly int _screenWidth;
     private readonly int _screenHeight;
     private readonly SaveManager _saveManager;
-    private readonly AudioManager _audioManager;
     private readonly GUIManager _guiManager;
     private readonly Camera _camera;
     private H4D2BitmapCanvas _screen = null!;
@@ -25,12 +24,11 @@ public class Game
     private bool _isInGame;
     private bool _isPaused;
     
-    public Game(int width, int height, SaveManager saveManager, AudioManager audioManager)
+    public Game(int width, int height, SaveManager saveManager)
     {
         _screenWidth = width;
         _screenHeight = height;
         _saveManager = saveManager;
-        _audioManager = audioManager;
         _guiManager = new GUIManager(saveManager, width, height);
         _guiManager.LevelChangeRequested += _InitializeGameLevel;
         _guiManager.MusicVolumeChangeRequested += _OnMusicVolumeChangeRequested;
@@ -117,13 +115,13 @@ public class Game
     
     private void _OnMusicVolumeChangeRequested(object? sender, MusicVolumeChangedEventArgs e)
     {
-        _audioManager.UpdateMusicVolume(e.MusicVolume);
+        AudioManager.Instance.UpdateMusicVolume(e.MusicVolume);
         _saveManager.SaveNewMusicVolume(e.MusicVolume);
     }
 
     private void _OnSFXVolumeChangeRequested(object? sender, SFXVolumeChangedEventArgs e)
     {
-        _audioManager.UpdateSFXVolume(e.SFXVolume);
+        AudioManager.Instance.UpdateSFXVolume(e.SFXVolume);
         _saveManager.SaveNewSFXVolume(e.SFXVolume);
     }
 
