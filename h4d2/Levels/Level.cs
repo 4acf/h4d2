@@ -206,14 +206,15 @@ public class Level
     
     public bool IsTileAdjacentToWall((int x, int y) tile)
     {
-        bool wallToN = IsWall(tile.x, tile.y - 1);
-        if (wallToN) return true;
-        bool wallToE = IsWall(tile.x + 1, tile.y);
-        if (wallToE) return true;
-        bool wallToS = IsWall(tile.x, tile.y + 1);
-        if (wallToS) return true;
-        bool wallToW = IsWall(tile.x - 1, tile.y);
-        if (wallToW) return true;
+        for (int i = -1; i <= 1; i++)
+        {
+            for (int j = -1; j <= 1; j++)
+            {
+                if (i == 0 && j == 0) continue;
+                bool isWall = IsWall(tile.x + i, tile.y + j);
+                if (isWall) return true;
+            }
+        }
         return false;
     }
 
