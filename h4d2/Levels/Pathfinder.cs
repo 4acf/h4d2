@@ -1,4 +1,6 @@
 ﻿using H4D2.Entities;
+using H4D2.Entities.Mobs.Survivors;
+using H4D2.Entities.Mobs.Zombies.Commons;
 using H4D2.Infrastructure;
 
 namespace H4D2.Levels;
@@ -57,7 +59,7 @@ public class Pathfinder
         bool targetMovedTiles = Level.GetTilePosition(_path.End) != Level.GetTilePosition(end);
         if (targetMovedTiles)
         {
-            bool targetMovedTooFar = _level.HasLineOfSight(_path.End, end);
+            bool targetMovedTooFar = !_level.HasLineOfSight(_path.End, end);
             if(targetMovedTooFar)
                 _path = new Path(_level, start, end);
         }
