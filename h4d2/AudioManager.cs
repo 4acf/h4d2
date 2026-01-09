@@ -83,6 +83,18 @@ public sealed class AudioManager
         sound.Play();
     }
 
+    public void Close()
+    {
+        foreach (KeyValuePair<Track, Music> kvp in _musics)
+        {
+            kvp.Value.Dispose();
+        }
+        foreach (KeyValuePair<SFX, Sound> kvp in _sounds)
+        {
+            kvp.Value.Dispose();
+        }
+    }
+    
     private static float _SFMLVolume(double volume)
     {
         return (float)(volume * 100);

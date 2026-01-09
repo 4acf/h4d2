@@ -26,6 +26,7 @@ public static class H4D2
         );
         window.Closed += (sender, _) =>
         {
+            AudioManager.Instance.Close();
             var w = (RenderWindow)sender!;
             w.Close();
         };
@@ -49,6 +50,7 @@ public static class H4D2
         var game = new Game((int)ScreenWidth, (int)ScreenHeight, saveManager);
         game.ExitGame += (_, _) =>
         {
+            AudioManager.Instance.Close();
             window.Close();
         };
         
