@@ -4,6 +4,7 @@ namespace H4D2.Levels;
 
 public class CostMap
 {
+    private const int _costScale = 5;
     private readonly Level _level;
     private readonly int[][] _internalMap;
     
@@ -67,7 +68,9 @@ public class CostMap
         var result = new AdjacentNode[adj.Length];
         for (int i = 0; i < adj.Length; i++)
         {
-            result[i] = new AdjacentNode(adj[i] >> 1, adj[i] & 0b1);
+            int idx = adj[i] >> 1;
+            int cost = ((adj[i] & 0b1) * _costScale) + 1;
+            result[i] = new AdjacentNode(idx, cost);
         }
         return result;
     }

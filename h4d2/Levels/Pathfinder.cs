@@ -83,7 +83,7 @@ public class Pathfinder
         public readonly ReadonlyPosition End;
 
         public Path(Level level, ReadonlyPosition start, ReadonlyPosition end)
-        { 
+        {
             _path = new Queue<Tile>();
             End = end;
             
@@ -161,9 +161,11 @@ public class Pathfinder
 
         private static double _TileDistance(Tile t1, Tile t2)
         {
-            double term1 = Math.Pow(t2.X - t1.X, 2);
-            double term2 = Math.Pow(t2.Y - t1.Y, 2);
-            return Math.Sqrt(term1 + term2);
+            // this works for now but is not proper Chebyshev distance
+            // possibly an issue with my A* implementation
+            double dx = t1.X - t2.X;
+            double dy = t1.Y - t2.Y;
+            return Math.Min(Math.Abs(dx), Math.Abs(dy));
         }
         
         private class UpdatingPQ
