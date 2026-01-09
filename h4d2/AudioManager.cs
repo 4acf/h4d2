@@ -61,8 +61,6 @@ public sealed class AudioManager
 
     public void PlayMusic(Track track)
     {
-        if (MusicVolume == 0.0)
-            return;
         if (!_musics.TryGetValue(track, out var music))
             return;
         if (music == _currentMusic)
@@ -75,8 +73,6 @@ public sealed class AudioManager
 
     public void PlaySFX(SFX sfx)
     {
-        if (SFXVolume == 0.0)
-            return;
         if (!_sounds.TryGetValue(sfx, out var sound))
             return;
         sound.Volume = _SFMLVolume(SFXVolume);
