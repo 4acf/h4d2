@@ -18,8 +18,8 @@ public class CostMap
                 continue;
             int numAdjFloors = 0;
             int x = i % level.Width;
-            int y = i / level.Height;
-
+            int y = i / level.Width;
+            
             bool canMoveN = !level.IsWall(x, y - 1);
             bool canMoveNE = !level.IsWall(x + 1, y - 1);
             bool canMoveE = !level.IsWall(x + 1, y);

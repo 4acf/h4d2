@@ -175,7 +175,7 @@ public class Level
 
     public int TileIndex(Tile tile)
     {
-        return (tile.Y * Width) + tile.X;
+        return TileIndex(tile.X, tile.Y);
     }
     
     public static Tile GetTilePosition(ReadonlyPosition position)
