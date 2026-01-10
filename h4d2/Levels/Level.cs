@@ -530,9 +530,9 @@ public class Level
         }
     }
     
-    public void Render(H4D2BitmapCanvas screen, ShadowBitmap shadows)
+    public void Render(Camera camera, H4D2BitmapCanvas screen, ShadowBitmap shadows)
     {
-        _RenderBackground(screen);
+        _RenderBackground(camera, screen);
         _RenderShadows(screen, shadows);
         _RenderIsometrics(screen);
     }
@@ -627,7 +627,7 @@ public class Level
         }
     }
     
-    private void _RenderBackground(H4D2BitmapCanvas screen)
+    private void _RenderBackground(Camera camera, H4D2BitmapCanvas screen)
     {
         screen.Clear(0x2b2b2b);
         _levelElements.Clear();
@@ -640,6 +640,14 @@ public class Level
                 int yScreenPos = (y * -H4D2Art.TileIsoHalfHeight) + (x * H4D2Art.TileIsoHalfHeight);
                 double xTilePos = x * TilePhysicalSize;
                 double yTilePos = -y * TilePhysicalSize;
+                
+                bool tooFarLeft = xScreenPos + H4D2Art.TileIsoWidth < (camera.XOffset * -1);
+                bool tooFarRight = xScreenPos > (camera.XOffset * -1) + camera.Width;
+                bool tooFarDown = yScreenPos < (camera.YOffset * -1);
+                bool tooFarUp = yScreenPos - (2 * H4D2Art.TileIsoHeight) > (camera.YOffset * -1) + camera.Height;
+                
+                if (tooFarLeft || tooFarRight || tooFarDown || tooFarUp)
+                    continue;
                 
                 TileType tileType = TileTypes[index];
                 switch (tileType)

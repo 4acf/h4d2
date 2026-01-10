@@ -102,7 +102,7 @@ public class Game
     {
         _screen.Clear();
         _shadows.Clear();
-        _level.Render(_screen, _shadows);
+        _level.Render(_camera, _screen, _shadows);
         _guiManager.Render(_screen);
         return _screen.Data;
     }
