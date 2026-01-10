@@ -79,12 +79,14 @@ public class Pathfinder
 
     private class Path
     {
-        private readonly Queue<Tile> _path;
+        private readonly List<Tile> _path;
+        private int _pathIndex;
         public readonly ReadonlyPosition End;
 
         public Path(Level level, ReadonlyPosition start, ReadonlyPosition end)
         {
-            _path = new Queue<Tile>();
+            _path = [];
+            _pathIndex = 0;
             End = end;
             
             Tile startTile = Level.GetTilePosition(start);
@@ -113,7 +115,7 @@ public class Pathfinder
                     
                     while (stk.Count > 0)
                     {
-                        _path.Enqueue(stk.Pop());
+                        _path.Add(stk.Pop());
                     }
                     return;
                 }
@@ -143,18 +145,18 @@ public class Pathfinder
             if (_path.Count == 0)
                 return 0.0;
             
-            Tile nextTile = _path.Peek(); 
+            Tile nextTile = _path[_pathIndex]; 
             
-            while (_path.Count > 0 && nextTile != currentTile)
+            while (_pathIndex <= _path.Count - 1 && nextTile != currentTile)
             {
-                nextTile = _path.Dequeue();
+                _pathIndex++;
+                nextTile = _path[_pathIndex];
             }
 
-            if (_path.Count <= 1)
+            if (_pathIndex >= _path.Count - 1)
                 return 0.0;
-
-            _path.Dequeue();
-            nextTile = _path.Peek();
+            
+            nextTile = _path[_pathIndex + 1];
             double direction = Math.Atan2(currentTile.Y - nextTile.Y, nextTile.X - currentTile.X);
             return MathHelpers.NormalizeRadians(direction);
         }
