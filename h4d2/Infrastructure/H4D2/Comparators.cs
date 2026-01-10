@@ -25,9 +25,9 @@ public static class Comparators
         
         int Rank(Type t)
         {
-            if (typeof(Projectile).IsAssignableFrom(t)) return -1;
             if (typeof(Hazard).IsAssignableFrom(t)) return -1;
             if (typeof(Special).IsAssignableFrom(t)) return 0;
+            if (typeof(Projectile).IsAssignableFrom(t)) return 2;
             return 1;
         }
     };
