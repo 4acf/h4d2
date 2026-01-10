@@ -539,7 +539,7 @@ public class Level
 
     private void _UpdateCollisionMap()
     {
-        _entityCollisionMap.Clear();
+        _entityCollisionMap.Update();
         foreach (Entity entity in _entities)
         {
             _entityCollisionMap.AddEntityToTile(entity, GetTilePosition(entity.CenterMass));
