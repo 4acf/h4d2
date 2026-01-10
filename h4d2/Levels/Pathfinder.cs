@@ -145,18 +145,15 @@ public class Pathfinder
             if (_path.Count == 0)
                 return 0.0;
             
-            Tile nextTile = _path[_pathIndex]; 
-            
-            while (_pathIndex <= _path.Count - 1 && nextTile != currentTile)
+            while (_pathIndex < _path.Count - 1 && _path[_pathIndex] != currentTile)
             {
                 _pathIndex++;
-                nextTile = _path[_pathIndex];
             }
 
             if (_pathIndex >= _path.Count - 1)
                 return 0.0;
             
-            nextTile = _path[_pathIndex + 1];
+            Tile nextTile = _path[_pathIndex + 1];
             double direction = Math.Atan2(currentTile.Y - nextTile.Y, nextTile.X - currentTile.X);
             return MathHelpers.NormalizeRadians(direction);
         }
