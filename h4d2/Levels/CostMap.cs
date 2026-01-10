@@ -13,52 +13,40 @@ public class CostMap
         _level = level;
         int numTiles = level.Width * level.Height;
         _internalMap = new int[numTiles][];
+
+        var directions = new (int dx, int dy)[]
+        {
+            ( 0, -1), // N
+            ( 1, -1), // NE
+            ( 1,  0), // E
+            ( 1,  1), // SE
+            ( 0,  1), // S
+            (-1,  1), // SW
+            (-1,  0), // W
+            (-1, -1)  // NW
+        };
+
         for (int i = 0; i < numTiles; i++)
         {
             if (tileTypes[i] == TileType.Wall || tileTypes[i] == TileType.EdgeWall)
                 continue;
-            int numAdjFloors = 0;
+            
             int x = i % level.Width;
             int y = i / level.Width;
+
+            var adjFloors = new List<int>();
+
+            for (int j = 0; j < directions.Length; j++)
+            {
+                int newX = x + directions[j].dx;
+                int newY = y + directions[j].dy;
+                if (!level.IsWall(newX, newY))
+                {
+                    adjFloors.Add(_EncodeTile(level, newX, newY));
+                }
+            }
             
-            bool canMoveN = !level.IsWall(x, y - 1);
-            bool canMoveNE = !level.IsWall(x + 1, y - 1);
-            bool canMoveE = !level.IsWall(x + 1, y);
-            bool canMoveSE = !level.IsWall(x + 1, y + 1);
-            bool canMoveS = !level.IsWall(x, y + 1);
-            bool canMoveSW = !level.IsWall(x - 1, y + 1);
-            bool canMoveW = !level.IsWall(x - 1, y);
-            bool canMoveNW = !level.IsWall(x - 1, y - 1);
-            
-            if (canMoveN) numAdjFloors++;
-            if (canMoveNE) numAdjFloors++;
-            if (canMoveE) numAdjFloors++;
-            if (canMoveSE) numAdjFloors++;
-            if (canMoveS) numAdjFloors++;
-            if (canMoveSW) numAdjFloors++;
-            if (canMoveW) numAdjFloors++;
-            if (canMoveNW) numAdjFloors++;
-            
-            var adjFloors = new int[numAdjFloors];
-            int placed = 0;
-            if (canMoveN) adjFloors[placed++] = 
-                (level.TileIndex(x, y - 1) << 1) | (level.IsTileAdjacentToWall(x, y - 1) ? 0b1 : 0b0);
-            if (canMoveNE) adjFloors[placed++] =
-                (level.TileIndex(x + 1, y - 1) << 1) | (level.IsTileAdjacentToWall(x + 1, y - 1) ? 0b1 : 0b0);
-            if (canMoveE) adjFloors[placed++] =
-                (level.TileIndex(x + 1, y) << 1) | (level.IsTileAdjacentToWall(x + 1, y) ? 0b1 : 0b0);
-            if (canMoveSE) adjFloors[placed++] =
-                (level.TileIndex(x + 1, y + 1) << 1) | (level.IsTileAdjacentToWall(x + 1, y + 1) ? 0b1 : 0b0);
-            if (canMoveS) adjFloors[placed++] =
-                (level.TileIndex(x, y + 1) << 1) | (level.IsTileAdjacentToWall(x, y + 1) ? 0b1 : 0b0);
-            if (canMoveSW) adjFloors[placed++] =
-                (level.TileIndex(x - 1, y + 1) << 1) | (level.IsTileAdjacentToWall(x - 1, y + 1) ? 0b1 : 0b0);
-            if (canMoveW) adjFloors[placed++] =
-                (level.TileIndex(x - 1, y) << 1) | (level.IsTileAdjacentToWall(x - 1, y) ? 0b1 : 0b0);
-            if (canMoveNW) adjFloors[placed++] =
-                (level.TileIndex(x - 1, y - 1) << 1) | (level.IsTileAdjacentToWall(x - 1, y - 1) ? 0b1 : 0b0);
-            
-            _internalMap[i] = adjFloors;
+            _internalMap[i] = adjFloors.ToArray();
         }
     }
 
@@ -76,6 +64,13 @@ public class CostMap
     }
 
     public AdjacentNode[] GetAdjacentNodes(int x, int y) => GetAdjacentNodes((y * _level.Width) + x);
+
+    private static int _EncodeTile(Level level, int x, int y)
+    {
+        return 
+            (level.TileIndex(x, y) << 1) | 
+            (level.IsTileAdjacentToWall(x, y) ? 0b1 : 0b0);
+    }
 }
 
 public readonly struct AdjacentNode(int index, int cost)
