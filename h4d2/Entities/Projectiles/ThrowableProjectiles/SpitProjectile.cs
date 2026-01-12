@@ -9,7 +9,7 @@ namespace H4D2.Entities.Projectiles.ThrowableProjectiles;
 public class SpitProjectile : ThrowableProjectile
 {
     private const int _numSpitParticles = 2;
-    private const int _numSpitSplatters = 30;
+    private const int _numSpitSplatters = 50;
     private const double _speedMultiplier = 1.75;
     private const double _gravityMultiplier = 0.75;
     

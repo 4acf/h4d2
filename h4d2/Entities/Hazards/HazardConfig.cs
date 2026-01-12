@@ -20,14 +20,14 @@ public static class HazardConfigs
     
     public static readonly HazardConfig Fire = new()
     {
-        Damage = 10,
+        Damage = 2,
         Duration = 15.0,
         BoundingBox = new BoundingBox(CollisionGroup.Hazard, _fireDimensions)
     };
 
     public static readonly HazardConfig Spit = new()
     {
-        Damage = 7,
+        Damage = 10,
         Duration = 6.0,
         BoundingBox = new BoundingBox(CollisionGroup.Hazard, _spitDimensions)
     };

@@ -46,8 +46,8 @@ public class Level
     private const int _maxSpawnWaveSize = 15;
     private const int _maxZombiesAlive = 50;
     private const int _maxParticles = 10000;
-    private const int _commonKillCredit = 1;
-    private const int _uncommonKillCredit = 3;
+    private const int _commonKillCredit = 5;
+    private const int _uncommonKillCredit = 10;
     private const double _mobSpawnXOffset = 5.5;
     private const double _mobSpawnYOffset = -(H4D2Art.TileCenterOffset - H4D2Art.SpriteSize) + 0.5;
     private const double _pickupXOffset = -7;

@@ -7,7 +7,7 @@ namespace H4D2.Entities.Projectiles;
 
 public class Bullet : Projectile
 {
-    private const double _speed = 200.0;
+    private const double _speed = 250.0;
     private const int _color = 0xffffff;
 
     private Position _oldPosition;

@@ -45,11 +45,11 @@ public static class StandardLevelConfig
     new Dictionary<SpecialDescriptor, BuyInfo>
     {
         {SpecialDescriptor.Spitter, new BuyInfo(30, 15.0)},
-        {SpecialDescriptor.Boomer, new BuyInfo(50, 30.0)},
-        {SpecialDescriptor.Hunter, new BuyInfo(100, 30.0)},
-        {SpecialDescriptor.Jockey, new BuyInfo(125, 20.0)},
+        {SpecialDescriptor.Boomer, new BuyInfo(50, 10.0)},
+        {SpecialDescriptor.Hunter, new BuyInfo(100, 15.0)},
+        {SpecialDescriptor.Jockey, new BuyInfo(125, 15.0)},
         {SpecialDescriptor.Charger, new BuyInfo(150, 10.0)},
-        {SpecialDescriptor.Smoker, new BuyInfo(250, 30.0)},
+        {SpecialDescriptor.Smoker, new BuyInfo(250, 20.0)},
         {SpecialDescriptor.Tank, new BuyInfo(1000, 15.0)},
         {SpecialDescriptor.Witch, new BuyInfo(1250, 30.0)}
     }.ToImmutableDictionary();
@@ -160,9 +160,9 @@ public static class LevelCollection
             BuyableSpecials = 
                 new Dictionary<SpecialDescriptor, BuyInfo>
                 {
-                    {SpecialDescriptor.Boomer, new BuyInfo(25, 30.0)},
-                    {SpecialDescriptor.Hunter, new BuyInfo(50, 20.0)},
-                    {SpecialDescriptor.Smoker, new BuyInfo(125, 30.0)},
+                    {SpecialDescriptor.Boomer, new BuyInfo(25, 10.0)},
+                    {SpecialDescriptor.Hunter, new BuyInfo(50, 15.0)},
+                    {SpecialDescriptor.Smoker, new BuyInfo(125, 20.0)},
                     {SpecialDescriptor.Tank, new BuyInfo(1000, 15.0)},
                     {SpecialDescriptor.Witch, new BuyInfo(1250, 30.0)}
                 }.ToImmutableDictionary(),
@@ -220,7 +220,7 @@ public static class LevelCollection
             BuyableSpecials = 
                 new Dictionary<SpecialDescriptor, BuyInfo>
                 {
-                    {SpecialDescriptor.Charger, new BuyInfo(50, 2.0)}
+                    {SpecialDescriptor.Charger, new BuyInfo(10, 0.1)}
                 }.ToImmutableDictionary(),
             Consumables = StandardLevelConfig.Consumables,
             Throwables = StandardLevelConfig.Throwables,
@@ -293,9 +293,9 @@ public static class LevelCollection
             BuyableSpecials = new Dictionary<SpecialDescriptor, BuyInfo>
             {
                 {SpecialDescriptor.Spitter, new BuyInfo(30, 15.0)},
-                {SpecialDescriptor.Boomer, new BuyInfo(50, 30.0)},
-                {SpecialDescriptor.Hunter, new BuyInfo(100, 30.0)},
-                {SpecialDescriptor.Jockey, new BuyInfo(125, 20.0)},
+                {SpecialDescriptor.Boomer, new BuyInfo(50, 10.0)},
+                {SpecialDescriptor.Hunter, new BuyInfo(100, 15.0)},
+                {SpecialDescriptor.Jockey, new BuyInfo(125, 15.0)},
                 {SpecialDescriptor.Charger, new BuyInfo(150, 10.0)},
                 {SpecialDescriptor.Tank, new BuyInfo(1000, 15.0)},
                 {SpecialDescriptor.Witch, new BuyInfo(1250, 30.0)}
