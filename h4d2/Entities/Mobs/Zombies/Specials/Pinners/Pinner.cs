@@ -24,7 +24,10 @@ public abstract class Pinner : Special
 
     protected override void _UpdateTarget()
     {
-        _target = _level.GetNearestUnpinnedSurvivor(Position);
+        List<Survivor> survivors = _level.GetEntities<Survivor>();
+        _target = survivors.Count == 1 ?
+            survivors[0] :
+            _level.GetNearestUnpinnedSurvivor(Position);
     }
 
     protected virtual void _StopPinning()
