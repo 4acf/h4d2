@@ -12,7 +12,7 @@ public class Charger : Pinner
     private const double _chargeRange = 50.0;
     private const double _maxChargeTime = 3.0;
     private const double _defaultSpeed = 250;
-    private const double _chargeSpeed = 500;
+    private const double _chargeSpeed = 600;
     private const double _slamDelay = 1.5;
     private const double _gravity = 0.5;
     private const double _stumbleHeight = 3.0;

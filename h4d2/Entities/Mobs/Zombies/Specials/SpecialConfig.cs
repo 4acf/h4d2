@@ -29,7 +29,7 @@ public static class SpecialBoundingBoxes
     private static readonly BoundingBoxDimensions _smokerDimensions
         = new(2, 2, 12, H4D2Art.SpriteSize, 7);
     private static readonly BoundingBoxDimensions _chargerDimensions
-        = new(6, 2, 12, H4D2Art.SpriteSize, 5);
+        = new(2, 2, 12, H4D2Art.SpriteSize, 7);
     private static readonly BoundingBoxDimensions _jockeyDimensions
         = new(4, 2, 6, H4D2Art.SpriteSize, 6);
     private static readonly BoundingBoxDimensions _spitterDimensions
