@@ -90,4 +90,13 @@ public static class SurvivorConfigs
         GibColor = _whiteSkinColor,
         BoundingBox = _boundingBox
     };
+
+    public static readonly SurvivorConfig MegaCoach = new()
+    {
+        Character = 0,
+        Health = _defaultHealth * 2,
+        RunSpeed = (int)(_runSpeed * 1.5),
+        GibColor = _blackSkinColor,
+        BoundingBox = _boundingBox
+    };
 }

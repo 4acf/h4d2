@@ -289,9 +289,18 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[14],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
-            Survivors = [SurvivorDescriptor.Coach],
-            BuyableSpecials = StandardLevelConfig.BuyableSpecials,
-            Consumables = StandardLevelConfig.Consumables,
+            Survivors = [SurvivorDescriptor.MegaCoach],
+            BuyableSpecials = new Dictionary<SpecialDescriptor, BuyInfo>
+            {
+                {SpecialDescriptor.Spitter, new BuyInfo(30, 15.0)},
+                {SpecialDescriptor.Boomer, new BuyInfo(50, 30.0)},
+                {SpecialDescriptor.Hunter, new BuyInfo(100, 30.0)},
+                {SpecialDescriptor.Jockey, new BuyInfo(125, 20.0)},
+                {SpecialDescriptor.Charger, new BuyInfo(150, 10.0)},
+                {SpecialDescriptor.Tank, new BuyInfo(1000, 15.0)},
+                {SpecialDescriptor.Witch, new BuyInfo(1250, 30.0)}
+            }.ToImmutableDictionary(),
+            Consumables = [ConsumableDescriptor.FirstAidKit, ConsumableDescriptor.Pills],
             Throwables = StandardLevelConfig.Throwables,
             Uncommons = StandardLevelConfig.Uncommons
         }

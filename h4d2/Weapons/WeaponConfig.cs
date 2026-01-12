@@ -89,4 +89,15 @@ public static class WeaponConfigs
         Pellets = 1,
         Piercing = 1
     };
+
+    public static readonly WeaponConfig MegaCoachShotgun = new()
+    {
+        Damage = 100,
+        ReloadTimeSeconds = 0.0,
+        ShootDelaySeconds = 1.0 / 16.0,
+        AmmoPerMagazine = 100,
+        Spread = 0.25,
+        Pellets = 15,
+        Piercing = 5
+    };
 }
