@@ -2,6 +2,13 @@
 
 public static class MathHelpers
 {
+    public static double Distance(double x0, double y0, double x1, double y1)
+    {
+        double term1 = Math.Pow(x1 - x0, 2);
+        double term2 = Math.Pow(y1 - y0, 2);
+        return Math.Sqrt(term1 + term2);
+    }
+    
     public static double RadiansToDegrees(double radians)
     {
         return (radians * 180 / Math.PI) % 360;
