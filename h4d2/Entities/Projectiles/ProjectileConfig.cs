@@ -7,16 +7,16 @@ public static class ProjectileConfig
 {
     
     private static readonly BoundingBoxDimensions _bulletDimensions
-        = new(1, 1, 1, 0);
+        = new(1, 1, 1, 1);
 
     private static readonly BoundingBoxDimensions _grenadeDimensions
-        = new(2, 2, 2, 0);
+        = new(2, 2, 2, 2);
 
     private static readonly BoundingBoxDimensions _pukeDimensions
-        = new(1, 1, 1, 0);
+        = new(1, 1, 1, 1);
 
     private static readonly BoundingBoxDimensions _tongueDimensions
-        = new(1, 1, 1, 0);
+        = new(1, 1, 1, 1);
     
     public static readonly BoundingBox BulletBoundingBox 
         = new (CollisionGroup.Projectile, _bulletDimensions);
