@@ -227,24 +227,29 @@ public abstract class Survivor : Mob
         if (_aimTarget == null || !_aimTarget.IsAlive)
         {
             _aimTarget = _level.GetNearestEntity<Zombie>(Position);
-            if (_aimTarget == null) return;
-            ReadonlyPosition targetPosition = _aimTarget.CenterMass;
-            AimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
-            AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
+            if (_aimTarget == null)
+                return;
         }
-        else
+
+        Special? nearestSpecial = _level.GetNearestEntity<Special>(Position);
+        if (nearestSpecial != null && nearestSpecial != _aimTarget)
         {
-            if (!_aimTarget.IsAlive)
-            {
-                _aimTarget = null;
-            }
-            else
-            {
-                ReadonlyPosition targetPosition = _aimTarget.CenterMass;
-                AimDirectionRadians = Math.Atan2(targetPosition.Y - survivorPosition.Y, targetPosition.X - survivorPosition.X);
-                AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
-            }
+            const double targetSpecialThreshold = 2.0;
+            
+            double distanceToTarget = ReadonlyPosition.Distance(Position, _aimTarget.Position);
+            double distanceToSpecial = ReadonlyPosition.Distance(Position, nearestSpecial.Position);
+            if (distanceToSpecial < distanceToTarget * targetSpecialThreshold)
+                _aimTarget = nearestSpecial;
         }
+        
+        ReadonlyPosition targetPosition = _aimTarget.CenterMass;
+
+        AimDirectionRadians = Math.Atan2(
+            targetPosition.Y - survivorPosition.Y,
+            targetPosition.X - survivorPosition.X
+        );
+
+        AimDirectionRadians = MathHelpers.NormalizeRadians(AimDirectionRadians);
     }
 
     private void _UpdateConsumableTarget()
