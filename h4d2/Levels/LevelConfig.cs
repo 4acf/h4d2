@@ -44,8 +44,8 @@ public static class StandardLevelConfig
     public static readonly ImmutableDictionary<SpecialDescriptor, BuyInfo> BuyableSpecials = 
     new Dictionary<SpecialDescriptor, BuyInfo>
     {
-        {SpecialDescriptor.Spitter, new BuyInfo(30, 15.0)},
-        {SpecialDescriptor.Boomer, new BuyInfo(50, 10.0)},
+        {SpecialDescriptor.Boomer, new BuyInfo(30, 10.0)},
+        {SpecialDescriptor.Spitter, new BuyInfo(50, 15.0)},
         {SpecialDescriptor.Hunter, new BuyInfo(100, 15.0)},
         {SpecialDescriptor.Jockey, new BuyInfo(125, 15.0)},
         {SpecialDescriptor.Charger, new BuyInfo(150, 10.0)},
@@ -292,8 +292,8 @@ public static class LevelCollection
             Survivors = [SurvivorDescriptor.MegaCoach],
             BuyableSpecials = new Dictionary<SpecialDescriptor, BuyInfo>
             {
-                {SpecialDescriptor.Spitter, new BuyInfo(30, 15.0)},
-                {SpecialDescriptor.Boomer, new BuyInfo(50, 10.0)},
+                {SpecialDescriptor.Boomer, new BuyInfo(30, 10.0)},
+                {SpecialDescriptor.Spitter, new BuyInfo(50, 15.0)},
                 {SpecialDescriptor.Hunter, new BuyInfo(100, 15.0)},
                 {SpecialDescriptor.Jockey, new BuyInfo(125, 15.0)},
                 {SpecialDescriptor.Charger, new BuyInfo(150, 10.0)},

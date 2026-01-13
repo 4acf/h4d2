@@ -20,7 +20,7 @@ public static class WeaponConfigs
         ShootDelaySeconds = 1 / 3.33,
         AmmoPerMagazine = 10,
         Spread = 0.5,
-        Pellets = 11,
+        Pellets = 10,
         Piercing = 2
     };
 
@@ -49,7 +49,7 @@ public static class WeaponConfigs
     public static readonly WeaponConfig HuntingRifle = new()
     {
         Damage = 90,
-        ReloadTimeSeconds = 3.13,
+        ReloadTimeSeconds = 2.5,
         ShootDelaySeconds = 1.0 / 4.0,
         AmmoPerMagazine = 15,
         Spread = 0.0,
@@ -60,12 +60,12 @@ public static class WeaponConfigs
     public static readonly WeaponConfig M16 = new()
     {
         Damage = 33,
-        ReloadTimeSeconds = 2.2,
+        ReloadTimeSeconds = 1.8,
         ShootDelaySeconds = 1.0 / 11.43,
         AmmoPerMagazine = 30,
         Spread = 0.25,
         Pellets = 1,
-        Piercing = 2
+        Piercing = 3
     };
 
     public static readonly WeaponConfig PumpShotgun = new()
@@ -82,7 +82,7 @@ public static class WeaponConfigs
     public static readonly WeaponConfig Uzi = new()
     {
         Damage = 20,
-        ReloadTimeSeconds = 1.8,
+        ReloadTimeSeconds = 1.5,
         ShootDelaySeconds = 1.0 / 16.0,
         AmmoPerMagazine = 50,
         Spread = 0.3,
