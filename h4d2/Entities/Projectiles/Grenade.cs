@@ -38,14 +38,14 @@ public class Grenade : Projectile
         double degrees = MathHelpers.RadiansToDegrees(directionRadians);
         index = degrees switch
         {
-            >= 337.5 or  < 22.5  => 0,
-            >= 22.5  and < 67.5  => 1,
-            >= 67.5  and < 112.5 => 2,
-            >= 112.5 and < 157.5 => 3,
-            >= 157.5 and < 202.5 => 4,
-            >= 202.5 and < 247.5 => 5,
-            >= 247.5 and < 292.5 => 6,
-            >= 292.5 and < 337.5 => 7,
+            >= 337.5 or  < 22.5  => 1,
+            >= 22.5  and < 67.5  => 2,
+            >= 67.5  and < 112.5 => 3,
+            >= 112.5 and < 157.5 => 4,
+            >= 157.5 and < 202.5 => 5,
+            >= 202.5 and < 247.5 => 6,
+            >= 247.5 and < 292.5 => 7,
+            >= 292.5 and < 337.5 => 0,
             _ => index
         };
         return index;
