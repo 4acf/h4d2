@@ -61,7 +61,7 @@ public abstract class Entity : Isometric
         
         if (_level.IsBlockedByWall(this, destination))
         {
-            _CollideWall();
+            _CollideWall(xComponent, yComponent, zComponent);
             return;
         }
 
@@ -84,8 +84,13 @@ public abstract class Entity : Isometric
         _velocity.Stop();
     }
 
-    protected virtual void _CollideWall()
+    protected virtual void _CollideWall(double xComponent, double yComponent, double zComponent)
     {
-        _velocity.Stop();
+        if (xComponent != 0)
+            _velocity.X = 0;
+        if (yComponent != 0)
+            _velocity.Y = 0;
+        if (zComponent != 0)
+            _velocity.Z = 0;
     }
 }

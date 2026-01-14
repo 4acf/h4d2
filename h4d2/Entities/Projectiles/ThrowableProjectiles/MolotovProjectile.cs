@@ -50,7 +50,7 @@ public class MolotovProjectile : ThrowableProjectile
         }
     }
     
-    protected override void _CollideWall()
+    protected override void _CollideWall(double xComponent, double yComponent, double zComponent)
     {
         _velocity.X *= _bounce * -1;
         _velocity.Y *= _bounce * -1;

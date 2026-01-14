@@ -72,10 +72,17 @@ public class Pathfinder
     }
 
     public bool HasLineOfSight(Entity target)
-        => _level.HasLineOfSight(_entity.NWPosition, target.NWPosition) && 
-           _level.HasLineOfSight(_entity.NEPosition, target.NEPosition) && 
-           _level.HasLineOfSight(_entity.SWPosition, target.SWPosition) && 
-           _level.HasLineOfSight(_entity.SEPosition, target.SEPosition);
+    {
+        if (!_level.HasLineOfSight(_entity.NWPosition, target.NWPosition))
+            return false;
+        if (!_level.HasLineOfSight(_entity.NEPosition, target.NEPosition))
+            return false;
+        if (!_level.HasLineOfSight(_entity.SWPosition, target.SWPosition))
+            return false;
+        if (!_level.HasLineOfSight(_entity.SEPosition, target.SEPosition))
+            return false;
+        return true;
+    }
 
     private class Path
     {

@@ -175,7 +175,7 @@ public class Tongue : Projectile
         _speed = _pullSpeed;
     }
 
-    protected override void _CollideWall()
+    protected override void _CollideWall(double xComponent, double yComponent, double zComponent)
     {
         if (!IsConnected)
         {
