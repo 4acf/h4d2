@@ -36,14 +36,22 @@ public class CostMap
 
             var adjFloors = new List<int>();
 
-            for (int j = 0; j < directions.Length; j++)
+            foreach (var dir in directions)
             {
-                int newX = x + directions[j].dx;
-                int newY = y + directions[j].dy;
-                if (!level.IsWall(newX, newY))
+                int newX = x + dir.dx;
+                int newY = y + dir.dy;
+
+                if (level.IsWall(newX, newY))
+                    continue;
+
+                bool isAdjacentDiagonally = dir.dx != 0 && dir.dy != 0;
+                if (isAdjacentDiagonally)
                 {
-                    adjFloors.Add(_EncodeTile(level, newX, newY));
+                    if (level.IsWall(x + dir.dx, y) || level.IsWall(x, y + dir.dy))
+                        continue;
                 }
+
+                adjFloors.Add(_EncodeTile(level, newX, newY));
             }
             
             _internalMap[i] = adjFloors.ToArray();
