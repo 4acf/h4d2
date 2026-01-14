@@ -11,7 +11,7 @@ public class Witch : Special
     private const int _alertedFrame = 0;
     private const double _attackRange = 5.0;
     private const double _attackDelay = 2.0;
-    private const double _chaseDelay = 3.0;
+    private const double _chaseDelay = 1.5;
     
     private bool _isAlerted;
     private readonly CountdownTimer _cooldownBeforeChasingTimer;
@@ -20,6 +20,7 @@ public class Witch : Special
     public Witch(Level level, Position position) 
         : base(level, position, SpecialConfigs.Witch)
     {
+        _frame = _idleFrame;
         _isAlerted = false;
         _cooldownBeforeChasingTimer = new CountdownTimer(_chaseDelay);
         _attackDelayTimer = new CountdownTimer(_attackDelay);
