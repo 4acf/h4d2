@@ -8,7 +8,7 @@ namespace H4D2.Entities.Mobs.Zombies.Uncommons;
 
 public abstract class Uncommon : Zombie
 {
-    protected const double _attackRange = 5.0;
+    protected const double _attackRange = 8.0;
     protected const double _attackDelay = 1.0;
     protected const double _pipeBombIdleDistance = 7.5;
     protected const double _bileBombRageDistance = 10.0;

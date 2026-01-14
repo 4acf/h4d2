@@ -8,7 +8,7 @@ public class CommonConfig : ZombieConfig;
 public static class CommonConfigs
 {
     private static readonly BoundingBoxDimensions _boundingBoxDimensions
-        = new(2, 2, 10, H4D2Art.SpriteSize, 7);
+        = new(4, 4, 10, H4D2Art.SpriteSize, 6);
 
     private static readonly BoundingBox _boundingBox
         = new(CollisionGroup.Zombie, _boundingBoxDimensions);

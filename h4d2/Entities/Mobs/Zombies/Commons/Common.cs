@@ -11,7 +11,7 @@ public class Common : Zombie
     private const int _numVariations = 9;
     private const int _minSpeed = 230;
     private const int _maxSpeed = 280;
-    private const double _attackRange = 5.0;
+    private const double _attackRange = 8.0;
     private const double _attackDelay = 1.0;
     private const double _pipeBombIdleDistance = 7.5;
     private const double _bileBombRageDistance = 10.0;

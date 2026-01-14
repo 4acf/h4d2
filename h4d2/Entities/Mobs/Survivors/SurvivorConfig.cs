@@ -15,7 +15,7 @@ public static class SurvivorConfigs
     private const int _whiteSkinColor = 0xffaf80;
     private const int _blackSkinColor = 0x895e46;
     private static readonly BoundingBoxDimensions _boundingBoxDimensions 
-        = new(2, 2, 10, H4D2Art.SpriteSize, 7);
+        = new(4, 4, 10, H4D2Art.SpriteSize, 6);
     private static readonly BoundingBox _boundingBox 
         = new(CollisionGroup.Survivor, _boundingBoxDimensions);
     
