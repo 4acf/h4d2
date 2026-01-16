@@ -237,39 +237,29 @@ public class Level
         return tileType == TileType.Wall || tileType ==  TileType.ZombieWall || tileType == TileType.EdgeWall;
     }
     
-    // these functions are pretty bad right now so clean them up please
     public bool IsBlockedByWall(Entity entity, ReadonlyPosition destination)
     {
-        var ne = entity.BoundingBox.NE(destination.X, destination.Y);
-        var se = entity.BoundingBox.SE(destination.X, destination.Y);
-        var sw = entity.BoundingBox.SW(destination.X, destination.Y);
-        var nw  = entity.BoundingBox.NW(destination.X, destination.Y);
+        var intercardinals = new (double, double)[]
+        {
+            entity.BoundingBox.NE(destination.X, destination.Y),
+            entity.BoundingBox.SE(destination.X, destination.Y),
+            entity.BoundingBox.SW(destination.X, destination.Y),
+            entity.BoundingBox.NW(destination.X, destination.Y)
+        };
 
-        Tile neTile = GetTilePosition(ne);
-        int index = (neTile.Y * Width) + neTile.X;
-        if (IsBlocked(index))
-            return true;
-
-        Tile seTile = GetTilePosition(se);
-        index = (seTile.Y * Width) + seTile.X;
-        if (IsBlocked(index))
-            return true;
-        
-        Tile swTile = GetTilePosition(sw);
-        index = (swTile.Y * Width) + swTile.X;
-        if (IsBlocked(index))
-            return true;
-        
-        Tile nwTile = GetTilePosition(nw);
-        index = (nwTile.Y * Width) + nwTile.X;
-        if (IsBlocked(index))
-            return true;
+        foreach ((double, double) position in intercardinals)
+        {
+            Tile tile = GetTilePosition(position);
+            int index = TileIndex(tile);
+            if (IsBlocked(index))
+                return true;
+        }
         
         return false;
         
         bool IsBlocked(int i)
         {
-            if (index < 0 || index >= TileTypes.Length)
+            if (i < 0 || i >= TileTypes.Length)
                 return true;
             if (TileTypes[i] == TileType.Wall || TileTypes[i] == TileType.EdgeWall)
                 return true;
@@ -281,9 +271,8 @@ public class Level
 
     public bool IsBlockedByWall(ReadonlyPosition destination)
     {
-        int x = (int)Math.Floor((destination.X + TilePhysicalOffset.Item1) / TilePhysicalSize);
-        int y = (int)Math.Floor(-((destination.Y + TilePhysicalOffset.Item2) / TilePhysicalSize));
-        int index = (y * Width) + x;
+        Tile tile = GetTilePosition((destination.X, destination.Y));
+        int index = TileIndex(tile);
         if (index < 0 || index >= TileTypes.Length)
             return true;
         if (TileTypes[index] == TileType.Wall || TileTypes[index] == TileType.ZombieWall)
