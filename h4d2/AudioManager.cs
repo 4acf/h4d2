@@ -1,5 +1,6 @@
 ﻿using H4D2.Infrastructure.H4D2;
 using SFML.Audio;
+using SFML.System;
 
 namespace H4D2;
 
@@ -19,6 +20,7 @@ public sealed class AudioManager
     private readonly Dictionary<Track, Music> _musics;
     private readonly Dictionary<SFX, Sound> _sounds;
     private Music? _currentMusic;
+    private Vector3f _sfxPosition;
     
     private AudioManager()
     {
@@ -40,6 +42,7 @@ public sealed class AudioManager
         }
         
         _currentMusic = null;
+        _sfxPosition = new Vector3f();
     }
     
     public void UpdateMusicVolume(double volume)
@@ -71,11 +74,14 @@ public sealed class AudioManager
         _currentMusic = music;
     }
 
-    public void PlaySFX(SFX sfx)
+    public void PlaySFX(SFX sfx, float x = 0, float y = 0)
     {
         if (!_sounds.TryGetValue(sfx, out var sound))
             return;
         sound.Volume = _SFMLVolume(SFXVolume);
+        _sfxPosition.X = x;
+        _sfxPosition.Y = y;
+        sound.Position = _sfxPosition;
         sound.Play();
     }
 
