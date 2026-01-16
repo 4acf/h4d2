@@ -93,6 +93,7 @@ public sealed class AudioManager
         }
         foreach (KeyValuePair<SFX, Sound> kvp in _sounds)
         {
+            kvp.Value.SoundBuffer.Dispose();
             kvp.Value.Dispose();
         }
     }
