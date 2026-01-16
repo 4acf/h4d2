@@ -48,9 +48,16 @@ public class PauseMenu : Menu
         _mainMenuButton.Render(screen);
     }
 
-    private void _OnResumeButtonClicked(object? sender, EventArgs e) =>
+    private void _OnResumeButtonClicked(object? sender, EventArgs e)
+    {
+        AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
         _RaiseUnpauseSelected(_spawnerView);
-    
-    private void _OnMainMenuButtonClicked(object? sender, EventArgs e) =>
+    }
+
+    private void _OnMainMenuButtonClicked(object? sender, EventArgs e)
+    {
+        AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
         _RaiseMainMenuSelected();
+    }
+    
 }

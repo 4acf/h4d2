@@ -68,7 +68,10 @@ public class LevelCompleteMenu : Menu
         double y = yScalar * (upperYBound - lowerYBound) + lowerYBound;
         return ((int)x, (int)y);
     }
-    
-    private void _OnLevelsButtonClicked(object? sender, EventArgs e) =>
+
+    private void _OnLevelsButtonClicked(object? sender, EventArgs e)
+    {
+        AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
         _RaiseLevelsSelectedFromLevelComplete(_levelID);
+    }
 }

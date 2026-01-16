@@ -44,10 +44,18 @@ public class MainMenu : Menu
         _exitButton.Render(screen);
     }
 
-    private void _OnPlayButtonClicked(object? sender, EventArgs e) =>
+    private void _OnPlayButtonClicked(object? sender, EventArgs e)
+    {
+        AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
         _RaiseLevelsSelected();
-    private void _OnSettingsButtonClicked(object? sender, EventArgs e) =>
+    }
+
+    private void _OnSettingsButtonClicked(object? sender, EventArgs e)
+    {
+        AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
         _RaiseSettingsSelected();
+    }
+
     private void _OnExitButtonClicked(object? sender, EventArgs e) =>
         _RaiseExitSelected();
 }

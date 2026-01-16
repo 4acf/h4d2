@@ -65,7 +65,10 @@ public class SettingsMenu : Menu
 
     private void _OnSFXVolumeSelectorUpdated(object? sender, EventArgs e) =>
         _RaiseSFXVolumeChanged(_sfxVolumeSelector.GetVolume());
-    
-    private void _OnMainMenuButtonClicked(object? sender, EventArgs e) =>
+
+    private void _OnMainMenuButtonClicked(object? sender, EventArgs e)
+    {
+        AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
         _RaiseMainMenuSelected();
+    }
 }
