@@ -38,7 +38,7 @@ public class LevelsMenu : Menu
         _backwardNavigationButton = new Button(ButtonType.Backward, _xEdgePadding, _centeredSmallButtonY);
         _backwardNavigationButton.Clicked += (_, _) =>
         {
-            AudioManager.Instance.PlaySFX(_RandomNavButtonSound());
+            AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
             _page = (LevelCollection.NumLevels + (_page - 1)) % LevelCollection.NumLevels;
             _RefreshPageDetails();
         };
@@ -47,7 +47,7 @@ public class LevelsMenu : Menu
         _forwardNavigationButton = new Button(ButtonType.Forward, forwardButtonX, _centeredSmallButtonY);
         _forwardNavigationButton.Clicked += (_, _) =>
         {
-            AudioManager.Instance.PlaySFX(_RandomNavButtonSound());
+            AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
             _page = (_page + 1) % LevelCollection.NumLevels;
             _RefreshPageDetails();
         };
@@ -113,17 +113,5 @@ public class LevelsMenu : Menu
     {
         AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
         _RaiseMainMenuSelected();
-    }
-
-    private SFX _RandomNavButtonSound()
-    {
-        int randomNumberBetween0and2Inclusive
-            = RandomSingleton.Instance.Next(2);
-        return randomNumberBetween0and2Inclusive switch
-        {
-            0 => SFX.ButtonNavigation1,
-            1 => SFX.ButtonNavigation2,
-            _ => SFX.ButtonNavigation3
-        };
     }
 }

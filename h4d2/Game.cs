@@ -46,7 +46,6 @@ public class Game
 
     private void _InitializeLevel(int level, bool isInGame)
     {
-        AudioManager.Instance.PlayMusic(Track.Gallery);
         LevelConfig config = LevelCollection.Levels[level];
         Bitmap levelBitmap = config.Layout;
         _InitializeCamera(levelBitmap);

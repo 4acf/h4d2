@@ -14,9 +14,6 @@ public enum Track
 public enum SFX
 {
     ButtonDefault,
-    ButtonNavigation1,
-    ButtonNavigation2,
-    ButtonNavigation3,
     ButtonPlay,
     ExplosionSmall,
     ExplosionLarge,
@@ -26,7 +23,16 @@ public enum SFX
     WeaponSmall,
     WeaponLarge,
     PickupConsumable,
-    PickupThrowable
+    PickupThrowable,
+    BileBombLand,
+    MolotovLand,
+    ChargerGrab,
+    Slam,
+    Puke,
+    Spit,
+    WitchAlert,
+    Jump,
+    Hit1
 }
 
 public static class AudioResources
@@ -43,9 +49,6 @@ public static class AudioResources
         => new()
         {
             {SFX.ButtonDefault , $"{Resources.SFXPrefix}button_default.wav"},
-            {SFX.ButtonNavigation1 , $"{Resources.SFXPrefix}button_nav_1.wav"},
-            {SFX.ButtonNavigation2 , $"{Resources.SFXPrefix}button_nav_2.wav"},
-            {SFX.ButtonNavigation3 , $"{Resources.SFXPrefix}button_nav_3.wav"},
             {SFX.ButtonPlay , $"{Resources.SFXPrefix}button_play.wav"},
             {SFX.ExplosionSmall, $"{Resources.SFXPrefix}explosion_small.wav"},
             {SFX.ExplosionLarge, $"{Resources.SFXPrefix}explosion_large.wav"},
@@ -55,6 +58,15 @@ public static class AudioResources
             {SFX.WeaponSmall, $"{Resources.SFXPrefix}weapon_small.wav"},
             {SFX.WeaponLarge, $"{Resources.SFXPrefix}weapon_large.wav"},
             {SFX.PickupConsumable, $"{Resources.SFXPrefix}pickup_consumable.wav"},
-            {SFX.PickupThrowable, $"{Resources.SFXPrefix}pickup_throwable.wav"}
+            {SFX.PickupThrowable, $"{Resources.SFXPrefix}pickup_throwable.wav"},
+            {SFX.BileBombLand, $"{Resources.SFXPrefix}bile_bomb_land.wav"},
+            {SFX.MolotovLand, $"{Resources.SFXPrefix}molotov_land.wav"},
+            {SFX.ChargerGrab, $"{Resources.SFXPrefix}charger_grab.wav"},
+            {SFX.Slam, $"{Resources.SFXPrefix}slam.wav"},
+            {SFX.Puke, $"{Resources.SFXPrefix}puke.wav"},
+            {SFX.Spit, $"{Resources.SFXPrefix}spit.wav"},
+            {SFX.WitchAlert, $"{Resources.SFXPrefix}witch_alert.wav"},
+            {SFX.Jump, $"{Resources.SFXPrefix}jump.wav"},
+            {SFX.Hit1, $"{Resources.SFXPrefix}hit_1.wav"}
         };
 }

@@ -80,17 +80,8 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
       <None Remove="Resources\audio\sfx\button_nav_1.wav" />
-      <Content Include="Resources\audio\sfx\button_nav_1.wav">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
       <None Remove="Resources\audio\sfx\button_nav_2.wav" />
-      <Content Include="Resources\audio\sfx\button_nav_2.wav">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
       <None Remove="Resources\audio\sfx\button_nav_3.wav" />
-      <Content Include="Resources\audio\sfx\button_nav_3.wav">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
       <None Remove="Resources\audio\sfx\button_play.wav" />
       <Content Include="Resources\audio\sfx\button_play.wav">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -137,6 +128,42 @@
       </Content>
       <None Remove="Resources\audio\music\one_bad_tank.ogg" />
       <Content Include="Resources\audio\music\one_bad_tank.ogg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\audio\sfx\bile_bomb_land.wav" />
+      <Content Include="Resources\audio\sfx\bile_bomb_land.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\audio\sfx\charger_grab.wav" />
+      <Content Include="Resources\audio\sfx\charger_grab.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\audio\sfx\hit_1.wav" />
+      <Content Include="Resources\audio\sfx\hit_1.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\audio\sfx\jump.wav" />
+      <Content Include="Resources\audio\sfx\jump.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\audio\sfx\molotov_land.wav" />
+      <Content Include="Resources\audio\sfx\molotov_land.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\audio\sfx\puke.wav" />
+      <Content Include="Resources\audio\sfx\puke.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\audio\sfx\slam.wav" />
+      <Content Include="Resources\audio\sfx\slam.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\audio\sfx\spit.wav" />
+      <Content Include="Resources\audio\sfx\spit.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\audio\sfx\witch_alert.wav" />
+      <Content Include="Resources\audio\sfx\witch_alert.wav">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
