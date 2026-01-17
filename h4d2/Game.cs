@@ -3,6 +3,7 @@ using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 using H4D2.Spawners.SpecialSpawners;
+using SFML.Audio;
 
 namespace H4D2;
 
@@ -134,6 +135,7 @@ public class Game
     
     private void _OnGameOver(object? sender, GameOverEventArgs e) 
     {
+        AudioManager.Instance.PlayMusic(Track.TheMonstersWithin);
         _saveManager.SaveNewLevelRecord(_level.ID, e.TotalElapsedTime);
         _guiManager.ForceNavigateToLevelCompleteMenu(_level.ID, e.TotalElapsedTime);
     }

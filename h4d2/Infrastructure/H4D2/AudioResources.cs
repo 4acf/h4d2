@@ -35,7 +35,8 @@ public static class AudioResources
         => new()
         {
             {Track.Gallery, $"{Resources.MusicPrefix}gallery.ogg"},
-            {Track.OneBadTank, $"{Resources.MusicPrefix}onebadtank.ogg"}
+            {Track.OneBadTank, $"{Resources.MusicPrefix}one_bad_tank.ogg"},
+            {Track.TheMonstersWithin, $"{Resources.MusicPrefix}the_monsters_within.ogg"}
         };
 
     public static Dictionary<SFX, string> LoadSFXPaths()
