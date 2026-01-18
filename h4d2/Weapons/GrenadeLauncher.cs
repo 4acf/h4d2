@@ -14,6 +14,10 @@ public class GrenadeLauncher : Weapon
     public override void Shoot(Position position, double directionRadians)
     {
         if (!CanShoot()) return;
+        
+        (int audioX, int audioY) = Isometric.WorldSpaceToScreenSpace(position.X, position.Y);
+        AudioManager.Instance.PlaySFX(_shootSound, audioX, audioY);
+        
         AmmoLoaded--;
         _shootDelayTimer.Reset();
         for (int i = 0; i < _pellets; i++)

@@ -1,4 +1,6 @@
-﻿namespace H4D2.Weapons;
+﻿using H4D2.Infrastructure.H4D2;
+
+namespace H4D2.Weapons;
 
 public class WeaponConfig
 {
@@ -9,6 +11,7 @@ public class WeaponConfig
     public required double Spread { get; init; }
     public required int Pellets { get; init; }
     public required int Piercing { get; init; }
+    public required SFX ShootSound { get; init; }
 }
 
 public static class WeaponConfigs
@@ -21,7 +24,8 @@ public static class WeaponConfigs
         AmmoPerMagazine = 10,
         Spread = 0.5,
         Pellets = 10,
-        Piercing = 2
+        Piercing = 2,
+        ShootSound = SFX.WeaponLarge
     };
 
     public static readonly WeaponConfig Deagle = new()
@@ -32,7 +36,8 @@ public static class WeaponConfigs
         AmmoPerMagazine = 8,
         Spread = 0.05,
         Pellets = 1,
-        Piercing = 5
+        Piercing = 5,
+        ShootSound = SFX.WeaponSmall
     };
 
     public static readonly WeaponConfig GrenadeLauncher = new()
@@ -43,7 +48,8 @@ public static class WeaponConfigs
         AmmoPerMagazine = 2,
         Spread = 0.0,
         Pellets = 1,
-        Piercing = 0
+        Piercing = 0,
+        ShootSound = SFX.WeaponLarge
     };
 
     public static readonly WeaponConfig HuntingRifle = new()
@@ -54,7 +60,8 @@ public static class WeaponConfigs
         AmmoPerMagazine = 15,
         Spread = 0.0,
         Pellets = 1,
-        Piercing = 5
+        Piercing = 5,
+        ShootSound = SFX.WeaponSmall
     };
 
     public static readonly WeaponConfig M16 = new()
@@ -65,7 +72,8 @@ public static class WeaponConfigs
         AmmoPerMagazine = 30,
         Spread = 0.25,
         Pellets = 1,
-        Piercing = 3
+        Piercing = 3,
+        ShootSound = SFX.WeaponSmall
     };
 
     public static readonly WeaponConfig PumpShotgun = new()
@@ -76,7 +84,8 @@ public static class WeaponConfigs
         AmmoPerMagazine = 8,
         Spread = 0.5,
         Pellets = 10,
-        Piercing = 3
+        Piercing = 3,
+        ShootSound = SFX.WeaponLarge
     };
 
     public static readonly WeaponConfig Uzi = new()
@@ -87,7 +96,8 @@ public static class WeaponConfigs
         AmmoPerMagazine = 50,
         Spread = 0.3,
         Pellets = 1,
-        Piercing = 1
+        Piercing = 1,
+        ShootSound = SFX.WeaponSmall
     };
 
     public static readonly WeaponConfig MegaCoachShotgun = new()
@@ -98,6 +108,7 @@ public static class WeaponConfigs
         AmmoPerMagazine = 100,
         Spread = 0.25,
         Pellets = 15,
-        Piercing = 5
+        Piercing = 5,
+        ShootSound = SFX.WeaponSmall
     };
 }

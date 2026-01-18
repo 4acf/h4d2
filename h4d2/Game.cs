@@ -57,6 +57,7 @@ public class Game
         _screen = new H4D2BitmapCanvas(_screenWidth, _screenHeight, _camera);
         _shadows = new ShadowBitmap(_screenWidth, _screenHeight, _camera);
         _isInGame = isInGame;
+        AudioManager.Instance.SetInGameState(isInGame);
         _isPaused = false;
         _specialSpawner = isInGame ? 
             new SpecialSpawner(_level, config, _camera) :
@@ -66,7 +67,6 @@ public class Game
     private SpecialSpawner _InitializeGameLevel(int level)
     {   
         _InitializeLevel(level, true);
-        AudioManager.Instance.SetInGameState(true);
         return _specialSpawner!;
     }
 

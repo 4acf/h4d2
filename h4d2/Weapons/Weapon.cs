@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Weapons;
@@ -14,7 +15,8 @@ public abstract class Weapon
     protected readonly double _spread;
     protected readonly int _pellets;
     protected readonly int _piercing;
-
+    protected readonly SFX _shootSound;
+    
     protected bool _isReloading = false;
 
     protected readonly CountdownTimer _reloadTimer;
@@ -28,6 +30,7 @@ public abstract class Weapon
         _spread = config.Spread;
         _pellets = config.Pellets;
         _piercing = config.Piercing;
+        _shootSound = config.ShootSound;
 
         AmmoLoaded = config.AmmoPerMagazine;
         _isReloading = false;
@@ -68,6 +71,10 @@ public abstract class Weapon
     public virtual void Shoot(Position position, double directionRadians)
     {
         if (!CanShoot()) return;
+
+        (int audioX, int audioY) = Isometric.WorldSpaceToScreenSpace(position.X, position.Y);
+        AudioManager.Instance.PlaySFX(_shootSound, audioX, audioY);
+        
         AmmoLoaded--;
         _shootDelayTimer.Reset();
         for (int i = 0; i < _pellets; i++)
