@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities.Mobs.Survivors;
 using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Zombies.Specials.Pinners;
@@ -125,6 +126,9 @@ public class Charger : Pinner
         _slamTimer.Update(elapsedTime);
         if (_slamTimer.IsFinished)
         {
+            (int audioX, int audioY) = _audioLocation;
+            AudioManager.Instance.PlaySFX(SFX.Slam, audioX, audioY);
+            
             _pinTarget.HitBy(this);
             _slamTimer.Reset();
         }
@@ -244,6 +248,9 @@ public class Charger : Pinner
 
     private void _Charge()
     {
+        (int audioX, int audioY) = _audioLocation;
+        AudioManager.Instance.PlaySFX(SFX.Puke, audioX, audioY);
+        
         IsCharging = true;
         _speed = _chargeSpeed;
     }
@@ -274,21 +281,31 @@ public class Charger : Pinner
         
         if (_pinTarget == null && entity is Survivor survivor && !survivor.IsPinned)
         {
+            (int audioX, int audioY) = _audioLocation;
+            AudioManager.Instance.PlaySFX(SFX.ChargerGrab, audioX, audioY);
+            
             _Pin(survivor);
             return;
         }
 
         if (_pinTarget != null && entity is Survivor survivor2)
         {
+            (int audioX, int audioY) = _audioLocation;
+            AudioManager.Instance.PlaySFX(SFX.Slam, audioX, audioY);
+            
             // this will stack in certain conditions (e.g. survivor2 is against a wall)
             // i could easily add a cooldown but i'd rather not because its a rare and
             // funny occurrence when a survivor gets crushed and dies instantly
+            
             survivor2.KnockbackHitBy(this);
         }
     }
 
     protected override void _CollideWall(double xComponent, double yComponent, double zComponent)
     {
+        (int audioX, int audioY) = _audioLocation;
+        AudioManager.Instance.PlaySFX(SFX.ChargerGrab, audioX, audioY);
+        
         if (IsCharging)
         {
             _pinTarget?.HitBy(this);

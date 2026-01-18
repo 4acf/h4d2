@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities.Projectiles.ThrowableProjectiles;
 using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 using H4D2.Particles.DebrisParticles.Emitters;
 using H4D2.Particles.DebrisParticles.Granules;
@@ -120,6 +121,9 @@ public class Spitter : Special
     
     private void _Spit()
     {
+        (int audioX, int audioY) = _audioLocation;
+        AudioManager.Instance.PlaySFX(SFX.Spit, audioX, audioY);
+        
         var spit = new SpitProjectile(_level, CenterMass.MutableCopy(), _directionRadians);
         _level.AddProjectile(spit);
     }

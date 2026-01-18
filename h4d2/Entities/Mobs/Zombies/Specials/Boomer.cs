@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 using H4D2.Particles.DebrisParticles;
 
@@ -73,6 +74,9 @@ public class Boomer : Special
         
         if (_attackDelayTimer.IsFinished)
         {
+            (int audioX, int audioY) = _audioLocation;
+            AudioManager.Instance.PlaySFX(SFX.Puke, audioX, audioY);
+            
             _isAttacking = true;
             _attackDelayTimer.Reset();
             _pukeFreezeTimer.Reset();

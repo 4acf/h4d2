@@ -194,6 +194,9 @@ public class Smoker : Pinner
     
     private void _Pin(Survivor survivor)
     {
+        (int audioX, int audioY) = _audioLocation;
+        AudioManager.Instance.PlaySFX(SFX.Spit, audioX, audioY);
+        
         _tongue = new Tongue(_level, CenterMass.MutableCopy(), survivor, _directionRadians);
         _level.AddProjectile(_tongue);
         _isPulling = true;

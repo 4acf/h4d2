@@ -1,6 +1,7 @@
 ﻿using H4D2.Entities.Mobs.Survivors;
 using H4D2.Entities.Projectiles;
 using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Zombies.Specials;
@@ -11,7 +12,7 @@ public class Witch : Special
     private const int _alertedFrame = 0;
     private const double _attackRange = 5.0;
     private const double _attackDelay = 2.0;
-    private const double _chaseDelay = 1.5;
+    private const double _chaseDelay = 2.0;
     
     private bool _isAlerted;
     private readonly CountdownTimer _cooldownBeforeChasingTimer;
@@ -29,6 +30,8 @@ public class Witch : Special
     public void Alert()
     {
         _isAlerted = true;
+        (int audioX, int audioY) = _audioLocation;
+        AudioManager.Instance.PlaySFX(SFX.WitchAlert, audioX, audioY);
     }
 
     public override void HitBy(Projectile projectile)

@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities.Mobs.Survivors;
 using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 
 namespace H4D2.Entities.Mobs.Zombies.Specials.Pinners;
@@ -165,6 +166,9 @@ public class Jockey : Pinner
     
     private void _Jump()
     {
+        (int audioX, int audioY) = _audioLocation;
+        AudioManager.Instance.PlaySFX(SFX.Jump, audioX, audioY);
+        
         _isJumping = true;
         _velocity.X = Math.Cos(_directionRadians) * _jumpSpeedScale;
         _velocity.Y = Math.Sin(_directionRadians) * _jumpSpeedScale;
