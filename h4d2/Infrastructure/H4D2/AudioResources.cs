@@ -1,4 +1,6 @@
-﻿namespace H4D2.Infrastructure.H4D2;
+﻿using System.Collections.Immutable;
+
+namespace H4D2.Infrastructure.H4D2;
 
 public enum Track
 {
@@ -37,16 +39,16 @@ public enum SFX
 
 public static class AudioResources
 {
-    public static Dictionary<Track, string> LoadTrackPaths()
-        => new()
+    public static readonly ImmutableDictionary<Track, string> TrackPaths
+        = new Dictionary<Track, string>
         {
             {Track.Gallery, $"{Resources.MusicPrefix}gallery.ogg"},
             {Track.OneBadTank, $"{Resources.MusicPrefix}one_bad_tank.ogg"},
             {Track.TheMonstersWithin, $"{Resources.MusicPrefix}the_monsters_within.ogg"}
-        };
+        }.ToImmutableDictionary();
 
-    public static Dictionary<SFX, string> LoadSFXPaths()
-        => new()
+    public static readonly ImmutableDictionary<SFX, string> SFXPaths
+        = new Dictionary<SFX, string>
         {
             {SFX.ButtonDefault , $"{Resources.SFXPrefix}button_default.wav"},
             {SFX.ButtonPlay , $"{Resources.SFXPrefix}button_play.wav"},
@@ -68,5 +70,12 @@ public static class AudioResources
             {SFX.WitchAlert, $"{Resources.SFXPrefix}witch_alert.wav"},
             {SFX.Jump, $"{Resources.SFXPrefix}jump.wav"},
             {SFX.Hit1, $"{Resources.SFXPrefix}hit_1.wav"}
-        };
+        }.ToImmutableDictionary();
+    
+    public static readonly ImmutableHashSet<SFX> SoundsUnaffectedByCamera
+        = new HashSet<SFX>
+        {
+            SFX.ButtonDefault,
+            SFX.ButtonPlay
+        }.ToImmutableHashSet();     
 }

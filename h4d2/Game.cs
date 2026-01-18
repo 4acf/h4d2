@@ -41,6 +41,7 @@ public class Game
         _collisionManager = new CollisionManager<CollisionGroup>();
         Collisions.Configure(_collisionManager);
         _camera = new Camera(width, height);
+        AudioManager.Instance.InitCamera(_camera);
         _InitializeLevel(_mainMenuLevelIndex, false);
     }
 

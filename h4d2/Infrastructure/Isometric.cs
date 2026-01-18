@@ -30,6 +30,14 @@ public abstract class Isometric
             ((yScreenPixels / ScaleY) - (xScreenPixels / ScaleX)) / 2
         );
     }
+
+    public static (int, int) WorldSpaceToScreenSpace(double xPos, double yPos)
+    {
+        return (
+            (int)(Math.Floor(xPos - yPos) * ScaleX),
+            (int)(Math.Floor(xPos + yPos) * ScaleY)
+        );
+    }
     
     public void Render(H4D2BitmapCanvas screen)
     {
