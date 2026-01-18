@@ -98,8 +98,12 @@ public abstract class Survivor : Mob
         _UpdateSprite(elapsedTime);
     }
 
+    // todo: refactor these consume/throw functions
     public void ConsumeFirstAidKit()
     {
+        ReadonlyPosition centerMass = CenterMass;
+        (int x, int y) = WorldSpaceToScreenSpace(centerMass.X, centerMass.Y);
+        AudioManager.Instance.PlaySFX(SFX.PickupConsumable, x, y);
         _EmitHealParticles();
         int missingHealth = _maxHealth - _health;
         double healthToRestore = 0.8 * missingHealth;
@@ -108,6 +112,9 @@ public abstract class Survivor : Mob
 
     public void ConsumePills()
     {
+        ReadonlyPosition centerMass = CenterMass;
+        (int x, int y) = WorldSpaceToScreenSpace(centerMass.X, centerMass.Y);
+        AudioManager.Instance.PlaySFX(SFX.PickupConsumable, x, y);
         _EmitHealParticles();
         int missingHealth = _maxHealth - _health;
         int healthToRestore = Math.Min(50, missingHealth);
@@ -116,6 +123,9 @@ public abstract class Survivor : Mob
 
     public void ConsumeAdrenaline()
     {
+        ReadonlyPosition centerMass = CenterMass;
+        (int x, int y) = WorldSpaceToScreenSpace(centerMass.X, centerMass.Y);
+        AudioManager.Instance.PlaySFX(SFX.PickupConsumable, x, y);
         _EmitHealParticles();
         int missingHealth = _maxHealth - _health;
         int healthToRestore = Math.Min(25, missingHealth);
@@ -126,6 +136,9 @@ public abstract class Survivor : Mob
 
     public void ThrowMolotov()
     {
+        ReadonlyPosition centerMass = CenterMass;
+        (int x, int y) = WorldSpaceToScreenSpace(centerMass.X, centerMass.Y);
+        AudioManager.Instance.PlaySFX(SFX.PickupThrowable, x, y);
         var molotovProjectile
             = new MolotovProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians);
         _level.AddProjectile(molotovProjectile);
@@ -133,6 +146,9 @@ public abstract class Survivor : Mob
     
     public void ThrowPipeBomb()
     {
+        ReadonlyPosition centerMass = CenterMass;
+        (int x, int y) = WorldSpaceToScreenSpace(centerMass.X, centerMass.Y);
+        AudioManager.Instance.PlaySFX(SFX.PickupThrowable, x, y);
         var pipeBombProjectile 
             = new PipeBombProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians);
         _level.AddProjectile(pipeBombProjectile);
@@ -140,6 +156,9 @@ public abstract class Survivor : Mob
 
     public void ThrowBileBomb()
     {
+        ReadonlyPosition centerMass = CenterMass;
+        (int x, int y) = WorldSpaceToScreenSpace(centerMass.X, centerMass.Y);
+        AudioManager.Instance.PlaySFX(SFX.PickupThrowable, x, y);
         var bileBombProjectile
             = new BileBombProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians);
         _level.AddProjectile(bileBombProjectile);
