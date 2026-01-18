@@ -453,7 +453,7 @@ public class Level
     public void Explode(Grenade grenade)
     {
         (int audioX, int audioY) = grenade.AudioLocation;
-        AudioManager.Instance.PlaySFX(SFX.ExplosionLarge, audioX, audioY);
+        AudioManager.Instance.PlaySFX(RandomExplosion(), audioX, audioY);
         
         AddParticle(new Explosion(this, grenade.Position.MutableCopy(), Grenade.SplashRadius));
         List<Zombie> zombies = GetLivingMobs<Zombie>();
@@ -465,12 +465,24 @@ public class Level
                 zombie.HitBy(grenade);
             }
         }
+
+        SFX RandomExplosion()
+        {
+            const int numExplosionSounds = 3;
+            int random = RandomSingleton.Instance.Next(numExplosionSounds);
+            return random switch
+            {
+                0 => SFX.Explosion1,
+                1 => SFX.Explosion2,
+                _ => SFX.Explosion3
+            };
+        }
     }
 
     public void Explode(PipeBombProjectile pipeBomb)
     {
         (int audioX, int audioY) = pipeBomb.AudioLocation;
-        AudioManager.Instance.PlaySFX(SFX.ExplosionLarge, audioX, audioY);
+        AudioManager.Instance.PlaySFX(SFX.Explosion1, audioX, audioY);
         
         AddParticle(new Explosion(this, pipeBomb.Position.MutableCopy(), PipeBombProjectile.SplashRadius));
         List<Zombie> zombies = GetLivingMobs<Zombie>();
@@ -487,7 +499,7 @@ public class Level
     public void ExplodeBile(Boomer boomer, double radius)
     {
         (int audioX, int audioY) = boomer.AudioLocation;
-        AudioManager.Instance.PlaySFX(SFX.ExplosionSmall, audioX, audioY);
+        AudioManager.Instance.PlaySFX(SFX.ExplosionBoomer, audioX, audioY);
         
         List<Survivor> survivors = GetLivingMobs<Survivor>();
         foreach (Survivor survivor in survivors)

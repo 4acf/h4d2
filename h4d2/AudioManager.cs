@@ -143,7 +143,7 @@ public sealed class AudioManager
 
     private static bool _IsSoundOnScreen(int xScreenPos, int yScreenPos)
     {
-        const double padding = 16;
+        const double padding = 48;
         if (
             xScreenPos + padding < 0 ||
             yScreenPos + padding < 0 ||

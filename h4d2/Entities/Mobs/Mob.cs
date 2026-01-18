@@ -74,7 +74,9 @@ public abstract class Mob : Entity
         if (this is not Zombie)
         {
             (int audioX, int audioY) = AudioLocation;
-            AudioManager.Instance.PlaySFX(SFX.Hit1, audioX, audioY);
+            SFX randomHitSound =
+                RandomSingleton.Instance.Next(2) == 0 ? SFX.Hit1 : SFX.Hit2;
+            AudioManager.Instance.PlaySFX(randomHitSound, audioX, audioY);
         }
         
         _health -= zombie.Damage;
@@ -102,7 +104,9 @@ public abstract class Mob : Entity
             return;
 
         (int audioX, int audioY) = AudioLocation;
-        AudioManager.Instance.PlaySFX(SFX.Hit1, audioX, audioY);
+        SFX randomHitSound =
+            RandomSingleton.Instance.Next(2) == 0 ? SFX.Hit1 : SFX.Hit2;
+        AudioManager.Instance.PlaySFX(randomHitSound, audioX, audioY);
         
         _hazardDamageTimer.Reset();
         _health -= damage;

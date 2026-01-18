@@ -17,8 +17,10 @@ public enum SFX
 {
     ButtonDefault,
     ButtonPlay,
-    ExplosionSmall,
-    ExplosionLarge,
+    Explosion1,
+    Explosion2,
+    Explosion3,
+    ExplosionBoomer,
     Death1,
     Death2,
     Death3,
@@ -34,7 +36,8 @@ public enum SFX
     Spit,
     WitchAlert,
     Jump,
-    Hit1
+    Hit1,
+    Hit2
 }
 
 public static class AudioResources
@@ -52,8 +55,10 @@ public static class AudioResources
         {
             {SFX.ButtonDefault , $"{Resources.SFXPrefix}button_default.wav"},
             {SFX.ButtonPlay , $"{Resources.SFXPrefix}button_play.wav"},
-            {SFX.ExplosionSmall, $"{Resources.SFXPrefix}explosion_small.wav"},
-            {SFX.ExplosionLarge, $"{Resources.SFXPrefix}explosion_large.wav"},
+            {SFX.Explosion1, $"{Resources.SFXPrefix}explosion_1.wav"},
+            {SFX.Explosion2, $"{Resources.SFXPrefix}explosion_2.wav"},
+            {SFX.Explosion3, $"{Resources.SFXPrefix}explosion_3.wav"},
+            {SFX.ExplosionBoomer, $"{Resources.SFXPrefix}explosion_boomer.wav"},
             {SFX.Death1, $"{Resources.SFXPrefix}death_1.wav"},
             {SFX.Death2, $"{Resources.SFXPrefix}death_2.wav"},
             {SFX.Death3, $"{Resources.SFXPrefix}death_3.wav"},
@@ -69,7 +74,8 @@ public static class AudioResources
             {SFX.Spit, $"{Resources.SFXPrefix}spit.wav"},
             {SFX.WitchAlert, $"{Resources.SFXPrefix}witch_alert.wav"},
             {SFX.Jump, $"{Resources.SFXPrefix}jump.wav"},
-            {SFX.Hit1, $"{Resources.SFXPrefix}hit_1.wav"}
+            {SFX.Hit1, $"{Resources.SFXPrefix}hit_1.wav"},
+            {SFX.Hit2, $"{Resources.SFXPrefix}hit_2.wav"}
         }.ToImmutableDictionary();
     
     public static readonly ImmutableHashSet<SFX> SoundsUnaffectedByCamera

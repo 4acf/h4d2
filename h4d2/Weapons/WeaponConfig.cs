@@ -49,7 +49,7 @@ public static class WeaponConfigs
         Spread = 0.0,
         Pellets = 1,
         Piercing = 0,
-        ShootSound = SFX.WeaponLarge
+        ShootSound = SFX.PickupThrowable
     };
 
     public static readonly WeaponConfig HuntingRifle = new()
