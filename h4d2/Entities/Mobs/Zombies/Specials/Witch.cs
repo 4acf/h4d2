@@ -30,7 +30,7 @@ public class Witch : Special
     public void Alert()
     {
         _isAlerted = true;
-        (int audioX, int audioY) = _audioLocation;
+        (int audioX, int audioY) = AudioLocation;
         AudioManager.Instance.PlaySFX(SFX.WitchAlert, audioX, audioY);
     }
 

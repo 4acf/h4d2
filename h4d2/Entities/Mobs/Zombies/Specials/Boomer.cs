@@ -74,7 +74,7 @@ public class Boomer : Special
         
         if (_attackDelayTimer.IsFinished)
         {
-            (int audioX, int audioY) = _audioLocation;
+            (int audioX, int audioY) = AudioLocation;
             AudioManager.Instance.PlaySFX(SFX.Puke, audioX, audioY);
             
             _isAttacking = true;

@@ -452,6 +452,9 @@ public class Level
     
     public void Explode(Grenade grenade)
     {
+        (int audioX, int audioY) = grenade.AudioLocation;
+        AudioManager.Instance.PlaySFX(SFX.ExplosionLarge, audioX, audioY);
+        
         AddParticle(new Explosion(this, grenade.Position.MutableCopy(), Grenade.SplashRadius));
         List<Zombie> zombies = GetLivingMobs<Zombie>();
         foreach (Zombie zombie in zombies)
@@ -466,6 +469,9 @@ public class Level
 
     public void Explode(PipeBombProjectile pipeBomb)
     {
+        (int audioX, int audioY) = pipeBomb.AudioLocation;
+        AudioManager.Instance.PlaySFX(SFX.ExplosionLarge, audioX, audioY);
+        
         AddParticle(new Explosion(this, pipeBomb.Position.MutableCopy(), PipeBombProjectile.SplashRadius));
         List<Zombie> zombies = GetLivingMobs<Zombie>();
         foreach (Zombie zombie in zombies)
@@ -480,6 +486,9 @@ public class Level
 
     public void ExplodeBile(Boomer boomer, double radius)
     {
+        (int audioX, int audioY) = boomer.AudioLocation;
+        AudioManager.Instance.PlaySFX(SFX.ExplosionSmall, audioX, audioY);
+        
         List<Survivor> survivors = GetLivingMobs<Survivor>();
         foreach (Survivor survivor in survivors)
         {

@@ -59,7 +59,7 @@ public class BileBombProjectile : ThrowableProjectile
         if (_collided)
             return;
 
-        (int audioX, int audioY) = _audioLocation;
+        (int audioX, int audioY) = AudioLocation;
         AudioManager.Instance.PlaySFX(SFX.BileBombLand, audioX, audioY);
         
         base._Collide(entity);

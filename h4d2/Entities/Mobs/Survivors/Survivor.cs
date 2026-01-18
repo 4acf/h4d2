@@ -101,7 +101,7 @@ public abstract class Survivor : Mob
     // todo: refactor these consume/throw functions
     public void ConsumeFirstAidKit()
     {
-        (int audioX, int audioY) = _audioLocation;
+        (int audioX, int audioY) = AudioLocation;
         AudioManager.Instance.PlaySFX(SFX.PickupConsumable, audioX, audioY);
         _EmitHealParticles();
         int missingHealth = _maxHealth - _health;
@@ -111,7 +111,7 @@ public abstract class Survivor : Mob
 
     public void ConsumePills()
     {
-        (int audioX, int audioY) = _audioLocation;
+        (int audioX, int audioY) = AudioLocation;
         AudioManager.Instance.PlaySFX(SFX.PickupConsumable, audioX, audioY);
         _EmitHealParticles();
         int missingHealth = _maxHealth - _health;
@@ -121,7 +121,7 @@ public abstract class Survivor : Mob
 
     public void ConsumeAdrenaline()
     {
-        (int audioX, int audioY) = _audioLocation;
+        (int audioX, int audioY) = AudioLocation;
         AudioManager.Instance.PlaySFX(SFX.PickupConsumable, audioX, audioY);
         _EmitHealParticles();
         int missingHealth = _maxHealth - _health;
@@ -133,7 +133,7 @@ public abstract class Survivor : Mob
 
     public void ThrowMolotov()
     {
-        (int audioX, int audioY) = _audioLocation;
+        (int audioX, int audioY) = AudioLocation;
         AudioManager.Instance.PlaySFX(SFX.PickupThrowable, audioX, audioY);
         var molotovProjectile
             = new MolotovProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians);
@@ -142,7 +142,7 @@ public abstract class Survivor : Mob
     
     public void ThrowPipeBomb()
     {
-        (int audioX, int audioY) = _audioLocation;
+        (int audioX, int audioY) = AudioLocation;
         AudioManager.Instance.PlaySFX(SFX.PickupThrowable, audioX, audioY);
         var pipeBombProjectile 
             = new PipeBombProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians);
@@ -151,7 +151,7 @@ public abstract class Survivor : Mob
 
     public void ThrowBileBomb()
     {
-        (int audioX, int audioY) = _audioLocation;
+        (int audioX, int audioY) = AudioLocation;
         AudioManager.Instance.PlaySFX(SFX.PickupThrowable, audioX, audioY);
         var bileBombProjectile
             = new BileBombProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians);

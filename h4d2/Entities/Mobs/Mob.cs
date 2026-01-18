@@ -73,7 +73,7 @@ public abstract class Mob : Entity
 
         if (this is not Zombie)
         {
-            (int audioX, int audioY) = _audioLocation;
+            (int audioX, int audioY) = AudioLocation;
             AudioManager.Instance.PlaySFX(SFX.Hit1, audioX, audioY);
         }
         
@@ -101,7 +101,7 @@ public abstract class Mob : Entity
         if (!_hazardDamageTimer.IsFinished)
             return;
 
-        (int audioX, int audioY) = _audioLocation;
+        (int audioX, int audioY) = AudioLocation;
         AudioManager.Instance.PlaySFX(SFX.Hit1, audioX, audioY);
         
         _hazardDamageTimer.Reset();

@@ -121,7 +121,7 @@ public class Spitter : Special
     
     private void _Spit()
     {
-        (int audioX, int audioY) = _audioLocation;
+        (int audioX, int audioY) = AudioLocation;
         AudioManager.Instance.PlaySFX(SFX.Spit, audioX, audioY);
         
         var spit = new SpitProjectile(_level, CenterMass.MutableCopy(), _directionRadians);

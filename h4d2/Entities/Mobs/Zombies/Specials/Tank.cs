@@ -59,7 +59,7 @@ public class Tank : Special
         
         if (_attackDelayTimer.IsFinished)
         {
-            (int audioX, int audioY) = _audioLocation;
+            (int audioX, int audioY) = AudioLocation;
             SFX sound = RandomSingleton.Instance.Next() % 2 == 0 ? SFX.Slam : SFX.ChargerGrab;
             AudioManager.Instance.PlaySFX(sound, audioX, audioY);
             

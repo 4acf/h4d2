@@ -189,7 +189,7 @@ public class Hunter : Pinner
     
     private void _Jump()
     {
-        (int audioX, int audioY) = _audioLocation;
+        (int audioX, int audioY) = AudioLocation;
         AudioManager.Instance.PlaySFX(SFX.Jump, audioX, audioY);
         
         _isCrouching = false;

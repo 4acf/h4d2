@@ -16,7 +16,7 @@ public abstract class Entity : Isometric
     
     protected Entity? _collisionExcludedEntity;
     
-    protected (int, int) _audioLocation
+    public (int, int) AudioLocation
     {
         get
         {

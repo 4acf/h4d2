@@ -40,7 +40,7 @@ public class MolotovProjectile : ThrowableProjectile
         }
         else
         {
-            (int audioX, int audioY) = _audioLocation;
+            (int audioX, int audioY) = AudioLocation;
             AudioManager.Instance.PlaySFX(SFX.MolotovLand, audioX, audioY);
             
             for (int i = 0; i < _fuelParticles; i++)
