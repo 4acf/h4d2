@@ -16,6 +16,15 @@ public abstract class Entity : Isometric
     
     protected Entity? _collisionExcludedEntity;
     
+    protected (int, int) _audioLocation
+    {
+        get
+        {
+            ReadonlyPosition centerMass = CenterMass;
+            return WorldSpaceToScreenSpace(centerMass.X, centerMass.Y);
+        }
+    }
+    
     protected Entity(Level level, Position position, BoundingBox boundingBox)
         : base(level, position)
     {
