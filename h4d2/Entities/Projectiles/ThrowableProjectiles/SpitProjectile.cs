@@ -63,9 +63,13 @@ public class SpitProjectile : ThrowableProjectile
 
     protected override void _Collide(Entity? entity)
     {
-        base._Collide(entity);
         if (Removed)
             return;
+        
+        (int audioX, int audioY) = _audioLocation;
+        AudioManager.Instance.PlaySFX(SFX.BileBombLand, audioX, audioY);
+        
+        base._Collide(entity);
         for (int i = 0; i < _numSpitSplatters; i++)
         {
             var spitSplatter = new SpitSplatter(_level, CenterMass.MutableCopy());

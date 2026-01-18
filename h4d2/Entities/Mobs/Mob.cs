@@ -1,5 +1,6 @@
 ﻿using H4D2.Entities.Mobs.Zombies;
 using H4D2.Infrastructure;
+using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 using H4D2.Particles.DebrisParticles;
 using H4D2.Particles.DebrisParticles.Emitters;
@@ -69,6 +70,13 @@ public abstract class Mob : Entity
     {
         if (Removed)
             return;
+
+        if (this is not Zombie)
+        {
+            (int audioX, int audioY) = _audioLocation;
+            AudioManager.Instance.PlaySFX(SFX.Hit1, audioX, audioY);
+        }
+        
         _health -= zombie.Damage;
         if (!IsAlive)
         {
@@ -92,6 +100,10 @@ public abstract class Mob : Entity
             return;
         if (!_hazardDamageTimer.IsFinished)
             return;
+
+        (int audioX, int audioY) = _audioLocation;
+        AudioManager.Instance.PlaySFX(SFX.Hit1, audioX, audioY);
+        
         _hazardDamageTimer.Reset();
         _health -= damage;
         if (!IsAlive)
