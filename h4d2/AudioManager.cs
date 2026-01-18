@@ -13,7 +13,7 @@ public sealed class AudioManager
     
     public double MusicVolume { get; private set; }
     public double SFXVolume { get; private set; }
-
+    
     private static readonly Lazy<AudioManager> _instance =
         new(() => new AudioManager());
     
@@ -24,6 +24,7 @@ public sealed class AudioManager
     private Music? _currentMusic;
     private Vector3f _sfxPosition;
     private Camera? _camera;
+    private bool _isInGame;
     
     private AudioManager()
     {
@@ -47,11 +48,20 @@ public sealed class AudioManager
         _currentMusic = null;
         _sfxPosition = new Vector3f(0, 0, -1);
         _camera = null;
+        _isInGame = false;
     }
 
-    public void InitCamera(Camera camera)
+    public void SetCamera(Camera camera)
     {
+        // i have a setter here intead of making _camera public because 
+        // AudioManager is a global singleton and the camera object doesn't need to be
+        // accessible from everywhere
         _camera = camera;
+    }
+
+    public void SetInGameState(bool isInGame)
+    {
+        _isInGame = isInGame;
     }
     
     public void UpdateMusicVolume(double volume)
@@ -92,7 +102,11 @@ public sealed class AudioManager
         if (!_sounds.TryGetValue(sfx, out var sound))
             return;
         
-        if (_camera != null && !AudioResources.SoundsUnaffectedByCamera.Contains(sfx))
+        bool isUISound = AudioResources.SoundsUnaffectedByCamera.Contains(sfx);
+        if (!isUISound && !_isInGame)
+            return;
+        
+        if (_camera != null && !isUISound)
         {
             xScreenPos += _camera.XOffset;
             yScreenPos += _camera.YOffset;
@@ -151,5 +165,4 @@ public sealed class AudioManager
             ((float)yPos / (int)H4D2.ScreenHeight) * maxValue
         );
     }
-        
 }
