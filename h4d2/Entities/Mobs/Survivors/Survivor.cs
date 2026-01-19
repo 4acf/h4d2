@@ -97,67 +97,62 @@ public abstract class Survivor : Mob
         _UpdatePosition(elapsedTime);
         _UpdateSprite(elapsedTime);
     }
-
-    // todo: refactor these consume/throw functions
+    
     public void ConsumeFirstAidKit()
     {
-        (int audioX, int audioY) = AudioLocation;
-        AudioManager.Instance.PlaySFX(SFX.PickupConsumable, audioX, audioY);
-        _EmitHealParticles();
-        int missingHealth = _maxHealth - _health;
-        double healthToRestore = 0.8 * missingHealth;
-        _health += (int)healthToRestore;
+        _Consume(missingHealth => (int)(0.8 * missingHealth));
     }
 
     public void ConsumePills()
     {
-        (int audioX, int audioY) = AudioLocation;
-        AudioManager.Instance.PlaySFX(SFX.PickupConsumable, audioX, audioY);
-        _EmitHealParticles();
-        int missingHealth = _maxHealth - _health;
-        int healthToRestore = Math.Min(50, missingHealth);
-        _health += healthToRestore;
+        _Consume(missingHealth => Math.Min(50, missingHealth));
     }
 
     public void ConsumeAdrenaline()
     {
+        _Consume(
+            missingHealth => Math.Min(25, missingHealth),
+            () =>
+            {
+                _isAdrenalineBoosted = true;
+                _adrenalineTimer = new CountdownTimer(_adrenalineEffectSeconds);
+            }
+        );
+    }
+
+    private void _Consume(Func<int, int> calculateHealAmount, Action? bonusEffect = null)
+    {
         (int audioX, int audioY) = AudioLocation;
         AudioManager.Instance.PlaySFX(SFX.PickupConsumable, audioX, audioY);
         _EmitHealParticles();
         int missingHealth = _maxHealth - _health;
-        int healthToRestore = Math.Min(25, missingHealth);
+        int healthToRestore = calculateHealAmount(missingHealth);
         _health += healthToRestore;
-        _isAdrenalineBoosted = true;
-        _adrenalineTimer = new CountdownTimer(_adrenalineEffectSeconds);
+        bonusEffect?.Invoke();
     }
-
+    
     public void ThrowMolotov()
     {
-        (int audioX, int audioY) = AudioLocation;
-        AudioManager.Instance.PlaySFX(SFX.PickupThrowable, audioX, audioY);
-        var molotovProjectile
-            = new MolotovProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians);
-        _level.AddProjectile(molotovProjectile);
+        _Throw(new MolotovProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians));
     }
     
     public void ThrowPipeBomb()
     {
-        (int audioX, int audioY) = AudioLocation;
-        AudioManager.Instance.PlaySFX(SFX.PickupThrowable, audioX, audioY);
-        var pipeBombProjectile 
-            = new PipeBombProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians);
-        _level.AddProjectile(pipeBombProjectile);
+        _Throw(new PipeBombProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians));
     }
 
     public void ThrowBileBomb()
     {
-        (int audioX, int audioY) = AudioLocation;
-        AudioManager.Instance.PlaySFX(SFX.PickupThrowable, audioX, audioY);
-        var bileBombProjectile
-            = new BileBombProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians);
-        _level.AddProjectile(bileBombProjectile);
+        _Throw(new BileBombProjectile(_level, CenterMass.MutableCopy(), AimDirectionRadians));
     }
 
+    private void _Throw(ThrowableProjectile throwableProjectile)
+    {
+        (int audioX, int audioY) = AudioLocation;
+        AudioManager.Instance.PlaySFX(SFX.PickupThrowable, audioX, audioY);
+        _level.AddProjectile(throwableProjectile);
+    }
+    
     public void Biled()
     {
         if (!IsBiled)
