@@ -109,9 +109,6 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
       <None Remove="Resources\audio\sfx\weapon_large.wav" />
-      <Content Include="Resources\audio\sfx\weapon_large.wav">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
       <None Remove="Resources\audio\sfx\weapon_small.wav" />
       <Content Include="Resources\audio\sfx\weapon_small.wav">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -184,6 +181,18 @@
       </Content>
       <None Remove="Resources\audio\sfx\slam_3.wav" />
       <Content Include="Resources\audio\sfx\slam_3.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\audio\sfx\weapon_large_1.wav" />
+      <Content Include="Resources\audio\sfx\weapon_large_1.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\audio\sfx\weapon_large_2.wav" />
+      <Content Include="Resources\audio\sfx\weapon_large_2.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\audio\sfx\weapon_large_3.wav" />
+      <Content Include="Resources\audio\sfx\weapon_large_3.wav">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
     </ItemGroup>

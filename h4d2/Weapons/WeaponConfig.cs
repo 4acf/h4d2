@@ -25,7 +25,7 @@ public static class WeaponConfigs
         Spread = 0.5,
         Pellets = 10,
         Piercing = 2,
-        ShootSound = SFX.WeaponLarge
+        ShootSound = SFX.WeaponLarge1
     };
 
     public static readonly WeaponConfig Deagle = new()
@@ -85,7 +85,7 @@ public static class WeaponConfigs
         Spread = 0.5,
         Pellets = 10,
         Piercing = 3,
-        ShootSound = SFX.WeaponLarge
+        ShootSound = SFX.WeaponLarge1
     };
 
     public static readonly WeaponConfig Uzi = new()

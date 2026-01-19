@@ -72,8 +72,12 @@ public abstract class Weapon
     {
         if (!CanShoot()) return;
 
+        SFX shootSound = _shootSound;
+        if (shootSound == SFX.WeaponLarge1)
+            shootSound = RandomWeaponLargeSound();
+        
         (int audioX, int audioY) = Isometric.WorldSpaceToScreenSpace(position.X, position.Y);
-        AudioManager.Instance.PlaySFX(_shootSound, audioX, audioY);
+        AudioManager.Instance.PlaySFX(shootSound, audioX, audioY);
         
         AmmoLoaded--;
         _shootDelayTimer.Reset();
@@ -84,6 +88,20 @@ public abstract class Weapon
             double newDirection = MathHelpers.NormalizeRadians(Math.Atan2(newYComponent, newXComponent));
             var bullet = new Bullet(_level, position.Copy(), _damage, _piercing, newDirection);
             _level.AddProjectile(bullet);
+        }
+
+        return;
+
+        SFX RandomWeaponLargeSound()
+        {
+            const int numWeaponLargeSounds = 3;
+            int random = RandomSingleton.Instance.Next(numWeaponLargeSounds);
+            return random switch
+            {
+                0 => SFX.WeaponLarge1,
+                1 => SFX.WeaponLarge2,
+                _ => SFX.WeaponLarge3
+            };
         }
     }
 
