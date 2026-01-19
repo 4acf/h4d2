@@ -47,6 +47,8 @@ public class Game
 
     private void _InitializeLevel(int level, bool isInGame)
     {
+        if(!isInGame)
+            AudioManager.Instance.PlayMusic(Track.TheParish);
         LevelConfig config = LevelCollection.Levels[level];
         Bitmap levelBitmap = config.Layout;
         _InitializeCamera(levelBitmap);
@@ -66,6 +68,7 @@ public class Game
     
     private SpecialSpawner _InitializeGameLevel(int level)
     {   
+        AudioManager.Instance.PlayMusic(Track.Gallery);
         _InitializeLevel(level, true);
         return _specialSpawner!;
     }

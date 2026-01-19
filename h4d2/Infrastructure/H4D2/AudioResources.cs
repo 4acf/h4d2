@@ -50,7 +50,8 @@ public static class AudioResources
         {
             {Track.Gallery, $"{Resources.MusicPrefix}gallery.ogg"},
             {Track.OneBadTank, $"{Resources.MusicPrefix}one_bad_tank.ogg"},
-            {Track.TheMonstersWithin, $"{Resources.MusicPrefix}the_monsters_within.ogg"}
+            {Track.TheMonstersWithin, $"{Resources.MusicPrefix}the_monsters_within.ogg"},
+            {Track.TheParish, $"{Resources.MusicPrefix}the_parish.ogg"}
         }.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<SFX, string> SFXPaths
