@@ -466,6 +466,8 @@ public class Level
             }
         }
 
+        return;
+        
         SFX RandomExplosion()
         {
             const int numExplosionSounds = 3;

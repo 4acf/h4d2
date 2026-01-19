@@ -127,10 +127,24 @@ public class Charger : Pinner
         if (_slamTimer.IsFinished)
         {
             (int audioX, int audioY) = AudioLocation;
-            AudioManager.Instance.PlaySFX(SFX.Slam, audioX, audioY);
+            AudioManager.Instance.PlaySFX(RandomSlamSound(), audioX, audioY);
             
             _pinTarget.HitBy(this);
             _slamTimer.Reset();
+        }
+
+        return;
+
+        SFX RandomSlamSound()
+        {
+            const int numSlamSounds = 3;
+            int random = RandomSingleton.Instance.Next(numSlamSounds);
+            return random switch
+            {
+                0 => SFX.Slam1,
+                1 => SFX.Slam2,
+                _ => SFX.Slam3
+            };
         }
     }
     
@@ -282,7 +296,7 @@ public class Charger : Pinner
         if (_pinTarget == null && entity is Survivor survivor && !survivor.IsPinned)
         {
             (int audioX, int audioY) = AudioLocation;
-            AudioManager.Instance.PlaySFX(SFX.ChargerGrab, audioX, audioY);
+            AudioManager.Instance.PlaySFX(SFX.Slam1, audioX, audioY);
             
             _Pin(survivor);
             return;
@@ -291,7 +305,7 @@ public class Charger : Pinner
         if (_pinTarget != null && entity is Survivor survivor2)
         {
             (int audioX, int audioY) = AudioLocation;
-            AudioManager.Instance.PlaySFX(SFX.Slam, audioX, audioY);
+            AudioManager.Instance.PlaySFX(SFX.Slam1, audioX, audioY);
             
             // this will stack in certain conditions (e.g. survivor2 is against a wall)
             // i could easily add a cooldown but i'd rather not because its a rare and
@@ -304,7 +318,7 @@ public class Charger : Pinner
     protected override void _CollideWall(double xComponent, double yComponent, double zComponent)
     {
         (int audioX, int audioY) = AudioLocation;
-        AudioManager.Instance.PlaySFX(SFX.ChargerGrab, audioX, audioY);
+        AudioManager.Instance.PlaySFX(SFX.Slam1, audioX, audioY);
         
         if (IsCharging)
         {
