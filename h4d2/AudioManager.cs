@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using H4D2.Infrastructure;
+﻿using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using SFML.Audio;
 using SFML.System;

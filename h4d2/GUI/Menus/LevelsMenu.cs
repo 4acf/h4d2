@@ -10,7 +10,6 @@ public class LevelsMenu : Menu
     private const int _paddingBetweenButtonsY = 2;
     private const int _paddingBetweenHeadersY = 20;
     private const int _mainMenuButtonYOffset = 20;
-    private readonly SaveManager _saveManager;
     private readonly CenteredHeader _levelNameHeader;
     private readonly CenteredSubheader _recordSubheader;
     private readonly Button _backwardNavigationButton;
@@ -20,10 +19,8 @@ public class LevelsMenu : Menu
     private readonly PageViewer _pageViewer;
     private int _page;
     
-    public LevelsMenu(SaveManager saveManager, int width, int height, int page = 0) : base(width, height)
+    public LevelsMenu(int width, int height, int page = 0) : base(width, height)
     {
-        _saveManager = saveManager;
-        
         if (page < 0 || page >= LevelCollection.NumLevels)
             page = 0;
         _page = page;
@@ -96,7 +93,7 @@ public class LevelsMenu : Menu
 
     private string _GetRecordText(int page)
     {
-        double? record = _saveManager.GetLevelRecord(page);
+        double? record = SaveManager.Instance.GetLevelRecord(page);
         if (record == null)
             return "LEVEL NOT COMPLETED";
         string formatted = TimeFormatter.Format(record.Value);

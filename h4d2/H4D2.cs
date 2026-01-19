@@ -43,11 +43,10 @@ public static class H4D2
             input.CaptureEventKeypress(e);
         };
 
-        var saveManager = new SaveManager();
-        AudioManager.Instance.UpdateMusicVolume(saveManager.GetMusicVolume());
-        AudioManager.Instance.UpdateSFXVolume(saveManager.GetSFXVolume());
+        AudioManager.Instance.UpdateMusicVolume(SaveManager.Instance.GetMusicVolume());
+        AudioManager.Instance.UpdateSFXVolume(SaveManager.Instance.GetSFXVolume());
         
-        var game = new Game((int)ScreenWidth, (int)ScreenHeight, saveManager);
+        var game = new Game((int)ScreenWidth, (int)ScreenHeight);
         game.ExitGame += (_, _) =>
         {
             AudioManager.Instance.Close();

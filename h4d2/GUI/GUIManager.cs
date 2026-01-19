@@ -14,14 +14,12 @@ public class GUIManager
     public event EventHandler? ReloadMainMenuRequested;
     public event EventHandler? ExitRequested;
 
-    private readonly SaveManager _saveManager;
     private readonly int _width;
     private readonly int _height;
     private Menu _menu;
     
-    public GUIManager(SaveManager saveManager, int width, int height)
+    public GUIManager(int width, int height)
     {
-        _saveManager = saveManager;
         _width = width;
         _height = height;
         _menu = new MainMenu(width, height);
@@ -48,7 +46,7 @@ public class GUIManager
     
     private void _NavigateToLevels(int page)
     {
-        _menu = new LevelsMenu(_saveManager, _width, _height, page);
+        _menu = new LevelsMenu(_width, _height, page);
         _menu.MainMenuSelected += _NavigateToMainMenu;
         _menu.LevelSelected += _OnLevelSelected;
     }
@@ -66,8 +64,8 @@ public class GUIManager
         _menu = new SettingsMenu(
             _width,
             _height,
-            _saveManager.GetMusicVolume(),
-            _saveManager.GetSFXVolume()
+            SaveManager.Instance.GetMusicVolume(),
+            SaveManager.Instance.GetSFXVolume()
         );
         _menu.MainMenuSelected += _NavigateToMainMenu;
         _menu.MusicVolumeChanged += _OnMusicVolumeChanged;

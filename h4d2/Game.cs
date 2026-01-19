@@ -3,7 +3,6 @@ using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
 using H4D2.Spawners.SpecialSpawners;
-using SFML.Audio;
 
 namespace H4D2;
 
@@ -14,7 +13,6 @@ public class Game
     private const int _mainMenuLevelIndex = 10;
     private readonly int _screenWidth;
     private readonly int _screenHeight;
-    private readonly SaveManager _saveManager;
     private readonly GUIManager _guiManager;
     private readonly Camera _camera;
     private H4D2BitmapCanvas _screen = null!;
@@ -25,12 +23,11 @@ public class Game
     private bool _isInGame;
     private bool _isPaused;
     
-    public Game(int width, int height, SaveManager saveManager)
+    public Game(int width, int height)
     {
         _screenWidth = width;
         _screenHeight = height;
-        _saveManager = saveManager;
-        _guiManager = new GUIManager(saveManager, width, height);
+        _guiManager = new GUIManager(width, height);
         _guiManager.LevelChangeRequested += _InitializeGameLevel;
         _guiManager.MusicVolumeChangeRequested += _OnMusicVolumeChangeRequested;
         _guiManager.SFXVolumeChangeRequested += _OnSFXVolumeChangeRequested;
@@ -119,16 +116,16 @@ public class Game
         _isPaused = !_isPaused;
     }
     
-    private void _OnMusicVolumeChangeRequested(object? sender, MusicVolumeChangedEventArgs e)
+    private static void _OnMusicVolumeChangeRequested(object? sender, MusicVolumeChangedEventArgs e)
     {
         AudioManager.Instance.UpdateMusicVolume(e.MusicVolume);
-        _saveManager.SaveNewMusicVolume(e.MusicVolume);
+        SaveManager.Instance.SaveNewMusicVolume(e.MusicVolume);
     }
 
-    private void _OnSFXVolumeChangeRequested(object? sender, SFXVolumeChangedEventArgs e)
+    private static void _OnSFXVolumeChangeRequested(object? sender, SFXVolumeChangedEventArgs e)
     {
         AudioManager.Instance.UpdateSFXVolume(e.SFXVolume);
-        _saveManager.SaveNewSFXVolume(e.SFXVolume);
+        SaveManager.Instance.SaveNewSFXVolume(e.SFXVolume);
     }
 
     private void _OnReloadMainMenuRequested(object? sender, EventArgs e) =>
@@ -140,7 +137,7 @@ public class Game
     private void _OnGameOver(object? sender, GameOverEventArgs e) 
     {
         AudioManager.Instance.PlayMusic(Track.TheMonstersWithin);
-        _saveManager.SaveNewLevelRecord(_level.ID, e.TotalElapsedTime);
+        SaveManager.Instance.SaveNewLevelRecord(_level.ID, e.TotalElapsedTime);
         _guiManager.ForceNavigateToLevelCompleteMenu(_level.ID, e.TotalElapsedTime);
     }
 

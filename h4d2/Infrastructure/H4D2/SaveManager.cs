@@ -2,7 +2,7 @@
 
 namespace H4D2.Infrastructure.H4D2;
 
-public class SaveManager
+public sealed class SaveManager
 {
     private class SavedSettings
     {
@@ -16,7 +16,12 @@ public class SaveManager
     private readonly SavedSettings _savedSettings;
     private readonly Dictionary<int, double> _levelRecords;
     
-    public SaveManager()
+    private static readonly Lazy<SaveManager> _instance = 
+        new(() => new SaveManager());
+    
+    public static SaveManager Instance => _instance.Value;
+    
+    private SaveManager()
     {
         _CreateFilesIfNotFound();
         
