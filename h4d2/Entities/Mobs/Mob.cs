@@ -120,6 +120,10 @@ public abstract class Mob : Entity
     
     protected virtual void _Die()
     {
+        (int audioX, int audioY) = AudioLocation;
+        SFX randomDeathSound = RandomDeathSound();
+        AudioManager.Instance.PlaySFX(randomDeathSound, audioX, audioY);
+        
         for (int i = 0; i < _gibs; i++)
         {
             Position position = CenterMass.MutableCopy();
@@ -128,5 +132,18 @@ public abstract class Mob : Entity
             _level.AddParticle(deathSplatter);
         }
         Removed = true;
+        return;
+
+        SFX RandomDeathSound()
+        {
+            const int numDeathSounds = 3;
+            int random = RandomSingleton.Instance.Next(numDeathSounds);
+            return random switch
+            {
+                0 => SFX.Death1,
+                1 => SFX.Death2,
+                _ => SFX.Death3
+            };
+        }
     }
 }
