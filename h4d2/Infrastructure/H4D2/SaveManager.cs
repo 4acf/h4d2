@@ -6,18 +6,27 @@ public sealed class SaveManager
 {
     private class SavedSettings
     {
-        public double MusicVolume { get; set; } = 1.0;
-        public double SFXVolume { get; set; } = 1.0;
+        public double MusicVolume { get; set; } = 0.5;
+        public double SFXVolume { get; set; } = 0.5;
     }
     
-    private const string _settingsFilePath = "settings.json";
-    private const string _levelRecordsFilePath = "records.json";
+    private static readonly string _appDataPath = 
+        Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            global::H4D2.H4D2.WindowTitle
+        );  
+    
+    private static readonly string _settingsFilePath = Path.Combine(_appDataPath, "settings.json");
+    private static readonly string _levelRecordsFilePath = Path.Combine(_appDataPath, "records.json");
 
     private readonly SavedSettings _savedSettings;
     private readonly Dictionary<int, double> _levelRecords;
     
     private static readonly Lazy<SaveManager> _instance = 
         new(() => new SaveManager());
+
+    private static readonly JsonSerializerOptions _jsonSerializerOptions = 
+        new() { WriteIndented = true };
     
     public static SaveManager Instance => _instance.Value;
     
@@ -35,7 +44,8 @@ public sealed class SaveManager
     
     public double GetMusicVolume() => _savedSettings.MusicVolume;
     public double GetSFXVolume() => _savedSettings.SFXVolume;
-    public double? GetLevelRecord(int id) => _levelRecords.TryGetValue(id, out double value) ? value : null;
+    public double? GetLevelRecord(int id) => 
+        _levelRecords.TryGetValue(id, out double value) ? value : null;
     
     public void SaveNewMusicVolume(double volume)
     {
@@ -62,26 +72,38 @@ public sealed class SaveManager
 
     private static void _CreateFilesIfNotFound()
     {
+        Directory.CreateDirectory(_appDataPath);
+        
         if (!File.Exists(_settingsFilePath) || new FileInfo(_settingsFilePath).Length == 0)
             File.WriteAllText(
                 _settingsFilePath,
-                JsonSerializer.Serialize(new SavedSettings())
+                JsonSerializer.Serialize(new SavedSettings(), _jsonSerializerOptions)
             );
         
         if (!File.Exists(_levelRecordsFilePath) || new FileInfo(_levelRecordsFilePath).Length == 0)
             File.WriteAllText(
                 _levelRecordsFilePath,
-                JsonSerializer.Serialize(new Dictionary<int, double>())
+                JsonSerializer.Serialize(new Dictionary<int, double>(), _jsonSerializerOptions)
             );
     }
     
     private static T? _ReadFromFile<T>(string filepath)
     {
-        return JsonSerializer.Deserialize<T>(File.ReadAllText(filepath));
+        try
+        {
+            return JsonSerializer.Deserialize<T>(File.ReadAllText(filepath));
+        }
+        catch
+        {
+            return default;
+        }
     }
     
     private static void _WriteToFile<T>(string filepath, T objectToWrite)
     {
-        File.WriteAllText(filepath, JsonSerializer.Serialize(objectToWrite));
+        File.WriteAllText(
+            filepath,
+            JsonSerializer.Serialize(objectToWrite, _jsonSerializerOptions)
+        );
     }
 }
