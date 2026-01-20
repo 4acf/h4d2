@@ -24,6 +24,12 @@ public static class H4D2
             WindowTitle,
             Styles.Close
         );
+
+        Stream iconStream = H4D2Art.GetRandomWindowIcon();
+        Image icon = new Image(iconStream);
+        window.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
+        iconStream.Dispose();
+        
         window.Closed += (sender, _) =>
         {
             AudioManager.Instance.Close();

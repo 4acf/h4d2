@@ -199,6 +199,38 @@
       <Content Include="Resources\audio\music\the_parish.ogg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="Resources\window_icons\bill.png" />
+      <EmbeddedResource Include="Resources\window_icons\bill.png" />
+      <None Remove="Resources\window_icons\boomer.png" />
+      <EmbeddedResource Include="Resources\window_icons\boomer.png" />
+      <None Remove="Resources\window_icons\charger.png" />
+      <EmbeddedResource Include="Resources\window_icons\charger.png" />
+      <None Remove="Resources\window_icons\coach.png" />
+      <EmbeddedResource Include="Resources\window_icons\coach.png" />
+      <None Remove="Resources\window_icons\ellis.png" />
+      <EmbeddedResource Include="Resources\window_icons\ellis.png" />
+      <None Remove="Resources\window_icons\francis.png" />
+      <EmbeddedResource Include="Resources\window_icons\francis.png" />
+      <None Remove="Resources\window_icons\hunter.png" />
+      <EmbeddedResource Include="Resources\window_icons\hunter.png" />
+      <None Remove="Resources\window_icons\jockey.png" />
+      <EmbeddedResource Include="Resources\window_icons\jockey.png" />
+      <None Remove="Resources\window_icons\louis.png" />
+      <EmbeddedResource Include="Resources\window_icons\louis.png" />
+      <None Remove="Resources\window_icons\nick.png" />
+      <EmbeddedResource Include="Resources\window_icons\nick.png" />
+      <None Remove="Resources\window_icons\rochelle.png" />
+      <EmbeddedResource Include="Resources\window_icons\rochelle.png" />
+      <None Remove="Resources\window_icons\smoker.png" />
+      <EmbeddedResource Include="Resources\window_icons\smoker.png" />
+      <None Remove="Resources\window_icons\spitter.png" />
+      <EmbeddedResource Include="Resources\window_icons\spitter.png" />
+      <None Remove="Resources\window_icons\tank.png" />
+      <EmbeddedResource Include="Resources\window_icons\tank.png" />
+      <None Remove="Resources\window_icons\witch.png" />
+      <EmbeddedResource Include="Resources\window_icons\witch.png" />
+      <None Remove="Resources\window_icons\zoey.png" />
+      <EmbeddedResource Include="Resources\window_icons\zoey.png" />
     </ItemGroup>
 
     <ItemGroup>

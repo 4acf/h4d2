@@ -15,12 +15,20 @@ public static class Art
                 throw new Exception($"Resource not found: {resourceName}") : 
                 SKBitmap.Decode(stream);
         }
+        
+        public static Stream LoadEmbeddedResourceAsStream(string resourceName)
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Stream? stream = assembly.GetManifestResourceStream(resourceName);
+            return stream ?? throw new Exception($"Resource not found: {resourceName}");
+        }
     }
 
-    public static Bitmap LoadBitmap(string resourceName)
-    {
-        return new Bitmap(ResourceLoader.LoadEmbeddedResource(resourceName));
-    }
+    public static Bitmap LoadBitmap(string resourceName) => 
+        new (ResourceLoader.LoadEmbeddedResource(resourceName));
+    
+    public static Stream LoadImage(string resourceName) =>
+        ResourceLoader.LoadEmbeddedResourceAsStream(resourceName);
     
     public static Bitmap[][] LoadBitmaps(string resourceName, int spriteSize, int rows, int columns)
     {

@@ -71,6 +71,32 @@ public static class H4D2Art
             public static readonly Bitmap[] Spawner = _smallButtons[1];
         }
     }
+
+    public static Stream GetRandomWindowIcon()
+    {
+        const int numWindowIcons = 16;
+        int random = RandomSingleton.Instance.Next(numWindowIcons);
+        string filename = random switch
+        {
+            0 => $"{Resources.EmbeddedPrefix}.window_icons.coach.png",
+            1 => $"{Resources.EmbeddedPrefix}.window_icons.nick.png",
+            2 => $"{Resources.EmbeddedPrefix}.window_icons.ellis.png",
+            3 => $"{Resources.EmbeddedPrefix}.window_icons.rochelle.png",
+            4 => $"{Resources.EmbeddedPrefix}.window_icons.bill.png",
+            5 => $"{Resources.EmbeddedPrefix}.window_icons.francis.png",
+            6 => $"{Resources.EmbeddedPrefix}.window_icons.louis.png",
+            7 => $"{Resources.EmbeddedPrefix}.window_icons.zoey.png",
+            8 => $"{Resources.EmbeddedPrefix}.window_icons.hunter.png",
+            9 => $"{Resources.EmbeddedPrefix}.window_icons.boomer.png",
+            10 => $"{Resources.EmbeddedPrefix}.window_icons.smoker.png",
+            11 => $"{Resources.EmbeddedPrefix}.window_icons.charger.png",
+            12 => $"{Resources.EmbeddedPrefix}.window_icons.jockey.png",
+            13 => $"{Resources.EmbeddedPrefix}.window_icons.spitter.png",
+            14 => $"{Resources.EmbeddedPrefix}.window_icons.tank.png",
+            _ => $"{Resources.EmbeddedPrefix}.window_icons.witch.png"
+        };
+        return Art.LoadImage(filename);
+    }
     
     private static Bitmap[][] _LoadSurvivors() => 
         Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.survivor.png", SpriteSize, 8, 53);
