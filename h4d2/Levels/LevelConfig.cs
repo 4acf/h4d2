@@ -13,6 +13,7 @@ public class LevelConfig
     public required Bitmap Layout { get; init; }
     public required int MaxConsumables { get; init; }
     public required int MaxThrowables { get; init; }
+    public required ZombieSpawnParams ZombieSpawnParams { get; init; }
     public required ImmutableArray<SurvivorDescriptor> Survivors { get; init; }
     public required ImmutableDictionary<SpecialDescriptor, BuyInfo> BuyableSpecials { get; init; }
     public required ImmutableArray<ConsumableDescriptor> Consumables { get; init; }
@@ -41,6 +42,9 @@ public static class StandardLevelConfig
     public const int MaxConsumables = 3;
     public const int MaxThrowables = 3;
 
+    public static readonly ZombieSpawnParams ZombieSpawnParams =
+        new (20, 50, 5, 15);
+    
     public static readonly ImmutableDictionary<SpecialDescriptor, BuyInfo> BuyableSpecials = 
     new Dictionary<SpecialDescriptor, BuyInfo>
     {
@@ -91,6 +95,7 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[0],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ZombieSpawnParams = StandardLevelConfig.ZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D2Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
             Consumables = StandardLevelConfig.Consumables,
@@ -104,6 +109,7 @@ public static class LevelCollection
           Layout = H4D2Art.LevelLayouts[1],
           MaxConsumables = StandardLevelConfig.MaxConsumables,
           MaxThrowables = StandardLevelConfig.MaxThrowables,
+          ZombieSpawnParams = StandardLevelConfig.ZombieSpawnParams,
           Survivors = StandardLevelConfig.L4D2Survivors,
           BuyableSpecials = StandardLevelConfig.BuyableSpecials,
           Consumables = StandardLevelConfig.Consumables,
@@ -117,6 +123,7 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[2],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ZombieSpawnParams = StandardLevelConfig.ZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D2Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
             Consumables = StandardLevelConfig.Consumables,
@@ -130,6 +137,7 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[3],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ZombieSpawnParams = StandardLevelConfig.ZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D2Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
             Consumables = StandardLevelConfig.Consumables,
@@ -143,6 +151,7 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[4],
             MaxConsumables = StandardLevelConfig.MaxConsumables * 2,
             MaxThrowables = StandardLevelConfig.MaxThrowables * 2,
+            ZombieSpawnParams = StandardLevelConfig.ZombieSpawnParams,
             Survivors = [..Enumerable.Repeat(SurvivorDescriptor.Ellis, 8)],
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
             Consumables = [ConsumableDescriptor.Adrenaline],
@@ -156,6 +165,7 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[5],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ZombieSpawnParams = StandardLevelConfig.ZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D1Survivors,
             BuyableSpecials = 
                 new Dictionary<SpecialDescriptor, BuyInfo>
@@ -177,6 +187,7 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[6],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ZombieSpawnParams = StandardLevelConfig.ZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D1Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
             Consumables = StandardLevelConfig.Consumables,
@@ -190,6 +201,7 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[7],
             MaxConsumables = StandardLevelConfig.MaxConsumables * 2,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ZombieSpawnParams = StandardLevelConfig.ZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D1Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
             Consumables = StandardLevelConfig.Consumables,
@@ -203,6 +215,7 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[8],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ZombieSpawnParams = StandardLevelConfig.ZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D1Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
             Consumables = StandardLevelConfig.Consumables,
@@ -216,6 +229,7 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[9],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ZombieSpawnParams = StandardLevelConfig.ZombieSpawnParams,
             Survivors = [..Enumerable.Repeat(SurvivorDescriptor.Francis, 8)],
             BuyableSpecials = 
                 new Dictionary<SpecialDescriptor, BuyInfo>
@@ -233,6 +247,7 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[10],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ZombieSpawnParams = StandardLevelConfig.ZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D2Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
             Consumables = StandardLevelConfig.Consumables,
@@ -246,6 +261,7 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[11],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ZombieSpawnParams = StandardLevelConfig.ZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D2Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
             Consumables = StandardLevelConfig.Consumables,
@@ -259,6 +275,7 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[12],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ZombieSpawnParams = new ZombieSpawnParams(40, 80, 15, 30),
             Survivors = [..StandardLevelConfig.L4D1Survivors, ..StandardLevelConfig.L4D2Survivors],
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
             Consumables = StandardLevelConfig.Consumables,
@@ -272,6 +289,7 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[13],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ZombieSpawnParams = new ZombieSpawnParams(40, 80, 15, 30),
             Survivors = [..StandardLevelConfig.L4D1Survivors, ..StandardLevelConfig.L4D2Survivors],
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
             Consumables = StandardLevelConfig.Consumables,
@@ -289,6 +307,7 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[14],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ZombieSpawnParams = StandardLevelConfig.ZombieSpawnParams,
             Survivors = [SurvivorDescriptor.MegaCoach],
             BuyableSpecials = new Dictionary<SpecialDescriptor, BuyInfo>
             {

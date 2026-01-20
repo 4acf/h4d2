@@ -41,10 +41,6 @@ public class Level
     private const double _consumableSpawnCooldownSeconds = 30.0;
     private const double _throwableSpawnCooldownSeconds = 30.0;
     private const double _zombieSpawnCooldownSeconds = 1.0 / 60.0;
-    private const int _minZombiesAlive = 20;
-    private const int _minSpawnWaveSize = 5;
-    private const int _maxSpawnWaveSize = 15;
-    private const int _maxZombiesAlive = 50;
     private const int _maxParticles = 10000;
     private const int _commonKillCredit = 5;
     private const int _uncommonKillCredit = 10;
@@ -86,6 +82,7 @@ public class Level
     private readonly Queue<Zombie> _zombieSpawnQueue;
     private readonly EntityCollisionMap _entityCollisionMap;
     private bool _gameOverEventPublished;
+    private readonly ZombieSpawnParams _zombieSpawnParams;
     
     public Level(LevelConfig config, CollisionManager<CollisionGroup> collisionManager, Camera camera)
     {
@@ -111,6 +108,7 @@ public class Level
         _activeConsumableLocations = [];
         _activeThrowableLocations = [];
         _zombieSpawnQueue = [];
+        _zombieSpawnParams = config.ZombieSpawnParams;
         
         var tileTypes = new TileType[Width * Height];
         for (int y = 0; y < Height; y++)
@@ -239,13 +237,13 @@ public class Level
     
     public bool IsBlockedByWall(Entity entity, ReadonlyPosition destination)
     {
-        var intercardinals = new (double, double)[]
-        {
+        (double, double)[] intercardinals =
+        [
             entity.BoundingBox.NE(destination.X, destination.Y),
             entity.BoundingBox.SE(destination.X, destination.Y),
             entity.BoundingBox.SW(destination.X, destination.Y),
             entity.BoundingBox.NW(destination.X, destination.Y)
-        };
+        ];
 
         foreach ((double, double) position in intercardinals)
         {
@@ -717,8 +715,8 @@ public class Level
     public void SpawnZombies()
     {
         int randomNewZombies = 
-            RandomSingleton.Instance.Next(_minSpawnWaveSize, _maxSpawnWaveSize);
-        randomNewZombies = Math.Min(randomNewZombies, _maxZombiesAlive);
+            RandomSingleton.Instance.Next(_zombieSpawnParams.MinSpawnWaveSize, _zombieSpawnParams.MaxSpawnWaveSize);
+        randomNewZombies = Math.Min(randomNewZombies, _zombieSpawnParams.MaxZombiesAlive);
         for (int i = 0; i < randomNewZombies; i++)
         {
             Zombie zombie = _CreateRandomLevelZombie(_RandomZombieSpawnPosition());
@@ -736,7 +734,7 @@ public class Level
         }
         
         List<Zombie> zombies = GetLivingMobs<Zombie>();
-        if (zombies.Count + _zombieSpawnQueue.Count < _minZombiesAlive)
+        if (zombies.Count + _zombieSpawnQueue.Count < _zombieSpawnParams.MinZombiesAlive)
         {
             SpawnZombies();
         }
