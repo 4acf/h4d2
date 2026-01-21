@@ -5,7 +5,6 @@ namespace H4D2.Infrastructure.H4D2;
 public enum Track
 {
     TheParish,
-    PrayForDeath,
     DeadLightDistrict,
     SkinOnOurTeeth,
     Gallery,

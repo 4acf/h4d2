@@ -65,7 +65,8 @@ public class Game
     
     private SpecialSpawner _InitializeGameLevel(int level)
     {   
-        AudioManager.Instance.PlayMusic(Track.Gallery);
+        LevelConfig config = LevelCollection.Levels[level];
+        AudioManager.Instance.PlayMusic(config.MainTheme);
         _InitializeLevel(level, true);
         return _specialSpawner!;
     }

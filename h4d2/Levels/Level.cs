@@ -82,6 +82,7 @@ public class Level
     private readonly Queue<Zombie> _zombieSpawnQueue;
     private readonly EntityCollisionMap _entityCollisionMap;
     private bool _gameOverEventPublished;
+    private bool _oneSurvivorThemePlayed;
     private readonly ZombieSpawnParams _zombieSpawnParams;
     
     public Level(LevelConfig config, CollisionManager<CollisionGroup> collisionManager, Camera camera)
@@ -99,6 +100,7 @@ public class Level
         _levelElements = [];
         CollisionManager = collisionManager;
         _gameOverEventPublished = false;
+        _oneSurvivorThemePlayed = false;
 
         ID = config.ID;
         Width = config.Layout.Width + _padding;
@@ -534,6 +536,7 @@ public class Level
         }
         else
         {
+            _UpdateMusic();
             _UpdateCollisionMap();
             _UpdateEntities(elapsedTime);
             _UpdateParticles(elapsedTime);
@@ -547,6 +550,19 @@ public class Level
         _RenderIsometrics(screen);
     }
 
+    private void _UpdateMusic()
+    {
+        if (_oneSurvivorThemePlayed || _config.OneSurvivorRemainingTheme == null)
+            return;
+        int survivorCount = _entities
+            .OfType<Survivor>()
+            .Count();
+        if (survivorCount != 1)
+            return;
+        AudioManager.Instance.PlayMusic(_config.OneSurvivorRemainingTheme.Value);
+        _oneSurvivorThemePlayed = true;
+    }
+    
     private void _UpdateCollisionMap()
     {
         _entityCollisionMap.Update();
@@ -587,18 +603,7 @@ public class Level
             if (_entities[i].Removed)
             {
                 indicesToRemove.Add(i);
-                if (_entities[i] is Throwable)
-                    _activeThrowableLocations.Remove(
-                        TileIndex(GetTilePosition(_entities[i].CenterMass))
-                    );
-                if (_entities[i] is Consumable)
-                    _activeConsumableLocations.Remove(
-                        TileIndex(GetTilePosition(_entities[i].CenterMass))
-                    );
-                if (_entities[i] is Common)
-                    Credits += _commonKillCredit;
-                if (_entities[i] is Uncommon)
-                    Credits += _uncommonKillCredit;
+                _HandleSpecialCaseEntityRemovals(_entities[i]);
             }
             else
             {
@@ -614,6 +619,29 @@ public class Level
         }
     }
 
+    private void _HandleSpecialCaseEntityRemovals(Entity entity)
+    {
+        switch (entity)
+        {
+            case Throwable:
+                _activeThrowableLocations.Remove(
+                    TileIndex(GetTilePosition(entity.CenterMass))
+                );
+                break;
+            case Consumable:
+                _activeConsumableLocations.Remove(
+                    TileIndex(GetTilePosition(entity.CenterMass))
+                );
+                break;
+            case Common:
+                Credits += _commonKillCredit;
+                break;
+            case Uncommon:
+                Credits += _uncommonKillCredit;
+                break;
+        }
+    }
+    
     private void _UpdateParticles(double elapsedTime)
     {
         var indicesToRemove = new List<int>();
