@@ -6,8 +6,6 @@ namespace H4D2.GUI;
 
 public class SpawnerButton
 {
-    public event EventHandler? Clicked;
-
     public const int Width = H4D2Art.SpawnerButtonWidth;
     public const int Height = H4D2Art.SmallButtonHeight;
     private const int _specialXOffs = 2;

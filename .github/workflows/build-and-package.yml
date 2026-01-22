@@ -21,6 +21,7 @@ jobs:
     env:
       DOTNET_NOLOGO: true
       CONFIGURATION: Release
+      PROJECT_PATH: h4d2/h4d2.csproj
       PUBLISH_DIR: publish/${{ matrix.runtime }}
 
     steps:
@@ -33,11 +34,11 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Restore Dependencies
-        run: dotnet restore
+        run: dotnet restore ${{ env.PROJECT_PATH }}
 
       - name: Publish
         run: >
-          dotnet publish
+          dotnet publish ${{ env.PROJECT_PATH }}
           --no-restore
           --configuration ${{ env.CONFIGURATION }}
           --runtime ${{ matrix.runtime }}
