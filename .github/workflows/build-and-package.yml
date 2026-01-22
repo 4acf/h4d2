@@ -1,0 +1,50 @@
+name: Build and Package
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  build:
+    name: Build for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      include:
+        - os: windows-latest
+          runtime: win-x64
+          artifact-name: h4d2-win-x64
+          self-contained: true
+
+    env:
+      DOTNET_NOLOGO: true
+      CONFIGURATION: Release
+      PUBLISH_DIR: publish/${{ matrix.runtime }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Publish
+        run: >
+          dotnet publish
+          --no-restore
+          --configuration ${{ env.CONFIGURATION }}
+          --runtime ${{ matrix.runtime }}
+          --self-contained ${{ matrix.self-contained }}
+          --output ${{ env.PUBLISH_DIR }}
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: ${{ env.PUBLISH_DIR }}
