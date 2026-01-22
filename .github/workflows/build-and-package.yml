@@ -11,11 +11,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      include:
-        - os: windows-latest
-          runtime: win-x64
-          artifact-name: h4d2-win-x64
-          self-contained: true
+      matrix:
+        include:
+          - os: windows-latest
+            runtime: win-x64
+            artifact-name: h4d2-win-x64
+            self-contained: true
 
     env:
       DOTNET_NOLOGO: true
