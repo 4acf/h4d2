@@ -246,6 +246,14 @@
       <Content Include="Resources\executable_icons\linux\256x256.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="Resources\audio\sfx\special_select.wav" />
+      <Content Include="Resources\audio\sfx\special_select.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Resources\audio\sfx\special_spawn.wav" />
+      <Content Include="Resources\audio\sfx\special_spawn.wav">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

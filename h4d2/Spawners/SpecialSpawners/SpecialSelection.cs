@@ -95,6 +95,10 @@ public class SpecialSelection : ISpecialSelectionView
         level.AddSpecial(special);
         level.SpendCredits(Cost);
         _cooldownTimer.Reset();
+        
+        (int audioX, int audioY) = special.AudioLocation;
+        AudioManager.Instance.PlaySFX(SFX.SpecialSpawn, audioX, audioY);
+        
         return true;
     }
 }

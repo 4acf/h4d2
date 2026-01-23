@@ -39,7 +39,9 @@ public enum SFX
     WitchAlert,
     Jump,
     Hit1,
-    Hit2
+    Hit2,
+    SpecialSelect,
+    SpecialSpawn
 }
 
 public static class AudioResources
@@ -81,13 +83,16 @@ public static class AudioResources
             {SFX.WitchAlert, $"{Resources.SFXPrefix}witch_alert.wav"},
             {SFX.Jump, $"{Resources.SFXPrefix}jump.wav"},
             {SFX.Hit1, $"{Resources.SFXPrefix}hit_1.wav"},
-            {SFX.Hit2, $"{Resources.SFXPrefix}hit_2.wav"}
+            {SFX.Hit2, $"{Resources.SFXPrefix}hit_2.wav"},
+            {SFX.SpecialSpawn, $"{Resources.SFXPrefix}special_spawn.wav"},
+            {SFX.SpecialSelect, $"{Resources.SFXPrefix}special_select.wav"}
         }.ToImmutableDictionary();
     
     public static readonly ImmutableHashSet<SFX> SoundsUnaffectedByCamera
         = new HashSet<SFX>
         {
             SFX.ButtonDefault,
-            SFX.ButtonPlay
+            SFX.ButtonPlay,
+            SFX.SpecialSelect
         }.ToImmutableHashSet();     
 }

@@ -101,6 +101,9 @@ public class SpecialSpawner : ISpecialSpawnerView
         SpecialSelection newSelection = _specialSelections[selection - 1];
         if (!newSelection.IsBuyable(_level.Credits))
             return;
+        
+        AudioManager.Instance.PlaySFX(SFX.SpecialSelect);
+        
         _selected = _selected != newSelection ?
             newSelection :
             null;
