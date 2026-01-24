@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+
+Name=h4d2
+Exec=h4d2
+Icon=h4d2
+Categories=Game
+Keywords=zombie;shooter;arcade;
+NoDisplay=false
+Terminal=false
