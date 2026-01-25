@@ -51,11 +51,21 @@ jobs:
           -p:DebugSymbols=false
           --output ${{ env.PUBLISH_DIR }}
 
+      - name: Install runtime dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt update
+          sudo apt install -y libopenal1
+
       - name: Create AppDir (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: |
           mkdir -p h4d2.AppDir/usr/bin
-          cp -r ${{ env.PUBLISH_DIR }}/* h4d2.AppDir/usr/bin/
+          mkdir -p h4d2.AppDir/usr/lib
+          cp ${{ env.PUBLISH_DIR }}/h4d2 h4d2.AppDir/usr/bin/
+          cp -r ${{ env.PUBLISH_DIR }}/Resources h4d2.AppDir/usr/bin/
+          cp -r ${{ env.PUBLISH_DIR }}/*.so* h4d2.AppDir/usr/lib/
+          cp /usr/lib/x86_64-linux-gnu/libopenal.so.1 h4d2.AppDir/usr/lib/
           cp cd/linux/AppRun h4d2.AppDir/
           chmod +x h4d2.AppDir/AppRun
           cp cd/linux/h4d2.desktop h4d2.AppDir/
