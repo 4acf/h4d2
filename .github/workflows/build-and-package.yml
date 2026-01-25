@@ -66,6 +66,13 @@ jobs:
         run: |
           wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
           chmod +x appimagetool-x86_64.AppImage
+   
+      - name: Install FUSE (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo add-apt-repository universe
+          sudo apt update
+          sudo apt install -y libfuse2t64
 
       - name: Build AppImage (Linux)
         if: matrix.os == 'ubuntu-latest'
