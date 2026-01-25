@@ -91,4 +91,4 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.artifact-name }}
-          path: "*.AppImage"
+          path: "h4d2-linux-x64.AppImage"
