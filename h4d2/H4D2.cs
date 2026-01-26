@@ -22,7 +22,7 @@ public static class H4D2
         var window = new RenderWindow(
             new VideoMode(WindowWidth, WindowHeight),
             WindowTitle,
-            Styles.Close
+            Styles.None
         );
 
         Stream iconStream = H4D2Art.GetRandomWindowIcon();
