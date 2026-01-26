@@ -92,6 +92,9 @@ public sealed class AudioManager
         _currentMusic = music;
     }
 
+    public void PauseMusic() => _currentMusic?.Pause();
+    public void UnpauseMusic() => _currentMusic?.Play();
+    
     public void PlaySFX(
         SFX sfx,
         int xScreenPos = (int)H4D2.ScreenWidth / 2,

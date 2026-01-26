@@ -15,6 +15,8 @@ public class PauseMenu : Menu
     
     public PauseMenu(ISpecialSpawnerView spawnerView, int width, int height) : base(width, height)
     {
+        AudioManager.Instance.PauseMusic();
+        
         _spawnerView = spawnerView;
         
         int headerY = _height - (_height / 3);
@@ -51,12 +53,14 @@ public class PauseMenu : Menu
     private void _OnResumeButtonClicked(object? sender, EventArgs e)
     {
         AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
+        AudioManager.Instance.UnpauseMusic();
         _RaiseUnpauseSelected(_spawnerView);
     }
 
     private void _OnMainMenuButtonClicked(object? sender, EventArgs e)
     {
         AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
+        AudioManager.Instance.UnpauseMusic();
         _RaiseMainMenuSelected();
     }
     
