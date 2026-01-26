@@ -66,10 +66,9 @@ public static class H4D2
         
         while (window.IsOpen)
         {
-            stopwatch.Stop();
             double elapsedTime = stopwatch.Elapsed.TotalSeconds;
-            stopwatch = Stopwatch.StartNew();
-
+            stopwatch.Restart();
+            
             input.Reset();
             window.DispatchEvents();
             input.CaptureRealtimeInputs();
