@@ -1,3 +1,10 @@
+# H4D2
+
+<p align="center">
+  <img src="demo/cinematic.gif" alt="game demonstration">
+</p>
+
+
 H4D2 is a Left 4 Dead 2 demake inspired by Notch's [Herp Fortress](https://www.youtube.com/watch?v=4J_8HkQj9mU).
 You play as the infected and must eliminate all the survivors.
 
@@ -20,7 +27,16 @@ H4D2 however stores your settings and personal level records outside of the down
 
 To fully remove the game from your machine, delete both the downloaded files and the settings/level records data.
 
-# Controls and Gameplay Details
+# Gameplay Preview
+<p align="center">
+  <img src="demo/gameplay-1.gif" alt="a tank chases survivors">
+</p>
+
+<p align="center">
+  <img src="demo/gameplay-2.gif" alt="a charger and smoker pin survivors">
+</p>
+
+# Controls
 - **Move Camera:** `W`, `A`, `S`, `D` or `Arrow Keys`
 - **Pause / Unpause:** `Esc`
 - **Select / Unselect Special Infected:** `1–8 (depending on level)`
@@ -35,8 +51,6 @@ As of v0.1 there are 15 levels. Kill all survivors to complete a level.
 - Playable on: Windows (64-bit) and Linux (64-bit)
 
 Devlogs will be included in future releases.
-
-### DEVELOPER SECTION
 
 # File Structure Overview
 ```
