@@ -247,6 +247,10 @@
       <Content Include="Resources\audio\music\dead_light_district.ogg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="Resources\audio\music\skin_on_your_teeth.ogg" />
+      <Content Include="Resources\audio\music\skin_on_our_teeth.ogg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
