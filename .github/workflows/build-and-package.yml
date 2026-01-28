@@ -21,10 +21,6 @@ jobs:
             runtime: win-x86
             artifact-name: h4d2-win-x86
 
-          - os: ubuntu-latest
-            runtime: linux-x64
-            artifact-name: h4d2-linux-x64
-
     env:
       DOTNET_NOLOGO: true
       CONFIGURATION: Release
@@ -53,58 +49,9 @@ jobs:
           -p:DebugSymbols=false
           --output ${{ env.PUBLISH_DIR }}
 
-      - name: Install runtime dependencies (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo apt update
-          sudo apt install -y libopenal1
-
-      - name: Create AppDir (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          mkdir -p h4d2.AppDir/usr/bin
-          cp -r ${{ env.PUBLISH_DIR }}/* h4d2.AppDir/usr/bin/
-
-          cp -P /usr/lib/x86_64-linux-gnu/libopenal.so* h4d2.AppDir/usr/bin/
-          cp -P /usr/lib/x86_64-linux-gnu/libflac.so* h4d2.AppDir/usr/bin/
-          cp -P /usr/lib/x86_64-linux-gnu/libogg.so* h4d2.AppDir/usr/bin/
-          cp -P /usr/lib/x86_64-linux-gnu/libvorbis.so* h4d2.AppDir/usr/bin/
-          cp -P /usr/lib/x86_64-linux-gnu/libvorbisenc.so* h4d2.AppDir/usr/bin/
-          cp -P /usr/lib/x86_64-linux-gnu/libvorbisfile.so* h4d2.AppDir/usr/bin/
-
-          cp cd/linux/AppRun h4d2.AppDir/
-          chmod +x h4d2.AppDir/AppRun
-          cp cd/linux/h4d2.desktop h4d2.AppDir/
-          cp h4d2/Resources/executable_icons/linux/h4d2.png h4d2.AppDir/
-
-      - name: Download appimagetool (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
-          chmod +x appimagetool-x86_64.AppImage
-   
-      - name: Install FUSE (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo add-apt-repository universe
-          sudo apt update
-          sudo apt install -y libfuse2t64
-
-      - name: Build AppImage (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          ARCH=x86_64 ./appimagetool-x86_64.AppImage h4d2.AppDir h4d2-linux-x64.AppImage
-
-      - name: Upload build artifact (Windows)
+      - name: Upload build artifact
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v6
         with:
           name: ${{ matrix.artifact-name }}
           path: ${{ env.PUBLISH_DIR }}
-
-      - name: Upload build artifact (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v6
-        with:
-          name: ${{ matrix.artifact-name }}
-          path: "h4d2-linux-x64.AppImage"

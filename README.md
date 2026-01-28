@@ -16,14 +16,12 @@ If nothing else it's a good way to kill 20 minutes.
 
 # Installation/Uninstallation
 Download the latest release for your operating system. Supported operating systems are: 
-- Windows (64-bit) 
-- Linux (64-bit)
+- Windows (32 and 64-bit) 
 
-H4D2 does not require installation. You can simply run the .exe if you're on Windows, or run the AppImage if on Linux.
+H4D2 does not require installation. You can simply run the .exe if you're on Windows.
 
 H4D2 however stores your settings and personal level records outside of the downloaded files.
 - On Windows, you can find this data in `AppData/Roaming/h4d2`
-- On Linux, you can usually find this data in `/home/{your username}/.config/h4d2`
 
 To fully remove the game from your machine, delete both the downloaded files and the settings/level records data.
 
@@ -48,7 +46,7 @@ As of v0.1 there are 15 levels. Kill all survivors to complete a level.
 ### v0.1
 - Initial release!
 - 15 playable levels with varying layouts, survivors, and spawnable specials.
-- Playable on: Windows (64-bit) and Linux (64-bit)
+- Playable on: Windows (32 and 64-bit) 
 
 Devlogs will be included in future releases.
 
