@@ -16,17 +16,14 @@ jobs:
           - os: windows-latest
             runtime: win-x64
             artifact-name: h4d2-win-x64
-            self-contained: true
 
           - os: windows-latest
             runtime: win-x86
             artifact-name: h4d2-win-x86
-            self-contained: true
 
           - os: ubuntu-latest
             runtime: linux-x64
             artifact-name: h4d2-linux-x64
-            self-contained: true
 
     env:
       DOTNET_NOLOGO: true
@@ -52,7 +49,7 @@ jobs:
           --no-restore
           --configuration ${{ env.CONFIGURATION }}
           --runtime ${{ matrix.runtime }}
-          --self-contained ${{ matrix.self-contained }}
+          --self-contained
           -p:DebugSymbols=false
           --output ${{ env.PUBLISH_DIR }}
 
@@ -61,11 +58,6 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y libopenal1
-          sudo apt install -y libflac12
-          sudo apt install -y libogg0
-          sudo apt install -y libvorbis0a
-          sudo apt install -y libvorbisenc2
-          sudo apt install -y libvorbisfile3
 
       - name: Create AppDir (Linux)
         if: matrix.os == 'ubuntu-latest'
@@ -73,12 +65,12 @@ jobs:
           mkdir -p h4d2.AppDir/usr/bin
           cp -r ${{ env.PUBLISH_DIR }}/* h4d2.AppDir/usr/bin/
 
-          cp /usr/lib/x86_64-linux-gnu/libopenal.so.1 h4d2.AppDir/usr/bin/
-          cp /usr/lib/x86_64-linux-gnu/libflac.so.12 h4d2.AppDir/usr/bin/
-          cp /usr/lib/x86_64-linux-gnu/libogg.so.0 h4d2.AppDir/usr/bin/
-          cp /usr/lib/x86_64-linux-gnu/libvorbis.so.0 h4d2.AppDir/usr/bin/
-          cp /usr/lib/x86_64-linux-gnu/libvorbisenc.so.2 h4d2.AppDir/usr/bin/
-          cp /usr/lib/x86_64-linux-gnu/libvorbisfile.so.3 h4d2.AppDir/usr/bin/
+          cp -P /usr/lib/x86_64-linux-gnu/libopenal.so* h4d2.AppDir/usr/bin/
+          cp -P /usr/lib/x86_64-linux-gnu/libflac.so* h4d2.AppDir/usr/bin/
+          cp -P /usr/lib/x86_64-linux-gnu/libogg.so* h4d2.AppDir/usr/bin/
+          cp -P /usr/lib/x86_64-linux-gnu/libvorbis.so* h4d2.AppDir/usr/bin/
+          cp -P /usr/lib/x86_64-linux-gnu/libvorbisenc.so* h4d2.AppDir/usr/bin/
+          cp -P /usr/lib/x86_64-linux-gnu/libvorbisfile.so* h4d2.AppDir/usr/bin/
 
           cp cd/linux/AppRun h4d2.AppDir/
           chmod +x h4d2.AppDir/AppRun
