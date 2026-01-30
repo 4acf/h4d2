@@ -53,7 +53,6 @@ public class PauseMenu : Menu
     private void _OnResumeButtonClicked(object? sender, EventArgs e)
     {
         AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
-        AudioManager.Instance.UnpauseMusic();
         _RaiseUnpauseSelected(_spawnerView);
     }
 
