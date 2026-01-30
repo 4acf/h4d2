@@ -67,6 +67,13 @@ public class LevelsMenu : Menu
 
     public override void Update(Input input, double elapsedTime)
     {
+        if (input.IsEscPressed)
+        {
+            AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
+            _RaiseMainMenuSelected();
+            return;
+        }
+        
         _backwardNavigationButton.Update(input);
         _forwardNavigationButton.Update(input);
         _playButton.Update(input);
@@ -91,7 +98,7 @@ public class LevelsMenu : Menu
         _pageViewer.Update(_page);
     }
 
-    private string _GetRecordText(int page)
+    private static string _GetRecordText(int page)
     {
         double? record = SaveManager.Instance.GetLevelRecord(page);
         if (record == null)
