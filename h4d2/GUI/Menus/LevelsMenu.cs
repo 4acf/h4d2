@@ -73,6 +73,12 @@ public class LevelsMenu : Menu
             _RaiseMainMenuSelected();
             return;
         }
+        if (input.IsEnterPressed)
+        {
+            AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
+            _RaiseLevelSelected(_page);
+            return;
+        }
         
         _backwardNavigationButton.Update(input);
         _forwardNavigationButton.Update(input);

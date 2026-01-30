@@ -28,6 +28,13 @@ public class MainMenu : Menu
 
     public override void Update(Input input, double elapsedTime)
     {
+        if (input.IsEnterPressed)
+        {
+            AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
+            _RaiseLevelsSelected();
+            return;
+        }
+        
         _playButton.Update(input);
         _settingsButton.Update(input);
         _exitButton.Update(input);
