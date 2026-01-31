@@ -103,7 +103,7 @@ public static class H4D2Art
     private static Bitmap[][] _LoadCommons() => 
         Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.common.png", SpriteSize, 9, 23);
     private static Bitmap[][] _LoadUncommons() => 
-        Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.uncommon.png", SpriteSize, 5, 23);
+        Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.uncommon.png", SpriteSize, 6, 23);
     private static Bitmap[][] _LoadSpecials() => 
         Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.special.png", SpriteSize, 9, 39);
     private static Bitmap[][] _LoadPickups() => 

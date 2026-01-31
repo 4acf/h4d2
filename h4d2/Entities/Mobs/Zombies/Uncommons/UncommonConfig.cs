@@ -65,4 +65,14 @@ public static class UncommonConfigs
         GibColor = 0xa7a39e,
         BoundingBox = _boundingBox
     };
+
+    public static readonly UncommonConfig JimmyGibbs = new()
+    {
+        Type = 5,
+        Health = 1250,
+        RunSpeed = 250,
+        Damage = _damage,
+        GibColor = 0xa7a39e,
+        BoundingBox = _boundingBox
+    };
 }
