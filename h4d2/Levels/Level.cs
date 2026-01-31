@@ -28,8 +28,6 @@ public class Level
     public const double TilePhysicalSize = 16;
    
     private const int _padding = 2;
-    private const double _consumableSpawnCooldownSeconds = 30.0;
-    private const double _throwableSpawnCooldownSeconds = 30.0;
     private const double _zombieSpawnCooldownSeconds = 1.0 / 60.0;
     private const int _maxParticles = 10000;
     private const int _commonKillCredit = 5;
@@ -77,9 +75,9 @@ public class Level
     public Level(LevelConfig config, CollisionManager<CollisionGroup> collisionManager, Camera camera)
     {
         _config = config;
-        _consumableSpawnTimer = new CountdownTimer(_consumableSpawnCooldownSeconds);
-        _throwableSpawnTimer = new CountdownTimer(_throwableSpawnCooldownSeconds);
-        _throwableSpawnTimer.Update(_throwableSpawnCooldownSeconds / 2.0);
+        _consumableSpawnTimer = new CountdownTimer(config.ConsumableRespawnTime);
+        _throwableSpawnTimer = new CountdownTimer(config.ThrowableRespawnTime);
+        _throwableSpawnTimer.Update(config.ThrowableRespawnTime / 2.0);
         _zombieSpawnTimer = new CountdownTimer(_zombieSpawnCooldownSeconds);
         
         _entities = [];
