@@ -35,18 +35,14 @@ public class LevelsMenu : Menu
         _backwardNavigationButton = new Button(ButtonType.Backward, _xEdgePadding, _centeredSmallButtonY);
         _backwardNavigationButton.Clicked += (_, _) =>
         {
-            AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
-            _page = (LevelCollection.NumLevels + (_page - 1)) % LevelCollection.NumLevels;
-            _RefreshPageDetails();
+            _OnBackwardNavigationButtonClicked();
         };
         
         int forwardButtonX = width - _xEdgePadding - H4D2Art.SmallButtonWidth;
         _forwardNavigationButton = new Button(ButtonType.Forward, forwardButtonX, _centeredSmallButtonY);
         _forwardNavigationButton.Clicked += (_, _) =>
         {
-            AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
-            _page = (_page + 1) % LevelCollection.NumLevels;
-            _RefreshPageDetails();
+            _OnForwardNavigationButtonClicked();
         };
         
         int mainMenuButtonY = (height / 3) - _mainMenuButtonYOffset;
@@ -67,6 +63,28 @@ public class LevelsMenu : Menu
 
     public override void Update(Input input, double elapsedTime)
     {
+        if (input.IsEscPressed)
+        {
+            AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
+            _RaiseMainMenuSelected();
+            return;
+        }
+        
+        if (input.IsEnterPressed)
+        {
+            AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
+            _RaiseLevelSelected(_page);
+            return;
+        }
+
+        if (input.LevelMenuNavigationState != LevelMenuNavigationState.Idle)
+        {
+            if(input.LevelMenuNavigationState == LevelMenuNavigationState.Backward)
+                _OnBackwardNavigationButtonClicked();
+            else
+                _OnForwardNavigationButtonClicked();
+        }
+        
         _backwardNavigationButton.Update(input);
         _forwardNavigationButton.Update(input);
         _playButton.Update(input);
@@ -91,7 +109,7 @@ public class LevelsMenu : Menu
         _pageViewer.Update(_page);
     }
 
-    private string _GetRecordText(int page)
+    private static string _GetRecordText(int page)
     {
         double? record = SaveManager.Instance.GetLevelRecord(page);
         if (record == null)
@@ -110,5 +128,19 @@ public class LevelsMenu : Menu
     {
         AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
         _RaiseMainMenuSelected();
+    }
+
+    private void _OnBackwardNavigationButtonClicked()
+    {
+        AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
+        _page = (LevelCollection.NumLevels + (_page - 1)) % LevelCollection.NumLevels;
+        _RefreshPageDetails();
+    }
+
+    private void _OnForwardNavigationButtonClicked()
+    {
+        AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
+        _page = (_page + 1) % LevelCollection.NumLevels;
+        _RefreshPageDetails();
     }
 }

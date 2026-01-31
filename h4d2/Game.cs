@@ -1,4 +1,5 @@
-﻿using H4D2.GUI;
+﻿using System.Diagnostics;
+using H4D2.GUI;
 using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
@@ -22,6 +23,7 @@ public class Game
     private SpecialSpawner? _specialSpawner;
     private bool _isInGame;
     private bool _isPaused;
+    private Stopwatch? _stopwatch;
     
     public Game(int width, int height)
     {
@@ -68,6 +70,8 @@ public class Game
         LevelConfig config = LevelCollection.Levels[level];
         AudioManager.Instance.PlayMusic(config.MainTheme);
         _InitializeLevel(level, true);
+        _stopwatch = new Stopwatch();
+        _stopwatch.Start();
         return _specialSpawner!;
     }
 
@@ -115,6 +119,10 @@ public class Game
         if (!_isInGame)
             return;
         _isPaused = !_isPaused;
+        if(_isPaused)
+            _stopwatch?.Stop();
+        else
+            _stopwatch?.Start();
     }
     
     private static void _OnMusicVolumeChangeRequested(object? sender, MusicVolumeChangedEventArgs e)
@@ -135,14 +143,17 @@ public class Game
     private void _OnExitRequested(object? sender, EventArgs e) =>
         ExitGame?.Invoke(this, EventArgs.Empty);
     
-    private void _OnGameOver(object? sender, GameOverEventArgs e) 
+    private void _OnGameOver(object? sender, EventArgs e) 
     {
+        double totalElapsedTime = _stopwatch != null ? 
+            _stopwatch.Elapsed.TotalSeconds : 0;
         AudioManager.Instance.PlayMusic(Track.TheMonstersWithin);
-        SaveManager.Instance.SaveNewLevelRecord(_level.ID, e.TotalElapsedTime);
-        _guiManager.ForceNavigateToLevelCompleteMenu(_level.ID, e.TotalElapsedTime);
+        SaveManager.Instance.SaveNewLevelRecord(_level.ID, totalElapsedTime);
+        _guiManager.ForceNavigateToLevelCompleteMenu(_level.ID, totalElapsedTime);
+        _stopwatch = null;
     }
 
-    private void _OnMainMenuGameOver(object? sender, GameOverEventArgs e) =>
+    private void _OnMainMenuGameOver(object? sender, EventArgs e) =>
         _InitializeLevel(_mainMenuLevelIndex, false);
 
 }

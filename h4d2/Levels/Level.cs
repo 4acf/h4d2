@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Diagnostics;
 using H4D2.Entities;
 using H4D2.Entities.Hazards;
 using H4D2.Entities.Mobs;
@@ -22,18 +21,9 @@ using H4D2.Spawners.SpecialSpawners;
 
 namespace H4D2.Levels;
 
-public class GameOverEventArgs : EventArgs
-{
-    public readonly double TotalElapsedTime;
-    public GameOverEventArgs(double totalElapsedTime)
-    {
-        TotalElapsedTime = totalElapsedTime;
-    }
-}
-
 public class Level
 {
-    public event EventHandler<GameOverEventArgs>? GameOver;
+    public event EventHandler? GameOver;
     
     public const double TilePhysicalSize = 16;
    
@@ -66,7 +56,6 @@ public class Level
     private readonly CountdownTimer _consumableSpawnTimer;
     private readonly CountdownTimer _throwableSpawnTimer;
     private readonly CountdownTimer _zombieSpawnTimer;
-    private readonly Stopwatch _stopwatch;
 
     public bool IsGameOver => GetLivingMobs<Survivor>().Count == 0;
     public int Credits { get; private set; }
@@ -92,8 +81,6 @@ public class Level
         _throwableSpawnTimer = new CountdownTimer(_throwableSpawnCooldownSeconds);
         _throwableSpawnTimer.Update(_throwableSpawnCooldownSeconds / 2.0);
         _zombieSpawnTimer = new CountdownTimer(_zombieSpawnCooldownSeconds);
-        _stopwatch = new Stopwatch();
-        _stopwatch.Start();
         
         _entities = [];
         _particles = [];
@@ -529,9 +516,7 @@ public class Level
             if (_gameOverEventPublished)
                 return;
             _UpdateEntities(elapsedTime);
-            _stopwatch.Stop();
-            double totalElapsedTime = _stopwatch.Elapsed.TotalSeconds;
-            GameOver?.Invoke(this, new GameOverEventArgs(totalElapsedTime));
+            GameOver?.Invoke(this, EventArgs.Empty);
             _gameOverEventPublished = true;
         }
         else
