@@ -54,6 +54,34 @@ public static class Art
         
         return result;
     }
+
+    public static Bitmap[][] LoadBitmaps(string resourceName, int spriteSize, int rows, int[] columnSizes)
+    {
+        if(rows != columnSizes.Length)
+            throw new ArgumentException("Number of rows does not equal length of columnSizes");
+        
+        var result = new Bitmap[rows][];
+        for (int i = 0; i < rows; i++)
+        {
+            result[i] = new Bitmap[columnSizes[i]];
+        }
+        
+        SKBitmap fullResourceBitmap = ResourceLoader.LoadEmbeddedResource(resourceName);
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columnSizes[i]; j++)
+            {
+                result[i][j] = new Bitmap(
+                    fullResourceBitmap,
+                    spriteSize,
+                    i,
+                    j
+                );
+            }
+        }
+        
+        return result;
+    }
     
     public static Bitmap[][] LoadBitmaps(string resourceName, int spriteWidth, int spriteHeight, int rows, int columns)
     {
