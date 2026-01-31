@@ -55,8 +55,8 @@ public static class StandardLevelConfig
     {
         {SpecialDescriptor.Boomer, new BuyInfo(30, 10.0)},
         {SpecialDescriptor.Spitter, new BuyInfo(50, 15.0)},
-        {SpecialDescriptor.Hunter, new BuyInfo(100, 15.0)},
-        {SpecialDescriptor.Jockey, new BuyInfo(125, 15.0)},
+        {SpecialDescriptor.Jockey, new BuyInfo(100, 15.0)},
+        {SpecialDescriptor.Hunter, new BuyInfo(125, 15.0)},
         {SpecialDescriptor.Charger, new BuyInfo(150, 10.0)},
         {SpecialDescriptor.Smoker, new BuyInfo(250, 20.0)},
         {SpecialDescriptor.Tank, new BuyInfo(1000, 15.0)},
@@ -342,13 +342,8 @@ public static class LevelCollection
             Survivors = [SurvivorDescriptor.MegaCoach],
             BuyableSpecials = new Dictionary<SpecialDescriptor, BuyInfo>
             {
-                {SpecialDescriptor.Boomer, new BuyInfo(30, 10.0)},
-                {SpecialDescriptor.Spitter, new BuyInfo(50, 15.0)},
-                {SpecialDescriptor.Hunter, new BuyInfo(100, 15.0)},
-                {SpecialDescriptor.Jockey, new BuyInfo(125, 15.0)},
-                {SpecialDescriptor.Charger, new BuyInfo(150, 10.0)},
-                {SpecialDescriptor.Tank, new BuyInfo(1000, 15.0)},
-                {SpecialDescriptor.Witch, new BuyInfo(1250, 30.0)}
+                {SpecialDescriptor.Spitter, new BuyInfo(5, 2.0)},
+                {SpecialDescriptor.Tank, new BuyInfo(10, 0.0)}
             }.ToImmutableDictionary(),
             Consumables = [ConsumableDescriptor.FirstAidKit, ConsumableDescriptor.Pills],
             Throwables = StandardLevelConfig.Throwables,
