@@ -771,6 +771,11 @@ public class Level
     
     private Zombie _CreateRandomLevelZombie(Position position)
     {
+        if (Probability.OneIn(10000))
+        {
+            return UncommonSpawner.SpawnJimmyGibbs(this, position);
+        }
+        
         if(Probability.Percent(95))
             return new Common(this, position);
         int randomUncommonIndex = RandomSingleton.Instance.Next(_config.Uncommons.Length);
