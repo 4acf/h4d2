@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Diagnostics;
 using H4D2.Entities;
 using H4D2.Entities.Hazards;
 using H4D2.Entities.Mobs;
@@ -22,26 +21,14 @@ using H4D2.Spawners.SpecialSpawners;
 
 namespace H4D2.Levels;
 
-public class GameOverEventArgs : EventArgs
-{
-    public readonly double TotalElapsedTime;
-    public GameOverEventArgs(double totalElapsedTime)
-    {
-        TotalElapsedTime = totalElapsedTime;
-    }
-}
-
 public class Level
 {
-    public event EventHandler<GameOverEventArgs>? GameOver;
+    public event EventHandler? GameOver;
     
     public const double TilePhysicalSize = 16;
    
     private const int _padding = 2;
-    private const double _consumableSpawnCooldownSeconds = 30.0;
-    private const double _throwableSpawnCooldownSeconds = 30.0;
     private const double _zombieSpawnCooldownSeconds = 1.0 / 60.0;
-    private const int _maxParticles = 10000;
     private const int _commonKillCredit = 5;
     private const int _uncommonKillCredit = 10;
     private const double _mobSpawnXOffset = 5.5;
@@ -66,7 +53,6 @@ public class Level
     private readonly CountdownTimer _consumableSpawnTimer;
     private readonly CountdownTimer _throwableSpawnTimer;
     private readonly CountdownTimer _zombieSpawnTimer;
-    private readonly Stopwatch _stopwatch;
 
     public bool IsGameOver => GetLivingMobs<Survivor>().Count == 0;
     public int Credits { get; private set; }
@@ -88,12 +74,10 @@ public class Level
     public Level(LevelConfig config, CollisionManager<CollisionGroup> collisionManager, Camera camera)
     {
         _config = config;
-        _consumableSpawnTimer = new CountdownTimer(_consumableSpawnCooldownSeconds);
-        _throwableSpawnTimer = new CountdownTimer(_throwableSpawnCooldownSeconds);
-        _throwableSpawnTimer.Update(_throwableSpawnCooldownSeconds / 2.0);
+        _consumableSpawnTimer = new CountdownTimer(config.ConsumableRespawnTime);
+        _throwableSpawnTimer = new CountdownTimer(config.ThrowableRespawnTime);
+        _throwableSpawnTimer.Update(config.ThrowableRespawnTime / 2.0);
         _zombieSpawnTimer = new CountdownTimer(_zombieSpawnCooldownSeconds);
-        _stopwatch = new Stopwatch();
-        _stopwatch.Start();
         
         _entities = [];
         _particles = [];
@@ -441,8 +425,7 @@ public class Level
     
     public void AddParticle(Particle particle)
     {
-        if(_particles.Count < _maxParticles)
-            _particles.Add(particle);
+        _particles.Add(particle);
     }
 
     public void AddSpecial(Special special)
@@ -529,9 +512,7 @@ public class Level
             if (_gameOverEventPublished)
                 return;
             _UpdateEntities(elapsedTime);
-            _stopwatch.Stop();
-            double totalElapsedTime = _stopwatch.Elapsed.TotalSeconds;
-            GameOver?.Invoke(this, new GameOverEventArgs(totalElapsedTime));
+            GameOver?.Invoke(this, EventArgs.Empty);
             _gameOverEventPublished = true;
         }
         else
@@ -786,6 +767,11 @@ public class Level
     
     private Zombie _CreateRandomLevelZombie(Position position)
     {
+        if (Probability.OneIn(10000))
+        {
+            return UncommonSpawner.SpawnJimmyGibbs(this, position);
+        }
+        
         if(Probability.Percent(95))
             return new Common(this, position);
         int randomUncommonIndex = RandomSingleton.Instance.Next(_config.Uncommons.Length);

@@ -33,7 +33,7 @@ public class PauseMenu : Menu
 
     public override void Update(Input input, double elapsedTime)
     {
-        if (input.IsEscPressed)
+        if (input.IsEscPressed || input.IsEnterPressed)
         {
             _RaiseUnpauseSelected(_spawnerView);
             return;
@@ -53,7 +53,6 @@ public class PauseMenu : Menu
     private void _OnResumeButtonClicked(object? sender, EventArgs e)
     {
         AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
-        AudioManager.Instance.UnpauseMusic();
         _RaiseUnpauseSelected(_spawnerView);
     }
 

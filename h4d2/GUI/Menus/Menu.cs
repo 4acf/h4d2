@@ -48,8 +48,13 @@ public abstract class Menu
         MainMenuSelected?.Invoke(this, EventArgs.Empty);
     protected void _RaisePauseSelected(ISpecialSpawnerView spawnerView) =>
         PauseSelected?.Invoke(this, new PauseToggleEventArgs(spawnerView));
-    protected void _RaiseUnpauseSelected(ISpecialSpawnerView spawnerView) =>
+
+    protected void _RaiseUnpauseSelected(ISpecialSpawnerView spawnerView)
+    {
+        AudioManager.Instance.UnpauseMusic();
         UnpauseSelected?.Invoke(this, new PauseToggleEventArgs(spawnerView));
+    }
+
     protected void _RaiseMusicVolumeChanged(double volume) =>
         MusicVolumeChanged?.Invoke(this, new MusicVolumeChangedEventArgs(volume));
     protected void _RaiseSFXVolumeChanged(double volume) =>

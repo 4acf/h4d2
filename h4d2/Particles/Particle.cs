@@ -1,9 +1,5 @@
 ﻿using H4D2.Infrastructure;
 using H4D2.Levels;
-using H4D2.Particles.Clouds.Cloudlets;
-using H4D2.Particles.DebrisParticles;
-using H4D2.Particles.DebrisParticles.Granules;
-using H4D2.Particles.Smokes;
 
 namespace H4D2.Particles;
 
@@ -16,6 +12,9 @@ public abstract class Particle : Isometric
     {
         
     }
-    
-    public abstract void Update(double elapsedTime);
+
+    public virtual void Update(double elapsedTime)
+    {
+        
+    }
 }

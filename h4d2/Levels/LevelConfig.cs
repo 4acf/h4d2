@@ -13,6 +13,8 @@ public class LevelConfig
     public required Bitmap Layout { get; init; }
     public required int MaxConsumables { get; init; }
     public required int MaxThrowables { get; init; }
+    public required double ConsumableRespawnTime { get; init; }
+    public double ThrowableRespawnTime { get; init; }
     public required ZombieSpawnParams ZombieSpawnParams { get; init; }
     public required ImmutableArray<SurvivorDescriptor> Survivors { get; init; }
     public required ImmutableDictionary<SpecialDescriptor, BuyInfo> BuyableSpecials { get; init; }
@@ -43,7 +45,9 @@ public static class StandardLevelConfig
 
     public const int MaxConsumables = 3;
     public const int MaxThrowables = 3;
-
+    public const double ConsumableRespawnTime = 30.0;
+    public const double ThrowableRespawnTime = 30.0;
+    
     public static readonly ZombieSpawnParams DefaultZombieSpawnParams =
         new (20, 50, 5, 15);
 
@@ -55,8 +59,8 @@ public static class StandardLevelConfig
     {
         {SpecialDescriptor.Boomer, new BuyInfo(30, 10.0)},
         {SpecialDescriptor.Spitter, new BuyInfo(50, 15.0)},
-        {SpecialDescriptor.Hunter, new BuyInfo(100, 15.0)},
-        {SpecialDescriptor.Jockey, new BuyInfo(125, 15.0)},
+        {SpecialDescriptor.Jockey, new BuyInfo(100, 15.0)},
+        {SpecialDescriptor.Hunter, new BuyInfo(125, 15.0)},
         {SpecialDescriptor.Charger, new BuyInfo(150, 10.0)},
         {SpecialDescriptor.Smoker, new BuyInfo(250, 20.0)},
         {SpecialDescriptor.Tank, new BuyInfo(1000, 15.0)},
@@ -100,6 +104,8 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[0],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
+            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
             ZombieSpawnParams = StandardLevelConfig.DefaultZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D2Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
@@ -116,6 +122,8 @@ public static class LevelCollection
           Layout = H4D2Art.LevelLayouts[1],
           MaxConsumables = StandardLevelConfig.MaxConsumables,
           MaxThrowables = StandardLevelConfig.MaxThrowables,
+          ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
+          ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
           ZombieSpawnParams = StandardLevelConfig.DefaultZombieSpawnParams,
           Survivors = StandardLevelConfig.L4D2Survivors,
           BuyableSpecials = StandardLevelConfig.BuyableSpecials,
@@ -132,6 +140,8 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[2],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
+            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
             ZombieSpawnParams = StandardLevelConfig.DefaultZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D2Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
@@ -148,6 +158,8 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[3],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
+            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
             ZombieSpawnParams = StandardLevelConfig.DefaultZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D2Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
@@ -164,6 +176,8 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[4],
             MaxConsumables = StandardLevelConfig.MaxConsumables * 4,
             MaxThrowables = StandardLevelConfig.MaxThrowables * 2,
+            ConsumableRespawnTime = 5.0,
+            ThrowableRespawnTime = 5.0,
             ZombieSpawnParams = StandardLevelConfig.DefaultZombieSpawnParams,
             Survivors = [..Enumerable.Repeat(SurvivorDescriptor.Ellis, 8)],
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
@@ -179,6 +193,8 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[5],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
+            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
             ZombieSpawnParams = StandardLevelConfig.DefaultZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D1Survivors,
             BuyableSpecials = 
@@ -201,8 +217,10 @@ public static class LevelCollection
             ID = 6,
             Name = "Party Room",
             Layout = H4D2Art.LevelLayouts[6],
-            MaxConsumables = StandardLevelConfig.MaxConsumables,
+            MaxConsumables = StandardLevelConfig.MaxConsumables * 2,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
+            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
             ZombieSpawnParams = StandardLevelConfig.DefaultZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D1Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
@@ -217,8 +235,10 @@ public static class LevelCollection
             ID = 7,
             Name = "Mercy Hospital",
             Layout = H4D2Art.LevelLayouts[7],
-            MaxConsumables = StandardLevelConfig.MaxConsumables * 2,
+            MaxConsumables = StandardLevelConfig.MaxConsumables * 3,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
+            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
             ZombieSpawnParams = StandardLevelConfig.DefaultZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D1Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
@@ -233,8 +253,10 @@ public static class LevelCollection
             ID = 8,
             Name = "Last Stand",
             Layout = H4D2Art.LevelLayouts[8],
-            MaxConsumables = StandardLevelConfig.MaxConsumables,
+            MaxConsumables = StandardLevelConfig.MaxConsumables * 2,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
+            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
             ZombieSpawnParams = StandardLevelConfig.DefaultZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D1Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
@@ -251,6 +273,8 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[9],
             MaxConsumables = StandardLevelConfig.MaxConsumables * 3,
             MaxThrowables = StandardLevelConfig.MaxThrowables * 2,
+            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
+            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
             ZombieSpawnParams = StandardLevelConfig.DefaultZombieSpawnParams,
             Survivors = [..Enumerable.Repeat(SurvivorDescriptor.Francis, 8)],
             BuyableSpecials = 
@@ -270,6 +294,8 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[10],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
+            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
             ZombieSpawnParams = StandardLevelConfig.BoostedZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D2Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
@@ -284,8 +310,10 @@ public static class LevelCollection
             ID = 11,
             Name = "Ghosts",
             Layout = H4D2Art.LevelLayouts[11],
-            MaxConsumables = StandardLevelConfig.MaxConsumables,
+            MaxConsumables = StandardLevelConfig.MaxConsumables * 2,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
+            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
             ZombieSpawnParams = StandardLevelConfig.DefaultZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D2Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
@@ -300,8 +328,10 @@ public static class LevelCollection
             ID = 12,
             Name = "Kill Everybody",
             Layout = H4D2Art.LevelLayouts[12],
-            MaxConsumables = StandardLevelConfig.MaxConsumables,
+            MaxConsumables = StandardLevelConfig.MaxConsumables * 2,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
+            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
             ZombieSpawnParams = StandardLevelConfig.BoostedZombieSpawnParams,
             Survivors = [..StandardLevelConfig.L4D1Survivors, ..StandardLevelConfig.L4D2Survivors],
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
@@ -316,8 +346,10 @@ public static class LevelCollection
             ID = 13,
             Name = "Ants",
             Layout = H4D2Art.LevelLayouts[13],
-            MaxConsumables = StandardLevelConfig.MaxConsumables,
+            MaxConsumables = StandardLevelConfig.MaxConsumables * 2,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
+            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
             ZombieSpawnParams = StandardLevelConfig.BoostedZombieSpawnParams,
             Survivors = [..StandardLevelConfig.L4D1Survivors, ..StandardLevelConfig.L4D2Survivors],
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
@@ -338,17 +370,14 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[14],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
+            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
+            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
             ZombieSpawnParams = StandardLevelConfig.DefaultZombieSpawnParams,
             Survivors = [SurvivorDescriptor.MegaCoach],
             BuyableSpecials = new Dictionary<SpecialDescriptor, BuyInfo>
             {
-                {SpecialDescriptor.Boomer, new BuyInfo(30, 10.0)},
-                {SpecialDescriptor.Spitter, new BuyInfo(50, 15.0)},
-                {SpecialDescriptor.Hunter, new BuyInfo(100, 15.0)},
-                {SpecialDescriptor.Jockey, new BuyInfo(125, 15.0)},
-                {SpecialDescriptor.Charger, new BuyInfo(150, 10.0)},
-                {SpecialDescriptor.Tank, new BuyInfo(1000, 15.0)},
-                {SpecialDescriptor.Witch, new BuyInfo(1250, 30.0)}
+                {SpecialDescriptor.Spitter, new BuyInfo(5, 2.0)},
+                {SpecialDescriptor.Tank, new BuyInfo(10, 0.0)}
             }.ToImmutableDictionary(),
             Consumables = [ConsumableDescriptor.FirstAidKit, ConsumableDescriptor.Pills],
             Throwables = StandardLevelConfig.Throwables,

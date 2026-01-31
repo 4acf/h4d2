@@ -45,6 +45,13 @@ public class SettingsMenu : Menu
 
     public override void Update(Input input, double elapsedTime)
     {
+        if (input.IsEscPressed)
+        {
+            AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
+            _RaiseMainMenuSelected();
+            return;
+        }
+        
         _musicVolumeSelector.Update(input);
         _sfxVolumeSelector.Update(input);
         _mainMenuButton.Update(input);

@@ -25,5 +25,10 @@ public static class UncommonSpawner
             UncommonDescriptor.Worker => new Worker(level, position),
             _ => new Riot(level, position)
         };
-    }   
+    }
+
+    public static Uncommon SpawnJimmyGibbs(Level level, Position position)
+    {
+        return new JimmyGibbs(level, position);
+    }
 }

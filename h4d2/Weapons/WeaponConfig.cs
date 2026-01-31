@@ -108,7 +108,7 @@ public static class WeaponConfigs
         AmmoPerMagazine = 100,
         Spread = 0.25,
         Pellets = 15,
-        Piercing = 5,
+        Piercing = 3,
         ShootSound = SFX.WeaponSmall
     };
 }
