@@ -2,6 +2,7 @@
 using H4D2.Infrastructure;
 using H4D2.Infrastructure.H4D2;
 using H4D2.Levels;
+using H4D2.Particles;
 
 namespace H4D2.Entities.Projectiles;
 
@@ -9,9 +10,9 @@ public class Tongue : Projectile
 {
     public bool IsConnected { get; private set; }
 
+    public const int Color = 0x8c5972;
     private const double _shootSpeed = 250.0;
     private const double _pullSpeed = 25.0;
-    private const int _color = 0x8c5972;
 
     private bool _isStopped;
     private double _speed;
@@ -19,6 +20,8 @@ public class Tongue : Projectile
     private readonly Survivor _pinTarget;
     private readonly List<(int, int)> _tonguePixels;
     private readonly List<(int, int)> _tongueShadowPixels;
+    private readonly Queue<TongueSegment> _waitingToBeAdded;
+    private readonly Stack<TongueSegment> _waitingToBeRemoved;
     
     public Tongue(Level level, Position startPosition, Survivor pinTarget, double directionRadians)
         : base(level, startPosition, ProjectileConfig.TongueBoundingBox, 0, directionRadians)
@@ -30,59 +33,46 @@ public class Tongue : Projectile
         
         _tonguePixels = [];
         _tongueShadowPixels = [];
-        _PrecalculateTonguePixels();
-        _PrecalculateTongueShadowPixels();
+        _waitingToBeAdded = [];
+        _waitingToBeRemoved = [];
+        _PrecalculateTongueSegments();
     }
 
-    private void _PrecalculateTonguePixels()
+    private void _PrecalculateTongueSegments()
     {
-        double startXCorrected = (_startPosition.X - _startPosition.Y) * ScaleX;
-        double startYCorrected = ((_startPosition.X + _startPosition.Y) * ScaleY) + _startPosition.Z;
-
         ReadonlyPosition targetPosition = _pinTarget.CenterMass;
-        double targetXCorrected = (targetPosition.X - targetPosition.Y) * ScaleX;
-        double targetYCorrected = ((targetPosition.X + targetPosition.Y) * ScaleY) + targetPosition.Z;
         
-        double xDifference = targetXCorrected - startXCorrected;
-        double yDifference = targetYCorrected - startYCorrected;
+        double xDifference = targetPosition.X - _startPosition.X;
+        double yDifference = targetPosition.Y - _startPosition.Y;
         
         int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
+        steps *= 2;
         for (int i = 0; i < steps; i++)
         {
-            _tonguePixels.Add
-            ((
-                (int)(startXCorrected + xDifference * i / steps),
-                (int)(startYCorrected + yDifference * i / steps)
-            ));
-        }
-    }
-    
-    private void _PrecalculateTongueShadowPixels()
-    {
-        double startXCorrected = (_startPosition.X - _startPosition.Y) * ScaleX;
-        double startYCorrected = ((_startPosition.X + _startPosition.Y) * ScaleY);
-
-        ReadonlyPosition targetPosition = _pinTarget.CenterMass;
-        double targetXCorrected = (targetPosition.X - targetPosition.Y) * ScaleX;
-        double targetYCorrected = ((targetPosition.X + targetPosition.Y) * ScaleY);
-        
-        double xDifference = targetXCorrected - startXCorrected;
-        double yDifference = targetYCorrected - startYCorrected;
-        
-        int steps = (int)(Math.Sqrt(xDifference * xDifference + yDifference * yDifference) + 1);
-        for (int i = 0; i < steps; i++)
-        {
-            _tongueShadowPixels.Add
-            ((
-                (int)(startXCorrected + xDifference * i / steps),
-                (int)(startYCorrected + yDifference * i / steps)
-            ));
+            var position = new Position(
+                _startPosition.X + xDifference * i / steps,
+                _startPosition.Y + yDifference * i / steps,
+                _startPosition.Z
+            );
+            var tongueSegment = new TongueSegment(_level, position);
+            _waitingToBeAdded.Enqueue(tongueSegment);
         }
     }
     
     public void Remove()
     {
         Removed = true;
+        while (_waitingToBeAdded.Count > 0)
+        {
+            TongueSegment tongueSegment = _waitingToBeAdded.Dequeue();
+            tongueSegment.Remove();
+        }
+
+        while (_waitingToBeRemoved.Count > 0)
+        {
+            TongueSegment tongueSegment = _waitingToBeRemoved.Pop();
+            tongueSegment.Remove();
+        }
     }
 
     public void StopPulling()
@@ -112,58 +102,46 @@ public class Tongue : Projectile
         _velocity.X = Math.Cos(directionRadians) * timeAdjustedSpeed;
         _velocity.Y = Math.Sin(directionRadians) * timeAdjustedSpeed;
         _AttemptMove();
+        _UpdateSegments();
     }
 
+    private void _UpdateSegments()
+    {
+        double distanceToEnd = ReadonlyPosition.Distance(_startPosition, Position);
+
+        if (!IsConnected)
+        {
+            while (
+                _waitingToBeAdded.Count > 0 && 
+                ReadonlyPosition.Distance(_startPosition, _waitingToBeAdded.Peek().Position) <= distanceToEnd
+            )
+            {
+                TongueSegment tongueSegment = _waitingToBeAdded.Dequeue();
+                _level.AddParticle(tongueSegment);
+                _waitingToBeRemoved.Push(tongueSegment);
+            }
+
+            return;
+        }
+
+        while (
+            _waitingToBeRemoved.Count > 0 &&
+            ReadonlyPosition.Distance(_startPosition, _waitingToBeRemoved.Peek().Position) >= distanceToEnd
+        )
+        {
+            TongueSegment tongueSegment = _waitingToBeRemoved.Pop();
+            tongueSegment.Remove();
+        }
+    }
+    
     protected override void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
-        if (_tonguePixels.Count == 0)
-            return;
-        
-        double distanceToEnd = MathHelpers.Distance(
-            xCorrected,
-            yCorrected,
-            _tonguePixels[0].Item1,
-            _tonguePixels[0].Item2
-        );
-        
-        for (int i = 0; i < _tonguePixels.Count; i++)
-        {
-            double distanceToPixel = MathHelpers.Distance(
-                _tonguePixels[0].Item1,
-                _tonguePixels[0].Item2,
-                _tonguePixels[i].Item1,
-                _tonguePixels[i].Item2
-            );
-            if (distanceToPixel > distanceToEnd)
-                return;
-            screen.SetPixel(_tonguePixels[i].Item1, _tonguePixels[i].Item2, _color);
-        }
+        screen.SetPixel(xCorrected, yCorrected, Color);
     }
 
     protected override void RenderShadow(ShadowBitmap shadows, int xCorrected, int yCorrected)
     {
-        if (_tongueShadowPixels.Count == 0)
-            return;
-        
-        double distanceToEnd = MathHelpers.Distance(
-            xCorrected,
-            yCorrected,
-            _tongueShadowPixels[0].Item1,
-            _tongueShadowPixels[0].Item2
-        );
-        
-        for (int i = 0; i < _tongueShadowPixels.Count; i++)
-        {
-            double distanceToPixel = MathHelpers.Distance(
-                _tongueShadowPixels[0].Item1,
-                _tongueShadowPixels[0].Item2,
-                _tongueShadowPixels[i].Item1,
-                _tongueShadowPixels[i].Item2
-            );
-            if (distanceToPixel > distanceToEnd)
-                return;
-            shadows.SetPixel(_tongueShadowPixels[i].Item1, _tongueShadowPixels[i].Item2);
-        }
+        shadows.SetPixel(xCorrected, yCorrected);
     }
 
     protected override void _Collide(Entity? entity)
