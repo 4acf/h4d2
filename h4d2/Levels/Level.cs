@@ -29,7 +29,6 @@ public class Level
    
     private const int _padding = 2;
     private const double _zombieSpawnCooldownSeconds = 1.0 / 60.0;
-    private const int _maxParticles = 10000;
     private const int _commonKillCredit = 5;
     private const int _uncommonKillCredit = 10;
     private const double _mobSpawnXOffset = 5.5;
@@ -426,8 +425,7 @@ public class Level
     
     public void AddParticle(Particle particle)
     {
-        if(_particles.Count < _maxParticles)
-            _particles.Add(particle);
+        _particles.Add(particle);
     }
 
     public void AddSpecial(Special special)
