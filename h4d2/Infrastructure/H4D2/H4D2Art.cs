@@ -8,16 +8,20 @@ public static class H4D2Art
     public const int ParticleSize = 8;
     public const int PickupSize = 8;
     public const int ProjectileSize = 8;
+    public const int MedalSize = 16;
+    
     public const int TileSize = 24;
     public const int TileIsoWidth = 24;
     public const int TileIsoHeight = 12;
     public const int TileIsoHalfHeight = 6;
     public const int TileCenterOffset = 19;
+    
     public const int SmallButtonWidth = 24;
     public const int SmallButtonHeight = 24;
     public const int SpawnerButtonWidth = 20;
     public const int LargeButtonWidth = 72;
     public const int LargeButtonHeight = 24;
+    
     public const int ShadowColor = 0x0;
     public const double ShadowBlend = 0.9;
     
@@ -69,6 +73,15 @@ public static class H4D2Art
             public static readonly Bitmap[] Levels = _largeButtons[5];
             public static readonly Bitmap[] Navigation = _smallButtons[0];
             public static readonly Bitmap[] Spawner = _smallButtons[1];
+        }
+
+        public static class Medals
+        {
+            private static readonly Bitmap[] _medals = _LoadMedals();
+            public static readonly Bitmap Platinum = _medals[0];
+            public static readonly Bitmap Gold = _medals[1];
+            public static readonly Bitmap Silver = _medals[2];
+            public static readonly Bitmap Bronze = _medals[3];
         }
     }
 
@@ -122,7 +135,9 @@ public static class H4D2Art
         Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.gui.smallbuttons.png", SmallButtonWidth, 2, 2);
     private static Bitmap[][] _LoadLargeButtons() =>
         Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.gui.largebuttons.png", LargeButtonWidth, LargeButtonHeight, 6, 2);
-
+    private static Bitmap[] _LoadMedals() =>
+        Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.gui.medals.png", MedalSize, 4);
+    
     private static Bitmap[] _LoadLevels()
     {
         var levels = new Bitmap[LevelCollection.NumLevels];
