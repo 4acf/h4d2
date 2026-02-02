@@ -107,7 +107,7 @@ public static class H4D2Art
     private static Bitmap[][] _LoadSpecials() => 
         Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.special.png", SpriteSize, 9, [21, 14, 24, 39, 15, 18, 27, 10, 8]);
     private static Bitmap[][] _LoadPickups() => 
-        Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.pickup.png", PickupSize, 2, 3);
+        Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.pickup.png", PickupSize, 2, [4,3]);
     private static Bitmap[][] _LoadProjectiles() => 
         Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.projectile.png", ProjectileSize, 4, 4);
     private static Bitmap[][] _LoadParticles() => 

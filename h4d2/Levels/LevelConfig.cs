@@ -163,7 +163,11 @@ public static class LevelCollection
             ZombieSpawnParams = StandardLevelConfig.DefaultZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D2Survivors,
             BuyableSpecials = StandardLevelConfig.BuyableSpecials,
-            Consumables = StandardLevelConfig.Consumables,
+            Consumables = [
+                ConsumableDescriptor.Cheeseburger, 
+                ConsumableDescriptor.Pills, 
+                ConsumableDescriptor.Adrenaline
+            ],
             Throwables = StandardLevelConfig.Throwables,
             Uncommons = [UncommonDescriptor.Worker, UncommonDescriptor.Riot],
             MainTheme = Track.OneBadTank,
@@ -379,7 +383,7 @@ public static class LevelCollection
                 {SpecialDescriptor.Spitter, new BuyInfo(5, 2.0)},
                 {SpecialDescriptor.Tank, new BuyInfo(10, 0.0)}
             }.ToImmutableDictionary(),
-            Consumables = StandardLevelConfig.Consumables.Remove(ConsumableDescriptor.Adrenaline),
+            Consumables = [ConsumableDescriptor.Cheeseburger],
             Throwables = StandardLevelConfig.Throwables.Remove(ThrowableDescriptor.BileBomb),
             Uncommons = StandardLevelConfig.Uncommons,
             MainTheme = Track.Gallery
