@@ -305,7 +305,7 @@ public abstract class Survivor : Mob
         _weapon.Update(elapsedTime);
         if (_weapon.CanShoot() && _aimTarget != null && _pathfinder.HasLineOfSight(_aimTarget))
         {
-            _weapon.Shoot(CenterMass.MutableCopy(), AimDirectionRadians);
+            _weapon.Shoot(CenterMass.MutableCopy(), AimDirectionRadians, IsBiled);
             _isShooting = true;
         }
         else
