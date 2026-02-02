@@ -94,7 +94,7 @@ public static class SurvivorConfigs
     public static readonly SurvivorConfig MegaCoach = new()
     {
         Character = 0,
-        Health = _defaultHealth * 2,
+        Health = _defaultHealth,
         RunSpeed = (int)(_runSpeed * 1.5),
         GibColor = _blackSkinColor,
         BoundingBox = _boundingBox

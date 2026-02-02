@@ -298,7 +298,7 @@ public static class LevelCollection
             ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
             ZombieSpawnParams = StandardLevelConfig.BoostedZombieSpawnParams,
             Survivors = StandardLevelConfig.L4D2Survivors,
-            BuyableSpecials = StandardLevelConfig.BuyableSpecials,
+            BuyableSpecials = StandardLevelConfig.BuyableSpecials.Remove(SpecialDescriptor.Smoker),
             Consumables = StandardLevelConfig.Consumables,
             Throwables = StandardLevelConfig.Throwables,
             Uncommons = StandardLevelConfig.Uncommons,
@@ -370,8 +370,8 @@ public static class LevelCollection
             Layout = H4D2Art.LevelLayouts[14],
             MaxConsumables = StandardLevelConfig.MaxConsumables,
             MaxThrowables = StandardLevelConfig.MaxThrowables,
-            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime,
-            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime,
+            ConsumableRespawnTime = StandardLevelConfig.ConsumableRespawnTime * 8,
+            ThrowableRespawnTime = StandardLevelConfig.ThrowableRespawnTime * 4,
             ZombieSpawnParams = StandardLevelConfig.DefaultZombieSpawnParams,
             Survivors = [SurvivorDescriptor.MegaCoach],
             BuyableSpecials = new Dictionary<SpecialDescriptor, BuyInfo>
@@ -379,8 +379,8 @@ public static class LevelCollection
                 {SpecialDescriptor.Spitter, new BuyInfo(5, 2.0)},
                 {SpecialDescriptor.Tank, new BuyInfo(10, 0.0)}
             }.ToImmutableDictionary(),
-            Consumables = [ConsumableDescriptor.FirstAidKit, ConsumableDescriptor.Pills],
-            Throwables = StandardLevelConfig.Throwables,
+            Consumables = StandardLevelConfig.Consumables.Remove(ConsumableDescriptor.Adrenaline),
+            Throwables = StandardLevelConfig.Throwables.Remove(ThrowableDescriptor.BileBomb),
             Uncommons = StandardLevelConfig.Uncommons,
             MainTheme = Track.Gallery
         }
