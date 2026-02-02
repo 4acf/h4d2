@@ -70,7 +70,7 @@ public class LevelsMenu : Menu
             return;
         }
         
-        if (input.IsEnterPressed)
+        if (input.IsConfirmPressed)
         {
             AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
             _RaiseLevelSelected(_page);

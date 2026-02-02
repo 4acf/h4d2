@@ -33,7 +33,7 @@ public class PauseMenu : Menu
 
     public override void Update(Input input, double elapsedTime)
     {
-        if (input.IsEscPressed || input.IsEnterPressed)
+        if (input.IsEscPressed || input.IsConfirmPressed)
         {
             _RaiseUnpauseSelected(_spawnerView);
             return;
