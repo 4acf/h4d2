@@ -8,16 +8,20 @@ public static class H4D2Art
     public const int ParticleSize = 8;
     public const int PickupSize = 8;
     public const int ProjectileSize = 8;
+    public const int MedalSize = 16;
+    
     public const int TileSize = 24;
     public const int TileIsoWidth = 24;
     public const int TileIsoHeight = 12;
     public const int TileIsoHalfHeight = 6;
     public const int TileCenterOffset = 19;
+    
     public const int SmallButtonWidth = 24;
     public const int SmallButtonHeight = 24;
     public const int SpawnerButtonWidth = 20;
     public const int LargeButtonWidth = 72;
     public const int LargeButtonHeight = 24;
+    
     public const int ShadowColor = 0x0;
     public const double ShadowBlend = 0.9;
     
@@ -70,6 +74,15 @@ public static class H4D2Art
             public static readonly Bitmap[] Navigation = _smallButtons[0];
             public static readonly Bitmap[] Spawner = _smallButtons[1];
         }
+
+        public static class Medals
+        {
+            private static readonly Bitmap[] _medals = _LoadMedals();
+            public static readonly Bitmap Platinum = _medals[0];
+            public static readonly Bitmap Gold = _medals[1];
+            public static readonly Bitmap Silver = _medals[2];
+            public static readonly Bitmap Bronze = _medals[3];
+        }
     }
 
     public static Stream GetRandomWindowIcon()
@@ -99,7 +112,7 @@ public static class H4D2Art
     }
     
     private static Bitmap[][] _LoadSurvivors() => 
-        Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.survivor.png", SpriteSize, 8, 53);
+        Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.survivor.png", SpriteSize, 9, 53);
     private static Bitmap[][] _LoadCommons() => 
         Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.common.png", SpriteSize, 9, 23);
     private static Bitmap[][] _LoadUncommons() => 
@@ -107,7 +120,7 @@ public static class H4D2Art
     private static Bitmap[][] _LoadSpecials() => 
         Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.special.png", SpriteSize, 9, [21, 14, 24, 39, 15, 18, 27, 10, 8]);
     private static Bitmap[][] _LoadPickups() => 
-        Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.pickup.png", PickupSize, 2, 3);
+        Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.pickup.png", PickupSize, 2, [4,3]);
     private static Bitmap[][] _LoadProjectiles() => 
         Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.projectile.png", ProjectileSize, 4, 4);
     private static Bitmap[][] _LoadParticles() => 
@@ -122,7 +135,9 @@ public static class H4D2Art
         Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.gui.smallbuttons.png", SmallButtonWidth, 2, 2);
     private static Bitmap[][] _LoadLargeButtons() =>
         Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.gui.largebuttons.png", LargeButtonWidth, LargeButtonHeight, 6, 2);
-
+    private static Bitmap[] _LoadMedals() =>
+        Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.gui.medals.png", MedalSize, 4);
+    
     private static Bitmap[] _LoadLevels()
     {
         var levels = new Bitmap[LevelCollection.NumLevels];

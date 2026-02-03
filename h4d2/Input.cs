@@ -36,7 +36,11 @@ public class Input
     
     public bool IsMousePressed { get; private set; }
     public bool IsEscPressed { get; private set; }
-    public bool IsEnterPressed { get; private set; }
+    
+    public bool IsConfirmPressed => _isEnterPressed || _isSpacePressed;
+    private bool _isEnterPressed;
+    private bool _isSpacePressed;
+    
     public LevelMenuNavigationState LevelMenuNavigationState { get; private set; }
     public bool IsNumberPressed { get; private set; }
     public int LastNumberPressed { get; private set; }
@@ -54,7 +58,8 @@ public class Input
         _pressedMovementKeys.Clear();
         IsMousePressed = false;
         IsEscPressed = false;
-        IsEnterPressed = false;
+        _isEnterPressed = false;
+        _isSpacePressed = false;
         LevelMenuNavigationState = LevelMenuNavigationState.Idle;
         IsNumberPressed = false;
         LastNumberPressed = 0;
@@ -93,7 +98,10 @@ public class Input
                 IsEscPressed = true;
                 break;
             case Keyboard.Key.Enter:
-                IsEnterPressed = true;
+                _isEnterPressed = true;
+                break;
+            case Keyboard.Key.Space:
+                _isSpacePressed = true;
                 break;
             case Keyboard.Key.Q:
                 LevelMenuNavigationState = LevelMenuNavigationState.Backward;

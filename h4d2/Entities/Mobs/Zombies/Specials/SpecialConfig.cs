@@ -71,8 +71,8 @@ public static class SpecialConfigs
     public static readonly SpecialConfig Boomer = new()
     {
         Type = SpecialIndices.Boomer,
-        Health = 50,
-        RunSpeed = 175,
+        Health = 150,
+        RunSpeed = 210,
         Damage = 0,
         GibColor = 0x847b71,
         BoundingBox = SpecialBoundingBoxes.Boomer

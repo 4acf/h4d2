@@ -14,7 +14,8 @@ public enum SurvivorDescriptor
     Francis,
     Louis,
     Zoey,
-    MegaCoach
+    MegaCoach,
+    Joe
 }
 
 public static class SurvivorSpawner
@@ -31,7 +32,8 @@ public static class SurvivorSpawner
             SurvivorDescriptor.Francis => new Francis(level, position),
             SurvivorDescriptor.Louis => new Louis(level, position),
             SurvivorDescriptor.Zoey => new Zoey(level, position),
-            _ => new MegaCoach(level, position)
+            SurvivorDescriptor.MegaCoach => new MegaCoach(level, position),
+            _ => new Joe(level, position)
         };
     }
 }

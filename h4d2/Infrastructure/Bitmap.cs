@@ -24,9 +24,15 @@ public class Bitmap
     {
 
     }
+
+    public Bitmap(SKBitmap bitmap, int spriteSize, int col)
+        : this(bitmap, spriteSize, spriteSize, 0, col)
+    {
+        
+    }
     
     public Bitmap(SKBitmap bitmap, int spriteSize, int row, int col)
-    : this(bitmap, spriteSize, spriteSize, row, col)
+        : this(bitmap, spriteSize, spriteSize, row, col)
     {
        
     }

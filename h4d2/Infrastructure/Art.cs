@@ -55,6 +55,21 @@ public static class Art
         return result;
     }
 
+    public static Bitmap[] LoadBitmaps(string resourceName, int spriteSize, int columns)
+    {
+        var result = new Bitmap[columns];
+        SKBitmap fullResourceBitmap = ResourceLoader.LoadEmbeddedResource(resourceName);
+        for (int i = 0; i < columns; i++)
+        {
+            result[i] = new Bitmap(
+                fullResourceBitmap,
+                spriteSize,
+                i
+            );
+        }
+        return result;
+    }
+    
     public static Bitmap[][] LoadBitmaps(string resourceName, int spriteSize, int rows, int[] columnSizes)
     {
         if(rows != columnSizes.Length)

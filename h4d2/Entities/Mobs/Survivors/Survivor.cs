@@ -305,7 +305,7 @@ public abstract class Survivor : Mob
         _weapon.Update(elapsedTime);
         if (_weapon.CanShoot() && _aimTarget != null && _pathfinder.HasLineOfSight(_aimTarget))
         {
-            _weapon.Shoot(CenterMass.MutableCopy(), AimDirectionRadians);
+            _weapon.Shoot(CenterMass.MutableCopy(), AimDirectionRadians, IsBiled);
             _isShooting = true;
         }
         else
@@ -387,7 +387,10 @@ public abstract class Survivor : Mob
 
     private double _GetTargetDirection()
     {
-        if (_consumableTarget == null && _throwableTarget == null && _helpTarget == null)
+        if (
+            IsBiled ||
+            (_consumableTarget == null && _throwableTarget == null && _helpTarget == null)
+        )
         {
             _pathfinder.InvalidatePath();
             return _GetRandomDirection();

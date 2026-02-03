@@ -28,7 +28,7 @@ public class MainMenu : Menu
 
     public override void Update(Input input, double elapsedTime)
     {
-        if (input.IsEnterPressed)
+        if (input.IsConfirmPressed)
         {
             AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
             _RaiseLevelsSelected();

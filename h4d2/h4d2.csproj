@@ -251,6 +251,8 @@
       <Content Include="Resources\audio\music\skin_on_our_teeth.ogg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="Resources\gui\medals.png" />
+      <EmbeddedResource Include="Resources\gui\medals.png" />
     </ItemGroup>
 
     <ItemGroup>

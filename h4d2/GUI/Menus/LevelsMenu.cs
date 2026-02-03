@@ -8,7 +8,7 @@ public class LevelsMenu : Menu
 {
     private const int _xEdgePadding = 5;
     private const int _paddingBetweenButtonsY = 2;
-    private const int _paddingBetweenHeadersY = 20;
+    private const int _paddingBetweenHeadersY = 10;
     private const int _mainMenuButtonYOffset = 20;
     private readonly CenteredHeader _levelNameHeader;
     private readonly CenteredSubheader _recordSubheader;
@@ -17,7 +17,11 @@ public class LevelsMenu : Menu
     private readonly Button _playButton;
     private readonly Button _mainMenuButton;
     private readonly PageViewer _pageViewer;
+    private Medal? _medal;
+    private readonly int _medalX;
+    private readonly int _medalY;
     private int _page;
+    private double? _record;
     
     public LevelsMenu(int width, int height, int page = 0) : base(width, height)
     {
@@ -25,12 +29,22 @@ public class LevelsMenu : Menu
             page = 0;
         _page = page;
 
+        _record = SaveManager.Instance.GetLevelRecord(_page);
+        
         int headerY = _height - (_height / 3);
         _levelNameHeader = new CenteredHeader(LevelCollection.Levels[_page].Name, headerY, _textColor);
 
         int recordY = headerY - (H4D2Art.GUI.TextHeight * 2) - _paddingBetweenHeadersY;
-        string record = _GetRecordText(_page);
-        _recordSubheader = new CenteredSubheader(record, recordY, _textColor);
+        string recordText = _GetRecordText(_record);
+        _recordSubheader = new CenteredSubheader(recordText, recordY, _textColor);
+        
+        _medal = null;
+        _medalX = (width / 2) - (H4D2Art.MedalSize / 2);
+        _medalY =  recordY - H4D2Art.GUI.TextHeight - _paddingBetweenHeadersY;
+        if (_record != null)
+        {
+            _medal = new Medal(_record.Value, _medalX, _medalY);
+        }
         
         _backwardNavigationButton = new Button(ButtonType.Backward, _xEdgePadding, _centeredSmallButtonY);
         _backwardNavigationButton.Clicked += (_, _) =>
@@ -70,7 +84,7 @@ public class LevelsMenu : Menu
             return;
         }
         
-        if (input.IsEnterPressed)
+        if (input.IsConfirmPressed)
         {
             AudioManager.Instance.PlaySFX(SFX.ButtonDefault);
             _RaiseLevelSelected(_page);
@@ -100,18 +114,20 @@ public class LevelsMenu : Menu
         _playButton.Render(screen);
         _mainMenuButton.Render(screen);
         _pageViewer.Render(screen);
+        _medal?.Render(screen);
     }
 
     private void _RefreshPageDetails()
     {
         _levelNameHeader.UpdateText(LevelCollection.Levels[_page].Name);
-        _recordSubheader.UpdateText(_GetRecordText(_page));
+        _record = SaveManager.Instance.GetLevelRecord(_page);
+        _medal = _record == null ? null : new Medal(_record.Value, _medalX, _medalY);
+        _recordSubheader.UpdateText(_GetRecordText(_record));
         _pageViewer.Update(_page);
     }
 
-    private static string _GetRecordText(int page)
+    private static string _GetRecordText(double? record)
     {
-        double? record = SaveManager.Instance.GetLevelRecord(page);
         if (record == null)
             return "LEVEL NOT COMPLETED";
         string formatted = TimeFormatter.Format(record.Value);
