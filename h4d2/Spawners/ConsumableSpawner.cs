@@ -8,7 +8,8 @@ public enum ConsumableDescriptor
 {
     FirstAidKit,
     Pills,
-    Adrenaline
+    Adrenaline,
+    Cheeseburger
 }
 
 public static class ConsumableSpawner
@@ -19,7 +20,8 @@ public static class ConsumableSpawner
         {
             ConsumableDescriptor.FirstAidKit => new FirstAidKit(level, position),
             ConsumableDescriptor.Pills => new Pills(level, position),
-            _ => new Adrenaline(level, position)
+            ConsumableDescriptor.Adrenaline => new Adrenaline(level, position),
+            _ => new Cheeseburger(level, position)
         };
     }   
 }

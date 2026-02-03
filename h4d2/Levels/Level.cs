@@ -798,6 +798,34 @@ public class Level
         }
     }
 
+    public void SpawnJoe()
+    {
+        int tileIndex = 0;
+        while (true)
+        {
+            tileIndex = RandomSingleton.Instance.Next(TileTypes.Length);
+            if (
+                TileTypes[tileIndex] != TileType.Wall &&
+                !IsTileAdjacentToWall(tileIndex) &&
+                !_consumableSpawnLocations.Contains(tileIndex) &&
+                !_activeThrowableLocations.Contains(tileIndex)
+            )
+            {
+                break;
+            }
+        }
+        Tile tile = GetTileFromIndex(tileIndex);
+        Position joePos = new Position(
+            (tile.X * TilePhysicalSize) + _pickupXOffset,
+            (-tile.Y * TilePhysicalSize) + _pickupYOffset
+        );
+        Survivor joe = SurvivorSpawner.Spawn(SurvivorDescriptor.Joe, this, joePos);
+        _entities.Add(joe);
+        
+        (int audioX, int audioY) = joe.AudioLocation;
+        AudioManager.Instance.PlaySFX(SFX.WitchAlert, audioX, audioY);
+    }
+    
     private bool _SpawnConsumable()
     {
         int triesRemaining = 5;

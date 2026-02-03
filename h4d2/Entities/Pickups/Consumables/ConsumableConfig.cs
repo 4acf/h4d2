@@ -41,4 +41,11 @@ public static class ConsumableConfigs
         ConsumableType = 2,
         BoundingBox = new BoundingBox(CollisionGroup.Pickup, _adrenalineBoundingBoxDimensions)
     };
+
+    public static readonly ConsumableConfig Cheeseburger = new()
+    {
+        PickupType = _pickupType,
+        ConsumableType = 3,
+        BoundingBox = new BoundingBox(CollisionGroup.Pickup, _firstAidKitBoundingBoxDimensions)
+    };
 }

@@ -13,8 +13,8 @@ public class LevelCompleteMenu : Menu
     private readonly CenteredHeader _centeredHeader;
     private readonly CenteredSubheader _centeredElapsedTime;
     private readonly Button _levelsButton;
+    private readonly Medal _medal;
     private ConfettiEmitter? _confettiEmitter;
-
     
     public LevelCompleteMenu(int levelID, double totalElapsedTime, int width, int height) 
         : base(width, height)
@@ -27,8 +27,12 @@ public class LevelCompleteMenu : Menu
         string time = TimeFormatter.Format(totalElapsedTime);
         int elapsedTimeY = headerY - (H4D2Art.GUI.TextHeight * 2) - _paddingY;
         _centeredElapsedTime = new CenteredSubheader($"Time taken: {time}", elapsedTimeY, _textColor);
+
+        int medalX = (width / 2) - (H4D2Art.MedalSize / 2);;
+        int medalY = elapsedTimeY - H4D2Art.GUI.TextHeight - _paddingY;
+        _medal = new Medal(totalElapsedTime, medalX, medalY);
         
-        int levelsButtonY = (_height - (_height / 2)) - H4D2Art.LargeButtonHeight;
+        int levelsButtonY = (_height - (_height / 2)) - H4D2Art.LargeButtonHeight - _paddingY;
         _levelsButton = new Button(ButtonType.Levels, _centeredLargeButtonX, levelsButtonY);
         _levelsButton.Clicked += _OnLevelsButtonClicked;
         
@@ -53,6 +57,7 @@ public class LevelCompleteMenu : Menu
         _centeredHeader.Render(screen);
         _centeredElapsedTime.Render(screen);
         _levelsButton.Render(screen);
+        _medal.Render(screen);
         _confettiEmitter?.Render(screen);
     }
     

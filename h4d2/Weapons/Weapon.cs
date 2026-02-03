@@ -68,7 +68,7 @@ public abstract class Weapon
         return true;
     }
     
-    public virtual void Shoot(Position position, double directionRadians)
+    public virtual void Shoot(Position position, double directionRadians, bool isBiled = false)
     {
         if (!CanShoot()) return;
 
@@ -81,10 +81,11 @@ public abstract class Weapon
         
         AmmoLoaded--;
         _shootDelayTimer.Reset();
+        double spread = isBiled ? _CalculateBiledSpread() : _spread;
         for (int i = 0; i < _pellets; i++)
         {
-            double newXComponent = Math.Cos(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * _spread;
-            double newYComponent = Math.Sin(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * _spread;
+            double newXComponent = Math.Cos(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * spread;
+            double newYComponent = Math.Sin(directionRadians) + (RandomSingleton.Instance.NextDouble() - 0.5) * spread;
             double newDirection = MathHelpers.NormalizeRadians(Math.Atan2(newYComponent, newXComponent));
             var bullet = new Bullet(_level, position.Copy(), _damage, _piercing, newDirection);
             _level.AddProjectile(bullet);
@@ -111,5 +112,12 @@ public abstract class Weapon
         _isReloading = true;
         _reloadTimer.Reset();
         AmmoLoaded = _ammoPerMagazine;
+    }
+
+    protected double _CalculateBiledSpread()
+    {
+        if (_spread == 0.0)
+            return 0.5;
+        return MathHelpers.ClampDouble(_spread * 5, 0.5, 1.0);
     }
 }
