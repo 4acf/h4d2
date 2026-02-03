@@ -99,4 +99,13 @@ public static class SurvivorConfigs
         GibColor = _blackSkinColor,
         BoundingBox = _boundingBox
     };
+
+    public static readonly SurvivorConfig Joe = new()
+    {
+        Character = 8,
+        Health = _defaultHealth,
+        RunSpeed = _runSpeed * 2,
+        GibColor = _whiteSkinColor,
+        BoundingBox = _boundingBox
+    };
 }

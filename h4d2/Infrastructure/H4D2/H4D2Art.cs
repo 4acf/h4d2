@@ -112,7 +112,7 @@ public static class H4D2Art
     }
     
     private static Bitmap[][] _LoadSurvivors() => 
-        Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.survivor.png", SpriteSize, 8, 53);
+        Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.survivor.png", SpriteSize, 9, 53);
     private static Bitmap[][] _LoadCommons() => 
         Art.LoadBitmaps($"{Resources.EmbeddedPrefix}.common.png", SpriteSize, 9, 23);
     private static Bitmap[][] _LoadUncommons() => 

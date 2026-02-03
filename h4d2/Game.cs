@@ -19,6 +19,7 @@ public class Game
     private H4D2BitmapCanvas _screen = null!;
     private ShadowBitmap _shadows = null!;
     private Level _level = null!;
+    private CheatCode _cheatCode = null!;
     private readonly CollisionManager<CollisionGroup> _collisionManager;
     private SpecialSpawner? _specialSpawner;
     private bool _isInGame;
@@ -57,6 +58,7 @@ public class Game
             _OnMainMenuGameOver;
         _screen = new H4D2BitmapCanvas(_screenWidth, _screenHeight, _camera);
         _shadows = new ShadowBitmap(_screenWidth, _screenHeight, _camera);
+        _cheatCode = new CheatCode(_level);
         _isInGame = isInGame;
         AudioManager.Instance.SetInGameState(isInGame);
         _isPaused = false;
@@ -102,6 +104,7 @@ public class Game
         {
             _specialSpawner.Update(input, elapsedTime);
             _camera.Update(input.PressedMovementKeys, elapsedTime);
+            _cheatCode.Update(input);
         }
     }
     
