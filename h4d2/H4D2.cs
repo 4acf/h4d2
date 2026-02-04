@@ -10,17 +10,22 @@ public static class H4D2
 {
     public const uint ScreenWidth = 320;
     public const uint ScreenHeight = 240;
-    public const uint ScreenScale = 4;
-    public const uint WindowWidth = ScreenWidth * ScreenScale;
-    public const uint WindowHeight = ScreenHeight * ScreenScale;
+    public static uint ScreenScale { get; private set; }
     public const string WindowTitle = "h4d2";
+    private static uint _maxScreenScale;
     
     public static void Main()
     {
         var canvas = new RenderTexture(ScreenWidth, ScreenHeight);
-
+        
+        var videoMode = VideoMode.DesktopMode;
+        _maxScreenScale = videoMode.Height / ScreenHeight;
+        ScreenScale = Math.Max(_maxScreenScale - 1, 1);
+        uint windowWidth = ScreenWidth * ScreenScale;
+        uint windowHeight = ScreenHeight * ScreenScale;
+        
         var window = new RenderWindow(
-            new VideoMode(WindowWidth, WindowHeight),
+            new VideoMode(windowWidth, windowHeight),
             WindowTitle,
             Styles.None
         );
