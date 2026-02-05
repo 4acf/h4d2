@@ -118,6 +118,6 @@ public abstract class Weapon
     {
         if (_spread == 0.0)
             return 0.5;
-        return MathHelpers.ClampDouble(_spread * 5, 0.5, 1.0);
+        return Math.Clamp(_spread * 5, 0.5, 1.0);
     }
 }

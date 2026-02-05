@@ -27,10 +27,8 @@ public abstract class Survivor : Mob
         IsPinned ||
         (_health < _unhealthyThreshold);
     
-    private const int _runSpeed = 300;
     private const int _limpSpeed = 150;
     private const int _walkSpeed = 85;
-    private const int _adrenalineRunSpeed = 320;
     private const int _adrenalineEffectSeconds = 15;
     private const int _healthBarRed = 0xe61515;
     private const int _healthBarGreen = 0x56de47;
@@ -46,6 +44,9 @@ public abstract class Survivor : Mob
     
     private readonly int _character;
     private readonly int _maxHealth;
+    private readonly int _runSpeed;
+    private readonly int _adrenalineRunSpeed;
+
     protected Weapon? _weapon;
     private Zombie? _aimTarget;
     private Consumable? _consumableTarget;
@@ -69,6 +70,8 @@ public abstract class Survivor : Mob
         
         _character = config.Character;
         _maxHealth = config.Health;
+        _runSpeed = config.RunSpeed;
+        _adrenalineRunSpeed = (int)(config.RunSpeed * 1.067);
         _aimTarget = null;
         _consumableTarget = null;
         _throwableTarget = null;
