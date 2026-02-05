@@ -8,6 +8,7 @@ public sealed class SaveManager
     {
         public double MusicVolume { get; set; } = 0.5;
         public double SFXVolume { get; set; } = 0.5;
+        public bool FullscreenEnabled { get; set; } = false;
     }
     
     private static readonly string _appDataPath = 
@@ -44,6 +45,7 @@ public sealed class SaveManager
     
     public double GetMusicVolume() => _savedSettings.MusicVolume;
     public double GetSFXVolume() => _savedSettings.SFXVolume;
+    public bool GetFullscreenEnabled() => _savedSettings.FullscreenEnabled;
     public double? GetLevelRecord(int id) => 
         _levelRecords.TryGetValue(id, out double value) ? value : null;
     
@@ -60,6 +62,12 @@ public sealed class SaveManager
         if (volume < AudioManager.MinVolume || volume > AudioManager.MaxVolume)
             return;
         _savedSettings.SFXVolume = volume;
+        _WriteToFile(_settingsFilePath, _savedSettings);
+    }
+
+    public void SaveNewFullscreenState(bool fullscreenEnabled)
+    {
+        _savedSettings.FullscreenEnabled = fullscreenEnabled;
         _WriteToFile(_settingsFilePath, _savedSettings);
     }
 

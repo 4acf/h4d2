@@ -26,13 +26,6 @@ public static class MathHelpers
         return (byte)((t * a) + (1 - t) * b);
     }
 
-    public static double ClampDouble(double value, double min, double max)
-    {
-        if (value < min) return min;
-        if (value > max) return max;
-        return value;
-    }
-
     public static double GaussianRandom(double mean, double standardDeviation)
     {
         double u1 = 1.0 - RandomSingleton.Instance.NextDouble();

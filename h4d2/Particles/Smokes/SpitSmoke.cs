@@ -48,7 +48,7 @@ public class SpitSmoke : Particle
     protected override void Render(H4D2BitmapCanvas screen, int xCorrected, int yCorrected)
     {
         double opacity = 1 - _despawnTimer.Percentage;
-        opacity = MathHelpers.ClampDouble(opacity, _minOpacity, _maxOpacity);
+        opacity = Math.Clamp(opacity, _minOpacity, _maxOpacity);
         screen.SetPixelBlend(xCorrected, yCorrected, _color, opacity);
     }
 }
