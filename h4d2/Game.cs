@@ -10,6 +10,7 @@ namespace H4D2;
 public class Game
 {
     public event EventHandler? ExitGame;
+    public event EventHandler<FullscreenStateChangedEventArgs>? ChangeFullscreenState; 
 
     private const int _mainMenuLevelIndex = 10;
     private readonly int _screenWidth;
@@ -34,6 +35,7 @@ public class Game
         _guiManager.LevelChangeRequested += _InitializeGameLevel;
         _guiManager.MusicVolumeChangeRequested += _OnMusicVolumeChangeRequested;
         _guiManager.SFXVolumeChangeRequested += _OnSFXVolumeChangeRequested;
+        _guiManager.FullscreenStateChangeRequested += _OnFullScreenStateChangeRequested;
         _guiManager.PauseRequested += _OnPauseToggleRequested;
         _guiManager.UnpauseRequested += _OnPauseToggleRequested;
         _guiManager.ReloadMainMenuRequested += _OnReloadMainMenuRequested;
@@ -140,6 +142,12 @@ public class Game
         SaveManager.Instance.SaveNewSFXVolume(e.SFXVolume);
     }
 
+    private void _OnFullScreenStateChangeRequested(object? sender, FullscreenStateChangedEventArgs e)
+    {
+        SaveManager.Instance.SaveNewFullscreenState(e.FullscreenEnabled);
+        ChangeFullscreenState?.Invoke(sender, e);
+    }
+    
     private void _OnReloadMainMenuRequested(object? sender, EventArgs e) =>
         _InitializeLevel(_mainMenuLevelIndex, false);
 

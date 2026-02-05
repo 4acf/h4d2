@@ -9,6 +9,7 @@ public class GUIManager
     public event Func<int, SpecialSpawner>? LevelChangeRequested;
     public event EventHandler<MusicVolumeChangedEventArgs>? MusicVolumeChangeRequested;
     public event EventHandler<SFXVolumeChangedEventArgs>? SFXVolumeChangeRequested;
+    public event EventHandler<FullscreenStateChangedEventArgs>? FullscreenStateChangeRequested;
     public event EventHandler? PauseRequested;
     public event EventHandler? UnpauseRequested;
     public event EventHandler? ReloadMainMenuRequested;
@@ -65,11 +66,13 @@ public class GUIManager
             _width,
             _height,
             SaveManager.Instance.GetMusicVolume(),
-            SaveManager.Instance.GetSFXVolume()
+            SaveManager.Instance.GetSFXVolume(),
+            SaveManager.Instance.GetFullscreenEnabled()
         );
         _menu.MainMenuSelected += _NavigateToMainMenu;
         _menu.MusicVolumeChanged += _OnMusicVolumeChanged;
         _menu.SFXVolumeChanged += _OnSFXVolumeChanged;
+        _menu.FullscreenStateChanged += _OnFullscreenStateChanged;
     }
 
     private void _NavigateToHUD(ISpecialSpawnerView spawnerView)
@@ -123,6 +126,9 @@ public class GUIManager
     
     private void _OnSFXVolumeChanged(object? sender, SFXVolumeChangedEventArgs e) =>
         SFXVolumeChangeRequested?.Invoke(this, e);
+
+    private void _OnFullscreenStateChanged(object? sender, FullscreenStateChangedEventArgs e) =>
+        FullscreenStateChangeRequested?.Invoke(this, e);
     
     private void _OnExitSelected(object? sender, EventArgs e) =>
         ExitRequested?.Invoke(this, EventArgs.Empty);

@@ -11,6 +11,7 @@ public class VolumeSelector
     private const int _sectionWidth = 6;
     private const int _sectionHeight = 9;
     private const int _paddingBetween = 2;
+    public static int PaddingBetween => _paddingBetween;
     
     public const int Width = _sections * (_sectionWidth + _paddingBetween);
     

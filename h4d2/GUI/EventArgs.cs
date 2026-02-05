@@ -48,3 +48,12 @@ public class SFXVolumeChangedEventArgs : EventArgs
         SFXVolume = sfxVolume;
     }
 }
+
+public class FullscreenStateChangedEventArgs : EventArgs
+{
+    public readonly bool FullscreenEnabled;
+    public FullscreenStateChangedEventArgs(bool fullscreenEnabled)
+    {
+        FullscreenEnabled = fullscreenEnabled;
+    }
+}

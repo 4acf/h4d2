@@ -1,5 +1,4 @@
-﻿using H4D2.Infrastructure;
-using H4D2.Infrastructure.H4D2;
+﻿using H4D2.Infrastructure.H4D2;
 using H4D2.Spawners.SpecialSpawners;
 
 namespace H4D2.GUI.Menus;
@@ -10,6 +9,7 @@ public abstract class Menu
 
     public event EventHandler<LevelSelectedEventArgs>? LevelSelected;
     public event EventHandler<LevelsSelectedEventArgs>? LevelsSelected;
+    public event EventHandler<FullscreenStateChangedEventArgs>? FullscreenStateChanged;
     public event EventHandler? SettingsSelected;
     public event EventHandler? ExitSelected;
     public event EventHandler? MainMenuSelected;
@@ -59,4 +59,6 @@ public abstract class Menu
         MusicVolumeChanged?.Invoke(this, new MusicVolumeChangedEventArgs(volume));
     protected void _RaiseSFXVolumeChanged(double volume) =>
         SFXVolumeChanged?.Invoke(this, new SFXVolumeChangedEventArgs(volume));
+    protected void _RaiseFullscreenStateChanged(bool fullscreenEnabled) =>
+        FullscreenStateChanged?.Invoke(this, new FullscreenStateChangedEventArgs(fullscreenEnabled));
 }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using H4D2.GUI;
 using H4D2.Infrastructure.H4D2;
 using SFML.Graphics;
 using SFML.System;
@@ -20,31 +21,11 @@ public static class H4D2
         
         var videoMode = VideoMode.DesktopMode;
         _maxScreenScale = videoMode.Height / ScreenHeight;
-        ScreenScale = Math.Max(_maxScreenScale - 1, 1);
-        uint windowWidth = ScreenWidth * ScreenScale;
-        uint windowHeight = ScreenHeight * ScreenScale;
-        
-        var window = new RenderWindow(
-            new VideoMode(windowWidth, windowHeight),
-            WindowTitle,
-            Styles.None
-        );
 
-        Stream iconStream = H4D2Art.GetRandomWindowIcon();
-        Image icon = new Image(iconStream);
-        window.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
-        iconStream.Dispose();
+        RenderWindow window = _CreateWindow(SaveManager.Instance.GetFullscreenEnabled());
+        Vector2f scale = new Vector2f(ScreenScale, ScreenScale);
         
-        window.Closed += (sender, _) =>
-        {
-            AudioManager.Instance.Close();
-            var w = (RenderWindow)sender!;
-            w.Close();
-        };
-        
-        window.SetFramerateLimit(60);
-
-        var input = new Input(window);
+        Input input = new Input(window);
         window.MouseButtonPressed += (_, e) =>
         {
             input.CaptureMouseButtonPress(e);
@@ -63,8 +44,24 @@ public static class H4D2
             AudioManager.Instance.Close();
             window.Close();
         };
+        game.ChangeFullscreenState += (object? sender, FullscreenStateChangedEventArgs e) =>
+        {
+            window.Close();
+            window.Dispose();
+            window = _CreateWindow(e.FullscreenEnabled);
+            scale = new Vector2f(ScreenScale, ScreenScale);
+            
+            input = new Input(window);
+            window.MouseButtonPressed += (_, mbe) =>
+            {
+                input.CaptureMouseButtonPress(mbe);
+            };
+            window.KeyPressed += (_, ke) =>
+            {
+                input.CaptureEventKeypress(ke);
+            };
+        };
         
-        var scale = new Vector2f(ScreenScale, ScreenScale);
         var stopwatch = new Stopwatch();
 
         var renderState = new RenderStates(BlendMode.None);
@@ -89,5 +86,37 @@ public static class H4D2
             window.Draw(sprite, renderState);
             window.Display();
         }
+    }
+
+    private static RenderWindow _CreateWindow(bool fullscreenEnabled)
+    {
+        ScreenScale = fullscreenEnabled ? 
+            _maxScreenScale : 
+            Math.Max(_maxScreenScale - 1, 1);
+        
+        uint windowWidth = ScreenWidth * ScreenScale;
+        uint windowHeight = ScreenHeight * ScreenScale;
+        
+        var window = new RenderWindow(
+            new VideoMode(windowWidth, windowHeight),
+            WindowTitle,
+            fullscreenEnabled ? Styles.Fullscreen : Styles.None
+        );
+
+        Stream iconStream = H4D2Art.GetRandomWindowIcon();
+        Image icon = new Image(iconStream);
+        window.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
+        iconStream.Dispose();
+        
+        window.Closed += (sender, _) =>
+        {
+            AudioManager.Instance.Close();
+            var w = (RenderWindow)sender!;
+            w.Close();
+        };
+        
+        window.SetFramerateLimit(60);
+
+        return window;
     }
 }
